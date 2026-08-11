@@ -239,9 +239,70 @@ document.getElementById("reset").onclick=()=>{
 };
 
 document.getElementById("save").onclick=()=>{
+  const expCanvas=document.createElement("canvas");
+  const pad=24, headerH=30, rowH=26, rows=Math.ceil(colors.length/2);
+  const legendH=pad+headerH+(rows*rowH)+pad;
+  
+  expCanvas.width=canvas.width;
+  expCanvas.height=canvas.height+legendH;
+  const exCtx=expCanvas.getContext("2d");
+  
+  exCtx.drawImage(canvas,0,0);
+  
+  exCtx.fillStyle="#ffffff";
+  exCtx.fillRect(0,canvas.height,expCanvas.width,legendH);
+  
+  exCtx.strokeStyle="#222";
+  exCtx.lineWidth=2;
+  exCtx.strokeRect(0,canvas.height,expCanvas.width,legendH);
+  
+  exCtx.fillStyle="#222";
+  exCtx.font="bold 16px system-ui, -apple-system, sans-serif";
+  exCtx.fillText("Flächenverteilung & Legende",pad,canvas.height+pad+14);
+  
+  const counts=Array(colors.length).fill(0);
+  const total=mask.flat().filter(Boolean).length;
+  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+    if(mask[y][x]&&grid[y][x]>=0)counts[grid[y][x]]++;
+  }
+  
+  const colW=(expCanvas.width-(pad*3))/2;
+  const startY=canvas.height+pad+headerH+12;
+  
+  exCtx.font="13px system-ui, -apple-system, sans-serif";
+  
+  colors.forEach((c,i)=>{
+    const col=i%2, row=Math.floor(i/2);
+    const x=pad+col*(colW+pad);
+    const y=startY+row*rowH;
+    
+    exCtx.fillStyle=c;
+    exCtx.fillRect(x,y-11,14,14);
+    exCtx.strokeStyle="#222";
+    exCtx.lineWidth=1;
+    exCtx.strokeRect(x,y-11,14,14);
+    
+    const name=colorNames[i].trim()||("Farbe "+(i+1));
+    exCtx.fillStyle="#222";
+    exCtx.textAlign="left";
+    
+    let dispName=name;
+    if(exCtx.measureText(dispName).width>colW-70){
+      while(dispName.length>0&&exCtx.measureText(dispName+"...").width>colW-70){
+        dispName=dispName.slice(0,-1);
+      }
+      dispName+="...";
+    }
+    exCtx.fillText(dispName,x+20,y);
+    
+    const pct=Math.round(counts[i]/total*100)+" %";
+    exCtx.textAlign="right";
+    exCtx.fillText(pct,x+colW,y);
+  });
+  
   const a=document.createElement("a");
   a.download="meine-fliegende-insel.png";
-  a.href=canvas.toDataURL("image/png");
+  a.href=expCanvas.toDataURL("image/png");
   a.click();
 };
 
