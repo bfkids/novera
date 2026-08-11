@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meine fliegende Insel</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#f4f1ea;color:#222}
+header{padding:22px 28px 10px;max-width:1200px;margin:auto}
+h1{margin:0 0 6px;font-size:28px}.subtitle{margin:0;color:#555}
+main{max-width:1200px;margin:auto;padding:18px 28px 35px;display:grid;grid-template-columns:minmax(500px,1fr) 320px;gap:24px}
+.panel{background:white;border-radius:14px;padding:18px;box-shadow:0 2px 12px #00000012}
+#islandWrap{display:flex;justify-content:center;align-items:center;min-height:620px;overflow:auto;background:#dff1fa;border-radius:10px;padding:20px}
+canvas{image-rendering:pixelated;image-rendering:crisp-edges;border:2px solid #222;cursor:crosshair;background:#dff1fa}
+h2{font-size:18px;margin:4px 0 12px}
+.info{background:#f4f1ea;border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.4;margin-bottom:16px}
+.palette{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
+.colorCard{display:grid;gap:6px}
+.swatch{width:100%;height:48px;border:3px solid transparent;border-radius:9px;cursor:pointer;padding:0;position:relative}
+.swatch.selected{border-color:#111;outline:2px solid white}
+.swatch span{position:absolute;bottom:2px;left:4px;right:4px;background:#ffffffbb;font-size:11px;border-radius:4px}
+.colorPicker{width:100%;height:30px;padding:0;border:1px solid #bbb;border-radius:6px}
+.nameInput{width:100%;padding:8px;border:1px solid #bbb;border-radius:6px;font-size:14px}
+.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+button.action{border:0;padding:10px 13px;border-radius:8px;cursor:pointer;background:#222;color:white;font-weight:600}
+button.secondary{background:#e8e5de;color:#222}
+.stats{font-size:13px;margin-top:14px}.stat{display:flex;justify-content:space-between;padding:3px 0}
+@media(max-width:900px){main{grid-template-columns:1fr}#islandWrap{min-height:auto}}
+</style>
+</head>
+<body>
+<header>
+<h1>Meine fliegende Insel</h1>
+<p class="subtitle">Was brauchst du, um auf dieser fliegenden Insel gut leben zu können?</p>
+</header>
+
+<main>
+<section class="panel">
+<div id="islandWrap"><canvas id="canvas"></canvas></div>
+</section>
+
+<aside class="panel">
+<div class="info"><strong>So geht's:</strong><br>
+Wähle eine Farbe, bestimme ihre Bedeutung und klicke anschliessend auf die Pixel der Insel.<br>
+Du musst nicht alle zehn Farben verwenden.
+</div>
+
+<h2>Farben und Bedeutungen</h2>
+<div class="palette" id="palette"></div>
+
+<div class="buttons">
+<button class="action" id="undo">↶ Rückgängig</button>
+<button class="action secondary" id="reset">Insel zurücksetzen</button>
+<button class="action" id="save">Insel speichern</button>
+</div>
+
+<div class="stats" id="stats"></div>
+</aside>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+const COLS=40, ROWS=30, SCALE=16;
+const colors=["#5DB7DE","#75C56B","#F4C84A","#E76F51","#B58AD8","#E78AB3","#8A9A9B","#F3F0E8","#D98B5F","#5E8FA8"];
+const colorNames=Array(colors.length).fill("");
+let selected=0, history=[];
+
+const mask=[];
+for(let y=0;y<ROWS;y++){
+  mask[y]=[];
+  for(let x=0;x<COLS;x++){
+    const dx=(x-(COLS-1)/2)/19;
+    const dy=(y-(ROWS-1)/2)/12;
+    const edge=dx*dx+dy*dy;
+    const irregular=0.10*Math.sin(x*0.9)+0.06*Math.cos(y*1.3);
+    mask[y][x]=edge<0.92+irregular;
+  }
+}
+
+function emptyGrid(){
+  return Array.from({length:ROWS},(_,y)=>
+    Array.from({length:COLS},(_,x)=>mask[y][x]?7:-1)
+  );
+}
+let grid=emptyGrid();
+
+const canvas=document.getElementById("canvas");
+canvas.width=COLS*SCALE;
+canvas.height=ROWS*SCALE;
+const ctx=canvas.getContext("2d");
+
+function draw(){
+  ctx.fillStyle="#dff1fa";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      if(!mask[y][x]) continue;
+      const v=grid[y][x];
+      ctx.fillStyle=(v>=0?colors[v]:"#fff");
+      ctx.fillRect(x*SCALE,y*SCALE,SCALE,SCALE);
+      ctx.strokeStyle="#ffffff55";
+      ctx.strokeRect(x*SCALE,y*SCALE,SCALE,SCALE);
+    }
+  }
+
+  for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
+    if(!mask[y][x]) continue;
+    const n=[[1,0],[-1,0],[0,1],[0,-1]];
+    for(const [dx,dy] of n){
+      const nx=x+dx,ny=y+dy;
+      if(nx<0||nx>=COLS||ny<0||ny>=ROWS||!mask[ny][nx]){
+        ctx.fillStyle="#3b3b3b";
+        if(dx===1)ctx.fillRect((x+1)*SCALE-2,y*SCALE,2,SCALE);
+        if(dx===-1)ctx.fillRect(x*SCALE,y*SCALE,2,SCALE);
+        if(dy===1)ctx.fillRect(x*SCALE,(y+1)*SCALE-2,SCALE,2);
+        if(dy===-1)ctx.fillRect(x*SCALE,y*SCALE,SCALE,2);
+      }
+    }
+  }
+  updateStats();
+}
+
+function makePalette(){
+  const p=document.getElementById("palette");
+  p.innerHTML="";
+  colors.forEach((c,i)=>{
+    const card=document.createElement("div");
+    card.className="colorCard";
+
+    const sw=document.createElement("button");
+    sw.type="button";
+    sw.className="swatch"+(i===selected?" selected":"");
+    sw.style.background=c;
+    sw.onclick=()=>{selected=i;makePalette()};
+    card.appendChild(sw);
+
+    const pickerWrap=document.createElement("div");
+    pickerWrap.style.position="relative";
+    pickerWrap.style.height="30px";
+
+    const picker=document.createElement("input");
+    picker.type="color";
+    picker.className="colorPicker";
+    picker.value=c;
+    picker.title="Farbe auswählen";
+    picker.setAttribute("aria-label","Farbe auswählen");
+    picker.style.height="30px";
+    picker.oninput=()=>{
+      colors[i]=picker.value;
+      selected=i;
+      makePalette();
+      draw();
+    };
+    pickerWrap.appendChild(picker);
+
+    const pickerText=document.createElement("span");
+    pickerText.textContent="Farbe auswählen";
+    pickerText.style.position="absolute";
+    pickerText.style.inset="0";
+    pickerText.style.display="flex";
+    pickerText.style.alignItems="center";
+    pickerText.style.justifyContent="center";
+    pickerText.style.fontSize="12px";
+    pickerText.style.fontWeight="600";
+    pickerText.style.color="#222";
+    pickerText.style.pointerEvents="none";
+    pickerText.style.background="rgba(255,255,255,.45)";
+    pickerText.style.borderRadius="6px";
+    pickerWrap.appendChild(pickerText);
+
+    card.appendChild(pickerWrap);
+
+    const name=document.createElement("input");
+    name.type="text";
+    name.className="nameInput";
+    name.maxLength=45;
+    name.placeholder="Bedeutung dieser Farbe";
+    name.value=colorNames[i];
+    name.oninput=()=>{
+      colorNames[i]=name.value;
+      updateStats();
+    };
+    card.appendChild(name);
+
+    p.appendChild(card);
+  });
+}
+
+function escapeHtml(t){
+  return t.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+
+function updateStats(){
+  const counts=Array(colors.length).fill(0);
+  const total=mask.flat().filter(Boolean).length;
+  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+    if(mask[y][x]&&grid[y][x]>=0)counts[grid[y][x]]++;
+  }
+  document.getElementById("stats").innerHTML="<strong>Flächenverteilung</strong>"+
+    counts.map((n,i)=>{
+      const name=colorNames[i].trim()||("Farbe "+(i+1));
+      return '<div class="stat"><span>'+escapeHtml(name)+'</span><span>'+Math.round(n/total*100)+' %</span></div>';
+    }).join("");
+}
+
+canvas.addEventListener("click",e=>{
+  const r=canvas.getBoundingClientRect();
+  const x=Math.floor((e.clientX-r.left)/SCALE);
+  const y=Math.floor((e.clientY-r.top)/SCALE);
+  if(x<0||x>=COLS||y<0||y>=ROWS||!mask[y][x])return;
+  history.push(grid.map(row=>row.slice()));
+  grid[y][x]=selected;
+  draw();
+});
+
+document.getElementById("undo").onclick=()=>{
+  if(history.length)grid=history.pop();
+  draw();
+};
+
+document.getElementById("reset").onclick=()=>{
+  if(confirm("Die Gestaltung wirklich zurücksetzen?")){
+    history=[];grid=emptyGrid();draw();
+  }
+};
+
+document.getElementById("save").onclick=()=>{
+  const a=document.createElement("a");
+  a.download="meine-fliegende-insel.png";
+  a.href=canvas.toDataURL("image/png");
+  a.click();
+};
+
+makePalette();
+draw();
+})();
+</script>
+</body>
+</html>
