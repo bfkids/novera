@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mons Novera - Erdsystem Simulation</title>
+<title>Mons Novera - Modellwelt-Simulation</title>
+
 <!-- jsPDF Bibliothek für PDF-Generierung -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
@@ -34,7 +35,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;border:none;cursor:
 h2{font-size:17px;margin:4px 0 10px}
 .info{background:#f4f1ea;border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.4;margin-bottom:16px}
 
-/* Dashboard Gesundheitszustand */
+/* Dashboard Zustand der Modellwelt */
 .healthDashboard{background:#fdfcf7;border:2px solid #222;border-radius:12px;padding:14px;margin-bottom:18px}
 .healthHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .healthBadge{padding:5px 10px;border-radius:20px;font-size:12px;font-weight:800;color:white;text-transform:uppercase;letter-spacing:0.5px}
@@ -99,19 +100,19 @@ button.full-width{flex:1 1 100%;margin-top:2px}
 
 <aside class="panel">
 <div class="info"><strong>So geht's:</strong><br>
-Gestalte deine Welt. Beobachte im Dashboard, wie sich der Zustand der Erde verändert.
+Gestalte deine Welt. Beobachte im Dashboard, wie sich der Zustand deiner Modellwelt verändert. Die Anzeigen bilden vereinfacht verschiedene Umweltzusammenhänge ab – sie sind keine Messung realer planetarer Grenzen.
 </div>
 
-<!-- DASHBOARD GESUNDHEITSZUSTAND DER WELT -->
+<!-- DASHBOARD ZUSTAND DER MODELLWELT -->
 <div class="healthDashboard">
   <div class="healthHeader">
-    <h2>Gesundheitszustand</h2>
+    <h2>Zustand der Modellwelt</h2>
     <span class="healthBadge" id="overallBadge">Gut</span>
   </div>
 
   <div class="indicatorItem">
     <div class="indicatorLabel">
-      <span>🪵 Lebensraum & Überbauung</span>
+      <span>🌱 Naturraum</span>
       <span id="labelLand">100 %</span>
     </div>
     <div class="barTrack"><div class="barFill" id="barLand"></div></div>
@@ -119,7 +120,7 @@ Gestalte deine Welt. Beobachte im Dashboard, wie sich der Zustand der Erde verä
 
   <div class="indicatorItem">
     <div class="indicatorLabel">
-      <span>💧 Wasserhaushalt</span>
+      <span>💧 Wasser</span>
       <span id="labelWater">100 %</span>
     </div>
     <div class="barTrack"><div class="barFill" id="barWater"></div></div>
@@ -127,10 +128,10 @@ Gestalte deine Welt. Beobachte im Dashboard, wie sich der Zustand der Erde verä
 
   <div class="indicatorItem">
     <div class="indicatorLabel">
-      <span>🌀 Luft & Klima</span>
-      <span id="labelAir">100 %</span>
+      <span>🌍 Klima</span>
+      <span id="labelClimate">100 %</span>
     </div>
-    <div class="barTrack"><div class="barFill" id="barAir"></div></div>
+    <div class="barTrack"><div class="barFill" id="barClimate"></div></div>
   </div>
 </div>
 
@@ -139,7 +140,7 @@ Gestalte deine Welt. Beobachte im Dashboard, wie sich der Zustand der Erde verä
 <div class="paletteSectionTitle">Ressourcen (Unveränderbar)</div>
 <div class="palette" id="resourcePalette"></div>
 
-<div class="paletteSectionTitle">Menschliche Gestaltung</div>
+<div class="paletteSectionTitle">Meine Gestaltung</div>
 <div class="palette" id="userPalette"></div>
 
 <div class="buttons">
@@ -404,24 +405,90 @@ function getSemanticCategory(name) {
   const clean = name.toLowerCase().trim();
   if (!clean) return 'BUILDING';
 
-  // Naturschutz / Senken
-  if (/wald|forest|baum|tree|park|biotop|moor|schutz|solar|wind|erneuerbar|bienen|wiese|renaturier|naturschutz|pflanze|garten|aufforst/.test(clean)) {
-    return 'SINK';
+  // Natur und ökologische Ausgleichsmöglichkeiten der Modellwelt
+  if (/solar|wind|erneuerbar|fahrrad|fussgänger|fußgänger/.test(clean)) {
+    return 'LOW_IMPACT';
+  }
+  if (/wald|forest|baum|tree|park|biotop|moor|schutz|bienen|wiese|renaturier|naturschutz|pflanze|garten|aufforst/.test(clean)) {
+    // Naturnahe Gestaltung kann in der Modellwelt Belastung mindern.
+    // Sie wird bewusst NICHT als CO₂-Senke bezeichnet.
+    return 'NATURE';
   }
   // Industrie / Starke Emissionen
   if (/fabrik|factory|kraftwerk|werk|mine|abbau|hafen|flughafen|airport|müll|müllhalde|chemie|industrie|rauch|ausstoß/.test(clean)) {
     return 'HEAVY_INDUSTRY';
   }
   // Schonende Bebauung / Nutzung
-  if (/bio|öko|oeko|holz|pfahlbau|tiny|fahrrad|fussgänger|fußgänger/.test(clean)) {
+  if (/bio|öko|oeko|holz|pfahlbau|tiny/.test(clean)) {
     return 'LOW_IMPACT';
   }
   // Gewässer / Wasserfläche
   if (/see|fluss|river|lake|beach|strand|teich|bach|meer|ocean|quelle/.test(clean)) {
     return 'WATER';
   }
-  // Standard-Fallback: Menschlicher Eingriff (Traumvilla, Gaming House, Haus, Straße, Pool, etc.)
+  // Standard-Fallback: Menschlicher Eingriff (Bebauung, Versiegelung)
   return 'BUILDING';
+}
+
+// VEREINFACHTES MODELL FÜR UMWELTZUSAMMENHÄNGE
+// Prüfroutine für einige lebensnotwendige Voraussetzungen der Modellwelt.
+// Sie ist bewusst keine vollständige Liste menschlicher Grundbedürfnisse.
+// Geprüft werden nur Voraussetzungen, die für das unmittelbare Überleben
+// in der Modellwelt relevant und im Gestaltungsspielraum sichtbar sind.
+// Wasser und Luft müssen nicht eingegeben werden: Sie gehören zur geschützten
+// Grundausstattung der Insel.
+function checkWorldNeeds() {
+  const names = userColorNames
+    .map(n => (n || '').toLowerCase().trim())
+    .filter(Boolean);
+
+  const hasFriends = names.some(n => /freund|freunde|freundschaft|familie|geschwister|mitbewohner|mitbewohnerin|menschen|bewohner/.test(n));
+
+  // Unterkunft: unterschiedliche Wohnformen sind möglich. Es wird nicht
+  // vorausgesetzt, dass Menschen in einem Haus wohnen müssen.
+  const hasHousing = names.some(n => /haus|wohnung|wohn|unterkunft|zelt|hütte|huette|heim|iglu|höhle|hoehle|bauernhof|dorf|siedlung|jurte|wohnwagen|bau/.test(n));
+
+  // Nahrung: Geprüft wird, ob eine Quelle der Nahrungsmittelversorgung
+  // erkennbar ist. Ein Supermarkt, Laden oder Markt ist nur ein Ort der
+  // Verteilung; er erklärt noch nicht, wo die Lebensmittel herkommen.
+  const hasFoodSource = names.some(n => /feld|acker|landwirtschaft|farm|anbau|gemüse|gemuese|obst|getreide|ernte|plantage|gewächshaus|gewaechshaus|gartenbau|tierhaltung|viehzucht|weide|fischerei|fischzucht|teichwirtschaft|angeln|fischen|sammeln|jäger|jaeger|jagd|nahrungserzeugung|lebensmittelproduktion|lebensmittelanbau/.test(n));
+  const hasFoodDistribution = names.some(n => /supermarkt|supermarket|laden|geschäft|geschaeft|markt|einkauf|shop|kiosk|bäckerei|baeckerei/.test(n));
+
+  const hints = [];
+
+  if (!hasHousing) {
+    if (hasFriends) {
+      hints.push('🏠 Du hast bereits Freunde in deiner Welt eingeplant. Wo könnt ihr wohnen? Ihr braucht eine Unterkunft – das muss kein Haus sein. Denke über eine Wohnform nach, die zu eurer Welt passt.');
+    } else {
+      hints.push('🏠 Du bist bisher allein in deiner Welt. Wo kannst du wohnen? Du brauchst eine Unterkunft – das muss kein Haus sein. Denke über eine Wohnform nach, die zu deiner Welt passt.');
+    }
+  }
+
+  if (!hasFoodSource) {
+    if (hasFoodDistribution) {
+      hints.push(hasFriends
+        ? '🥕 Du hast einen Supermarkt, Laden oder Markt eingeplant. Aber woher kommen die Lebensmittel für dich und deine Freunde? Wo werden sie erzeugt oder gewonnen? Denke weiter.'
+        : '🥕 Du hast einen Supermarkt, Laden oder Markt eingeplant. Aber woher kommen deine Lebensmittel? Wo werden sie erzeugt oder gewonnen? Denke weiter.');
+    } else {
+      hints.push(hasFriends
+        ? '🥕 Du hast bereits Freunde in deiner Welt eingeplant. Woher kommt eure Nahrung? Gibt es zum Beispiel Felder, Gärten, Tierhaltung, Fischerei oder eine andere Form der Nahrungsversorgung? Denke weiter.'
+        : '🥕 Woher kommt deine Nahrung? Gibt es zum Beispiel Felder, Gärten, Tierhaltung, Fischerei oder eine andere Form der Nahrungsversorgung? Denke weiter.');
+    }
+  }
+
+  return hints;
+}
+
+function showWorldNeedsCheck() {
+  const hints = checkWorldNeeds();
+  if (!hints.length) return true;
+
+  alert(
+    'Bevor du deine Welt speicherst, denke noch einmal weiter:\n\n' +
+    hints.map((h, i) => (i + 1) + '. ' + h.replace(/^\S+\s/, '')).join('\n\n') +
+    '\n\nGestalte deine Welt weiter und speichere sie danach erneut.'
+  );
+  return false;
 }
 
 function updateHealthDashboard() {
@@ -432,9 +499,18 @@ function updateHealthDashboard() {
     if(mask[y][x] && grid[y][x] >= 0) counts[grid[y][x]]++;
   }
 
-  // Ausgangszustand der Startwelt
-  const initialWater = counts[0]; 
-  const initialLandNature = counts[1] + counts[2];
+  // Referenzzustand: die tatsächlich erzeugte, unveränderte Startwelt.
+  // Die Werte werden aus dem Startgitter ermittelt und sind Modellreferenzen,
+  // keine Messwerte der realen Erde.
+  const baselineGrid = startGrid();
+  const baselineCounts = Array(4).fill(0);
+  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) {
+    if (mask[y][x] && baselineGrid[y][x] >= 0 && baselineGrid[y][x] < 4) {
+      baselineCounts[baselineGrid[y][x]]++;
+    }
+  }
+  const initialWater = baselineCounts[0];
+  const initialLandNature = baselineCounts[1] + baselineCounts[2];
 
   let buildingTiles = 0;
   let industryTiles = 0;
@@ -448,45 +524,100 @@ function updateHealthDashboard() {
     if (count === 0) continue;
 
     const cat = getSemanticCategory(userColorNames[i]);
-    if (cat === 'SINK') sinkTiles += count;
+    if (cat === 'NATURE') sinkTiles += count;
     else if (cat === 'HEAVY_INDUSTRY') industryTiles += count;
     else if (cat === 'LOW_IMPACT') lowImpactTiles += count;
     else if (cat === 'WATER') userWaterTiles += count;
     else buildingTiles += count;
   }
 
-  // 1. LEBENSRAUM & ÜBERBAUUNG (Leert sich bei Versiegelung/Bebauung)
-  const stressPoints = (buildingTiles * 1.0) + (industryTiles * 1.8) + (lowImpactTiles * 0.4) - (sinkTiles * 0.7);
-  const maxAcceptableStress = totalTiles * 0.28; 
-  let healthLand = Math.round(100 - Math.max(0, (stressPoints / maxAcceptableStress) * 100));
-  healthLand = Math.min(100, Math.max(0, healthLand));
+  // 1. NATURRAUM
+  // Direkter Belastungswert der Modellwelt: menschliche Nutzung verändert
+  // die vorhandene Naturfläche. Die Gewichtungen sind Modellannahmen.
+  const landStressRaw = (buildingTiles * 1.2) + (industryTiles * 2.2) + (lowImpactTiles * 0.4);
+  const landRestorationCredit = sinkTiles * 0.6;
+  const landStress = Math.max(0, landStressRaw - landRestorationCredit);
+  const landThreshold = Math.max(1, initialLandNature * 0.35);
 
-  // 2. WASSERHAUSHALT (Leert sich bei Verlust von Wasserflächen oder hohem Verbrauch)
+  // 2. WASSER
+  // Direkter Belastungswert: Verlust vorhandener Gewässer plus zusätzlicher
+  // Nutzungsdruck. Auch diese Gewichtungen sind Modellannahmen.
   const currentWater = counts[0] + userWaterTiles;
-  const waterLossPenalty = Math.max(0, (initialWater - currentWater) / (initialWater || 1)) * 100;
-  const waterDemandPenalty = ((industryTiles * 1.5) + (buildingTiles * 0.3)) / (initialWater || 1) * 100;
-  let healthWater = Math.round(100 - waterLossPenalty - waterDemandPenalty);
+  const directWaterLoss = Math.max(0, initialWater - currentWater);
+  const waterUseStress = (industryTiles * 2.0) + (buildingTiles * 0.5) + (lowImpactTiles * 0.2);
+  const waterStress = (directWaterLoss * 1.8) + waterUseStress;
+  const waterThreshold = Math.max(1, initialWater * 1.1);
+
+  // 3. KLIMA
+  // Direkter Belastungswert: emissionsintensive Nutzung belastet das Klima,
+  // Naturflächen wirken in der Modellwelt als vereinfachter Puffer. Das ist
+  // keine Berechnung realer CO2-Flüsse oder Klimawirkungen.
+  const climateLoad = (industryTiles * 2.5) + (buildingTiles * 0.8) + (lowImpactTiles * 0.2);
+  const naturalClimateBuffer = (counts[1] * 0.10) + (sinkTiles * 0.8);
+  const climateStress = Math.max(0, climateLoad - naturalClimateBuffer);
+  const climateThreshold = Math.max(1, totalTiles * 0.22);
+
+  // SYSTEMVERKETTUNG
+  // Die drei Bereiche werden nicht völlig unabhängig bewertet: Veränderungen
+  // eines Bereichs können andere Bereiche mitbelasten. Solche Wechselwirkungen
+  // sind aus der Erdsystemforschung grundsätzlich bekannt (z.B. Landnutzung,
+  // Wasserhaushalt und Klima beeinflussen sich gegenseitig).
+  //
+  // Wichtig: Die Koeffizienten sind bewusst kleine, dimensionslose
+  // Modellparameter. Sie sind NICHT empirische Kennwerte der realen Erde.
+  // Die Formel bildet daher eine qualitative Systemverkettung ab, keine
+  // wissenschaftliche Berechnung der planetaren Grenzen.
+  const landStressNorm = Math.min(1, landStress / landThreshold);
+  const waterStressNorm = Math.min(1, waterStress / waterThreshold);
+  const climateStressNorm = Math.min(1, climateStress / climateThreshold);
+
+  // Land -> Wasser: starke Veränderung des Naturraums kann im Modell den
+  // Wasserbereich zusätzlich belasten.
+  // Klima -> Wasser: Klimabelastung kann im Modell zusätzlichen Wasserdruck
+  // auslösen.
+  const effectiveWaterStress = Math.min(1,
+    waterStressNorm + 0.12 * landStressNorm + 0.08 * climateStressNorm
+  );
+
+  // Land -> Klima: Veränderung natürlicher Flächen kann im Modell die
+  // Klimabelastung verstärken.
+  // Wasser -> Klima: starker Wasserdruck wird als kleiner zusätzlicher
+  // Systemstress berücksichtigt.
+  const effectiveClimateStress = Math.min(1,
+    climateStressNorm + 0.12 * landStressNorm + 0.05 * waterStressNorm
+  );
+
+  // Wasser -> Naturraum: starker Wasserdruck kann im Modell die Belastung
+  // des Naturraums erhöhen.
+  const effectiveLandStress = Math.min(1,
+    landStressNorm + 0.08 * waterStressNorm
+  );
+
+  let healthLand = Math.round(100 * (1 - effectiveLandStress));
+  let healthWater = Math.round(100 * (1 - effectiveWaterStress));
+  let healthClimate = Math.round(100 * (1 - effectiveClimateStress));
+
+  healthLand = Math.min(100, Math.max(0, healthLand));
   healthWater = Math.min(100, Math.max(0, healthWater));
+  healthClimate = Math.min(100, Math.max(0, healthClimate));
 
-  // 3. LUFT & KLIMA (Leert sich bei Emissionen ohne Ausgleich)
-  const currentNatureFilter = counts[1] + counts[3] + (sinkTiles * 1.4);
-  const emissions = (industryTiles * 2.2) + (buildingTiles * 0.7);
-  let healthAir = Math.round(100 - (emissions / (currentNatureFilter + 1)) * 55);
-  healthAir = Math.min(100, Math.max(0, healthAir));
-
-  // Gesamtzustand
-  const overallHealth = Math.round((healthLand * 0.4) + (healthWater * 0.3) + (healthAir * 0.3));
+  // GESAMTZUSTAND (didaktische Modellregel)
+  const minHealth = Math.min(healthLand, healthWater, healthClimate);
+  const avgHealth = Math.round((healthLand + healthWater + healthClimate) / 3);
+  
+  // Eine stark belastete Dimension kann den Gesamtzustand stärker beeinflussen; dies ist keine Modellierung realer Kipppunkte.
+  const overallHealth = Math.round(avgHealth * 0.6 + minHealth * 0.4);
 
   // Visualisierung im UI
   updateBar("barLand", "labelLand", healthLand);
   updateBar("barWater", "labelWater", healthWater);
-  updateBar("barAir", "labelAir", healthAir);
+  updateBar("barClimate", "labelClimate", healthClimate);
 
   const badge = document.getElementById("overallBadge");
-  if (overallHealth >= 75) {
+  if (overallHealth >= 75 && minHealth >= 55) {
     badge.textContent = "Gut";
     badge.style.background = "#2ecc71";
-  } else if (overallHealth >= 45) {
+  } else if (overallHealth >= 45 && minHealth >= 30) {
     badge.textContent = "Belastet";
     badge.style.background = "#f39c12";
   } else {
@@ -573,7 +704,7 @@ function makePalette(){
     resP.appendChild(card);
   });
 
-  // Anpassbare eigene Gestaltungselemente (4-9)
+  // Meine Gestaltung (Anpassbare Elemente 4-9)
   userColors.forEach((c, i) => {
     const fullIndex = i + 4;
     const card = document.createElement("div");
@@ -603,7 +734,7 @@ function makePalette(){
     name.type = "text";
     name.className = "nameInput";
     name.maxLength = 35;
-    name.placeholder = "z.B. Haus, Wald, Fabrik";
+    name.placeholder = "Bedeutung dieser Farbe";
     name.value = userColorNames[i];
     name.oninput = () => {
       userColorNames[i] = name.value;
@@ -627,13 +758,18 @@ canvas.addEventListener("click", e => {
 });
 
 document.getElementById("reset").onclick = () => {
-  if(confirm("Die Gestaltung wirklich auf die unberührte Startwelt zurücksetzen?")){
+  if(confirm("Die Gestaltung wirklich auf die unveränderte Startwelt zurücksetzen?")){
     loadBlankState();
     setWorldURL(null);
   }
 };
 
 document.getElementById("save").onclick = () => {
+  // Vor dem Speichern werden einige grundlegende Lebensbedingungen als
+  // Denkanstoß geprüft. Bei fehlenden Voraussetzungen wird noch nicht
+  // gespeichert; die bestehende Speicherroutine bleibt unverändert.
+  if (!showWorldNeedsCheck()) return;
+
   const worlds = getSavedWorlds();
   const usedSlots = worlds.map(w => w.id);
   const targetSlot = VALID_SLOTS.find(slot => !usedSlots.includes(slot));
@@ -643,7 +779,7 @@ document.getElementById("save").onclick = () => {
     return;
   }
 
-  // Generiert Export-Canvas inklusive Legende und Erdsystem-Status
+  // Generiert Export-Canvas inklusive Legende und Modellwelt-Status
   const expCanvas = document.createElement("canvas");
   const pad = 24, headerH = 100, rowH = 24, rows = 5;
   const legendH = pad + headerH + (rows * rowH) + pad;
@@ -665,12 +801,12 @@ document.getElementById("save").onclick = () => {
   const badgeText = document.getElementById("overallBadge").textContent;
   exCtx.fillStyle = "#222";
   exCtx.font = "bold 16px system-ui, sans-serif";
-  exCtx.fillText("Gesundheitszustand der Welt: " + badgeText, pad, canvas.height + pad + 14);
+  exCtx.fillText("Zustand der Modellwelt: " + badgeText, pad, canvas.height + pad + 14);
 
   exCtx.font = "12px system-ui, sans-serif";
-  exCtx.fillText("Lebensraum: " + document.getElementById("labelLand").textContent, pad, canvas.height + pad + 36);
-  exCtx.fillText("Wasserhaushalt: " + document.getElementById("labelWater").textContent, pad + 200, canvas.height + pad + 36);
-  exCtx.fillText("Luft & Klima: " + document.getElementById("labelAir").textContent, pad + 400, canvas.height + pad + 36);
+  exCtx.fillText("Naturraum: " + document.getElementById("labelLand").textContent, pad, canvas.height + pad + 36);
+  exCtx.fillText("Wasser: " + document.getElementById("labelWater").textContent, pad + 200, canvas.height + pad + 36);
+  exCtx.fillText("Klima: " + document.getElementById("labelClimate").textContent, pad + 400, canvas.height + pad + 36);
 
   exCtx.beginPath();
   exCtx.moveTo(pad, canvas.height + pad + 50);
