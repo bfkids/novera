@@ -195,10 +195,8 @@ function deleteWorld(id) {
   let worlds = getSavedWorlds();
   const currentActiveId = getURLParam("world");
 
-  // Gewählte Welt entfernen
   worlds = worlds.filter(w => w.id !== id);
 
-  // Verbleibende Welten nachrücken (neu durchnummerieren ab 1)
   worlds.forEach((w, index) => {
     w.id = (index + 1).toString();
   });
@@ -241,18 +239,12 @@ function renderGallery() {
     thumbCard.appendChild(label);
 
     const link = document.createElement("a");
-    link.title = "Klicken für Großansicht & Bearbeiten";
+    link.href = "?world=" + world.id;
+    link.title = "Welt " + world.id + " laden";
     link.onclick = (e) => {
       e.preventDefault();
       loadWorldData(world);
       setWorldURL(world.id);
-
-      // Großansicht im neuen Tab öffnen
-      if (world.dataUrl) {
-        const blob = dataURLtoBlob(world.dataUrl);
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl, "_blank");
-      }
     };
 
     const img = document.createElement("img");
@@ -428,7 +420,6 @@ document.getElementById("save").onclick=()=>{
   const worlds = getSavedWorlds();
   const usedSlots = worlds.map(w => w.id);
   
-  // Nächsten freien Slot suchen
   const targetSlot = VALID_SLOTS.find(slot => !usedSlots.includes(slot));
 
   if (!targetSlot) {
