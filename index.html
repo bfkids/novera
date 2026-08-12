@@ -18,10 +18,13 @@ main{max-width:1200px;margin:auto;padding:18px 28px 35px;display:grid;grid-templ
 .galleryWrap.active{display:block}
 .galleryTitle{font-size:16px;margin:0 0 12px;font-weight:700}
 .galleryGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-.thumbCard{border:2px solid #222;border-radius:8px;overflow:hidden;background:#dff1fa;box-shadow:0 2px 6px #00000010;transition:transform .15s ease}
+.thumbCard{border:2px solid #222;border-radius:8px;overflow:hidden;background:#dff1fa;box-shadow:0 2px 6px #00000010;transition:transform .15s ease;display:flex;flex-direction:column;justify-content:space-between}
 .thumbCard:hover{transform:scale(1.03)}
-.thumbCard a{display:block;cursor:pointer}
+.thumbCard a{display:block;cursor:pointer;flex:1;text-decoration:none;color:inherit}
 .thumbCard img{width:100%;height:auto;display:block;object-fit:contain}
+.thumbLabel{padding:4px 6px;font-size:12px;font-weight:bold;background:#fff;border-bottom:1px solid #ddd;text-align:center}
+.deleteBtn{border:none;background:#e76f51;color:white;padding:6px;font-size:12px;font-weight:600;cursor:pointer;width:100%;transition:background .2s}
+.deleteBtn:hover{background:#c0392b}
 
 .panel{background:white;border-radius:14px;padding:18px;box-shadow:0 2px 12px #00000012}
 #islandWrap{display:flex;justify-content:center;align-items:center;min-height:520px;overflow:hidden;background:#dff1fa;border-radius:10px;padding:20px}
@@ -87,7 +90,6 @@ Du musst nicht alle zehn Farben verwenden.
 <div class="palette" id="palette"></div>
 
 <div class="buttons">
-<button class="action" id="undo">↶ Rückgängig</button>
 <button class="action secondary" id="reset">Welt zurücksetzen</button>
 <button class="action" id="save">Welt speichern</button>
 </div>
@@ -100,10 +102,13 @@ Du musst nicht alle zehn Farben verwenden.
 (function(){
 "use strict";
 
+const STORAGE_KEY = "mons_novera_saved_worlds";
+const VALID_SLOTS = ["1", "2", "3"];
 const COLS=20, ROWS=15, SCALE=32;
-const colors=["#5DB7DE","#75C56B","#F4C84A","#E76F51","#B58AD8","#E78AB3","#8A9A9B","#F3F0E8","#D98B5F","#5E8FA8"];
+const defaultColors=["#5DB7DE","#75C56B","#F4C84A","#E76F51","#B58AD8","#E78AB3","#8A9A9B","#F3F0E8","#D98B5F","#5E8FA8"];
+let colors=[...defaultColors];
 const colorNames=Array(colors.length).fill("");
-let selected=0, history=[];
+let selected=0;
 
 const mask=[];
 for(let y=0;y<ROWS;y++){
@@ -128,6 +133,116 @@ const canvas=document.getElementById("canvas");
 canvas.width=COLS*SCALE;
 canvas.height=ROWS*SCALE;
 const ctx=canvas.getContext("2d");
+
+function getSavedWorlds() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveSavedWorlds(worlds) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(worlds));
+}
+
+function getURLParam(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
+
+function setWorldURL(id) {
+  if (id) {
+    const newUrl = window.location.pathname + '?world=' + id;
+    window.history.pushState({ worldId: id }, '', newUrl);
+  } else {
+    window.history.pushState({}, '', window.location.pathname);
+  }
+}
+
+function loadWorldData(world) {
+  grid = JSON.parse(JSON.stringify(world.grid));
+  if (world.colors) {
+    for (let i = 0; i < colors.length; i++) {
+      if (world.colors[i]) colors[i] = world.colors[i];
+    }
+  }
+  if (world.colorNames) {
+    for (let i = 0; i < colorNames.length; i++) {
+      colorNames[i] = world.colorNames[i] || "";
+    }
+  }
+  makePalette();
+  draw();
+}
+
+function deleteWorld(id) {
+  let worlds = getSavedWorlds();
+  worlds = worlds.filter(w => w.id !== id);
+  saveSavedWorlds(worlds);
+  renderGallery();
+
+  if (getURLParam("world") === id) {
+    setWorldURL(null);
+    grid = emptyGrid();
+    colors = [...defaultColors];
+    colorNames.fill("");
+    makePalette();
+    draw();
+  }
+}
+
+function renderGallery() {
+  const galleryWrap = document.getElementById("galleryWrap");
+  const galleryGrid = document.getElementById("galleryGrid");
+  galleryGrid.innerHTML = "";
+
+  const worlds = getSavedWorlds();
+  worlds.sort((a,b) => Number(a.id) - Number(b.id));
+
+  if (worlds.length > 0) {
+    galleryWrap.classList.add("active");
+  } else {
+    galleryWrap.classList.remove("active");
+  }
+
+  worlds.forEach(world => {
+    const thumbCard = document.createElement("div");
+    thumbCard.className = "thumbCard";
+
+    const label = document.createElement("div");
+    label.className = "thumbLabel";
+    label.textContent = "Welt " + world.id;
+    thumbCard.appendChild(label);
+
+    const link = document.createElement("a");
+    link.title = "Welt " + world.id + " laden";
+    link.onclick = (e) => {
+      e.preventDefault();
+      loadWorldData(world);
+      setWorldURL(world.id);
+    };
+
+    const img = document.createElement("img");
+    img.src = world.dataUrl;
+    img.alt = "Gespeicherte Welt " + world.id;
+
+    link.appendChild(img);
+    thumbCard.appendChild(link);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "deleteBtn";
+    delBtn.textContent = "Löschen";
+    delBtn.title = "Welt " + world.id + " löschen";
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+      deleteWorld(world.id);
+    };
+
+    thumbCard.appendChild(delBtn);
+    galleryGrid.appendChild(thumbCard);
+  });
+}
 
 function draw(){
   ctx.fillStyle="#dff1fa";
@@ -262,23 +377,40 @@ canvas.addEventListener("click",e=>{
   const x=Math.floor(((e.clientX-r.left)*scaleX)/SCALE);
   const y=Math.floor(((e.clientY-r.top)*scaleY)/SCALE);
   if(x<0||x>=COLS||y<0||y>=ROWS||!mask[y][x])return;
-  history.push(grid.map(row=>row.slice()));
   grid[y][x]=selected;
   draw();
 });
 
-document.getElementById("undo").onclick=()=>{
-  if(history.length)grid=history.pop();
-  draw();
-};
-
 document.getElementById("reset").onclick=()=>{
   if(confirm("Die Gestaltung wirklich zurücksetzen?")){
-    history=[];grid=emptyGrid();draw();
+    grid=emptyGrid();
+    colors=[...defaultColors];
+    colorNames.fill("");
+    setWorldURL(null);
+    makePalette();
+    draw();
   }
 };
 
 document.getElementById("save").onclick=()=>{
+  const worlds = getSavedWorlds();
+  const currentParam = getURLParam("world");
+  let targetSlot = null;
+
+  // Wenn bereits ein gültiger Slot geladen ist, wird genau dieser überschrieben
+  if (currentParam && VALID_SLOTS.includes(currentParam)) {
+    targetSlot = currentParam;
+  } else {
+    // Ansonsten den nächsten freien Slot aus [1, 2, 3] suchen
+    const usedSlots = worlds.map(w => w.id);
+    targetSlot = VALID_SLOTS.find(slot => !usedSlots.includes(slot));
+  }
+
+  if (!targetSlot) {
+    alert("Maximale Anzahl von 3 Welten erreicht. Bitte lösche zuerst mindestens eine Welt.");
+    return;
+  }
+
   const expCanvas=document.createElement("canvas");
   const pad=24, headerH=30, rowH=26, rows=Math.ceil(colors.length/2);
   const legendH=pad+headerH+(rows*rowH)+pad;
@@ -341,40 +473,62 @@ document.getElementById("save").onclick=()=>{
   });
 
   const dataUrl=expCanvas.toDataURL("image/png");
+  const newWorld = {
+    id: targetSlot,
+    grid: JSON.parse(JSON.stringify(grid)),
+    colors: [...colors],
+    colorNames: [...colorNames],
+    dataUrl: dataUrl
+  };
+
+  const updatedWorlds = worlds.filter(w => w.id !== targetSlot);
+  updatedWorlds.push(newWorld);
+  saveSavedWorlds(updatedWorlds);
+  
+  renderGallery();
+  setWorldURL(targetSlot);
+
   const blob=dataURLtoBlob(dataUrl);
   const blobUrl=URL.createObjectURL(blob);
-  
-  // 1. ZUERST: Thumbnail in die Galerie einfügen
-  const galleryWrap=document.getElementById("galleryWrap");
-  const galleryGrid=document.getElementById("galleryGrid");
-  
-  galleryWrap.classList.add("active");
-
-  const thumbCard=document.createElement("div");
-  thumbCard.className="thumbCard";
-  
-  const link=document.createElement("a");
-  link.href=blobUrl;
-  link.target="_blank";
-  link.title="Klicken für Großansicht";
-
-  const img=document.createElement("img");
-  img.src=blobUrl;
-  img.alt="Gespeicherte Insel";
-  
-  link.appendChild(img);
-  thumbCard.appendChild(link);
-  galleryGrid.appendChild(thumbCard);
-
-  // 2. DANACH: Bild als Datei herunterladen
   const a=document.createElement("a");
-  a.download="meine-fliegende-insel.png";
+  a.download="meine-fliegende-insel-welt-"+targetSlot+".png";
   a.href=blobUrl;
   a.click();
 };
 
-makePalette();
-draw();
+window.onpopstate = () => {
+  const worldId = getURLParam('world');
+  if (worldId && VALID_SLOTS.includes(worldId)) {
+    const worlds = getSavedWorlds();
+    const world = worlds.find(w => w.id === worldId);
+    if (world) {
+      loadWorldData(world);
+      return;
+    }
+  }
+  grid = emptyGrid();
+  colors = [...defaultColors];
+  colorNames.fill("");
+  makePalette();
+  draw();
+};
+
+renderGallery();
+const initialWorldId = getURLParam('world');
+if (initialWorldId && VALID_SLOTS.includes(initialWorldId)) {
+  const worlds = getSavedWorlds();
+  const world = worlds.find(w => w.id === initialWorldId);
+  if (world) {
+    loadWorldData(world);
+  } else {
+    makePalette();
+    draw();
+  }
+} else {
+  makePalette();
+  draw();
+}
+
 })();
 </script>
 </body>
