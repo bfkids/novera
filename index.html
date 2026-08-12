@@ -34,6 +34,10 @@ main{max-width:1200px;margin:auto;padding:18px 28px 35px;display:grid;grid-templ
 canvas{image-rendering:pixelated;image-rendering:crisp-edges;border:none;cursor:crosshair;background:#dff1fa;max-width:100%;height:auto;display:block;touch-action:manipulation}
 h2{font-size:17px;margin:4px 0 10px}
 .info{background:#f4f1ea;border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.4;margin-bottom:16px}
+.worldPeopleBox{background:#eef5ea;border:1px solid #cbd9c5;border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.5;margin-bottom:16px}
+.worldPeopleBox label{display:block;margin-top:7px;cursor:pointer}
+.worldPeopleBox input{margin-right:7px}
+.smallNote{font-size:12px;opacity:.8;margin-top:8px}
 
 /* Dashboard Zustand der Modellwelt */
 .healthDashboard{background:#fdfcf7;border:2px solid #222;border-radius:12px;padding:14px;margin-bottom:18px}
@@ -100,7 +104,16 @@ button.full-width{flex:1 1 100%;margin-top:2px}
 
 <aside class="panel">
 <div class="info"><strong>So geht's:</strong><br>
-Gestalte deine Welt. Beobachte im Dashboard, wie sich der Zustand deiner Modellwelt verändert. Die Anzeigen bilden vereinfacht verschiedene Umweltzusammenhänge ab – sie sind keine Messung realer planetarer Grenzen.
+Wähle eine Farbe aus. Überlege, was sie in deiner Welt darstellen soll, und beschreibe ihre Bedeutung. Trage die Bedeutung ein und platziere anschließend die Farbe auf deiner Insel. Wiederhole dies mit weiteren Farben, bis deine Welt so aussieht, wie du sie dir vorstellst.<br><br>
+Beobachte im Dashboard, wie sich der Zustand deiner Modellwelt verändert. Die Anzeigen bilden vereinfacht verschiedene Umweltzusammenhänge in einer Fantasiewelt ab.
+</div>
+
+<div class="worldPeopleBox">
+  <strong>Für wie viele Menschen gestaltest du diese Welt?</strong>
+  <label><input type="radio" name="worldPeople" value="1"> Welt für 1 Person</label>
+  <label><input type="radio" name="worldPeople" value="3"> Welt für 3 Personen</label>
+  <label><input type="radio" name="worldPeople" value="6"> Welt für 6 Personen</label>
+  <div class="smallNote">Wähle eine Möglichkeit aus. Erst dann kannst du die Welt speichern.</div>
 </div>
 
 <!-- DASHBOARD ZUSTAND DER MODELLWELT -->
@@ -251,6 +264,7 @@ function startGrid(){
 }
 
 let grid = startGrid();
+let worldPeopleCount = null;
 
 const canvas = document.getElementById("canvas");
 canvas.width = COLS * SCALE;
@@ -287,6 +301,8 @@ function setWorldURL(id) {
 
 function loadWorldData(world) {
   grid = JSON.parse(JSON.stringify(world.grid));
+  worldPeopleCount = world.peopleCount || null;
+  setWorldPeopleSelection(worldPeopleCount);
   if (world.userColors) {
     for (let i = 0; i < userColors.length; i++) {
       if (world.userColors[i]) userColors[i] = world.userColors[i];
@@ -303,6 +319,8 @@ function loadWorldData(world) {
 
 function loadBlankState() {
   grid = startGrid();
+  worldPeopleCount = null;
+  setWorldPeopleSelection(null);
   userColors = [...defaultUserColors];
   userColorNames.fill("");
   makePalette();
@@ -405,7 +423,7 @@ function getSemanticCategory(name) {
   const clean = name.toLowerCase().trim();
   if (!clean) return 'BUILDING';
 
-  // Natur und ökologische Ausgleichsmöglichkeiten der Modellwelt
+  // Naturnahe Gestaltung der Modellwelt
   if (/solar|wind|erneuerbar|fahrrad|fussgänger|fußgänger/.test(clean)) {
     return 'LOW_IMPACT';
   }
@@ -431,64 +449,112 @@ function getSemanticCategory(name) {
 }
 
 // VEREINFACHTES MODELL FÜR UMWELTZUSAMMENHÄNGE
-// Prüfroutine für einige lebensnotwendige Voraussetzungen der Modellwelt.
+// Prüfroutine für wenige lebensnotwendige Voraussetzungen der Modellwelt.
 // Sie ist bewusst keine vollständige Liste menschlicher Grundbedürfnisse.
-// Geprüft werden nur Voraussetzungen, die für das unmittelbare Überleben
-// in der Modellwelt relevant und im Gestaltungsspielraum sichtbar sind.
-// Wasser und Luft müssen nicht eingegeben werden: Sie gehören zur geschützten
-// Grundausstattung der Insel.
+// Wasser und Luft gehören zur geschützten Grundausstattung der Insel und
+// werden deshalb nicht als individuelle Gestaltung vorausgesetzt.
+function setWorldPeopleSelection(value) {
+  document.querySelectorAll('input[name="worldPeople"]').forEach(radio => {
+    radio.checked = String(value || '') === radio.value;
+  });
+}
+
+document.querySelectorAll('input[name="worldPeople"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    worldPeopleCount = Number(radio.value);
+  });
+});
+
+function getSelectedWorldPeople() {
+  const selected = document.querySelector('input[name="worldPeople"]:checked');
+  return selected ? Number(selected.value) : null;
+}
+
+function hasUserPlacedTiles() {
+  const baseline = startGrid();
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      if (grid[y][x] !== baseline[y][x]) return true;
+    }
+  }
+  return false;
+}
+
 function checkWorldNeeds() {
+  const people = getSelectedWorldPeople();
+  if (!people) return { required: [], prompts: [], needsConfirmation: false };
+
   const names = userColorNames
     .map(n => (n || '').toLowerCase().trim())
     .filter(Boolean);
 
-  const hasFriends = names.some(n => /freund|freunde|freundschaft|familie|geschwister|mitbewohner|mitbewohnerin|menschen|bewohner/.test(n));
-
-  // Unterkunft: unterschiedliche Wohnformen sind möglich. Es wird nicht
-  // vorausgesetzt, dass Menschen in einem Haus wohnen müssen.
-  const hasHousing = names.some(n => /haus|wohnung|wohn|unterkunft|zelt|hütte|huette|heim|iglu|höhle|hoehle|bauernhof|dorf|siedlung|jurte|wohnwagen|bau/.test(n));
-
-  // Nahrung: Geprüft wird, ob eine Quelle der Nahrungsmittelversorgung
-  // erkennbar ist. Ein Supermarkt, Laden oder Markt ist nur ein Ort der
-  // Verteilung; er erklärt noch nicht, wo die Lebensmittel herkommen.
+  const hasHousing = names.some(n => /haus|wohnung|wohn|unterkunft|zelt|hütte|huette|heim|iglu|höhle|hoehle|bauernhof|dorf|siedlung|jurte|wohnwagen/.test(n));
   const hasFoodSource = names.some(n => /feld|acker|landwirtschaft|farm|anbau|gemüse|gemuese|obst|getreide|ernte|plantage|gewächshaus|gewaechshaus|gartenbau|tierhaltung|viehzucht|weide|fischerei|fischzucht|teichwirtschaft|angeln|fischen|sammeln|jäger|jaeger|jagd|nahrungserzeugung|lebensmittelproduktion|lebensmittelanbau/.test(n));
   const hasFoodDistribution = names.some(n => /supermarkt|supermarket|laden|geschäft|geschaeft|markt|einkauf|shop|kiosk|bäckerei|baeckerei/.test(n));
 
-  const hints = [];
+  const required = [];
+  const prompts = [];
 
   if (!hasHousing) {
-    if (hasFriends) {
-      hints.push('🏠 Du hast bereits Freunde in deiner Welt eingeplant. Wo könnt ihr wohnen? Ihr braucht eine Unterkunft – das muss kein Haus sein. Denke über eine Wohnform nach, die zu eurer Welt passt.');
-    } else {
-      hints.push('🏠 Du bist bisher allein in deiner Welt. Wo kannst du wohnen? Du brauchst eine Unterkunft – das muss kein Haus sein. Denke über eine Wohnform nach, die zu deiner Welt passt.');
-    }
+    required.push(people === 1
+      ? '🏠 Du bist allein in deiner Welt. Wo kannst du wohnen? Du brauchst eine Unterkunft – das muss kein Haus sein. Denke über eine Wohnform nach, die zu deiner Welt passt.'
+      : `🏠 Deine Welt soll für ${people} Menschen funktionieren. Wo könnt ihr wohnen? Ihr braucht eine Unterkunft – das muss kein Haus sein. Denke über eine Wohnform nach, die zu eurer Welt passt.`);
   }
 
   if (!hasFoodSource) {
     if (hasFoodDistribution) {
-      hints.push(hasFriends
-        ? '🥕 Du hast einen Supermarkt, Laden oder Markt eingeplant. Aber woher kommen die Lebensmittel für dich und deine Freunde? Wo werden sie erzeugt oder gewonnen? Denke weiter.'
-        : '🥕 Du hast einen Supermarkt, Laden oder Markt eingeplant. Aber woher kommen deine Lebensmittel? Wo werden sie erzeugt oder gewonnen? Denke weiter.');
+      required.push(people === 1
+        ? '🥕 Du hast einen Supermarkt, Laden oder Markt eingeplant. Aber woher kommen deine Lebensmittel? Wo werden sie erzeugt oder gewonnen? Denke weiter.'
+        : `🥕 Du hast einen Supermarkt, Laden oder Markt eingeplant. Aber woher kommen die Lebensmittel für ${people} Menschen? Wo werden sie erzeugt oder gewonnen? Denke weiter.`);
     } else {
-      hints.push(hasFriends
-        ? '🥕 Du hast bereits Freunde in deiner Welt eingeplant. Woher kommt eure Nahrung? Gibt es zum Beispiel Felder, Gärten, Tierhaltung, Fischerei oder eine andere Form der Nahrungsversorgung? Denke weiter.'
-        : '🥕 Woher kommt deine Nahrung? Gibt es zum Beispiel Felder, Gärten, Tierhaltung, Fischerei oder eine andere Form der Nahrungsversorgung? Denke weiter.');
+      required.push(people === 1
+        ? '🥕 Woher kommt deine Nahrung? Gibt es zum Beispiel Felder, Gärten, Tierhaltung, Fischerei oder eine andere Form der Nahrungsversorgung? Denke weiter.'
+        : `🥕 Woher kommt die Nahrung für ${people} Menschen? Gibt es zum Beispiel Felder, Gärten, Tierhaltung, Fischerei oder eine andere Form der Nahrungsversorgung? Denke weiter.`);
     }
   }
 
-  return hints;
+  // Bei mehr als einer Person wird keine scheinpräzise "Personen pro Feld"-
+  // Rechnung vorgenommen. Die ausreichende Versorgung hängt von Größe,
+  // Ertrag, Anbauweise, Ernährung und weiteren Bedingungen ab.
+  if (people > 1 && hasFoodSource) {
+    prompts.push(`🥕 Jetzt soll deine Welt für ${people} Menschen funktionieren. Reicht die vorhandene Nahrungsversorgung für alle? Ein Feld kann unterschiedlich viel Nahrung liefern – das hängt unter anderem von seiner Größe, dem Anbau und eurer Ernährung ab. Überlege, ob ihr mehr oder etwas anderes braucht.`);
+  }
+
+  if (people > 1 && hasHousing) {
+    prompts.push(`🏠 Jetzt soll deine Welt für ${people} Menschen funktionieren. Reicht die von dir vorgesehene Unterkunft für alle? Das hängt zum Beispiel von ihrer Größe und der gewählten Wohnform ab. Überlege, ob du etwas verändern möchtest.`);
+  }
+
+  // Wenn für eine Welt mit mehreren Personen überhaupt noch nichts verändert
+  // wurde, soll die Person bewusst prüfen, ob ihr Entwurf für die gewählte Zahl
+  // von Menschen gedacht ist. Das Modell behauptet dabei nicht, was "genug"
+  // ist.
+  if (people > 1 && !hasUserPlacedTiles()) {
+    prompts.push(`👥 Deine Welt ist bisher unverändert. Sie soll für ${people} Menschen funktionieren. Ist das wirklich so gedacht? Überlege, was ihr gemeinsam zum Leben braucht und ob du etwas verändern möchtest.`);
+  }
+
+  return { required, prompts, needsConfirmation: required.length > 0 || prompts.length > 0 };
 }
 
 function showWorldNeedsCheck() {
-  const hints = checkWorldNeeds();
-  if (!hints.length) return true;
+  const result = checkWorldNeeds();
+  if (!result.needsConfirmation) return true;
 
-  alert(
+  const all = [...result.required, ...result.prompts];
+  const text = all.map((h, i) => (i + 1) + '. ' + h.replace(/^\S+\s/, '')).join('\n\n');
+
+  if (result.required.length > 0) {
+    return confirm(
+      'Bevor du deine Welt speicherst, denke noch einmal weiter:\n\n' +
+      text +
+      '\n\nStimmt deine Gestaltung trotzdem so? Wenn ja, kannst du sie speichern. Wenn nein, gestalte deine Welt weiter.'
+    );
+  }
+
+  return confirm(
     'Bevor du deine Welt speicherst, denke noch einmal weiter:\n\n' +
-    hints.map((h, i) => (i + 1) + '. ' + h.replace(/^\S+\s/, '')).join('\n\n') +
-    '\n\nGestalte deine Welt weiter und speichere sie danach erneut.'
+    text +
+    '\n\nStimmt deine Gestaltung so? Wenn ja, wird sie gespeichert. Wenn nein, kannst du deine Welt noch verändern.'
   );
-  return false;
 }
 
 function updateHealthDashboard() {
@@ -514,7 +580,7 @@ function updateHealthDashboard() {
 
   let buildingTiles = 0;
   let industryTiles = 0;
-  let sinkTiles = 0;
+  let natureTiles = 0;
   let lowImpactTiles = 0;
   let userWaterTiles = 0;
 
@@ -524,7 +590,7 @@ function updateHealthDashboard() {
     if (count === 0) continue;
 
     const cat = getSemanticCategory(userColorNames[i]);
-    if (cat === 'NATURE') sinkTiles += count;
+    if (cat === 'NATURE') natureTiles += count;
     else if (cat === 'HEAVY_INDUSTRY') industryTiles += count;
     else if (cat === 'LOW_IMPACT') lowImpactTiles += count;
     else if (cat === 'WATER') userWaterTiles += count;
@@ -535,7 +601,7 @@ function updateHealthDashboard() {
   // Direkter Belastungswert der Modellwelt: menschliche Nutzung verändert
   // die vorhandene Naturfläche. Die Gewichtungen sind Modellannahmen.
   const landStressRaw = (buildingTiles * 1.2) + (industryTiles * 2.2) + (lowImpactTiles * 0.4);
-  const landRestorationCredit = sinkTiles * 0.6;
+  const landRestorationCredit = natureTiles * 0.6;
   const landStress = Math.max(0, landStressRaw - landRestorationCredit);
   const landThreshold = Math.max(1, initialLandNature * 0.35);
 
@@ -553,7 +619,7 @@ function updateHealthDashboard() {
   // Naturflächen wirken in der Modellwelt als vereinfachter Puffer. Das ist
   // keine Berechnung realer CO2-Flüsse oder Klimawirkungen.
   const climateLoad = (industryTiles * 2.5) + (buildingTiles * 0.8) + (lowImpactTiles * 0.2);
-  const naturalClimateBuffer = (counts[1] * 0.10) + (sinkTiles * 0.8);
+  const naturalClimateBuffer = (counts[1] * 0.10) + (natureTiles * 0.8);
   const climateStress = Math.max(0, climateLoad - naturalClimateBuffer);
   const climateThreshold = Math.max(1, totalTiles * 0.22);
 
@@ -847,6 +913,7 @@ document.getElementById("save").onclick = () => {
     grid: JSON.parse(JSON.stringify(grid)),
     userColors: [...userColors],
     userColorNames: [...userColorNames],
+    peopleCount: worldPeopleCount,
     dataUrl: dataUrl
   };
 
@@ -883,7 +950,7 @@ document.getElementById("downloadPdf").onclick = () => {
 
     pdf.setFontSize(16);
     pdf.setFont("helvetica", "bold");
-    pdf.text("Welt " + world.id, 15, 18);
+    pdf.text("Welt " + world.id + (world.peopleCount ? " – für " + world.peopleCount + " Personen" : ""), 15, 18);
 
     const imgProps = pdf.getImageProperties(world.dataUrl);
     const imgRatio = imgProps.width / imgProps.height;
