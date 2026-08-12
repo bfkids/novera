@@ -3,974 +3,3184 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mons Novera - Fantasiewelt-Simulation</title>
+<title>Mons Novera – Fantasiewelt-Simulation</title>
 
-<!-- jsPDF Bibliothek für PDF-Generierung -->
+<!-- jsPDF für die PDF-Ausgabe -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#f4f1ea;color:#222}
-header{padding:22px 28px 10px;max-width:1200px;margin:auto}
-h1{margin:0 0 6px;font-size:28px}.subtitle{margin:0;color:#555}
-main{max-width:1200px;margin:auto;padding:18px 28px 35px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px}
-.banner{grid-column:1 / -1;overflow:hidden;border-radius:14px;background:#dff1fa;box-shadow:0 2px 12px #00000012;line-height:0}
-.banner img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain;object-position:center}
+*{
+  box-sizing:border-box;
+}
 
-/* Galerie für gespeicherte Welten */
-.galleryWrap{grid-column:1 / -1;display:none;background:white;border-radius:14px;padding:18px;box-shadow:0 2px 12px #00000012}
-.galleryWrap.active{display:block}
-.galleryTitle{font-size:16px;margin:0 0 12px;font-weight:700}
-.galleryGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-.thumbCard{border:2px solid #222;border-radius:8px;overflow:hidden;background:#dff1fa;box-shadow:0 2px 6px #00000010;transition:transform .15s ease;display:flex;flex-direction:column;justify-content:space-between}
-.thumbCard:hover{transform:scale(1.03)}
-.thumbCard a{display:block;cursor:pointer;flex:1;text-decoration:none;color:inherit}
-.thumbCard img{width:100%;height:auto;display:block;object-fit:contain}
-.thumbLabel{padding:4px 6px;font-size:12px;font-weight:bold;background:#fff;border-bottom:1px solid #ddd;text-align:center}
-.deleteBtn{border:none;background:#e76f51;color:white;padding:6px;font-size:12px;font-weight:600;cursor:pointer;width:100%;transition:background .2s}
-.deleteBtn:hover{background:#c0392b}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,sans-serif;
+  background:#f4f1ea;
+  color:#222;
+}
 
-.panel{background:white;border-radius:14px;padding:18px;box-shadow:0 2px 12px #00000012}
-#islandWrap{display:flex;justify-content:center;align-items:center;min-height:520px;overflow:hidden;background:#dff1fa;border-radius:10px;padding:20px}
-canvas{image-rendering:pixelated;image-rendering:crisp-edges;border:none;cursor:crosshair;background:#dff1fa;max-width:100%;height:auto;display:block;touch-action:manipulation}
-h2{font-size:17px;margin:4px 0 10px}
-.info{background:#f4f1ea;border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.4;margin-bottom:16px}
-.worldPeopleBox{background:#eef5ea;border:1px solid #cbd9c5;border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.5;margin-bottom:16px}
-.worldPeopleBox label{display:block;margin-top:7px;cursor:pointer}
-.worldPeopleBox input{margin-right:7px}
-.smallNote{font-size:12px;opacity:.8;margin-top:8px}
+header{
+  padding:22px 28px 10px;
+  max-width:1200px;
+  margin:auto;
+}
 
-/* Dashboard Zustand der Fantasiewelt */
-.healthDashboard{background:#fdfcf7;border:2px solid #222;border-radius:12px;padding:14px;margin-bottom:18px}
-.healthHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.healthBadge{padding:5px 10px;border-radius:20px;font-size:12px;font-weight:800;color:white;text-transform:uppercase;letter-spacing:0.5px}
-.indicatorItem{margin-bottom:10px}
-.indicatorItem:last-child{margin-bottom:0}
-.indicatorLabel{font-size:12px;display:flex;justify-content:space-between;margin-bottom:3px;font-weight:600}
-.barTrack{width:100%;height:10px;background:#e2ded4;border-radius:5px;overflow:hidden}
-.barFill{height:100%;width:100%;border-radius:5px;transition:width 0.4s ease, background-color 0.4s ease}
+h1{
+  margin:0 0 6px;
+  font-size:28px;
+}
 
-/* Palette Styling */
-.paletteSectionTitle{font-size:13px;font-weight:700;color:#666;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px}
-.palette{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-.colorCard{display:grid;gap:4px}
-.swatch{width:100%;height:40px;border:3px solid transparent;border-radius:8px;cursor:pointer;padding:0;position:relative}
-.swatch.selected{border-color:#111;outline:2px solid white}
-.colorPicker{width:100%;height:28px;padding:0;border:1px solid #bbb;border-radius:6px}
-.nameInput{width:100%;padding:6px;border:1px solid #bbb;border-radius:6px;font-size:12px}
-.readOnlyTag{background:#e8e5de;padding:6px;border-radius:6px;font-size:12px;font-weight:600;color:#444;text-align:center}
+.subtitle{
+  margin:0;
+  color:#555;
+}
 
-.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
-button.action{border:0;padding:10px 13px;border-radius:8px;cursor:pointer;background:#222;color:white;font-weight:600;flex:1 1 auto;text-align:center}
-button.secondary{background:#e8e5de;color:#222}
-button.full-width{flex:1 1 100%;margin-top:2px}
+main{
+  max-width:1200px;
+  margin:auto;
+  padding:18px 28px 35px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:24px;
+}
+
+/* Banner */
+
+.banner{
+  grid-column:1 / -1;
+  overflow:hidden;
+  border-radius:14px;
+  background:#dff1fa;
+  box-shadow:0 2px 12px #00000012;
+  line-height:0;
+}
+
+.banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:520px;
+  object-fit:contain;
+  object-position:center;
+}
+
+/* Galerie */
+
+.galleryWrap{
+  grid-column:1 / -1;
+  display:none;
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 2px 12px #00000012;
+}
+
+.galleryWrap.active{
+  display:block;
+}
+
+.galleryTitle{
+  font-size:16px;
+  margin:0 0 12px;
+  font-weight:700;
+}
+
+.galleryGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:12px;
+}
+
+.thumbCard{
+  border:2px solid #222;
+  border-radius:8px;
+  overflow:hidden;
+  background:#dff1fa;
+  box-shadow:0 2px 6px #00000010;
+  transition:transform .15s ease;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.thumbCard:hover{
+  transform:scale(1.03);
+}
+
+.thumbCard a{
+  display:block;
+  cursor:pointer;
+  flex:1;
+  text-decoration:none;
+  color:inherit;
+}
+
+.thumbCard img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:contain;
+}
+
+.thumbLabel{
+  padding:4px 6px;
+  font-size:12px;
+  font-weight:bold;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+  text-align:center;
+}
+
+.deleteBtn{
+  border:none;
+  background:#e76f51;
+  color:white;
+  padding:6px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  width:100%;
+  transition:background .2s;
+}
+
+.deleteBtn:hover{
+  background:#c0392b;
+}
+
+/* Panels */
+
+.panel{
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 2px 12px #00000012;
+}
+
+#islandWrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:520px;
+  overflow:hidden;
+  background:#dff1fa;
+  border-radius:10px;
+  padding:20px;
+}
+
+canvas{
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  border:none;
+  cursor:crosshair;
+  background:#dff1fa;
+  max-width:100%;
+  height:auto;
+  display:block;
+  touch-action:manipulation;
+}
+
+h2{
+  font-size:17px;
+  margin:4px 0 10px;
+}
+
+/* Anleitung */
+
+.info{
+  background:#f4f1ea;
+  border-radius:9px;
+  padding:11px 12px;
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:16px;
+}
+
+.smallNote{
+  font-size:12px;
+  opacity:.8;
+  margin-top:8px;
+  line-height:1.4;
+}
+
+/* Farbpalette */
+
+.paletteSectionTitle{
+  font-size:13px;
+  font-weight:700;
+  color:#666;
+  margin:12px 0 6px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.palette{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.colorCard{
+  display:grid;
+  gap:4px;
+}
+
+.swatch{
+  width:100%;
+  height:40px;
+  border:3px solid transparent;
+  border-radius:8px;
+  cursor:pointer;
+  padding:0;
+  position:relative;
+}
+
+.swatch.selected{
+  border-color:#111;
+  outline:2px solid white;
+}
+
+.colorPicker{
+  width:100%;
+  height:28px;
+  padding:0;
+  border:1px solid #bbb;
+  border-radius:6px;
+}
+
+.nameInput{
+  width:100%;
+  padding:6px;
+  border:1px solid #bbb;
+  border-radius:6px;
+  font-size:12px;
+}
+
+/* Wortvorschläge */
+
+.suggestionBox{
+  font-size:11px;
+  color:#66512c;
+  background:#fcf8e3;
+  border:1px solid #faebcc;
+  border-radius:6px;
+  padding:5px 8px;
+  margin-top:2px;
+  display:none;
+  line-height:1.4;
+}
+
+.suggestionChip{
+  display:inline-block;
+  background:#222;
+  color:#fff;
+  padding:2px 6px;
+  border-radius:4px;
+  cursor:pointer;
+  margin-left:4px;
+  font-weight:600;
+  font-size:11px;
+}
+
+.suggestionChip:hover{
+  background:#444;
+}
+
+/* Buttons */
+
+.buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+
+button.action{
+  border:0;
+  padding:10px 13px;
+  border-radius:8px;
+  cursor:pointer;
+  background:#222;
+  color:white;
+  font-weight:600;
+  flex:1 1 auto;
+  text-align:center;
+}
+
+button.secondary{
+  background:#e8e5de;
+  color:#222;
+}
+
+button.full-width{
+  flex:1 1 100%;
+  margin-top:2px;
+}
+
+/* Rückfrage-Dialog */
+
+.checkOverlay{
+  position:fixed;
+  inset:0;
+  background:#00000066;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:1000;
+}
+
+.checkOverlay.active{
+  display:flex;
+}
+
+.checkDialog{
+  width:min(560px,100%);
+  background:white;
+  border-radius:14px;
+  padding:22px;
+  box-shadow:0 8px 35px #00000030;
+}
+
+.checkDialog h2{
+  margin-top:0;
+  font-size:19px;
+}
+
+.checkDialog p{
+  font-size:14px;
+  line-height:1.5;
+}
+
+.checkList{
+  margin:15px 0;
+  padding:0;
+  list-style:none;
+}
+
+.checkList li{
+  background:#f4f1ea;
+  border-radius:8px;
+  padding:10px 12px;
+  margin-bottom:8px;
+  font-size:13px;
+  line-height:1.45;
+}
+
+.checkButtons{
+  display:flex;
+  gap:8px;
+  margin-top:16px;
+}
+
+.checkButtons button{
+  flex:1;
+  border:0;
+  padding:10px 13px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.checkCancel{
+  background:#e8e5de;
+  color:#222;
+}
+
+.checkConfirm{
+  background:#222;
+  color:#fff;
+}
+
+/* Kommentar für Lehrpersonen */
+
+.teacherCommentLink{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 28px 28px;
+  text-align:right;
+}
+
+.teacherCommentLink button{
+  border:0;
+  background:transparent;
+  color:#777;
+  font-size:12px;
+  cursor:pointer;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+.teacherCommentLink button:hover{
+  color:#333;
+}
+
+.commentOverlay{
+  position:fixed;
+  inset:0;
+  background:#00000066;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:1100;
+}
+
+.commentOverlay.active{
+  display:flex;
+}
+
+.commentDialog{
+  width:min(780px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:white;
+  border-radius:14px;
+  padding:26px;
+  box-shadow:0 8px 35px #00000030;
+}
+
+.commentDialog h2{
+  font-size:21px;
+  margin-top:0;
+}
+
+.commentDialog h3{
+  font-size:15px;
+  margin-top:22px;
+}
+
+.commentDialog p,
+.commentDialog li{
+  font-size:13px;
+  line-height:1.55;
+}
+
+.commentDialog ul{
+  padding-left:20px;
+}
+
+.commentClose{
+  float:right;
+  border:0;
+  background:#e8e5de;
+  border-radius:7px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+
+/* Responsive */
 
 @media(max-width:900px){
-  header{padding:16px 20px 8px}
-  main{grid-template-columns:1fr;padding:14px 20px 28px;gap:16px}
-  #islandWrap{min-height:auto;padding:12px}
-  .banner img{max-height:none}
-}
-@media(max-width:480px){
-  header{padding:12px 14px 6px}
-  h1{font-size:22px}
-  main{padding:10px 14px 20px}
-  .panel{padding:14px}
-  .palette{grid-template-columns:1fr}
-  .buttons{flex-direction:column}
-  button.action{width:100%}
-  .galleryGrid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
-}
-</style>
-</head>
-<body>
-<header>
-<h1>Mons Novera</h1>
-<p class="subtitle">Was brauchst du um hier gut leben zu können?</p>
-</header>
 
-<main>
-<div class="banner">
-  <img src="mons-novera-banner.png" alt="Pixel-Art einer fliegenden Insel">
-</div>
+  header{
+    padding:16px 20px 8px;
+  }
 
-<section class="galleryWrap" id="galleryWrap">
-  <h2 class="galleryTitle">Gespeicherte Welten</h2>
-  <div class="galleryGrid" id="galleryGrid"></div>
-</section>
+  main{
+    grid-template-columns:1fr;
+    padding:14px 20px 28px;
+    gap:16px;
+  }
 
-<section class="panel">
-<div id="islandWrap"><canvas id="canvas"></canvas></div>
-</section>
+  #islandWrap{
+    min-height:auto;
+    padding:12px;
+  }
 
-<aside class="panel">
-<div class="info"><strong>So geht's:</strong><br>
-Wähle eine Farbe aus. Überlege, was sie in deiner Welt bedeutet. Trage die Bedeutung ein und platziere die Farbe auf deiner Insel. Wiederhole dies mit weiteren Farben, bis deine Welt so aussieht, wie du sie dir vorstellst.<br><br>
-Beobachte im Dashboard, wie sich der Zustand deiner Fantasiewelt verändert. Die Anzeigen bilden vereinfacht verschiedene Umweltzusammenhänge in einer Fantasiewelt ab.
-</div>
+  .banner img{
+    max-height:none;
+  }
 
-<div class="worldPeopleBox">
-  <strong>Für wie viele Menschen gestaltest du diese Welt?</strong>
-  <label><input type="radio" name="worldPeople" value="1"> Welt für 1 Person</label>
-  <label><input type="radio" name="worldPeople" value="3"> Welt für 3 Personen</label>
-  <label><input type="radio" name="worldPeople" value="6"> Welt für 6 Personen</label>
-  <div class="smallNote">Wähle eine Möglichkeit aus. Erst dann kannst du die Welt speichern.</div>
-</div>
-
-<!-- DASHBOARD ZUSTAND DER FANTASIEWELT -->
-<div class="healthDashboard">
-  <div class="healthHeader">
-    <h2>Zustand der Fantasiewelt</h2>
-    <span class="healthBadge" id="overallBadge">Gut</span>
-  </div>
-
-  <div class="indicatorItem">
-    <div class="indicatorLabel">
-      <span>🌱 Naturraum</span>
-      <span id="labelLand">100 %</span>
-    </div>
-    <div class="barTrack"><div class="barFill" id="barLand"></div></div>
-  </div>
-
-  <div class="indicatorItem">
-    <div class="indicatorLabel">
-      <span>💧 Wasser</span>
-      <span id="labelWater">100 %</span>
-    </div>
-    <div class="barTrack"><div class="barFill" id="barWater"></div></div>
-  </div>
-
-  <div class="indicatorItem">
-    <div class="indicatorLabel">
-      <span>🌍 Klima</span>
-      <span id="labelClimate">100 %</span>
-    </div>
-    <div class="barTrack"><div class="barFill" id="barClimate"></div></div>
-  </div>
-</div>
-
-<h2>Farben und Bedeutungen</h2>
-
-<div class="paletteSectionTitle">Ressourcen, schon vorhanden</div>
-<div class="palette" id="resourcePalette"></div>
-
-<div class="paletteSectionTitle">Meine Gestaltung</div>
-<div class="palette" id="userPalette"></div>
-
-<div class="buttons">
-<button class="action secondary" id="reset">Welt zurücksetzen</button>
-<button class="action" id="save">Welt speichern</button>
-<button class="action secondary full-width" id="downloadPdf">Alle Welten herunterladen (PDF)</button>
-</div>
-</aside>
-</main>
-
-<script>
-(function(){
-"use strict";
-
-const STORAGE_KEY = "mons_novera_saved_worlds";
-const VALID_SLOTS = ["1", "2", "3"];
-const COLS=20, ROWS=15, SCALE=32;
-
-// Geschützte Basis-Ressourcen
-const resourceColors = ["#5DB7DE", "#75C56B", "#D98B5F"];
-const resourceNames = ["Wasser", "Naturraum", "Stein & Fels"];
-
-// Menschlich gestaltbare Farbpalette
-const defaultUserColors = ["#E76F51", "#B58AD8", "#E78AB3", "#F4C84A", "#8A9A9B", "#5E8FA8"];
-let userColors = [...defaultUserColors];
-const userColorNames = Array(userColors.length).fill("");
-
-let selected = 0; // Index 0-2: Ressourcen, Index 3-8: Eigene Gestaltung
-
-// Inselfläche (Maske)
-const mask=[];
-for(let y=0;y<ROWS;y++){
-  mask[y]=[];
-  for(let x=0;x<COLS;x++){
-    const dx=(x-(COLS-1)/2)/9.5;
-    const dy=(y-(ROWS-1)/2)/6;
-    const edge=dx*dx+dy*dy;
-    const irregular=0.10*Math.sin(x*0.9)+0.06*Math.cos(y*1.3);
-    mask[y][x]=edge<0.92+irregular;
+  .teacherCommentLink{
+    padding-left:20px;
+    padding-right:20px;
   }
 }
 
-// Ursprungswelt (Visualisierung nach dem Bild "mons-novera-banner.png")
+@media(max-width:480px){
+
+  header{
+    padding:12px 14px 6px;
+  }
+
+  h1{
+    font-size:22px;
+  }
+
+  main{
+    padding:10px 14px 20px;
+  }
+
+  .panel{
+    padding:14px;
+  }
+
+  .palette{
+    grid-template-columns:1fr;
+  }
+
+  .buttons{
+    flex-direction:column;
+  }
+
+  button.action{
+    width:100%;
+  }
+
+  .galleryGrid{
+    grid-template-columns:repeat(auto-fill,minmax(100px,1fr));
+  }
+
+  .checkButtons{
+    flex-direction:column;
+  }
+
+  .teacherCommentLink{
+    padding-left:14px;
+    padding-right:14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Mons Novera</h1>
+  <p class="subtitle">Was brauchst du, um hier gut leben zu können?</p>
+</header>
+
+<main>
+
+  <!-- Banner -->
+
+  <div class="banner">
+    <img
+      src="mons-novera-banner.png"
+      alt="Pixel-Art einer fliegenden Insel"
+    >
+  </div>
+
+  <!-- Gespeicherte Welten -->
+
+  <section class="galleryWrap" id="galleryWrap">
+    <h2 class="galleryTitle">Gespeicherte Welten</h2>
+    <div class="galleryGrid" id="galleryGrid"></div>
+  </section>
+
+  <!-- Insel -->
+
+  <section class="panel">
+
+    <div id="islandWrap">
+      <canvas id="canvas"></canvas>
+    </div>
+
+  </section>
+
+  <!-- Steuerung -->
+
+  <aside class="panel">
+
+    <div class="info">
+
+      <strong>So geht's:</strong><br>
+
+      Gestalte deine eigene Welt.
+
+      Wähle eine Farbe aus und überlege, was sie in deiner Welt bedeutet.
+      Trage deine Bedeutung ein und platziere die Farbe auf der Insel.
+
+      <br><br>
+
+      Du entscheidest selbst, was in deiner Welt wichtig ist.
+      Eine Farbe kann zum Beispiel für einen Ort, einen Gegenstand,
+      eine Person, eine Tätigkeit, Natur, Tiere, Beziehungen oder etwas
+      ganz anderes stehen.
+
+      <br><br>
+
+      Auch die Farben, die auf der Insel bereits zu sehen sind,
+      haben keine vorgegebene Bedeutung.
+      <strong>Du entscheidest selbst, wofür sie stehen.</strong>
+
+      <br><br>
+
+      Es gibt kein vorgegebenes „richtig“ oder „falsch“.
+      Entscheidend ist, dass du deine Welt erklären kannst.
+
+    </div>
+
+    <h2>Farben und Bedeutungen</h2>
+
+    <div class="paletteSectionTitle">
+      Meine Farben
+    </div>
+
+    <div class="palette" id="userPalette"></div>
+
+    <div class="smallNote">
+      Du kannst die Farben verändern und jeder Farbe eine eigene Bedeutung geben.
+      Die ersten drei Farben entsprechen der ursprünglichen Gestaltung der Insel.
+      Ihre Bedeutung bestimmst du selbst.
+    </div>
+
+    <div class="buttons">
+
+      <button
+        class="action secondary"
+        id="reset"
+      >
+        Welt zurücksetzen
+      </button>
+
+      <button
+        class="action"
+        id="save"
+      >
+        Welt speichern
+      </button>
+
+      <button
+        class="action secondary full-width"
+        id="downloadPdf"
+      >
+        Alle Welten herunterladen (PDF)
+      </button>
+
+    </div>
+
+  </aside>
+
+</main>
+
+
+<!-- Rückfrage beim Speichern -->
+
+<div
+  class="checkOverlay"
+  id="checkOverlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="checkTitle"
+>
+
+  <div class="checkDialog">
+
+    <h2 id="checkTitle">
+      Bevor du deine Welt speicherst …
+    </h2>
+
+    <p>
+      Schau noch einmal auf deine Welt.
+      Gibt es etwas, worüber du noch nachdenken möchtest?
+    </p>
+
+    <ul
+      class="checkList"
+      id="checkList"
+    ></ul>
+
+    <p>
+      Die Hinweise sind keine Vorgaben für deine Welt.
+      Du kannst deine Gestaltung ändern oder bestätigen,
+      dass du darüber nachgedacht hast.
+    </p>
+
+    <div class="checkButtons">
+
+      <button
+        class="checkCancel"
+        id="checkCancel"
+      >
+        Zurück zur Gestaltung
+      </button>
+
+      <button
+        class="checkConfirm"
+        id="checkConfirm"
+      >
+        Ich habe darüber nachgedacht – speichern
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- Kommentar für Lehrpersonen -->
+
+<div class="teacherCommentLink">
+
+  <button id="openTeacherComment">
+    Kommentar für Lehrpersonen · Nutzen und Grenzen der Simulation
+  </button>
+
+</div>
+
+
+<div
+  class="commentOverlay"
+  id="commentOverlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="commentTitle"
+>
+
+  <div class="commentDialog">
+
+    <button
+      class="commentClose"
+      id="closeTeacherComment"
+      aria-label="Kommentar schliessen"
+    >
+      Schliessen
+    </button>
+
+    <h2 id="commentTitle">
+      Kommentar für Lehrpersonen
+    </h2>
+
+    <p>
+      <strong>Mons Novera</strong> ist als offene Gestaltungs- und
+      Konfrontationsaufgabe konzipiert. Die Schülerinnen und Schüler
+      entwickeln eine eigene Vorstellung davon, was sie für ein gutes
+      Leben in einer selbst gestalteten Welt benötigen. Die Simulation
+      gibt dabei bewusst keine inhaltlich festgelegten Gegenstände,
+      Ressourcen oder Vorstellungen eines guten Lebens vor.
+    </p>
+
+    <h3>Didaktischer Nutzen</h3>
+
+    <p>
+      Die digitale Gestaltung ermöglicht es, individuelle Vorstellungen
+      vom guten Leben sichtbar und besprechbar zu machen. Eine Farbe
+      besitzt zunächst keine festgelegte Bedeutung. Erst durch die
+      Benennung durch das Kind erhält sie eine Bedeutung. Dadurch können
+      sehr unterschiedliche Vorstellungen sichtbar werden: etwa Wohnen,
+      Familie, Freundschaften, Natur, Freizeit, Technik, Nahrung,
+      Sicherheit oder ganz andere Dinge.
+    </p>
+
+    <p>
+      Die Aufgabe setzt damit nicht bei einer vorgegebenen Definition
+      von Nachhaltigkeit an. Sie eröffnet zunächst einen individuellen
+      Zugang zur Frage, was Menschen für ein gutes Leben als wichtig
+      erachten. Auch Vorstellungen, die aus ökologischer Perspektive
+      später kritisch diskutiert werden können, dürfen zunächst
+      dargestellt werden.
+    </p>
+
+    <p>
+      Die Simulation enthält deshalb bewusst <strong>keinen automatischen
+      „Nachhaltigkeitswert“</strong> und keine Anzeige eines guten oder
+      schlechten Zustands der Welt. Sie soll nicht selbst entscheiden,
+      ob eine Schülerwelt nachhaltig, richtig oder falsch ist.
+    </p>
+
+    <h3>Konfrontation statt Bewertung</h3>
+
+    <p>
+      Beim Speichern können lediglich Hinweise erscheinen, wenn in den
+      eingegebenen Bedeutungen kein Hinweis auf grundlegende Bereiche
+      wie Wohnen oder Nahrung erkennbar ist. Diese Hinweise sind als
+      Denkimpulse gedacht, nicht als Bewertung.
+    </p>
+
+    <p>
+      Die Anwendung kann beispielsweise fragen, wo Menschen in der
+      gestalteten Welt wohnen oder woher Nahrung kommt. Sie schreibt
+      dabei weder eine bestimmte Wohnform noch eine bestimmte Form der
+      Ernährung vor. Die Schülerinnen und Schüler können eine
+      Rückfrage auch bewusst zurückweisen bzw. bestätigen, dass sie
+      darüber nachgedacht haben.
+    </p>
+
+    <p>
+      Dadurch kann die Lehrperson die Simulation anschliessend für eine
+      eigentliche Konfrontation nutzen: Was braucht eine Welt, damit
+      Menschen darin leben können? Was verändert sich, wenn mehrere
+      Menschen dieselben oder unterschiedliche Bedürfnisse haben?
+      Und welche Folgen entstehen, wenn individuelle Vorstellungen vom
+      guten Leben auf begrenzte natürliche Lebensgrundlagen und auf
+      andere Menschen treffen?
+    </p>
+
+    <h3>Soziale und ökologische Dimension</h3>
+
+    <p>
+      Die soziale Dimension wird nicht auf eine vorgegebene Anzahl von
+      Personen reduziert. Die Schülerinnen und Schüler können bereits
+      in ihrer ersten Gestaltung Familie, Freunde, Gemeinschaften oder
+      andere Beziehungen berücksichtigen – oder zunächst nur von sich
+      selbst ausgehen. Gerade diese unterschiedlichen Ausgangspunkte
+      können Gegenstand des anschliessenden Gesprächs werden.
+    </p>
+
+    <p>
+      Die ökologische Perspektive wird ebenfalls nicht bereits durch
+      einen eingebauten Bewertungsmechanismus vorweggenommen. Dies ist
+      didaktisch beabsichtigt: Die anschliessende fachliche
+      Auseinandersetzung, beispielsweise mit Fragen des
+      „Gleichgewichts“ der Erde und den Inhalten der Ausstellung
+      <em>Keep it Cool</em>, kann die individuellen Vorstellungen mit
+      ökologischen, gesellschaftlichen und räumlichen Zusammenhängen
+      konfrontieren.
+    </p>
+
+    <p>
+      Die Simulation ist somit <strong>kein Modell der Erde</strong> und
+      keine wissenschaftliche Nachhaltigkeitssimulation. Sie bildet
+      vielmehr eine vereinfachte Erfahrungs- und Gesprächssituation,
+      in der Vorstellungen vom guten Leben zunächst sichtbar gemacht
+      werden.
+    </p>
+
+    <h3>Grenzen der Simulation</h3>
+
+    <ul>
+      <li>
+        Die Gestaltungsmöglichkeiten sind technisch begrenzt. Eine
+        farbliche Fläche kann komplexe Lebensbereiche nur sehr stark
+        vereinfachen.
+      </li>
+
+      <li>
+        Die Bedeutung einer Farbe wird durch die Eingabe des Kindes
+        bestimmt. Eine automatische Spracherkennung kann diese Bedeutung
+        niemals vollständig erfassen.
+      </li>
+
+      <li>
+        Die wenigen automatischen Rückfragen erkennen lediglich grobe
+        sprachliche Hinweise. Sie ersetzen weder ein Gespräch noch eine
+        pädagogische Einschätzung.
+      </li>
+
+      <li>
+        Die Simulation stellt keine wissenschaftlich validierte
+        Nachhaltigkeitsberechnung dar und sollte auch nicht als solche
+        interpretiert werden.
+      </li>
+
+      <li>
+        Eine gestaltete Welt sagt nicht unmittelbar aus, wie ein Kind
+        tatsächlich leben möchte. Sie ist ein Ausdruck innerhalb einer
+        konkreten Aufgabenstellung und sollte entsprechend vorsichtig
+        interpretiert werden.
+      </li>
+
+      <li>
+        Die anschliessende Reflexion und fachliche Einordnung durch die
+        Lehrperson sind deshalb zentral.
+      </li>
+    </ul>
+
+    <h3>Technische Transparenz</h3>
+
+    <p>
+      Die technische Umsetzung wurde im Rahmen eines
+      <strong>Vibe-Coding-Prozesses</strong> entwickelt. Teile der
+      Programmstruktur, der semantischen Verarbeitung der
+      Schülereingaben, der Benutzeroberfläche und der technischen
+      Berechnungen wurden mit Unterstützung von
+      <strong>ChatGPT</strong> vorgeschlagen, geprüft, angepasst und
+      weiterentwickelt.
+    </p>
+
+    <p>
+      Die Anwendung ist deshalb nicht als unabhängig entwickelte,
+      wissenschaftlich validierte Software zu verstehen. Insbesondere
+      die automatische Erkennung von Begriffen arbeitet mit einem
+      begrenzten Wörterbuch und fehlertoleranter Wortsuche. Sie dient
+      ausschliesslich dazu, sehr grobe Denkimpulse zu ermöglichen.
+      Inhaltliche Entscheidungen über die Bedeutung der Schülerwelten
+      werden nicht automatisiert getroffen.
+    </p>
+
+    <p>
+      Für die pädagogische Verwendung bedeutet dies: Die Technik
+      unterstützt die Aufgabe, ersetzt aber weder die Beobachtung der
+      Lernenden noch das Gespräch, die Reflexion oder die fachliche
+      Auseinandersetzung.
+    </p>
+
+  </div>
+
+</div>
+
+
+<script>
+(function(){
+
+"use strict";
+
+
+/* ============================================================
+   GRUNDKONFIGURATION
+   ============================================================ */
+
+const STORAGE_KEY = "mons_novera_saved_worlds";
+const VALID_SLOTS = ["1","2","3"];
+
+const COLS = 20;
+const ROWS = 15;
+const SCALE = 32;
+
+
+/*
+ * Die Farben besitzen bewusst KEINE vorgegebene Bedeutung.
+ *
+ * Die ersten drei Farben werden in der Startwelt verwendet,
+ * damit die Insel visuell an das Banner anschliesst.
+ *
+ * Erst die Eingabe des Kindes bestimmt ihre Bedeutung.
+ */
+
+const defaultUserColors = [
+  "#5DB7DE",
+  "#75C56B",
+  "#D98B5F",
+  "#E76F51",
+  "#B58AD8",
+  "#E78AB3",
+  "#F4C84A",
+  "#8A9A9B",
+  "#5E8FA8"
+];
+
+let userColors = [...defaultUserColors];
+
+const userColorNames =
+  Array(userColors.length).fill("");
+
+let selected = 0;
+
+
+/* ============================================================
+   WÖRTERBUCH
+   Nur für vorsichtige Denkimpulse.
+   Keine Nachhaltigkeitsbewertung.
+   ============================================================ */
+
+const DOMAIN_DICTIONARY = [
+
+  /* Wohnen */
+
+  "Haus",
+  "Wohnung",
+  "Hütte",
+  "Zelt",
+  "Bauernhof",
+  "Dorf",
+  "Siedlung",
+  "Wohnwagen",
+  "Iglu",
+  "Höhle",
+  "Unterkunft",
+  "Heim",
+  "Jurte",
+  "Tiny House",
+  "Holzhaus",
+  "Wohnmobil",
+
+  /* Nahrung */
+
+  "Feld",
+  "Acker",
+  "Garten",
+  "Gewächshaus",
+  "Gemüse",
+  "Obst",
+  "Getreide",
+  "Weide",
+  "Tierhaltung",
+  "Farm",
+  "Landwirtschaft",
+  "Supermarkt",
+  "Laden",
+  "Bäckerei",
+  "Markt",
+  "Fischerei",
+  "Jagd",
+  "Angeln",
+  "Fischen",
+  "Nahrung",
+  "Essen",
+  "Lebensmittel",
+  "Ernte",
+  "Anbau",
+  "Plantage",
+
+  /* Soziales / Zusammenleben */
+
+  "Familie",
+  "Freunde",
+  "Freund",
+  "Freundin",
+  "Menschen",
+  "Personen",
+  "Gemeinschaft",
+  "Nachbarn",
+  "Nachbarschaft",
+  "Dorf",
+  "Schule",
+  "Kindergarten",
+  "Treffpunkt",
+
+  /* Allgemeine Weltgestaltung */
+
+  "Wald",
+  "Baum",
+  "Park",
+  "Biotop",
+  "Moor",
+  "Wiese",
+  "Pflanze",
+  "Naturschutzgebiet",
+  "See",
+  "Fluss",
+  "Bach",
+  "Teich",
+  "Quelle",
+  "Strand",
+  "Meer",
+
+  "Solaranlage",
+  "Photovoltaik",
+  "Windrad",
+  "Windkraft",
+  "Wasserkraft",
+  "Atomkraft",
+
+  "Fabrik",
+  "Kraftwerk",
+  "Bergwerk",
+  "Hafen",
+  "Flughafen",
+  "Industrie",
+  "Recyclinghof",
+  "Müll",
+
+  "Radweg",
+  "Fussgängerzone",
+  "Fußgängerzone",
+  "Spielplatz",
+  "Sportplatz",
+  "Bibliothek",
+  "Krankenhaus"
+];
+
+
+/* ============================================================
+   INSELMASKE
+   ============================================================ */
+
+const mask = [];
+
+for(let y = 0; y < ROWS; y++){
+
+  mask[y] = [];
+
+  for(let x = 0; x < COLS; x++){
+
+    const dx =
+      (x - (COLS - 1) / 2) / 9.5;
+
+    const dy =
+      (y - (ROWS - 1) / 2) / 6;
+
+    const edge =
+      dx * dx + dy * dy;
+
+    const irregular =
+      0.10 * Math.sin(x * 0.9) +
+      0.06 * Math.cos(y * 1.3);
+
+    mask[y][x] =
+      edge < 0.92 + irregular;
+  }
+}
+
+
+/* ============================================================
+   STARTWELT
+   Die Farben haben keine semantische Bedeutung.
+   ============================================================ */
+
 function startGrid(){
-  return Array.from({length:ROWS}, (_, y) =>
-    Array.from({length:COLS}, (_, x) => {
-      if(!mask[y][x]) return -1;
 
-      // Die obere Krone gehört zum Naturraum.
-      if (y === 0 || (y === 1 && (x < 5 || x > 14))) return 1;
+  return Array.from(
+    {length:ROWS},
+    (_,y) =>
 
-      // Der geschwungene Hauptfluss vom oberen rechten Teil bis zum Wasserfall unten
-      const isRiver = (
-        (y === 1 && (x === 12 || x === 13)) ||
-        (y === 2 && (x === 11 || x === 12)) ||
-        (y === 3 && x === 11) ||
-        (y === 4 && (x === 10 || x === 11)) ||
-        (y === 5 && x === 10) ||
-        (y === 6 && (x === 9 || x === 10)) ||
-        (y === 7 && x === 9) ||
-        (y === 8 && (x === 8 || x === 9)) ||
-        (y === 9 && x === 8) ||
-        (y === 10 && (x === 8 || x === 9)) ||
-        (y === 11 && x === 9) ||
-        (y === 12 && (x === 9 || x === 10)) ||
-        (y === 13 && x === 10) ||
-        (y === 14 && x === 10)
-      );
-      if (isRiver) return 0;
+      Array.from(
+        {length:COLS},
+        (_,x) => {
 
-      // Linker Teich/See
-      const isLeftPond = (
-        (y === 6 && (x === 3 || x === 4 || x === 5)) ||
-        (y === 7 && (x === 2 || x === 3 || x === 4 || x === 5)) ||
-        (y === 8 && (x === 3 || x === 4))
-      );
-      if (isLeftPond) return 0;
+          if(!mask[y][x]){
+            return -1;
+          }
 
-      // Rechter Teich/See
-      const isRightPond = (
-        (y === 7 && (x === 14 || x === 15)) ||
-        (y === 8 && (x === 14 || x === 15 || x === 16)) ||
-        (y === 9 && (x === 15 || x === 16))
-      );
-      if (isRightPond) return 0;
+          /*
+           * Obere Inselbereiche:
+           * Farbe 1
+           */
 
-      // Fels- und Stein-Ansammlungen
-      const isRock = (
-        (y === 1 && (x === 8 || x === 9)) ||
-        (y === 2 && (x === 6 || x === 14)) ||
-        (y === 3 && (x === 4 || x === 15)) ||
-        (y === 4 && (x === 7 || x === 13)) ||
-        (y === 5 && (x === 3 || x === 16)) ||
-        (y === 6 && x === 12) ||
-        (y === 7 && x === 7) ||
-        (y === 8 && (x === 11 || x === 12)) ||
-        (y === 9 && (x === 4 || x === 5)) ||
-        (y === 10 && (x === 13 || x === 14)) ||
-        (y === 11 && (x === 6 || x === 7)) ||
-        (y === 12 && x === 12)
-      );
-      if (isRock) return 2;
+          if(
+            y === 0 ||
+            (y === 1 && (x < 5 || x > 14))
+          ){
+            return 1;
+          }
 
-      // Übrige Fläche: Gras- und Buschland
-      return 1;
-    })
+
+          /*
+           * Wasserähnliche Form:
+           * Farbe 0
+           *
+           * Wichtig:
+           * Dies bedeutet technisch NICHT „Wasser“.
+           * Das Kind kann Farbe 0 später anders benennen.
+           */
+
+          const isBlueShape = (
+
+            (y === 1 && (x === 12 || x === 13)) ||
+            (y === 2 && (x === 11 || x === 12)) ||
+            (y === 3 && x === 11) ||
+            (y === 4 && (x === 10 || x === 11)) ||
+            (y === 5 && x === 10) ||
+            (y === 6 && (x === 9 || x === 10)) ||
+            (y === 7 && x === 9) ||
+            (y === 8 && (x === 8 || x === 9)) ||
+            (y === 9 && x === 8) ||
+            (y === 10 && (x === 8 || x === 9)) ||
+            (y === 11 && x === 9) ||
+            (y === 12 && (x === 9 || x === 10)) ||
+            (y === 13 && x === 10) ||
+            (y === 14 && x === 10)
+
+          );
+
+          if(isBlueShape){
+            return 0;
+          }
+
+
+          /*
+           * Linke Fläche:
+           * ebenfalls nur eine visuelle Gestaltung.
+           */
+
+          const isBlueAreaLeft = (
+
+            (y === 6 && (x === 3 || x === 4 || x === 5)) ||
+            (y === 7 && (x === 2 || x === 3 || x === 4 || x === 5)) ||
+            (y === 8 && (x === 3 || x === 4))
+
+          );
+
+          if(isBlueAreaLeft){
+            return 0;
+          }
+
+
+          /*
+           * Rechte Fläche:
+           */
+
+          const isBlueAreaRight = (
+
+            (y === 7 && (x === 14 || x === 15)) ||
+            (y === 8 && (x === 14 || x === 15 || x === 16)) ||
+            (y === 9 && (x === 15 || x === 16))
+
+          );
+
+          if(isBlueAreaRight){
+            return 0;
+          }
+
+
+          /*
+           * Farbe 2:
+           * ebenfalls rein visuelle Ausgangsgestaltung.
+           */
+
+          const isBrownArea = (
+
+            (y === 1 && (x === 8 || x === 9)) ||
+            (y === 2 && (x === 6 || x === 14)) ||
+            (y === 3 && (x === 4 || x === 15)) ||
+            (y === 4 && (x === 7 || x === 13)) ||
+            (y === 5 && (x === 3 || x === 16)) ||
+            (y === 6 && x === 12) ||
+            (y === 7 && x === 7) ||
+            (y === 8 && (x === 11 || x === 12)) ||
+            (y === 9 && (x === 4 || x === 5)) ||
+            (y === 10 && (x === 13 || x === 14)) ||
+            (y === 11 && (x === 6 || x === 7)) ||
+            (y === 12 && x === 12)
+
+          );
+
+          if(isBrownArea){
+            return 2;
+          }
+
+
+          /*
+           * Restliche Fläche:
+           * Farbe 1.
+           */
+
+          return 1;
+
+        }
+      )
   );
 }
 
+
 let grid = startGrid();
-let worldPeopleCount = null;
 
-const canvas = document.getElementById("canvas");
-canvas.width = COLS * SCALE;
-canvas.height = ROWS * SCALE;
-const ctx = canvas.getContext("2d");
+const canvas =
+  document.getElementById("canvas");
 
-function getSavedWorlds() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  } catch(e) {
+canvas.width =
+  COLS * SCALE;
+
+canvas.height =
+  ROWS * SCALE;
+
+const ctx =
+  canvas.getContext("2d");
+
+
+/* ============================================================
+   FUZZY MATCHING
+   ============================================================ */
+
+function levenshteinDistance(a,b){
+
+  const matrix = [];
+
+  for(let i = 0; i <= b.length; i++){
+    matrix[i] = [i];
+  }
+
+  for(let j = 0; j <= a.length; j++){
+    matrix[0][j] = j;
+  }
+
+  for(let i = 1; i <= b.length; i++){
+
+    for(let j = 1; j <= a.length; j++){
+
+      if(
+        b.charAt(i - 1) ===
+        a.charAt(j - 1)
+      ){
+
+        matrix[i][j] =
+          matrix[i - 1][j - 1];
+
+      }else{
+
+        matrix[i][j] =
+          Math.min(
+
+            matrix[i - 1][j - 1] + 1,
+
+            matrix[i][j - 1] + 1,
+
+            matrix[i - 1][j] + 1
+
+          );
+      }
+    }
+  }
+
+  return matrix[b.length][a.length];
+}
+
+
+function normalizeWord(str){
+
+  return str
+    .toLowerCase()
+    .replace(/ph/g,"f")
+    .replace(/dt/g,"t")
+    .replace(/th/g,"t")
+    .replace(/ä/g,"a")
+    .replace(/ö/g,"o")
+    .replace(/ü/g,"u")
+    .replace(/ß/g,"ss")
+    .trim();
+}
+
+
+function getBestFuzzyMatch(rawWord){
+
+  const normRaw =
+    normalizeWord(rawWord);
+
+  if(normRaw.length < 3){
+    return null;
+  }
+
+  let bestMatch = null;
+  let minDistance = Infinity;
+
+  for(const dictWord of DOMAIN_DICTIONARY){
+
+    const normDict =
+      normalizeWord(dictWord);
+
+    if(normRaw === normDict){
+      return dictWord;
+    }
+
+    const dist =
+      levenshteinDistance(
+        normRaw,
+        normDict
+      );
+
+    const maxAllowedDist =
+      normRaw.length <= 4
+        ? 1
+        : 2;
+
+    if(
+      dist <= maxAllowedDist &&
+      dist < minDistance
+    ){
+
+      minDistance = dist;
+      bestMatch = dictWord;
+    }
+  }
+
+  return bestMatch;
+}
+
+
+/* ============================================================
+   SPEICHERUNG
+   ============================================================ */
+
+function getSavedWorlds(){
+
+  try{
+
+    return (
+      JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+      ) || []
+    );
+
+  }catch(e){
+
     return [];
   }
 }
 
-function saveSavedWorlds(worlds) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(worlds));
+
+function saveSavedWorlds(worlds){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(worlds)
+  );
 }
 
-function getURLParam(name) {
-  const urlParams = new URLSearchParams(window.location.search);
+
+/* ============================================================
+   URL
+   ============================================================ */
+
+function getURLParam(name){
+
+  const urlParams =
+    new URLSearchParams(
+      window.location.search
+    );
+
   return urlParams.get(name);
 }
 
-function setWorldURL(id) {
-  try {
-    if (id) {
-      const newUrl = window.location.pathname + '?world=' + id;
-      window.history.pushState({ worldId: id }, '', newUrl);
-    } else {
-      window.history.pushState({}, '', window.location.pathname);
+
+function setWorldURL(id){
+
+  try{
+
+    if(id){
+
+      const newUrl =
+        window.location.pathname +
+        "?world=" +
+        id;
+
+      window.history.pushState(
+        {worldId:id},
+        "",
+        newUrl
+      );
+
+    }else{
+
+      window.history.pushState(
+        {},
+        "",
+        window.location.pathname
+      );
     }
-  } catch(e) {}
+
+  }catch(e){}
 }
 
-function loadWorldData(world) {
-  grid = JSON.parse(JSON.stringify(world.grid));
-  worldPeopleCount = world.peopleCount || null;
-  setWorldPeopleSelection(worldPeopleCount);
-  if (world.userColors) {
-    for (let i = 0; i < userColors.length; i++) {
-      if (world.userColors[i]) userColors[i] = world.userColors[i];
+
+/* ============================================================
+   WELT LADEN
+   ============================================================ */
+
+function loadWorldData(world){
+
+  grid =
+    JSON.parse(
+      JSON.stringify(world.grid)
+    );
+
+  if(world.userColors){
+
+    for(
+      let i = 0;
+      i < userColors.length;
+      i++
+    ){
+
+      if(world.userColors[i]){
+        userColors[i] =
+          world.userColors[i];
+      }
     }
   }
-  if (world.userColorNames) {
-    for (let i = 0; i < userColorNames.length; i++) {
-      userColorNames[i] = world.userColorNames[i] || "";
+
+  if(world.userColorNames){
+
+    for(
+      let i = 0;
+      i < userColorNames.length;
+      i++
+    ){
+
+      userColorNames[i] =
+        world.userColorNames[i] || "";
     }
   }
+
   makePalette();
   draw();
 }
 
-function loadBlankState() {
-  grid = startGrid();
-  worldPeopleCount = null;
-  setWorldPeopleSelection(null);
-  userColors = [...defaultUserColors];
+
+function loadBlankState(){
+
+  grid =
+    startGrid();
+
+  userColors =
+    [...defaultUserColors];
+
   userColorNames.fill("");
+
+  selected = 0;
+
   makePalette();
   draw();
 }
 
-function syncStateWithURL() {
-  const worldId = getURLParam('world');
-  const worlds = getSavedWorlds();
 
-  if (worldId && VALID_SLOTS.includes(worldId)) {
-    const world = worlds.find(w => w.id === worldId);
-    if (world) {
+/* ============================================================
+   URL-SYNCHRONISATION
+   ============================================================ */
+
+function syncStateWithURL(){
+
+  const worldId =
+    getURLParam("world");
+
+  const worlds =
+    getSavedWorlds();
+
+  if(
+    worldId &&
+    VALID_SLOTS.includes(worldId)
+  ){
+
+    const world =
+      worlds.find(
+        w => w.id === worldId
+      );
+
+    if(world){
+
       loadWorldData(world);
-    } else {
+
+    }else{
+
       loadBlankState();
     }
-  } else if (worlds.length > 0) {
-    const latest = worlds[worlds.length - 1];
+
+  }else if(worlds.length > 0){
+
+    const latest =
+      worlds[worlds.length - 1];
+
     loadWorldData(latest);
+
     setWorldURL(latest.id);
-  } else {
+
+  }else{
+
     loadBlankState();
+
     setWorldURL(null);
   }
 }
 
-function deleteWorld(id) {
-  let worlds = getSavedWorlds();
-  worlds = worlds.filter(w => w.id !== id);
-  worlds.forEach((w, index) => {
-    w.id = (index + 1).toString();
-  });
+
+/* ============================================================
+   WELT LÖSCHEN
+   ============================================================ */
+
+function deleteWorld(id){
+
+  let worlds =
+    getSavedWorlds();
+
+  worlds =
+    worlds.filter(
+      w => w.id !== id
+    );
+
+  worlds.forEach(
+    (w,index) => {
+      w.id =
+        (index + 1).toString();
+    }
+  );
+
   saveSavedWorlds(worlds);
+
   renderGallery();
+
   syncStateWithURL();
 }
 
-function renderGallery() {
-  const galleryWrap = document.getElementById("galleryWrap");
-  const galleryGrid = document.getElementById("galleryGrid");
+
+/* ============================================================
+   GALERIE
+   ============================================================ */
+
+function renderGallery(){
+
+  const galleryWrap =
+    document.getElementById(
+      "galleryWrap"
+    );
+
+  const galleryGrid =
+    document.getElementById(
+      "galleryGrid"
+    );
+
   galleryGrid.innerHTML = "";
 
-  const worlds = getSavedWorlds();
-  worlds.sort((a,b) => Number(a.id) - Number(b.id));
+  const worlds =
+    getSavedWorlds();
 
-  if (worlds.length > 0) {
-    galleryWrap.classList.add("active");
-  } else {
-    galleryWrap.classList.remove("active");
+  worlds.sort(
+    (a,b) =>
+      Number(a.id) -
+      Number(b.id)
+  );
+
+  if(worlds.length > 0){
+
+    galleryWrap.classList.add(
+      "active"
+    );
+
+  }else{
+
+    galleryWrap.classList.remove(
+      "active"
+    );
   }
 
-  worlds.forEach(world => {
-    const thumbCard = document.createElement("div");
-    thumbCard.className = "thumbCard";
 
-    const label = document.createElement("div");
-    label.className = "thumbLabel";
-    label.textContent = "Welt " + world.id;
+  worlds.forEach(world => {
+
+    const thumbCard =
+      document.createElement("div");
+
+    thumbCard.className =
+      "thumbCard";
+
+
+    const label =
+      document.createElement("div");
+
+    label.className =
+      "thumbLabel";
+
+    label.textContent =
+      "Welt " + world.id;
+
     thumbCard.appendChild(label);
 
-    const link = document.createElement("a");
-    link.href = "?world=" + world.id;
-    link.title = "Welt " + world.id + " laden";
+
+    const link =
+      document.createElement("a");
+
+    link.href =
+      "?world=" + world.id;
+
+    link.title =
+      "Welt " + world.id + " laden";
+
+
     link.onclick = (e) => {
+
       e.preventDefault();
+
       loadWorldData(world);
+
       setWorldURL(world.id);
-      
-      const islandWrap = document.getElementById("islandWrap");
-      if (islandWrap) {
-        islandWrap.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      const islandWrap =
+        document.getElementById(
+          "islandWrap"
+        );
+
+      if(islandWrap){
+
+        islandWrap.scrollIntoView({
+          behavior:"smooth",
+          block:"center"
+        });
       }
     };
 
-    const img = document.createElement("img");
-    img.src = world.dataUrl;
-    img.alt = "Gespeicherte Welt " + world.id;
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      world.dataUrl;
+
+    img.alt =
+      "Gespeicherte Welt " +
+      world.id;
 
     link.appendChild(img);
+
     thumbCard.appendChild(link);
 
-    const delBtn = document.createElement("button");
-    delBtn.className = "deleteBtn";
-    delBtn.textContent = "Löschen";
-    delBtn.title = "Welt " + world.id + " löschen";
+
+    const delBtn =
+      document.createElement("button");
+
+    delBtn.className =
+      "deleteBtn";
+
+    delBtn.textContent =
+      "Löschen";
+
+    delBtn.title =
+      "Welt " + world.id +
+      " löschen";
+
+
     delBtn.onclick = (e) => {
+
       e.stopPropagation();
+
       deleteWorld(world.id);
     };
 
     thumbCard.appendChild(delBtn);
-    galleryGrid.appendChild(thumbCard);
+
+    galleryGrid.appendChild(
+      thumbCard
+    );
   });
 }
 
-// Einfache Erkennung ausgewählter Nutzungen für das Modell.
-function getSemanticCategory(name) {
-  if (!name || typeof name !== 'string') return 'BUILDING';
-  const clean = name.toLowerCase().trim();
-  if (!clean) return 'BUILDING';
 
-  if (/solar|photovoltaik|pv-anlage/.test(clean)) return 'ENERGY_LOW';
-  if (/atomkraft|kernkraft|kernreaktor/.test(clean)) return 'NUCLEAR';
-  if (/windkraft|windrad|windenergie/.test(clean)) return 'ENERGY_LOW';
-  if (/wald|baum|park|biotop|moor|wiese|renaturier|naturschutz|pflanze|aufforst/.test(clean)) return 'NATURE';
-  if (/fabrik|kraftwerk|mine|bergwerk|kohle|tagebau|abbau|hafen|flughafen|müll|muell|chemie|industrie|rauch|ausstoß|ausstoss/.test(clean)) return 'HEAVY_INDUSTRY';
-  if (/bio|öko|oeko|holz|pfahlbau|tiny|fahrrad|fussgänger|fußgänger/.test(clean)) return 'LOW_IMPACT';
-  if (/see|fluss|river|lake|strand|teich|bach|meer|ocean|quelle/.test(clean)) return 'WATER';
-  return 'BUILDING';
-}
+/* ============================================================
+   SEMANTISCHE ERKENNUNG
+   ------------------------------------------------------------
+   Die Kategorien dienen NUR dazu, bei grundlegenden Lücken
+   einen Denkimpuls zu erzeugen.
+   ============================================================ */
 
-// VEREINFACHTES MODELL FÜR UMWELTZUSAMMENHÄNGE
-// Prüfroutine für wenige lebensnotwendige Voraussetzungen der Fantasiewelt.
-// Sie ist bewusst keine vollständige Liste menschlicher Grundbedürfnisse.
-// Wasser und Luft gehören zur geschützten Grundausstattung der Insel und
-// werden deshalb nicht als individuelle Gestaltung vorausgesetzt.
-function setWorldPeopleSelection(value) {
-  document.querySelectorAll('input[name="worldPeople"]').forEach(radio => {
-    radio.checked = String(value || '') === radio.value;
-  });
-}
+function getSemanticCategory(name){
 
-document.querySelectorAll('input[name="worldPeople"]').forEach(radio => {
-  radio.addEventListener('change', () => {
-    worldPeopleCount = Number(radio.value);
-  });
-});
+  if(
+    !name ||
+    typeof name !== "string"
+  ){
 
-function getSelectedWorldPeople() {
-  const selected = document.querySelector('input[name="worldPeople"]:checked');
-  return selected ? Number(selected.value) : null;
-}
+    return null;
+  }
 
-function hasUserPlacedTiles() {
-  const baseline = startGrid();
-  for (let y = 0; y < ROWS; y++) {
-    for (let x = 0; x < COLS; x++) {
-      if (grid[y][x] !== baseline[y][x]) return true;
+  const clean =
+    name
+      .toLowerCase()
+      .trim();
+
+  if(!clean){
+    return null;
+  }
+
+
+  function testRegex(str){
+
+    /* Wohnen */
+
+    if(
+      /haus|wohnung|wohn|unterkunft|zelt|hütte|huette|heim|iglu|höhle|hoehle|bauernhof|dorf|siedlung|jurte|wohnwagen|wohnmobil|tiny\s*house/.test(str)
+    ){
+
+      return "HOUSING";
+    }
+
+
+    /* Nahrung */
+
+    if(
+      /feld|acker|landwirtschaft|farm|anbau|gemüse|gemuese|obst|getreide|ernte|plantage|gewächshaus|gewaechshaus|gartenbau|tierhaltung|viehzucht|weide|fischerei|fischzucht|angeln|fischen|sammeln|jagd|jäger|jaeger|nahrung|essen|lebensmittel|bäckerei|baeckerei|supermarkt|laden|markt/.test(str)
+    ){
+
+      return "FOOD";
+    }
+
+
+    /* Soziales */
+
+    if(
+      /familie|freund|freunde|menschen|personen|gemeinschaft|nachbar|nachbarschaft|schule|kindergarten|treffpunkt/.test(str)
+    ){
+
+      return "SOCIAL";
+    }
+
+
+    return null;
+  }
+
+
+  /*
+   * 1. Direkter Test
+   */
+
+  const directMatch =
+    testRegex(clean);
+
+  if(directMatch){
+    return directMatch;
+  }
+
+
+  /*
+   * 2. Fuzzy Matching einzelner Wörter
+   */
+
+  const words =
+    clean.split(/\s+/);
+
+  for(const word of words){
+
+    const matchedDictWord =
+      getBestFuzzyMatch(word);
+
+    if(matchedDictWord){
+
+      const fuzzyMatch =
+        testRegex(
+          matchedDictWord.toLowerCase()
+        );
+
+      if(fuzzyMatch){
+        return fuzzyMatch;
+      }
     }
   }
-  return false;
+
+  return null;
 }
 
-function checkWorldNeeds() {
-  const people = getSelectedWorldPeople();
-  if (!people) return { required: ['👥 Wähle zuerst, für wie viele Menschen du die Welt gestaltest.'], prompts: [], needsConfirmation: true };
 
-  const names = userColorNames
-    .map(n => (n || '').toLowerCase().trim())
-    .filter(Boolean);
+/* ============================================================
+   SCHÜLERISCHE BEDEUTUNGEN SAMMELN
+   ============================================================ */
 
-  const hasHousing = names.some(n => /haus|wohnung|wohn|unterkunft|zelt|hütte|huette|heim|iglu|höhle|hoehle|bauernhof|dorf|siedlung|jurte|wohnwagen/.test(n));
-  const hasFoodSource = names.some(n => /feld|acker|landwirtschaft|farm|anbau|gemüse|gemuese|obst|getreide|ernte|plantage|gewächshaus|gewaechshaus|gartenbau|tierhaltung|viehzucht|weide|fischerei|fischzucht|teichwirtschaft|angeln|fischen|sammeln|jäger|jaeger|jagd|nahrungserzeugung|lebensmittelproduktion|lebensmittelanbau/.test(n));
-  const hasFoodDistribution = names.some(n => /supermarkt|supermarket|laden|geschäft|geschaeft|markt|einkauf|shop|kiosk|bäckerei|baeckerei/.test(n));
+function getMeaningCategories(){
+
+  const categories =
+    new Set();
+
+  userColorNames.forEach(name => {
+
+    if(!name){
+      return;
+    }
+
+    const category =
+      getSemanticCategory(name);
+
+    if(category){
+      categories.add(category);
+    }
+  });
+
+  return categories;
+}
+
+
+/* ============================================================
+   KONFRONTATIONS-CHECK
+   ------------------------------------------------------------
+   Nur grundlegende Denkimpulse.
+   Keine Bewertung.
+   Keine Personenzahl.
+   Keine Nachhaltigkeitsbewertung.
+   ============================================================ */
+
+function checkWorldNeeds(){
+
+  const categories =
+    getMeaningCategories();
 
   const required = [];
-  const prompts = [];
 
-  if (!hasHousing) {
-    required.push(people === 1
-      ? '🏠 Du bist allein. Wo kannst du wohnen? Du brauchst eine Unterkunft. Das muss kein Haus sein. Denke weiter.'
-      : `🏠 Deine Welt soll für ${people} Menschen passen. Wo könnt ihr wohnen? Ihr braucht eine Unterkunft. Das muss kein Haus sein. Denke weiter.`);
-  }
 
-  if (!hasFoodSource) {
-    if (hasFoodDistribution) {
-      required.push(people === 1
-        ? '🥕 Du hast einen Laden eingeplant. Aber woher kommen die Lebensmittel? Denke weiter.'
-        : `🥕 Du hast einen Laden eingeplant. Aber woher kommen die Lebensmittel für ${people} Menschen? Denke weiter.`);
-    } else {
-      required.push(people === 1
-        ? '🥕 Woher kommt deine Nahrung? Zum Beispiel aus einem Feld, Garten, von Tieren oder aus dem Wasser? Denke weiter.'
-        : `🥕 Woher kommt die Nahrung für ${people} Menschen? Zum Beispiel aus Feldern, Gärten, von Tieren oder aus dem Wasser? Denke weiter.`);
-    }
-  }
+  /*
+   * Wohnen
+   */
 
-  // Bei mehr als einer Person wird keine scheinpräzise "Personen pro Feld"-
-  // Rechnung vorgenommen. Die ausreichende Versorgung hängt von Größe,
-  // Ertrag, Anbauweise, Ernährung und weiteren Bedingungen ab.
-  if (people > 1 && hasFoodSource) {
-    prompts.push(`🥕 Deine Welt soll für ${people} Menschen passen. Reicht die Nahrungsversorgung für alle? Ein Feld kann unterschiedlich viel liefern. Denke über Größe, Anbau und Ernährung nach.`);
-  }
+  if(
+    !categories.has("HOUSING")
+  ){
 
-  if (people > 1 && hasHousing) {
-    prompts.push(`🏠 Deine Welt soll für ${people} Menschen passen. Reicht die Unterkunft für alle? Denke über Größe und Wohnform nach.`);
-  }
-
-  // Wenn für eine Welt mit mehreren Personen überhaupt noch nichts verändert
-  // wurde, soll die Person bewusst prüfen, ob ihr Entwurf für die gewählte Zahl
-  // von Menschen gedacht ist. Das Modell behauptet dabei nicht, was "genug"
-  // ist.
-  if (people > 1 && !hasUserPlacedTiles()) {
-    prompts.push(`👥 Deine Welt ist unverändert. Sie soll für ${people} Menschen passen. Stimmt das so? Überlege, was ihr gemeinsam braucht.`);
-  }
-
-  return { required, prompts, needsConfirmation: required.length > 0 || prompts.length > 0 };
-}
-
-function showWorldNeedsCheck() {
-  const result = checkWorldNeeds();
-  if (!result.needsConfirmation) return true;
-
-  const all = [...result.required, ...result.prompts];
-  const text = all.map((h, i) => (i + 1) + '. ' + h.replace(/^\S+\s/, '')).join('\n\n');
-
-  if (result.required.length > 0) {
-    return confirm(
-      'Bevor du speicherst:\n\n' +
-      text +
-      '\n\nStimmt das so? Ja speichert die Welt. Nein bringt dich zurück zur Gestaltung.'
+    required.push(
+      "🏠 Wo können Menschen in deiner Welt wohnen? " +
+      "Du hast bisher keinen Ort genannt, an dem Menschen leben können. " +
+      "Überlege, ob du dazu noch etwas gestalten möchtest."
     );
   }
 
-  return confirm(
-    'Bevor du speicherst:\n\n' +
-    text +
-    '\n\nStimmt das so? Ja speichert die Welt. Nein bringt dich zurück zur Gestaltung.'
-  );
-}
 
-function updateHealthDashboard() {
-  const counts = Array(9).fill(0);
-  const totalTiles = mask.flat().filter(Boolean).length;
+  /*
+   * Nahrung
+   */
 
-  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
-    if(mask[y][x] && grid[y][x] >= 0) counts[grid[y][x]]++;
+  if(
+    !categories.has("FOOD")
+  ){
+
+    required.push(
+      "🥕 Wovon leben die Menschen in deiner Welt? " +
+      "Du hast bisher nichts dazu genannt, woher Nahrung oder Essen kommt. " +
+      "Überlege, ob das für deine Welt wichtig ist."
+    );
   }
 
-  // Referenzzustand: die tatsächlich erzeugte, unveränderte Startwelt.
-  // Die Werte werden aus dem Startgitter ermittelt und sind Modellreferenzen,
-  // keine Messwerte der realen Erde.
-  const baselineGrid = startGrid();
-  const baselineCounts = Array(4).fill(0);
-  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) {
-    if (mask[y][x] && baselineGrid[y][x] >= 0 && baselineGrid[y][x] < 3) {
-      baselineCounts[baselineGrid[y][x]]++;
+
+  /*
+   * Kein sozialer Zwang.
+   *
+   * Es wird NICHT gefragt, ob Familie/Freunde vorhanden sein müssen.
+   *
+   * Wenn ein Kind solche Elemente gestaltet, bleiben sie aber
+   * Teil der Welt und können später im Gespräch aufgegriffen werden.
+   */
+
+  return {
+    required,
+    needsConfirmation:
+      required.length > 0
+  };
+}
+
+
+/* ============================================================
+   RÜCKFRAGE-DIALOG
+   ============================================================ */
+
+function showWorldNeedsCheck(){
+
+  const result =
+    checkWorldNeeds();
+
+  if(!result.needsConfirmation){
+    return true;
+  }
+
+  const overlay =
+    document.getElementById(
+      "checkOverlay"
+    );
+
+  const list =
+    document.getElementById(
+      "checkList"
+    );
+
+  list.innerHTML = "";
+
+
+  result.required.forEach(
+    message => {
+
+      const li =
+        document.createElement("li");
+
+      li.textContent =
+        message;
+
+      list.appendChild(li);
     }
-  }
-  const initialWater = baselineCounts[0];
-  const initialLandNature = baselineCounts[1] + baselineCounts[2];
-
-  let buildingTiles = 0;
-  let industryTiles = 0;
-  let natureTiles = 0;
-  let lowImpactTiles = 0;
-  let energyLowTiles = 0;
-  let nuclearTiles = 0;
-  let userWaterTiles = 0;
-
-  for (let i = 0; i < userColorNames.length; i++) {
-    const slotIndex = i + 3;
-    const count = counts[slotIndex];
-    if (count === 0) continue;
-
-    const cat = getSemanticCategory(userColorNames[i]);
-    if (cat === 'NATURE') natureTiles += count;
-    else if (cat === 'HEAVY_INDUSTRY') industryTiles += count;
-    else if (cat === 'LOW_IMPACT') lowImpactTiles += count;
-    else if (cat === 'ENERGY_LOW') energyLowTiles += count;
-    else if (cat === 'NUCLEAR') nuclearTiles += count;
-    else if (cat === 'WATER') userWaterTiles += count;
-    else buildingTiles += count;
-  }
-
-  // 1. NATURRAUM
-  // Direkter Belastungswert der Fantasiewelt: menschliche Nutzung verändert
-  // die vorhandene Naturfläche. Die Gewichtungen sind Modellannahmen.
-  const landStressRaw = (buildingTiles * 1.2) + (industryTiles * 2.2) + (lowImpactTiles * 0.4) + (energyLowTiles * 0.4) + (nuclearTiles * 1.2);
-  const landRestorationCredit = natureTiles * 0.6;
-  const landStress = Math.max(0, landStressRaw - landRestorationCredit);
-  const landThreshold = Math.max(1, initialLandNature * 0.35);
-
-  // 2. WASSER
-  // Direkter Belastungswert: Verlust vorhandener Gewässer plus zusätzlicher
-  // Nutzungsdruck. Auch diese Gewichtungen sind Modellannahmen.
-  const currentWater = counts[0] + userWaterTiles;
-  const directWaterLoss = Math.max(0, initialWater - currentWater);
-  const waterUseStress = (industryTiles * 2.0) + (nuclearTiles * 1.2) + (buildingTiles * 0.5) + (lowImpactTiles * 0.2);
-  const waterStress = (directWaterLoss * 1.8) + waterUseStress;
-  const waterThreshold = Math.max(1, initialWater * 1.1);
-
-  // 3. KLIMA
-  // Direkter Belastungswert: emissionsintensive Nutzung belastet das Klima,
-  // Naturflächen wirken in der Fantasiewelt als vereinfachter Puffer. Das ist
-  // keine Berechnung realer CO2-Flüsse oder Klimawirkungen.
-  const climateLoad = (industryTiles * 2.5) + (buildingTiles * 0.8) + (lowImpactTiles * 0.2);
-  const naturalClimateBuffer = (counts[1] * 0.10) + (natureTiles * 0.8);
-  const climateStress = Math.max(0, climateLoad - naturalClimateBuffer);
-  const climateThreshold = Math.max(1, totalTiles * 0.22);
-
-  // SYSTEMVERKETTUNG
-  // Die drei Bereiche werden nicht völlig unabhängig bewertet: Veränderungen
-  // eines Bereichs können andere Bereiche mitbelasten. Solche Wechselwirkungen
-  // sind aus der Erdsystemforschung grundsätzlich bekannt (z.B. Landnutzung,
-  // Wasserhaushalt und Klima beeinflussen sich gegenseitig).
-  //
-  // Wichtig: Die Koeffizienten sind bewusst kleine, dimensionslose
-  // Modellparameter. Sie sind NICHT empirische Kennwerte der realen Erde.
-  // Die Formel bildet daher eine qualitative Systemverkettung ab, keine
-  // wissenschaftliche Berechnung der planetaren Grenzen.
-  const landStressNorm = Math.min(1, landStress / landThreshold);
-  const waterStressNorm = Math.min(1, waterStress / waterThreshold);
-  const climateStressNorm = Math.min(1, climateStress / climateThreshold);
-
-  // Land -> Wasser: starke Veränderung des Naturraums kann im Modell den
-  // Wasserbereich zusätzlich belasten.
-  // Klima -> Wasser: Klimabelastung kann im Modell zusätzlichen Wasserdruck
-  // auslösen.
-  const effectiveWaterStress = Math.min(1,
-    waterStressNorm + 0.12 * landStressNorm + 0.08 * climateStressNorm
   );
 
-  // Land -> Klima: Veränderung natürlicher Flächen kann im Modell die
-  // Klimabelastung verstärken.
-  // Wasser -> Klima: starker Wasserdruck wird als kleiner zusätzlicher
-  // Systemstress berücksichtigt.
-  const effectiveClimateStress = Math.min(1,
-    climateStressNorm + 0.12 * landStressNorm + 0.05 * waterStressNorm
+
+  overlay.classList.add(
+    "active"
   );
 
-  // Wasser -> Naturraum: starker Wasserdruck kann im Modell die Belastung
-  // des Naturraums erhöhen.
-  const effectiveLandStress = Math.min(1,
-    landStressNorm + 0.08 * waterStressNorm
+
+  return new Promise(
+    resolve => {
+
+      const cancel =
+        document.getElementById(
+          "checkCancel"
+        );
+
+      const confirmButton =
+        document.getElementById(
+          "checkConfirm"
+        );
+
+
+      const cleanup = () => {
+
+        overlay.classList.remove(
+          "active"
+        );
+
+        cancel.onclick = null;
+        confirmButton.onclick = null;
+      };
+
+
+      cancel.onclick = () => {
+
+        cleanup();
+
+        resolve(false);
+      };
+
+
+      confirmButton.onclick = () => {
+
+        cleanup();
+
+        resolve(true);
+      };
+
+    }
   );
-
-  let healthLand = Math.round(100 * (1 - effectiveLandStress));
-  let healthWater = Math.round(100 * (1 - effectiveWaterStress));
-  let healthClimate = Math.round(100 * (1 - effectiveClimateStress));
-
-  healthLand = Math.min(100, Math.max(0, healthLand));
-  healthWater = Math.min(100, Math.max(0, healthWater));
-  healthClimate = Math.min(100, Math.max(0, healthClimate));
-
-  // GESAMTZUSTAND (didaktische Modellregel)
-  const minHealth = Math.min(healthLand, healthWater, healthClimate);
-  const avgHealth = Math.round((healthLand + healthWater + healthClimate) / 3);
-  
-  // Eine stark belastete Dimension kann den Gesamtzustand stärker beeinflussen; dies ist keine Modellierung realer Kipppunkte.
-  const overallHealth = Math.round(avgHealth * 0.6 + minHealth * 0.4);
-
-  // Visualisierung im UI
-  updateBar("barLand", "labelLand", healthLand);
-  updateBar("barWater", "labelWater", healthWater);
-  updateBar("barClimate", "labelClimate", healthClimate);
-
-  const badge = document.getElementById("overallBadge");
-  if (overallHealth >= 75 && minHealth >= 55) {
-    badge.textContent = "Gut";
-    badge.style.background = "#2ecc71";
-  } else if (overallHealth >= 45 && minHealth >= 30) {
-    badge.textContent = "Belastet";
-    badge.style.background = "#f39c12";
-  } else {
-    badge.textContent = "Kritisch";
-    badge.style.background = "#e74c3c";
-  }
 }
 
-function updateBar(barId, labelId, percent) {
-  const bar = document.getElementById(barId);
-  const label = document.getElementById(labelId);
-  
-  bar.style.width = percent + "%";
-  label.textContent = percent + " %";
 
-  if (percent >= 70) {
-    bar.style.background = "#2ecc71";
-  } else if (percent >= 40) {
-    bar.style.background = "#f39c12";
-  } else {
-    bar.style.background = "#e74c3c";
-  }
-}
+/* ============================================================
+   ZEICHNEN
+   ============================================================ */
 
 function draw(){
-  ctx.fillStyle="#dff1fa";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  for(let y=0;y<ROWS;y++){
-    for(let x=0;x<COLS;x++){
-      if(!mask[y][x]) continue;
-      const v=grid[y][x];
-      if (v >= 0) {
-        ctx.fillStyle = (v < 3) ? resourceColors[v] : userColors[v - 3];
-      } else {
-        ctx.fillStyle = "#fff";
+  ctx.fillStyle =
+    "#dff1fa";
+
+  ctx.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  for(
+    let y = 0;
+    y < ROWS;
+    y++
+  ){
+
+    for(
+      let x = 0;
+      x < COLS;
+      x++
+    ){
+
+      if(!mask[y][x]){
+        continue;
       }
-      ctx.fillRect(x*SCALE,y*SCALE,SCALE,SCALE);
-      ctx.strokeStyle="#ffffff55";
-      ctx.strokeRect(x*SCALE,y*SCALE,SCALE,SCALE);
+
+      const v =
+        grid[y][x];
+
+
+      if(v >= 0){
+
+        ctx.fillStyle =
+          userColors[v];
+
+      }else{
+
+        ctx.fillStyle =
+          "#fff";
+      }
+
+
+      ctx.fillRect(
+        x * SCALE,
+        y * SCALE,
+        SCALE,
+        SCALE
+      );
+
+
+      ctx.strokeStyle =
+        "#ffffff55";
+
+      ctx.strokeRect(
+        x * SCALE,
+        y * SCALE,
+        SCALE,
+        SCALE
+      );
     }
   }
 
-  for(let y=0;y<ROWS;y++) for(let x=0;x<COLS;x++){
-    if(!mask[y][x]) continue;
-    const n=[[1,0],[-1,0],[0,1],[0,-1]];
-    for(const [dx,dy] of n){
-      const nx=x+dx,ny=y+dy;
-      if(nx<0||nx>=COLS||ny<0||ny>=ROWS||!mask[ny][nx]){
-        ctx.fillStyle="#3b3b3b";
-        if(dx===1)ctx.fillRect((x+1)*SCALE-2,y*SCALE,2,SCALE);
-        if(dx===-1)ctx.fillRect(x*SCALE,y*SCALE,2,SCALE);
-        if(dy===1)ctx.fillRect(x*SCALE,(y+1)*SCALE-2,SCALE,2);
-        if(dy===-1)ctx.fillRect(x*SCALE,y*SCALE,SCALE,2);
+
+  /*
+   * Inselumrandung
+   */
+
+  for(
+    let y = 0;
+    y < ROWS;
+    y++
+  ){
+
+    for(
+      let x = 0;
+      x < COLS;
+      x++
+    ){
+
+      if(!mask[y][x]){
+        continue;
+      }
+
+
+      const neighbors = [
+        [1,0],
+        [-1,0],
+        [0,1],
+        [0,-1]
+      ];
+
+
+      for(
+        const [dx,dy]
+        of neighbors
+      ){
+
+        const nx =
+          x + dx;
+
+        const ny =
+          y + dy;
+
+
+        if(
+          nx < 0 ||
+          nx >= COLS ||
+          ny < 0 ||
+          ny >= ROWS ||
+          !mask[ny][nx]
+        ){
+
+          ctx.fillStyle =
+            "#3b3b3b";
+
+
+          if(dx === 1){
+
+            ctx.fillRect(
+              (x + 1) * SCALE - 2,
+              y * SCALE,
+              2,
+              SCALE
+            );
+          }
+
+
+          if(dx === -1){
+
+            ctx.fillRect(
+              x * SCALE,
+              y * SCALE,
+              2,
+              SCALE
+            );
+          }
+
+
+          if(dy === 1){
+
+            ctx.fillRect(
+              x * SCALE,
+              (y + 1) * SCALE - 2,
+              SCALE,
+              2
+            );
+          }
+
+
+          if(dy === -1){
+
+            ctx.fillRect(
+              x * SCALE,
+              y * SCALE,
+              SCALE,
+              2
+            );
+          }
+        }
       }
     }
   }
-  updateHealthDashboard();
 }
+
+
+/* ============================================================
+   PALETTE
+   ============================================================ */
 
 function makePalette(){
-  const resP = document.getElementById("resourcePalette");
-  const userP = document.getElementById("userPalette");
-  resP.innerHTML = "";
+
+  const userP =
+    document.getElementById(
+      "userPalette"
+    );
+
   userP.innerHTML = "";
 
-  // Vorhandene Ressourcen (0-2)
-  resourceColors.forEach((c, i) => {
-    const card = document.createElement("div");
-    card.className = "colorCard";
 
-    const sw = document.createElement("button");
-    sw.type = "button";
-    sw.className = "swatch" + (i === selected ? " selected" : "");
-    sw.style.background = c;
-    sw.onclick = () => { selected = i; makePalette(); };
-    card.appendChild(sw);
+  userColors.forEach(
+    (color,index) => {
 
-    const tag = document.createElement("div");
-    tag.className = "readOnlyTag";
-    tag.textContent = resourceNames[i];
-    card.appendChild(tag);
+      const card =
+        document.createElement(
+          "div"
+        );
 
-    resP.appendChild(card);
-  });
+      card.className =
+        "colorCard";
 
-  // Meine Gestaltung (3-8)
-  userColors.forEach((c, i) => {
-    const fullIndex = i + 3;
-    const card = document.createElement("div");
-    card.className = "colorCard";
 
-    const sw = document.createElement("button");
-    sw.type = "button";
-    sw.className = "swatch" + (fullIndex === selected ? " selected" : "");
-    sw.style.background = c;
-    sw.onclick = () => { selected = fullIndex; makePalette(); };
-    card.appendChild(sw);
+      /*
+       * Farbfeld
+       */
 
-    const picker = document.createElement("input");
-    picker.type = "color";
-    picker.className = "colorPicker";
-    picker.value = c;
-    picker.title = "Farbe wählen";
-    picker.oninput = () => {
-      userColors[i] = picker.value;
-      selected = fullIndex;
-      makePalette();
-      draw();
-    };
-    card.appendChild(picker);
+      const sw =
+        document.createElement(
+          "button"
+        );
 
-    const name = document.createElement("input");
-    name.type = "text";
-    name.className = "nameInput";
-    name.maxLength = 35;
-    name.placeholder = "Bedeutung dieser Farbe";
-    name.value = userColorNames[i];
-    name.oninput = () => {
-      userColorNames[i] = name.value;
-      updateHealthDashboard();
-    };
-    card.appendChild(name);
+      sw.type =
+        "button";
 
-    userP.appendChild(card);
-  });
+      sw.className =
+        "swatch" +
+        (
+          index === selected
+            ? " selected"
+            : ""
+        );
+
+      sw.style.background =
+        color;
+
+      sw.title =
+        "Farbe auswählen";
+
+
+      sw.onclick = () => {
+
+        selected =
+          index;
+
+        makePalette();
+      };
+
+
+      card.appendChild(sw);
+
+
+      /*
+       * Farbwahl
+       */
+
+      const picker =
+        document.createElement(
+          "input"
+        );
+
+      picker.type =
+        "color";
+
+      picker.className =
+        "colorPicker";
+
+      picker.value =
+        color;
+
+      picker.title =
+        "Farbe verändern";
+
+
+      picker.oninput = () => {
+
+        userColors[index] =
+          picker.value;
+
+        selected =
+          index;
+
+        makePalette();
+
+        draw();
+      };
+
+
+      card.appendChild(
+        picker
+      );
+
+
+      /*
+       * Bedeutungsfeld
+       */
+
+      const name =
+        document.createElement(
+          "input"
+        );
+
+      name.type =
+        "text";
+
+      name.className =
+        "nameInput";
+
+      name.maxLength =
+        50;
+
+      name.placeholder =
+        "Was bedeutet diese Farbe?";
+
+      name.value =
+        userColorNames[index];
+
+
+      /*
+       * Vorschlagsbox
+       */
+
+      const suggestBox =
+        document.createElement(
+          "div"
+        );
+
+      suggestBox.className =
+        "suggestionBox";
+
+
+      function checkSuggestions(){
+
+        const val =
+          name.value.trim();
+
+        suggestBox.innerHTML = "";
+
+        suggestBox.style.display =
+          "none";
+
+
+        if(!val){
+          return;
+        }
+
+
+        const words =
+          val.split(/\s+/);
+
+        const suggestions = [];
+
+
+        words.forEach(word => {
+
+          const match =
+            getBestFuzzyMatch(word);
+
+          if(
+            match &&
+            match.toLowerCase() !==
+            word.toLowerCase()
+          ){
+
+            if(
+              !suggestions.includes(match)
+            ){
+
+              suggestions.push(
+                match
+              );
+            }
+          }
+        });
+
+
+        if(
+          suggestions.length === 0
+        ){
+
+          return;
+        }
+
+
+        suggestBox.style.display =
+          "block";
+
+
+        const labelText =
+          document.createElement(
+            "span"
+          );
+
+        labelText.textContent =
+          "Meintest du: ";
+
+        suggestBox.appendChild(
+          labelText
+        );
+
+
+        suggestions.forEach(
+          suggestion => {
+
+            const chip =
+              document.createElement(
+                "span"
+              );
+
+            chip.className =
+              "suggestionChip";
+
+            chip.textContent =
+              suggestion;
+
+
+            chip.onclick = () => {
+
+              let currentText =
+                name.value;
+
+
+              words.forEach(word => {
+
+                const normalizedWord =
+                  normalizeWord(word);
+
+                const normalizedSuggestion =
+                  normalizeWord(
+                    suggestion
+                  );
+
+
+                if(
+                  normalizedWord ===
+                  normalizedSuggestion ||
+                  getBestFuzzyMatch(word) ===
+                  suggestion
+                ){
+
+                  const escaped =
+                    word.replace(
+                      /[.*+?^${}()|[\]\\]/g,
+                      "\\$&"
+                    );
+
+
+                  const reg =
+                    new RegExp(
+                      "\\b" +
+                      escaped +
+                      "\\b",
+                      "gi"
+                    );
+
+
+                  currentText =
+                    currentText.replace(
+                      reg,
+                      suggestion
+                    );
+                }
+              });
+
+
+              if(
+                currentText ===
+                name.value
+              ){
+
+                currentText =
+                  suggestion;
+              }
+
+
+              name.value =
+                currentText;
+
+              userColorNames[index] =
+                currentText;
+
+              suggestBox.style.display =
+                "none";
+            };
+
+
+            suggestBox.appendChild(
+              chip
+            );
+          }
+        );
+      }
+
+
+      name.oninput = () => {
+
+        userColorNames[index] =
+          name.value;
+
+        checkSuggestions();
+      };
+
+
+      card.appendChild(name);
+
+      card.appendChild(
+        suggestBox
+      );
+
+
+      userP.appendChild(card);
+    }
+  );
 }
 
-canvas.addEventListener("click", e => {
-  const r = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / r.width;
-  const scaleY = canvas.height / r.height;
-  const x = Math.floor(((e.clientX - r.left) * scaleX) / SCALE);
-  const y = Math.floor(((e.clientY - r.top) * scaleY) / SCALE);
-  if (x < 0 || x >= COLS || y < 0 || y >= ROWS || !mask[y][x]) return;
-  grid[y][x] = selected;
-  draw();
-});
 
-document.getElementById("reset").onclick = () => {
-  if(confirm("Die Gestaltung wirklich auf die unveränderte Startwelt zurücksetzen?")){
+/* ============================================================
+   INSELKLICK
+   ============================================================ */
+
+canvas.addEventListener(
+  "click",
+  e => {
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+
+    const scaleX =
+      canvas.width /
+      rect.width;
+
+    const scaleY =
+      canvas.height /
+      rect.height;
+
+
+    const x =
+      Math.floor(
+        (
+          (e.clientX - rect.left) *
+          scaleX
+        ) / SCALE
+      );
+
+
+    const y =
+      Math.floor(
+        (
+          (e.clientY - rect.top) *
+          scaleY
+        ) / SCALE
+      );
+
+
+    if(
+      x < 0 ||
+      x >= COLS ||
+      y < 0 ||
+      y >= ROWS ||
+      !mask[y][x]
+    ){
+
+      return;
+    }
+
+
+    grid[y][x] =
+      selected;
+
+    draw();
+  }
+);
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+document.getElementById(
+  "reset"
+).onclick = () => {
+
+  if(
+    confirm(
+      "Die Gestaltung wirklich auf die ursprüngliche Insel zurücksetzen?"
+    )
+  ){
+
     loadBlankState();
+
     setWorldURL(null);
   }
 };
 
-document.getElementById("save").onclick = () => {
-  // Vor dem Speichern werden einige grundlegende Lebensbedingungen als
-  // Denkanstoß geprüft. Bei fehlenden Voraussetzungen wird noch nicht
-  // gespeichert; die bestehende Speicherroutine bleibt unverändert.
-  if (!showWorldNeedsCheck()) return;
 
-  const worlds = getSavedWorlds();
-  const usedSlots = worlds.map(w => w.id);
-  const targetSlot = VALID_SLOTS.find(slot => !usedSlots.includes(slot));
+/* ============================================================
+   SPEICHERN
+   ============================================================ */
 
-  if (!targetSlot) {
-    alert("Maximale Anzahl von 3 Welten erreicht. Bitte lösche zuerst mindestens eine Welt.");
+document.getElementById(
+  "save"
+).onclick = async () => {
+
+  /*
+   * Erst die Konfrontationsfragen.
+   */
+
+  const shouldSave =
+    await showWorldNeedsCheck();
+
+  if(!shouldSave){
     return;
   }
 
-  // Generiert Export-Canvas inklusive Legende und Fantasiewelt-Status
-  const expCanvas = document.createElement("canvas");
-  const pad = 24, headerH = 118, rowH = 24, rows = 5;
-  const legendH = pad + headerH + (rows * rowH) + pad;
 
-  expCanvas.width = canvas.width;
-  expCanvas.height = canvas.height + legendH;
-  const exCtx = expCanvas.getContext("2d");
+  const worlds =
+    getSavedWorlds();
 
-  exCtx.drawImage(canvas, 0, 0);
 
-  exCtx.fillStyle = "#ffffff";
-  exCtx.fillRect(0, canvas.height, expCanvas.width, legendH);
+  const usedSlots =
+    worlds.map(
+      world => world.id
+    );
 
-  exCtx.strokeStyle = "#222";
-  exCtx.lineWidth = 2;
-  exCtx.strokeRect(0, canvas.height, expCanvas.width, legendH);
 
-  // Status-Header
-  const badgeText = document.getElementById("overallBadge").textContent;
-  exCtx.fillStyle = "#222";
-  exCtx.font = "bold 16px system-ui, sans-serif";
-  exCtx.fillText("Welt für " + worldPeopleCount + " Menschen | Zustand der Fantasiewelt: " + badgeText, pad, canvas.height + pad + 14);
+  const targetSlot =
+    VALID_SLOTS.find(
+      slot =>
+        !usedSlots.includes(slot)
+    );
 
-  exCtx.font = "12px system-ui, sans-serif";
-  exCtx.fillText("Naturraum: " + document.getElementById("labelLand").textContent, pad, canvas.height + pad + 36);
-  exCtx.fillText("Wasser: " + document.getElementById("labelWater").textContent, pad + 200, canvas.height + pad + 36);
-  exCtx.fillText("Klima: " + document.getElementById("labelClimate").textContent, pad + 400, canvas.height + pad + 36);
 
-  exCtx.beginPath();
-  exCtx.moveTo(pad, canvas.height + pad + 50);
-  exCtx.lineTo(expCanvas.width - pad, canvas.height + pad + 50);
-  exCtx.strokeStyle = "#ccc";
-  exCtx.stroke();
+  if(!targetSlot){
 
-  // Legende
-  exCtx.fillStyle = "#222";
-  exCtx.font = "bold 14px system-ui, sans-serif";
-  exCtx.fillText("Legende & Elemente", pad, canvas.height + pad + 70);
+    alert(
+      "Maximale Anzahl von 3 Welten erreicht. " +
+      "Bitte lösche zuerst mindestens eine Welt."
+    );
 
-  const startY = canvas.height + pad + 90;
-  const colW = (expCanvas.width - (pad * 3)) / 2;
+    return;
+  }
 
-  const allNames = [...resourceNames, ...userColorNames.map((n, i) => n.trim() || ("Element " + (i + 1)))];
-  const allColors = [...resourceColors, ...userColors];
 
-  allColors.forEach((c, i) => {
-    const col = i % 2, row = Math.floor(i / 2);
-    const x = pad + col * (colW + pad);
-    const y = startY + row * rowH;
+  /*
+   * Exportbild erzeugen
+   */
 
-    exCtx.fillStyle = c;
-    exCtx.fillRect(x, y - 11, 14, 14);
-    exCtx.strokeStyle = "#222";
-    exCtx.lineWidth = 1;
-    exCtx.strokeRect(x, y - 11, 14, 14);
+  const exportCanvas =
+    document.createElement(
+      "canvas"
+    );
 
-    exCtx.fillStyle = "#222";
-    exCtx.font = "12px system-ui, sans-serif";
-    exCtx.fillText(allNames[i], x + 22, y);
-  });
 
-  const dataUrl = expCanvas.toDataURL("image/png");
+  const pad = 24;
+
+  const headerH = 90;
+
+  const rowH = 24;
+
+  const legendRows =
+    Math.ceil(
+      userColors.length / 2
+    );
+
+
+  const legendH =
+    pad +
+    headerH +
+    (legendRows * rowH) +
+    pad;
+
+
+  exportCanvas.width =
+    canvas.width;
+
+
+  exportCanvas.height =
+    canvas.height +
+    legendH;
+
+
+  const exportCtx =
+    exportCanvas.getContext(
+      "2d"
+    );
+
+
+  /*
+   * Insel
+   */
+
+  exportCtx.drawImage(
+    canvas,
+    0,
+    0
+  );
+
+
+  /*
+   * Legendenbereich
+   */
+
+  exportCtx.fillStyle =
+    "#ffffff";
+
+
+  exportCtx.fillRect(
+    0,
+    canvas.height,
+    exportCanvas.width,
+    legendH
+  );
+
+
+  exportCtx.strokeStyle =
+    "#222";
+
+
+  exportCtx.lineWidth =
+    2;
+
+
+  exportCtx.strokeRect(
+    0,
+    canvas.height,
+    exportCanvas.width,
+    legendH
+  );
+
+
+  /*
+   * Überschrift
+   */
+
+  exportCtx.fillStyle =
+    "#222";
+
+
+  exportCtx.font =
+    "bold 16px system-ui, sans-serif";
+
+
+  exportCtx.fillText(
+    "Mons Novera – meine Welt",
+    pad,
+    canvas.height +
+    pad +
+    14
+  );
+
+
+  exportCtx.font =
+    "12px system-ui, sans-serif";
+
+
+  exportCtx.fillText(
+    "Farben und ihre Bedeutungen",
+    pad,
+    canvas.height +
+    pad +
+    36
+  );
+
+
+  exportCtx.beginPath();
+
+  exportCtx.moveTo(
+    pad,
+    canvas.height +
+    pad +
+    50
+  );
+
+  exportCtx.lineTo(
+    exportCanvas.width - pad,
+    canvas.height +
+    pad +
+    50
+  );
+
+  exportCtx.strokeStyle =
+    "#ccc";
+
+  exportCtx.stroke();
+
+
+  /*
+   * Legende
+   */
+
+  const startY =
+    canvas.height +
+    pad +
+    72;
+
+
+  const colW =
+    (
+      exportCanvas.width -
+      (pad * 3)
+    ) / 2;
+
+
+  userColors.forEach(
+    (color,index) => {
+
+      const col =
+        index % 2;
+
+      const row =
+        Math.floor(index / 2);
+
+
+      const x =
+        pad +
+        col * (
+          colW + pad
+        );
+
+
+      const y =
+        startY +
+        row * rowH;
+
+
+      exportCtx.fillStyle =
+        color;
+
+
+      exportCtx.fillRect(
+        x,
+        y - 11,
+        14,
+        14
+      );
+
+
+      exportCtx.strokeStyle =
+        "#222";
+
+
+      exportCtx.lineWidth =
+        1;
+
+
+      exportCtx.strokeRect(
+        x,
+        y - 11,
+        14,
+        14
+      );
+
+
+      exportCtx.fillStyle =
+        "#222";
+
+
+      exportCtx.font =
+        "12px system-ui, sans-serif";
+
+
+      const label =
+        userColorNames[index].trim() ||
+        "noch keine Bedeutung";
+
+
+      exportCtx.fillText(
+        label,
+        x + 22,
+        y
+      );
+    }
+  );
+
+
+  /*
+   * PNG
+   */
+
+  const dataUrl =
+    exportCanvas.toDataURL(
+      "image/png"
+    );
+
+
+  /*
+   * Welt speichern
+   */
+
   const newWorld = {
-    id: targetSlot,
-    grid: JSON.parse(JSON.stringify(grid)),
-    userColors: [...userColors],
-    userColorNames: [...userColorNames],
-    peopleCount: worldPeopleCount,
-    dataUrl: dataUrl
+
+    id:
+      targetSlot,
+
+    grid:
+      JSON.parse(
+        JSON.stringify(grid)
+      ),
+
+    userColors:
+      [...userColors],
+
+    userColorNames:
+      [...userColorNames],
+
+    dataUrl:
+      dataUrl
   };
 
-  worlds.push(newWorld);
-  saveSavedWorlds(worlds);
+
+  worlds.push(
+    newWorld
+  );
+
+
+  saveSavedWorlds(
+    worlds
+  );
+
 
   renderGallery();
-  setWorldURL(targetSlot);
+
+  setWorldURL(
+    targetSlot
+  );
 };
 
-// PDF Export Funktion
-document.getElementById("downloadPdf").onclick = () => {
-  const worlds = getSavedWorlds();
-  if (worlds.length === 0) {
-    alert("Es sind noch keine Welten gespeichert.");
+
+/* ============================================================
+   PDF
+   ============================================================ */
+
+document.getElementById(
+  "downloadPdf"
+).onclick = () => {
+
+  const worlds =
+    getSavedWorlds();
+
+
+  if(worlds.length === 0){
+
+    alert(
+      "Es sind noch keine Welten gespeichert."
+    );
+
     return;
   }
 
-  if (!window.jspdf || !window.jspdf.jsPDF) {
-    alert("PDF-Bibliothek konnte nicht geladen werden.");
+
+  if(
+    !window.jspdf ||
+    !window.jspdf.jsPDF
+  ){
+
+    alert(
+      "Die PDF-Bibliothek konnte nicht geladen werden."
+    );
+
     return;
   }
 
-  worlds.sort((a,b) => Number(a.id) - Number(b.id));
 
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+  worlds.sort(
+    (a,b) =>
+      Number(a.id) -
+      Number(b.id)
+  );
 
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
 
-  worlds.forEach((world, index) => {
-    if (index > 0) pdf.addPage();
+  const {
+    jsPDF
+  } =
+    window.jspdf;
 
-    pdf.setFontSize(16);
-    pdf.setFont("helvetica", "bold");
-    pdf.text("Welt " + world.id + (world.peopleCount ? " – für " + world.peopleCount + " Personen" : ""), 15, 18);
 
-    const imgProps = pdf.getImageProperties(world.dataUrl);
-    const imgRatio = imgProps.width / imgProps.height;
+  const pdf =
+    new jsPDF({
+      orientation:"p",
+      unit:"mm",
+      format:"a4"
+    });
 
-    const margin = 15;
-    const maxImgWidth = pageWidth - (margin * 2);
-    const maxImgHeight = pageHeight - 30 - margin;
 
-    let imgW = maxImgWidth;
-    let imgH = imgW / imgRatio;
+  const pageWidth =
+    pdf.internal.pageSize.getWidth();
 
-    if (imgH > maxImgHeight) {
-      imgH = maxImgHeight;
-      imgW = imgH * imgRatio;
+
+  const pageHeight =
+    pdf.internal.pageSize.getHeight();
+
+
+  worlds.forEach(
+    (world,index) => {
+
+      if(index > 0){
+        pdf.addPage();
+      }
+
+
+      pdf.setFontSize(
+        16
+      );
+
+
+      pdf.setFont(
+        "helvetica",
+        "bold"
+      );
+
+
+      pdf.text(
+        "Mons Novera – Welt " +
+        world.id,
+        15,
+        18
+      );
+
+
+      const imgProps =
+        pdf.getImageProperties(
+          world.dataUrl
+        );
+
+
+      const imgRatio =
+        imgProps.width /
+        imgProps.height;
+
+
+      const margin =
+        15;
+
+
+      const maxImgWidth =
+        pageWidth -
+        (margin * 2);
+
+
+      const maxImgHeight =
+        pageHeight -
+        30 -
+        margin;
+
+
+      let imgW =
+        maxImgWidth;
+
+
+      let imgH =
+        imgW /
+        imgRatio;
+
+
+      if(
+        imgH >
+        maxImgHeight
+      ){
+
+        imgH =
+          maxImgHeight;
+
+        imgW =
+          imgH *
+          imgRatio;
+      }
+
+
+      const imgX =
+        (
+          pageWidth -
+          imgW
+        ) / 2;
+
+
+      pdf.addImage(
+        world.dataUrl,
+        "PNG",
+        imgX,
+        25,
+        imgW,
+        imgH
+      );
     }
+  );
 
-    const imgX = (pageWidth - imgW) / 2;
-    pdf.addImage(world.dataUrl, 'PNG', imgX, 25, imgW, imgH);
-  });
 
-  pdf.save("mons-novera-welten.pdf");
+  pdf.save(
+    "mons-novera-welten.pdf"
+  );
 };
 
-window.onpopstate = () => {
-  syncStateWithURL();
+
+/* ============================================================
+   LEHRPERSONEN-KOMMENTAR
+   ============================================================ */
+
+const commentOverlay =
+  document.getElementById(
+    "commentOverlay"
+  );
+
+
+document.getElementById(
+  "openTeacherComment"
+).onclick = () => {
+
+  commentOverlay.classList.add(
+    "active"
+  );
 };
+
+
+document.getElementById(
+  "closeTeacherComment"
+).onclick = () => {
+
+  commentOverlay.classList.remove(
+    "active"
+  );
+};
+
+
+commentOverlay.addEventListener(
+  "click",
+  e => {
+
+    if(
+      e.target ===
+      commentOverlay
+    ){
+
+      commentOverlay.classList.remove(
+        "active"
+      );
+    }
+  }
+);
+
+
+/* ============================================================
+   ESCAPE-TASTE
+   ============================================================ */
+
+document.addEventListener(
+  "keydown",
+  e => {
+
+    if(
+      e.key === "Escape"
+    ){
+
+      document
+        .getElementById(
+          "commentOverlay"
+        )
+        .classList.remove(
+          "active"
+        );
+
+
+      document
+        .getElementById(
+          "checkOverlay"
+        )
+        .classList.remove(
+          "active"
+        );
+    }
+  }
+);
+
+
+/* ============================================================
+   START
+   ============================================================ */
 
 renderGallery();
+
 syncStateWithURL();
 
 })();
 </script>
+
 </body>
 </html>
