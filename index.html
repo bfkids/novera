@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mons Novera</title>
+<!-- jsPDF Bibliothek für die PDF-Generierung -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#f4f1ea;color:#222}
@@ -41,6 +43,7 @@ h2{font-size:18px;margin:4px 0 12px}
 .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
 button.action{border:0;padding:10px 13px;border-radius:8px;cursor:pointer;background:#222;color:white;font-weight:600;flex:1 1 auto;text-align:center}
 button.secondary{background:#e8e5de;color:#222}
+button.full-width{flex:1 1 100%;margin-top:4px}
 .stats{font-size:13px;margin-top:14px}.stat{display:flex;justify-content:space-between;padding:3px 0}
 @media(max-width:900px){
   header{padding:16px 20px 8px}
@@ -92,6 +95,7 @@ Du musst nicht alle zehn Farben verwenden.
 <div class="buttons">
 <button class="action secondary" id="reset">Welt zurücksetzen</button>
 <button class="action" id="save">Welt speichern</button>
+<button class="action secondary full-width" id="downloadPdf">Alle Welten herunterladen (PDF)</button>
 </div>
 
 <div class="stats" id="stats"></div>
@@ -152,12 +156,14 @@ function getURLParam(name) {
 }
 
 function setWorldURL(id) {
-  if (id) {
-    const newUrl = window.location.pathname + '?world=' + id;
-    window.history.pushState({ worldId: id }, '', newUrl);
-  } else {
-    window.history.pushState({}, '', window.location.pathname);
-  }
+  try {
+    if (id) {
+      const newUrl = window.location.pathname + '?world=' + id;
+      window.history.pushState({ worldId: id }, '', newUrl);
+    } else {
+      window.history.pushState({}, '', window.location.pathname);
+    }
+  } catch(e) {}
 }
 
 function loadWorldData(world) {
@@ -176,24 +182,37 @@ function loadWorldData(world) {
   draw();
 }
 
-function loadLatestOrDefault(worlds) {
-  if (worlds && worlds.length > 0) {
-    const latestWorld = worlds[worlds.length - 1];
-    loadWorldData(latestWorld);
-    setWorldURL(latestWorld.id);
+function loadBlankState() {
+  grid = emptyGrid();
+  colors = [...defaultColors];
+  colorNames.fill("");
+  makePalette();
+  draw();
+}
+
+function syncStateWithURL() {
+  const worldId = getURLParam('world');
+  const worlds = getSavedWorlds();
+
+  if (worldId && VALID_SLOTS.includes(worldId)) {
+    const world = worlds.find(w => w.id === worldId);
+    if (world) {
+      loadWorldData(world);
+    } else {
+      loadBlankState();
+    }
+  } else if (worlds.length > 0) {
+    const latest = worlds[worlds.length - 1];
+    loadWorldData(latest);
+    setWorldURL(latest.id);
   } else {
-    grid = emptyGrid();
-    colors = [...defaultColors];
-    colorNames.fill("");
+    loadBlankState();
     setWorldURL(null);
-    makePalette();
-    draw();
   }
 }
 
 function deleteWorld(id) {
   let worlds = getSavedWorlds();
-  const currentActiveId = getURLParam("world");
 
   worlds = worlds.filter(w => w.id !== id);
 
@@ -203,16 +222,7 @@ function deleteWorld(id) {
 
   saveSavedWorlds(worlds);
   renderGallery();
-
-  if (currentActiveId === id) {
-    loadLatestOrDefault(worlds);
-  } else if (currentActiveId) {
-    const newActiveId = (Number(currentActiveId) > Number(id))
-      ? (Number(currentActiveId) - 1).toString()
-      : currentActiveId;
-
-    setWorldURL(newActiveId);
-  }
+  syncStateWithURL();
 }
 
 function renderGallery() {
@@ -245,6 +255,11 @@ function renderGallery() {
       e.preventDefault();
       loadWorldData(world);
       setWorldURL(world.id);
+      
+      const islandWrap = document.getElementById("islandWrap");
+      if (islandWrap) {
+        islandWrap.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     };
 
     const img = document.createElement("img");
@@ -383,17 +398,6 @@ function updateStats(){
     }).join("");
 }
 
-function dataURLtoBlob(dataurl) {
-  const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while(n--){
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-  return new Blob([u8arr], {type:mime});
-}
-
 canvas.addEventListener("click",e=>{
   const r=canvas.getBoundingClientRect();
   const scaleX=canvas.width/r.width;
@@ -407,12 +411,8 @@ canvas.addEventListener("click",e=>{
 
 document.getElementById("reset").onclick=()=>{
   if(confirm("Die Gestaltung wirklich zurücksetzen?")){
-    grid=emptyGrid();
-    colors=[...defaultColors];
-    colorNames.fill("");
+    loadBlankState();
     setWorldURL(null);
-    makePalette();
-    draw();
   }
 };
 
@@ -502,42 +502,72 @@ document.getElementById("save").onclick=()=>{
   
   renderGallery();
   setWorldURL(targetSlot);
+};
 
-  const blob=dataURLtoBlob(dataUrl);
-  const blobUrl=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.download="meine-fliegende-insel-welt-"+targetSlot+".png";
-  a.href=blobUrl;
-  a.click();
+// Funktion für den PDF-Export aller Welten
+document.getElementById("downloadPdf").onclick = () => {
+  const worlds = getSavedWorlds();
+  if (worlds.length === 0) {
+    alert("Es sind noch keine Welten gespeichert.");
+    return;
+  }
+
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    alert("PDF-Bibliothek konnte nicht geladen werden.");
+    return;
+  }
+
+  worlds.sort((a,b) => Number(a.id) - Number(b.id));
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({
+    orientation: 'p',
+    unit: 'mm',
+    format: 'a4'
+  });
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  worlds.forEach((world, index) => {
+    if (index > 0) {
+      pdf.addPage();
+    }
+
+    pdf.setFontSize(16);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Welt " + world.id, 15, 18);
+
+    const imgProps = pdf.getImageProperties(world.dataUrl);
+    const imgRatio = imgProps.width / imgProps.height;
+
+    const margin = 15;
+    const maxImgWidth = pageWidth - (margin * 2);
+    const maxImgHeight = pageHeight - 30 - margin;
+
+    let imgW = maxImgWidth;
+    let imgH = imgW / imgRatio;
+
+    if (imgH > maxImgHeight) {
+      imgH = maxImgHeight;
+      imgW = imgH * imgRatio;
+    }
+
+    const imgX = (pageWidth - imgW) / 2;
+    const imgY = 25;
+
+    pdf.addImage(world.dataUrl, 'PNG', imgX, imgY, imgW, imgH);
+  });
+
+  pdf.save("mons-novera-welten.pdf");
 };
 
 window.onpopstate = () => {
-  const worldId = getURLParam('world');
-  const worlds = getSavedWorlds();
-  if (worldId && VALID_SLOTS.includes(worldId)) {
-    const world = worlds.find(w => w.id === worldId);
-    if (world) {
-      loadWorldData(world);
-      return;
-    }
-  }
-  loadLatestOrDefault(worlds);
+  syncStateWithURL();
 };
 
 renderGallery();
-const initialWorldId = getURLParam('world');
-const savedWorlds = getSavedWorlds();
-
-if (initialWorldId && VALID_SLOTS.includes(initialWorldId)) {
-  const world = savedWorlds.find(w => w.id === initialWorldId);
-  if (world) {
-    loadWorldData(world);
-  } else {
-    loadLatestOrDefault(savedWorlds);
-  }
-} else {
-  loadLatestOrDefault(savedWorlds);
-}
+syncStateWithURL();
 
 })();
 </script>
