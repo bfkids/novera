@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mons Novera</title>
-<!-- jsPDF Bibliothek für die PDF-Generierung -->
+<title>Mons Novera - Erdsystem Simulation</title>
+<!-- jsPDF Bibliothek für PDF-Generierung -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#f4f1ea;color:#222}
 header{padding:22px 28px 10px;max-width:1200px;margin:auto}
 h1{margin:0 0 6px;font-size:28px}.subtitle{margin:0;color:#555}
-main{max-width:1200px;margin:auto;padding:18px 28px 35px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px}
+main{max-width:1200px;margin:auto;padding:18px 28px 35px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px}
 .banner{grid-column:1 / -1;overflow:hidden;border-radius:14px;background:#dff1fa;box-shadow:0 2px 12px #00000012;line-height:0}
 .banner img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain;object-position:center}
 
@@ -31,20 +31,34 @@ main{max-width:1200px;margin:auto;padding:18px 28px 35px;display:grid;grid-templ
 .panel{background:white;border-radius:14px;padding:18px;box-shadow:0 2px 12px #00000012}
 #islandWrap{display:flex;justify-content:center;align-items:center;min-height:520px;overflow:hidden;background:#dff1fa;border-radius:10px;padding:20px}
 canvas{image-rendering:pixelated;image-rendering:crisp-edges;border:none;cursor:crosshair;background:#dff1fa;max-width:100%;height:auto;display:block;touch-action:manipulation}
-h2{font-size:18px;margin:4px 0 12px}
+h2{font-size:17px;margin:4px 0 10px}
 .info{background:#f4f1ea;border-radius:9px;padding:11px 12px;font-size:13px;line-height:1.4;margin-bottom:16px}
-.palette{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
-.colorCard{display:grid;gap:6px}
-.swatch{width:100%;height:48px;border:3px solid transparent;border-radius:9px;cursor:pointer;padding:0;position:relative}
+
+/* Dashboard Gesundheitszustand */
+.healthDashboard{background:#fdfcf7;border:2px solid #222;border-radius:12px;padding:14px;margin-bottom:18px}
+.healthHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.healthBadge{padding:5px 10px;border-radius:20px;font-size:12px;font-weight:800;color:white;text-transform:uppercase;letter-spacing:0.5px}
+.indicatorItem{margin-bottom:10px}
+.indicatorItem:last-child{margin-bottom:0}
+.indicatorLabel{font-size:12px;display:flex;justify-content:space-between;margin-bottom:3px;font-weight:600}
+.barTrack{width:100%;height:10px;background:#e2ded4;border-radius:5px;overflow:hidden}
+.barFill{height:100%;width:100%;border-radius:5px;transition:width 0.4s ease, background-color 0.4s ease}
+
+/* Palette Styling */
+.paletteSectionTitle{font-size:13px;font-weight:700;color:#666;margin:12px 0 6px;text-transform:uppercase;letter-spacing:0.5px}
+.palette{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.colorCard{display:grid;gap:4px}
+.swatch{width:100%;height:40px;border:3px solid transparent;border-radius:8px;cursor:pointer;padding:0;position:relative}
 .swatch.selected{border-color:#111;outline:2px solid white}
-.swatch span{position:absolute;bottom:2px;left:4px;right:4px;background:#ffffffbb;font-size:11px;border-radius:4px}
-.colorPicker{width:100%;height:30px;padding:0;border:1px solid #bbb;border-radius:6px}
-.nameInput{width:100%;padding:8px;border:1px solid #bbb;border-radius:6px;font-size:14px}
+.colorPicker{width:100%;height:28px;padding:0;border:1px solid #bbb;border-radius:6px}
+.nameInput{width:100%;padding:6px;border:1px solid #bbb;border-radius:6px;font-size:12px}
+.readOnlyTag{background:#e8e5de;padding:6px;border-radius:6px;font-size:12px;font-weight:600;color:#444;text-align:center}
+
 .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
 button.action{border:0;padding:10px 13px;border-radius:8px;cursor:pointer;background:#222;color:white;font-weight:600;flex:1 1 auto;text-align:center}
 button.secondary{background:#e8e5de;color:#222}
-button.full-width{flex:1 1 100%;margin-top:4px}
-.stats{font-size:13px;margin-top:14px}.stat{display:flex;justify-content:space-between;padding:3px 0}
+button.full-width{flex:1 1 100%;margin-top:2px}
+
 @media(max-width:900px){
   header{padding:16px 20px 8px}
   main{grid-template-columns:1fr;padding:14px 20px 28px;gap:16px}
@@ -85,20 +99,54 @@ button.full-width{flex:1 1 100%;margin-top:4px}
 
 <aside class="panel">
 <div class="info"><strong>So geht's:</strong><br>
-Wähle eine Farbe, bestimme ihre Bedeutung und klicke anschliessend auf die Pixel der Welt.<br>
-Du musst nicht alle zehn Farben verwenden.
+Gestalte deine Welt. Beobachte im Dashboard, wie sich der Zustand der Erde verändert.
+</div>
+
+<!-- DASHBOARD GESUNDHEITSZUSTAND DER WELT -->
+<div class="healthDashboard">
+  <div class="healthHeader">
+    <h2>Gesundheitszustand</h2>
+    <span class="healthBadge" id="overallBadge">Gut</span>
+  </div>
+
+  <div class="indicatorItem">
+    <div class="indicatorLabel">
+      <span>🪵 Lebensraum & Überbauung</span>
+      <span id="labelLand">100 %</span>
+    </div>
+    <div class="barTrack"><div class="barFill" id="barLand"></div></div>
+  </div>
+
+  <div class="indicatorItem">
+    <div class="indicatorLabel">
+      <span>💧 Wasserhaushalt</span>
+      <span id="labelWater">100 %</span>
+    </div>
+    <div class="barTrack"><div class="barFill" id="barWater"></div></div>
+  </div>
+
+  <div class="indicatorItem">
+    <div class="indicatorLabel">
+      <span>🌀 Luft & Klima</span>
+      <span id="labelAir">100 %</span>
+    </div>
+    <div class="barTrack"><div class="barFill" id="barAir"></div></div>
+  </div>
 </div>
 
 <h2>Farben und Bedeutungen</h2>
-<div class="palette" id="palette"></div>
+
+<div class="paletteSectionTitle">Ressourcen (Unveränderbar)</div>
+<div class="palette" id="resourcePalette"></div>
+
+<div class="paletteSectionTitle">Menschliche Gestaltung</div>
+<div class="palette" id="userPalette"></div>
 
 <div class="buttons">
 <button class="action secondary" id="reset">Welt zurücksetzen</button>
 <button class="action" id="save">Welt speichern</button>
 <button class="action secondary full-width" id="downloadPdf">Alle Welten herunterladen (PDF)</button>
 </div>
-
-<div class="stats" id="stats"></div>
 </aside>
 </main>
 
@@ -109,11 +157,19 @@ Du musst nicht alle zehn Farben verwenden.
 const STORAGE_KEY = "mons_novera_saved_worlds";
 const VALID_SLOTS = ["1", "2", "3"];
 const COLS=20, ROWS=15, SCALE=32;
-const defaultColors=["#5DB7DE","#75C56B","#F4C84A","#E76F51","#B58AD8","#E78AB3","#8A9A9B","#F3F0E8","#D98B5F","#5E8FA8"];
-let colors=[...defaultColors];
-const colorNames=Array(colors.length).fill("");
-let selected=0;
 
+// Geschützte Basis-Ressourcen
+const resourceColors = ["#5DB7DE", "#75C56B", "#D98B5F", "#A3D8F4"];
+const resourceNames = ["Wasser", "Gras- & Buschland", "Stein & Fels", "Luft & Atmosphäre"];
+
+// Menschlich gestaltbare Farbpalette
+const defaultUserColors = ["#E76F51", "#B58AD8", "#E78AB3", "#F4C84A", "#8A9A9B", "#5E8FA8"];
+let userColors = [...defaultUserColors];
+const userColorNames = Array(userColors.length).fill("");
+
+let selected = 0; // Index 0-3: Ressourcen, Index 4-9: Eigene Gestaltung
+
+// Inselfläche (Maske)
 const mask=[];
 for(let y=0;y<ROWS;y++){
   mask[y]=[];
@@ -126,17 +182,79 @@ for(let y=0;y<ROWS;y++){
   }
 }
 
-function emptyGrid(){
-  return Array.from({length:ROWS},(_,y)=>
-    Array.from({length:COLS},(_,x)=>mask[y][x]?7:-1)
+// Ursprungswelt (Visualisierung nach dem Bild "mons-novera-banner.png")
+function startGrid(){
+  return Array.from({length:ROWS}, (_, y) =>
+    Array.from({length:COLS}, (_, x) => {
+      if(!mask[y][x]) return -1;
+
+      // Luft/Atmosphäre an der oberen Krone der Insel
+      if (y === 0 || (y === 1 && (x < 5 || x > 14))) return 3;
+
+      // Der geschwungene Hauptfluss vom oberen rechten Teil bis zum Wasserfall unten
+      const isRiver = (
+        (y === 1 && (x === 12 || x === 13)) ||
+        (y === 2 && (x === 11 || x === 12)) ||
+        (y === 3 && x === 11) ||
+        (y === 4 && (x === 10 || x === 11)) ||
+        (y === 5 && x === 10) ||
+        (y === 6 && (x === 9 || x === 10)) ||
+        (y === 7 && x === 9) ||
+        (y === 8 && (x === 8 || x === 9)) ||
+        (y === 9 && x === 8) ||
+        (y === 10 && (x === 8 || x === 9)) ||
+        (y === 11 && x === 9) ||
+        (y === 12 && (x === 9 || x === 10)) ||
+        (y === 13 && x === 10) ||
+        (y === 14 && x === 10)
+      );
+      if (isRiver) return 0;
+
+      // Linker Teich/See
+      const isLeftPond = (
+        (y === 6 && (x === 3 || x === 4 || x === 5)) ||
+        (y === 7 && (x === 2 || x === 3 || x === 4 || x === 5)) ||
+        (y === 8 && (x === 3 || x === 4))
+      );
+      if (isLeftPond) return 0;
+
+      // Rechter Teich/See
+      const isRightPond = (
+        (y === 7 && (x === 14 || x === 15)) ||
+        (y === 8 && (x === 14 || x === 15 || x === 16)) ||
+        (y === 9 && (x === 15 || x === 16))
+      );
+      if (isRightPond) return 0;
+
+      // Fels- und Stein-Ansammlungen
+      const isRock = (
+        (y === 1 && (x === 8 || x === 9)) ||
+        (y === 2 && (x === 6 || x === 14)) ||
+        (y === 3 && (x === 4 || x === 15)) ||
+        (y === 4 && (x === 7 || x === 13)) ||
+        (y === 5 && (x === 3 || x === 16)) ||
+        (y === 6 && x === 12) ||
+        (y === 7 && x === 7) ||
+        (y === 8 && (x === 11 || x === 12)) ||
+        (y === 9 && (x === 4 || x === 5)) ||
+        (y === 10 && (x === 13 || x === 14)) ||
+        (y === 11 && (x === 6 || x === 7)) ||
+        (y === 12 && x === 12)
+      );
+      if (isRock) return 2;
+
+      // Übrige Fläche: Gras- und Buschland
+      return 1;
+    })
   );
 }
-let grid=emptyGrid();
 
-const canvas=document.getElementById("canvas");
-canvas.width=COLS*SCALE;
-canvas.height=ROWS*SCALE;
-const ctx=canvas.getContext("2d");
+let grid = startGrid();
+
+const canvas = document.getElementById("canvas");
+canvas.width = COLS * SCALE;
+canvas.height = ROWS * SCALE;
+const ctx = canvas.getContext("2d");
 
 function getSavedWorlds() {
   try {
@@ -168,14 +286,14 @@ function setWorldURL(id) {
 
 function loadWorldData(world) {
   grid = JSON.parse(JSON.stringify(world.grid));
-  if (world.colors) {
-    for (let i = 0; i < colors.length; i++) {
-      if (world.colors[i]) colors[i] = world.colors[i];
+  if (world.userColors) {
+    for (let i = 0; i < userColors.length; i++) {
+      if (world.userColors[i]) userColors[i] = world.userColors[i];
     }
   }
-  if (world.colorNames) {
-    for (let i = 0; i < colorNames.length; i++) {
-      colorNames[i] = world.colorNames[i] || "";
+  if (world.userColorNames) {
+    for (let i = 0; i < userColorNames.length; i++) {
+      userColorNames[i] = world.userColorNames[i] || "";
     }
   }
   makePalette();
@@ -183,9 +301,9 @@ function loadWorldData(world) {
 }
 
 function loadBlankState() {
-  grid = emptyGrid();
-  colors = [...defaultColors];
-  colorNames.fill("");
+  grid = startGrid();
+  userColors = [...defaultUserColors];
+  userColorNames.fill("");
   makePalette();
   draw();
 }
@@ -213,13 +331,10 @@ function syncStateWithURL() {
 
 function deleteWorld(id) {
   let worlds = getSavedWorlds();
-
   worlds = worlds.filter(w => w.id !== id);
-
   worlds.forEach((w, index) => {
     w.id = (index + 1).toString();
   });
-
   saveSavedWorlds(worlds);
   renderGallery();
   syncStateWithURL();
@@ -283,6 +398,119 @@ function renderGallery() {
   });
 }
 
+// Lokale Semantik-Engine zur Erkennung eingegebener Begriffe
+function getSemanticCategory(name) {
+  if (!name || typeof name !== 'string') return 'BUILDING';
+  const clean = name.toLowerCase().trim();
+  if (!clean) return 'BUILDING';
+
+  // Naturschutz / Senken
+  if (/wald|forest|baum|tree|park|biotop|moor|schutz|solar|wind|erneuerbar|bienen|wiese|renaturier|naturschutz|pflanze|garten|aufforst/.test(clean)) {
+    return 'SINK';
+  }
+  // Industrie / Starke Emissionen
+  if (/fabrik|factory|kraftwerk|werk|mine|abbau|hafen|flughafen|airport|müll|müllhalde|chemie|industrie|rauch|ausstoß/.test(clean)) {
+    return 'HEAVY_INDUSTRY';
+  }
+  // Schonende Bebauung / Nutzung
+  if (/bio|öko|oeko|holz|pfahlbau|tiny|fahrrad|fussgänger|fußgänger/.test(clean)) {
+    return 'LOW_IMPACT';
+  }
+  // Gewässer / Wasserfläche
+  if (/see|fluss|river|lake|beach|strand|teich|bach|meer|ocean|quelle/.test(clean)) {
+    return 'WATER';
+  }
+  // Standard-Fallback: Menschlicher Eingriff (Traumvilla, Gaming House, Haus, Straße, Pool, etc.)
+  return 'BUILDING';
+}
+
+function updateHealthDashboard() {
+  const counts = Array(10).fill(0);
+  const totalTiles = mask.flat().filter(Boolean).length;
+
+  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+    if(mask[y][x] && grid[y][x] >= 0) counts[grid[y][x]]++;
+  }
+
+  // Ausgangszustand der Startwelt
+  const initialWater = counts[0]; 
+  const initialLandNature = counts[1] + counts[2];
+
+  let buildingTiles = 0;
+  let industryTiles = 0;
+  let sinkTiles = 0;
+  let lowImpactTiles = 0;
+  let userWaterTiles = 0;
+
+  for (let i = 0; i < userColorNames.length; i++) {
+    const slotIndex = i + 4;
+    const count = counts[slotIndex];
+    if (count === 0) continue;
+
+    const cat = getSemanticCategory(userColorNames[i]);
+    if (cat === 'SINK') sinkTiles += count;
+    else if (cat === 'HEAVY_INDUSTRY') industryTiles += count;
+    else if (cat === 'LOW_IMPACT') lowImpactTiles += count;
+    else if (cat === 'WATER') userWaterTiles += count;
+    else buildingTiles += count;
+  }
+
+  // 1. LEBENSRAUM & ÜBERBAUUNG (Leert sich bei Versiegelung/Bebauung)
+  const stressPoints = (buildingTiles * 1.0) + (industryTiles * 1.8) + (lowImpactTiles * 0.4) - (sinkTiles * 0.7);
+  const maxAcceptableStress = totalTiles * 0.28; 
+  let healthLand = Math.round(100 - Math.max(0, (stressPoints / maxAcceptableStress) * 100));
+  healthLand = Math.min(100, Math.max(0, healthLand));
+
+  // 2. WASSERHAUSHALT (Leert sich bei Verlust von Wasserflächen oder hohem Verbrauch)
+  const currentWater = counts[0] + userWaterTiles;
+  const waterLossPenalty = Math.max(0, (initialWater - currentWater) / (initialWater || 1)) * 100;
+  const waterDemandPenalty = ((industryTiles * 1.5) + (buildingTiles * 0.3)) / (initialWater || 1) * 100;
+  let healthWater = Math.round(100 - waterLossPenalty - waterDemandPenalty);
+  healthWater = Math.min(100, Math.max(0, healthWater));
+
+  // 3. LUFT & KLIMA (Leert sich bei Emissionen ohne Ausgleich)
+  const currentNatureFilter = counts[1] + counts[3] + (sinkTiles * 1.4);
+  const emissions = (industryTiles * 2.2) + (buildingTiles * 0.7);
+  let healthAir = Math.round(100 - (emissions / (currentNatureFilter + 1)) * 55);
+  healthAir = Math.min(100, Math.max(0, healthAir));
+
+  // Gesamtzustand
+  const overallHealth = Math.round((healthLand * 0.4) + (healthWater * 0.3) + (healthAir * 0.3));
+
+  // Visualisierung im UI
+  updateBar("barLand", "labelLand", healthLand);
+  updateBar("barWater", "labelWater", healthWater);
+  updateBar("barAir", "labelAir", healthAir);
+
+  const badge = document.getElementById("overallBadge");
+  if (overallHealth >= 75) {
+    badge.textContent = "Gut";
+    badge.style.background = "#2ecc71";
+  } else if (overallHealth >= 45) {
+    badge.textContent = "Belastet";
+    badge.style.background = "#f39c12";
+  } else {
+    badge.textContent = "Kritisch";
+    badge.style.background = "#e74c3c";
+  }
+}
+
+function updateBar(barId, labelId, percent) {
+  const bar = document.getElementById(barId);
+  const label = document.getElementById(labelId);
+  
+  bar.style.width = percent + "%";
+  label.textContent = percent + " %";
+
+  if (percent >= 70) {
+    bar.style.background = "#2ecc71";
+  } else if (percent >= 40) {
+    bar.style.background = "#f39c12";
+  } else {
+    bar.style.background = "#e74c3c";
+  }
+}
+
 function draw(){
   ctx.fillStyle="#dff1fa";
   ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -291,7 +519,11 @@ function draw(){
     for(let x=0;x<COLS;x++){
       if(!mask[y][x]) continue;
       const v=grid[y][x];
-      ctx.fillStyle=(v>=0?colors[v]:"#fff");
+      if (v >= 0) {
+        ctx.fillStyle = (v < 4) ? resourceColors[v] : userColors[v - 4];
+      } else {
+        ctx.fillStyle = "#fff";
+      }
       ctx.fillRect(x*SCALE,y*SCALE,SCALE,SCALE);
       ctx.strokeStyle="#ffffff55";
       ctx.strokeRect(x*SCALE,y*SCALE,SCALE,SCALE);
@@ -312,114 +544,98 @@ function draw(){
       }
     }
   }
-  updateStats();
+  updateHealthDashboard();
 }
 
 function makePalette(){
-  const p=document.getElementById("palette");
-  p.innerHTML="";
-  colors.forEach((c,i)=>{
-    const card=document.createElement("div");
-    card.className="colorCard";
+  const resP = document.getElementById("resourcePalette");
+  const userP = document.getElementById("userPalette");
+  resP.innerHTML = "";
+  userP.innerHTML = "";
 
-    const sw=document.createElement("button");
-    sw.type="button";
-    sw.className="swatch"+(i===selected?" selected":"");
-    sw.style.background=c;
-    sw.onclick=()=>{selected=i;makePalette()};
+  // Unveränderbare Basis-Ressourcen (0-3)
+  resourceColors.forEach((c, i) => {
+    const card = document.createElement("div");
+    card.className = "colorCard";
+
+    const sw = document.createElement("button");
+    sw.type = "button";
+    sw.className = "swatch" + (i === selected ? " selected" : "");
+    sw.style.background = c;
+    sw.onclick = () => { selected = i; makePalette(); };
     card.appendChild(sw);
 
-    const pickerWrap=document.createElement("div");
-    pickerWrap.style.position="relative";
-    pickerWrap.style.height="30px";
+    const tag = document.createElement("div");
+    tag.className = "readOnlyTag";
+    tag.textContent = resourceNames[i];
+    card.appendChild(tag);
 
-    const picker=document.createElement("input");
-    picker.type="color";
-    picker.className="colorPicker";
-    picker.value=c;
-    picker.title="Farbe auswählen";
-    picker.setAttribute("aria-label","Farbe auswählen");
-    picker.style.height="30px";
-    picker.oninput=()=>{
-      colors[i]=picker.value;
-      selected=i;
+    resP.appendChild(card);
+  });
+
+  // Anpassbare eigene Gestaltungselemente (4-9)
+  userColors.forEach((c, i) => {
+    const fullIndex = i + 4;
+    const card = document.createElement("div");
+    card.className = "colorCard";
+
+    const sw = document.createElement("button");
+    sw.type = "button";
+    sw.className = "swatch" + (fullIndex === selected ? " selected" : "");
+    sw.style.background = c;
+    sw.onclick = () => { selected = fullIndex; makePalette(); };
+    card.appendChild(sw);
+
+    const picker = document.createElement("input");
+    picker.type = "color";
+    picker.className = "colorPicker";
+    picker.value = c;
+    picker.title = "Farbe wählen";
+    picker.oninput = () => {
+      userColors[i] = picker.value;
+      selected = fullIndex;
       makePalette();
       draw();
     };
-    pickerWrap.appendChild(picker);
+    card.appendChild(picker);
 
-    const pickerText=document.createElement("span");
-    pickerText.textContent="Farbe auswählen";
-    pickerText.style.position="absolute";
-    pickerText.style.inset="0";
-    pickerText.style.display="flex";
-    pickerText.style.alignItems="center";
-    pickerText.style.justifyContent="center";
-    pickerText.style.fontSize="12px";
-    pickerText.style.fontWeight="600";
-    pickerText.style.color="#222";
-    pickerText.style.pointerEvents="none";
-    pickerText.style.background="rgba(255,255,255,.45)";
-    pickerText.style.borderRadius="6px";
-    pickerWrap.appendChild(pickerText);
-
-    card.appendChild(pickerWrap);
-
-    const name=document.createElement("input");
-    name.type="text";
-    name.className="nameInput";
-    name.maxLength=45;
-    name.placeholder="Bedeutung dieser Farbe";
-    name.value=colorNames[i];
-    name.oninput=()=>{
-      colorNames[i]=name.value;
-      updateStats();
+    const name = document.createElement("input");
+    name.type = "text";
+    name.className = "nameInput";
+    name.maxLength = 35;
+    name.placeholder = "z.B. Haus, Wald, Fabrik";
+    name.value = userColorNames[i];
+    name.oninput = () => {
+      userColorNames[i] = name.value;
+      updateHealthDashboard();
     };
     card.appendChild(name);
 
-    p.appendChild(card);
+    userP.appendChild(card);
   });
 }
 
-function escapeHtml(t){
-  return t.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-}
-
-function updateStats(){
-  const counts=Array(colors.length).fill(0);
-  const total=mask.flat().filter(Boolean).length;
-  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
-    if(mask[y][x]&&grid[y][x]>=0)counts[grid[y][x]]++;
-  }
-  document.getElementById("stats").innerHTML="<strong>Flächenverteilung</strong>"+
-    counts.map((n,i)=>{
-      const name=colorNames[i].trim()||("Farbe "+(i+1));
-      return '<div class="stat"><span>'+escapeHtml(name)+'</span><span>'+Math.round(n/total*100)+' %</span></div>';
-    }).join("");
-}
-
-canvas.addEventListener("click",e=>{
-  const r=canvas.getBoundingClientRect();
-  const scaleX=canvas.width/r.width;
-  const scaleY=canvas.height/r.height;
-  const x=Math.floor(((e.clientX-r.left)*scaleX)/SCALE);
-  const y=Math.floor(((e.clientY-r.top)*scaleY)/SCALE);
-  if(x<0||x>=COLS||y<0||y>=ROWS||!mask[y][x])return;
-  grid[y][x]=selected;
+canvas.addEventListener("click", e => {
+  const r = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / r.width;
+  const scaleY = canvas.height / r.height;
+  const x = Math.floor(((e.clientX - r.left) * scaleX) / SCALE);
+  const y = Math.floor(((e.clientY - r.top) * scaleY) / SCALE);
+  if (x < 0 || x >= COLS || y < 0 || y >= ROWS || !mask[y][x]) return;
+  grid[y][x] = selected;
   draw();
 });
 
-document.getElementById("reset").onclick=()=>{
-  if(confirm("Die Gestaltung wirklich zurücksetzen?")){
+document.getElementById("reset").onclick = () => {
+  if(confirm("Die Gestaltung wirklich auf die unberührte Startwelt zurücksetzen?")){
     loadBlankState();
     setWorldURL(null);
   }
 };
 
-document.getElementById("save").onclick=()=>{
+document.getElementById("save").onclick = () => {
   const worlds = getSavedWorlds();
   const usedSlots = worlds.map(w => w.id);
-  
   const targetSlot = VALID_SLOTS.find(slot => !usedSlots.includes(slot));
 
   if (!targetSlot) {
@@ -427,84 +643,85 @@ document.getElementById("save").onclick=()=>{
     return;
   }
 
-  const expCanvas=document.createElement("canvas");
-  const pad=24, headerH=30, rowH=26, rows=Math.ceil(colors.length/2);
-  const legendH=pad+headerH+(rows*rowH)+pad;
-  
-  expCanvas.width=canvas.width;
-  expCanvas.height=canvas.height+legendH;
-  const exCtx=expCanvas.getContext("2d");
-  
-  exCtx.drawImage(canvas,0,0);
-  
-  exCtx.fillStyle="#ffffff";
-  exCtx.fillRect(0,canvas.height,expCanvas.width,legendH);
-  
-  exCtx.strokeStyle="#222";
-  exCtx.lineWidth=2;
-  exCtx.strokeRect(0,canvas.height,expCanvas.width,legendH);
-  
-  exCtx.fillStyle="#222";
-  exCtx.font="bold 16px system-ui, -apple-system, sans-serif";
-  exCtx.fillText("Flächenverteilung & Legende",pad,canvas.height+pad+14);
-  
-  const counts=Array(colors.length).fill(0);
-  const total=mask.flat().filter(Boolean).length;
-  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
-    if(mask[y][x]&&grid[y][x]>=0)counts[grid[y][x]]++;
-  }
-  
-  const colW=(expCanvas.width-(pad*3))/2;
-  const startY=canvas.height+pad+headerH+12;
-  
-  exCtx.font="13px system-ui, -apple-system, sans-serif";
-  
-  colors.forEach((c,i)=>{
-    const col=i%2, row=Math.floor(i/2);
-    const x=pad+col*(colW+pad);
-    const y=startY+row*rowH;
-    
-    exCtx.fillStyle=c;
-    exCtx.fillRect(x,y-11,14,14);
-    exCtx.strokeStyle="#222";
-    exCtx.lineWidth=1;
-    exCtx.strokeRect(x,y-11,14,14);
-    
-    const name=colorNames[i].trim()||("Farbe "+(i+1));
-    exCtx.fillStyle="#222";
-    exCtx.textAlign="left";
-    
-    let dispName=name;
-    if(exCtx.measureText(dispName).width>colW-70){
-      while(dispName.length>0&&exCtx.measureText(dispName+"...").width>colW-70){
-        dispName=dispName.slice(0,-1);
-      }
-      dispName+="...";
-    }
-    exCtx.fillText(dispName,x+20,y);
-    
-    const pct=Math.round(counts[i]/total*100)+" %";
-    exCtx.textAlign="right";
-    exCtx.fillText(pct,x+colW,y);
+  // Generiert Export-Canvas inklusive Legende und Erdsystem-Status
+  const expCanvas = document.createElement("canvas");
+  const pad = 24, headerH = 100, rowH = 24, rows = 5;
+  const legendH = pad + headerH + (rows * rowH) + pad;
+
+  expCanvas.width = canvas.width;
+  expCanvas.height = canvas.height + legendH;
+  const exCtx = expCanvas.getContext("2d");
+
+  exCtx.drawImage(canvas, 0, 0);
+
+  exCtx.fillStyle = "#ffffff";
+  exCtx.fillRect(0, canvas.height, expCanvas.width, legendH);
+
+  exCtx.strokeStyle = "#222";
+  exCtx.lineWidth = 2;
+  exCtx.strokeRect(0, canvas.height, expCanvas.width, legendH);
+
+  // Status-Header
+  const badgeText = document.getElementById("overallBadge").textContent;
+  exCtx.fillStyle = "#222";
+  exCtx.font = "bold 16px system-ui, sans-serif";
+  exCtx.fillText("Gesundheitszustand der Welt: " + badgeText, pad, canvas.height + pad + 14);
+
+  exCtx.font = "12px system-ui, sans-serif";
+  exCtx.fillText("Lebensraum: " + document.getElementById("labelLand").textContent, pad, canvas.height + pad + 36);
+  exCtx.fillText("Wasserhaushalt: " + document.getElementById("labelWater").textContent, pad + 200, canvas.height + pad + 36);
+  exCtx.fillText("Luft & Klima: " + document.getElementById("labelAir").textContent, pad + 400, canvas.height + pad + 36);
+
+  exCtx.beginPath();
+  exCtx.moveTo(pad, canvas.height + pad + 50);
+  exCtx.lineTo(expCanvas.width - pad, canvas.height + pad + 50);
+  exCtx.strokeStyle = "#ccc";
+  exCtx.stroke();
+
+  // Legende
+  exCtx.fillStyle = "#222";
+  exCtx.font = "bold 14px system-ui, sans-serif";
+  exCtx.fillText("Legende & Elemente", pad, canvas.height + pad + 70);
+
+  const startY = canvas.height + pad + 90;
+  const colW = (expCanvas.width - (pad * 3)) / 2;
+
+  const allNames = [...resourceNames, ...userColorNames.map((n, i) => n.trim() || ("Element " + (i + 1)))];
+  const allColors = [...resourceColors, ...userColors];
+
+  allColors.forEach((c, i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const x = pad + col * (colW + pad);
+    const y = startY + row * rowH;
+
+    exCtx.fillStyle = c;
+    exCtx.fillRect(x, y - 11, 14, 14);
+    exCtx.strokeStyle = "#222";
+    exCtx.lineWidth = 1;
+    exCtx.strokeRect(x, y - 11, 14, 14);
+
+    exCtx.fillStyle = "#222";
+    exCtx.font = "12px system-ui, sans-serif";
+    exCtx.fillText(allNames[i], x + 22, y);
   });
 
-  const dataUrl=expCanvas.toDataURL("image/png");
+  const dataUrl = expCanvas.toDataURL("image/png");
   const newWorld = {
     id: targetSlot,
     grid: JSON.parse(JSON.stringify(grid)),
-    colors: [...colors],
-    colorNames: [...colorNames],
+    userColors: [...userColors],
+    userColorNames: [...userColorNames],
     dataUrl: dataUrl
   };
 
   worlds.push(newWorld);
   saveSavedWorlds(worlds);
-  
+
   renderGallery();
   setWorldURL(targetSlot);
 };
 
-// Funktion für den PDF-Export aller Welten
+// PDF Export Funktion
 document.getElementById("downloadPdf").onclick = () => {
   const worlds = getSavedWorlds();
   if (worlds.length === 0) {
@@ -520,19 +737,13 @@ document.getElementById("downloadPdf").onclick = () => {
   worlds.sort((a,b) => Number(a.id) - Number(b.id));
 
   const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({
-    orientation: 'p',
-    unit: 'mm',
-    format: 'a4'
-  });
+  const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
 
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
 
   worlds.forEach((world, index) => {
-    if (index > 0) {
-      pdf.addPage();
-    }
+    if (index > 0) pdf.addPage();
 
     pdf.setFontSize(16);
     pdf.setFont("helvetica", "bold");
@@ -554,9 +765,7 @@ document.getElementById("downloadPdf").onclick = () => {
     }
 
     const imgX = (pageWidth - imgW) / 2;
-    const imgY = 25;
-
-    pdf.addImage(world.dataUrl, 'PNG', imgX, imgY, imgW, imgH);
+    pdf.addImage(world.dataUrl, 'PNG', imgX, 25, imgW, imgH);
   });
 
   pdf.save("mons-novera-welten.pdf");
