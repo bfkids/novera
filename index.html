@@ -176,6 +176,21 @@ function loadWorldData(world) {
   draw();
 }
 
+function loadLatestOrDefault(worlds) {
+  if (worlds && worlds.length > 0) {
+    const latestWorld = worlds[worlds.length - 1];
+    loadWorldData(latestWorld);
+    setWorldURL(latestWorld.id);
+  } else {
+    grid = emptyGrid();
+    colors = [...defaultColors];
+    colorNames.fill("");
+    setWorldURL(null);
+    makePalette();
+    draw();
+  }
+}
+
 function deleteWorld(id) {
   let worlds = getSavedWorlds();
   worlds = worlds.filter(w => w.id !== id);
@@ -183,12 +198,7 @@ function deleteWorld(id) {
   renderGallery();
 
   if (getURLParam("world") === id) {
-    setWorldURL(null);
-    grid = emptyGrid();
-    colors = [...defaultColors];
-    colorNames.fill("");
-    makePalette();
-    draw();
+    loadLatestOrDefault(worlds);
   }
 }
 
@@ -394,17 +404,10 @@ document.getElementById("reset").onclick=()=>{
 
 document.getElementById("save").onclick=()=>{
   const worlds = getSavedWorlds();
-  const currentParam = getURLParam("world");
-  let targetSlot = null;
-
-  // Wenn bereits ein gültiger Slot geladen ist, wird genau dieser überschrieben
-  if (currentParam && VALID_SLOTS.includes(currentParam)) {
-    targetSlot = currentParam;
-  } else {
-    // Ansonsten den nächsten freien Slot aus [1, 2, 3] suchen
-    const usedSlots = worlds.map(w => w.id);
-    targetSlot = VALID_SLOTS.find(slot => !usedSlots.includes(slot));
-  }
+  const usedSlots = worlds.map(w => w.id);
+  
+  // Suche IMMER den nächsten freien Slot (1, 2 oder 3)
+  const targetSlot = VALID_SLOTS.find(slot => !usedSlots.includes(slot));
 
   if (!targetSlot) {
     alert("Maximale Anzahl von 3 Welten erreicht. Bitte lösche zuerst mindestens eine Welt.");
@@ -481,9 +484,8 @@ document.getElementById("save").onclick=()=>{
     dataUrl: dataUrl
   };
 
-  const updatedWorlds = worlds.filter(w => w.id !== targetSlot);
-  updatedWorlds.push(newWorld);
-  saveSavedWorlds(updatedWorlds);
+  worlds.push(newWorld);
+  saveSavedWorlds(worlds);
   
   renderGallery();
   setWorldURL(targetSlot);
@@ -498,35 +500,30 @@ document.getElementById("save").onclick=()=>{
 
 window.onpopstate = () => {
   const worldId = getURLParam('world');
+  const worlds = getSavedWorlds();
   if (worldId && VALID_SLOTS.includes(worldId)) {
-    const worlds = getSavedWorlds();
     const world = worlds.find(w => w.id === worldId);
     if (world) {
       loadWorldData(world);
       return;
     }
   }
-  grid = emptyGrid();
-  colors = [...defaultColors];
-  colorNames.fill("");
-  makePalette();
-  draw();
+  loadLatestOrDefault(worlds);
 };
 
 renderGallery();
 const initialWorldId = getURLParam('world');
+const savedWorlds = getSavedWorlds();
+
 if (initialWorldId && VALID_SLOTS.includes(initialWorldId)) {
-  const worlds = getSavedWorlds();
-  const world = worlds.find(w => w.id === initialWorldId);
+  const world = savedWorlds.find(w => w.id === initialWorldId);
   if (world) {
     loadWorldData(world);
   } else {
-    makePalette();
-    draw();
+    loadLatestOrDefault(savedWorlds);
   }
 } else {
-  makePalette();
-  draw();
+  loadLatestOrDefault(savedWorlds);
 }
 
 })();
