@@ -190,9 +190,9 @@ main{
 
 .taskCard.withArtwork{
   display:grid;
-  grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr);
-  gap:22px;
-  align-items:center;
+  grid-template-columns:1fr;
+  gap:16px;
+  align-items:stretch;
 }
 
 .taskContent{
@@ -899,14 +899,6 @@ button.full-width{
 
   <aside class="panel workspaceControls">
 
-    <div class="info">
-
-      <strong>So geht's:</strong><br>
-      Wähle eine Farbe, gib ihr eine Bedeutung und gestalte damit deine Welt.
-      Die bereits vorhandenen Farben kannst du ebenfalls selbst benennen oder abändern.
-
-    </div>
-
     <h2>Farben und Bedeutungen</h2>
 
     <div class="paletteSectionTitle">
@@ -949,18 +941,14 @@ button.full-width{
 
   <section class="tasks" aria-label="Aufgaben A bis D">
 
-    <article class="taskCard withArtwork" id="taskA">
-      <img
-        class="taskArtwork"
-        src="novera-startwelt.webp"
-        alt="Ausgangswelt von Novera mit Wasser, Naturraum und Felsen"
-      >
+    <article class="taskCard" id="taskA">
       <div class="taskContent">
         <span class="taskLabel">Aufgabe A</span>
         <h2>Was brauchst du, um auf Novera gut leben zu können?</h2>
         <p class="taskInstruction">
           Gestalte deine erste Welt. Wähle Farben, gib ihnen eigene Bedeutungen
-          und zeige damit, was für dich zu einem guten Leben gehört.
+          und zeige damit, was für dich zu einem guten Leben gehört. Du kannst
+          auch die bereits vorhandenen Farben benennen oder verändern.
         </p>
         <p class="saveReminder">
           ⚠️ Vergiss nicht, deine Welt zu speichern.
