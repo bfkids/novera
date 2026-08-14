@@ -56,6 +56,63 @@ main{
   line-height:0;
 }
 
+.mission{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(320px,1.35fr);
+  gap:24px;
+  align-items:center;
+}
+
+.missionCopy{
+  padding:8px 4px;
+}
+
+.missionKicker{
+  display:inline-block;
+  margin-bottom:8px;
+  color:#4d7550;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.mission h2{
+  margin:0 0 10px;
+  font-size:25px;
+}
+
+.mission p{
+  margin:0;
+  font-size:15px;
+  line-height:1.65;
+}
+
+.mission .banner{
+  grid-column:auto;
+  box-shadow:none;
+}
+
+.workspaceLayout{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  grid-template-areas:
+    "world controls"
+    "tasks controls";
+  gap:24px;
+  align-items:start;
+}
+
+#simulationWorkspace{
+  grid-area:world;
+}
+
+.workspaceControls{
+  grid-area:controls;
+}
+
 .banner img{
   display:block;
   width:100%;
@@ -63,6 +120,170 @@ main{
   max-height:520px;
   object-fit:contain;
   object-position:center;
+}
+
+/* Aufgaben */
+
+.tasks{
+  grid-area:tasks;
+}
+
+.taskIntro{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(280px,.9fr);
+  gap:22px;
+  align-items:center;
+  border-left:7px solid #75c56b;
+}
+
+.taskIntro img,
+.taskArtwork{
+  display:block;
+  width:100%;
+  max-height:330px;
+  object-fit:contain;
+  border-radius:10px;
+  background:#dff1fa;
+}
+
+.taskLabel{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:38px;
+  height:30px;
+  margin-bottom:9px;
+  padding:0 10px;
+  border-radius:999px;
+  background:#75c56b;
+  color:#173719;
+  font-size:13px;
+  font-weight:800;
+}
+
+.taskIntro h2,
+.taskCard h2{
+  margin:0 0 11px;
+  font-size:20px;
+  line-height:1.3;
+}
+
+.taskIntro p,
+.taskCard p{
+  margin:0;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.tasks{
+  display:grid;
+  gap:18px;
+}
+
+.taskCard{
+  background:white;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 2px 12px #00000012;
+  border-top:5px solid #75c56b;
+}
+
+.taskCard.withArtwork{
+  display:grid;
+  grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr);
+  gap:22px;
+  align-items:center;
+}
+
+.taskContent{
+  min-width:0;
+}
+
+.taskInstruction{
+  margin:14px 0 10px !important;
+  padding:11px 12px;
+  border-left:4px solid #75c56b;
+  border-radius:8px;
+  background:#edf7ea;
+  font-weight:400;
+}
+
+.taskQuestion{
+  margin:12px 0 8px !important;
+  padding:11px 12px;
+  border-left:4px solid #5db7de;
+  border-radius:8px;
+  background:#edf6fb;
+  font-weight:400;
+}
+
+.taskInstruction::before,
+.taskQuestion::before{
+  display:block;
+  margin-bottom:4px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.taskInstruction::before{
+  content:"✦ Auftrag";
+  color:#376a3b;
+}
+
+.taskQuestion::before{
+  content:"💭 Reflexion";
+  color:#356d86;
+}
+
+.saveReminder{
+  margin:0 0 12px !important;
+  color:#7b4b18;
+  font-size:12px !important;
+}
+
+.taskDownload{
+  padding:4px 0 2px;
+}
+
+.taskDownload button.action{
+  width:100%;
+  padding:14px 16px;
+  font-size:15px;
+}
+
+.taskAnswerLabel{
+  display:block;
+  margin-bottom:6px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.taskAnswer{
+  display:block;
+  width:100%;
+  min-height:130px;
+  resize:vertical;
+  padding:12px 13px;
+  border:2px solid #5db7de;
+  border-radius:10px;
+  background:#fff;
+  color:#222;
+  font:inherit;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.taskAnswer:focus{
+  border-color:#356d86;
+  outline:3px solid #5db7de33;
+}
+
+.taskSaveNote{
+  margin-top:7px !important;
+  color:#666;
+  font-size:12px !important;
 }
 
 /* Galerie */
@@ -536,6 +757,25 @@ button.full-width{
     max-height:none;
   }
 
+  .mission,
+  .taskIntro,
+  .taskCard.withArtwork{
+    grid-template-columns:1fr;
+  }
+
+  .workspaceLayout{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "world"
+      "controls"
+      "tasks";
+    gap:16px;
+  }
+
+  .mission .banner{
+    order:-1;
+  }
+
   .teacherCommentLink{
     padding-left:20px;
     padding-right:20px;
@@ -558,6 +798,20 @@ button.full-width{
 
   .panel{
     padding:14px;
+  }
+
+  .mission h2{
+    font-size:21px;
+  }
+
+  .taskCard,
+  .taskIntro{
+    padding:15px;
+  }
+
+  .taskIntro h2,
+  .taskCard h2{
+    font-size:18px;
   }
 
   .palette{
@@ -597,14 +851,30 @@ button.full-width{
 
 <main>
 
-  <!-- Banner -->
+  <!-- Mission -->
 
-  <div class="banner">
-    <img
-      src="mons-novera-banner.png"
-      alt="Pixel-Art einer fliegenden Insel"
-    >
-  </div>
+  <section class="mission panel">
+
+    <div class="missionCopy">
+      <span class="missionKicker">Deine Mission</span>
+      <h2>Ein gutes Leben!</h2>
+      <p>
+        Hast du manchmal auch verrückte Träume? Zum Beispiel diesen:
+        In einem fantastischen Paralleluniversum entdeckst du einen seltsamen,
+        bewohnbaren Inselplaneten Novera. Du bist der erste Mensch, der diese
+        Welt betritt und machst sie zu deinem neuen Zuhause. Was brauchst du,
+        um hier gut leben zu können?
+      </p>
+    </div>
+
+    <div class="banner">
+      <img
+        src="novera-mission.webp"
+        alt="Pixel-Art des schwebenden Inselplaneten Novera"
+      >
+    </div>
+
+  </section>
 
   <!-- Gespeicherte Welten -->
 
@@ -613,9 +883,11 @@ button.full-width{
     <div class="galleryGrid" id="galleryGrid"></div>
   </section>
 
+  <div class="workspaceLayout">
+
   <!-- Insel -->
 
-  <section class="panel">
+  <section class="panel" id="simulationWorkspace">
 
     <div id="islandWrap">
       <canvas id="canvas"></canvas>
@@ -625,7 +897,7 @@ button.full-width{
 
   <!-- Steuerung -->
 
-  <aside class="panel">
+  <aside class="panel workspaceControls">
 
     <div class="info">
 
@@ -669,16 +941,164 @@ button.full-width{
         Welt speichern
       </button>
 
-      <button
-        class="action secondary full-width"
-        id="downloadPdf"
-      >
-        Alle Welten herunterladen (PDF)
-      </button>
-
     </div>
 
   </aside>
+
+  <!-- Aufgaben und Reflexion -->
+
+  <section class="tasks" aria-label="Aufgaben A bis D">
+
+    <article class="taskCard withArtwork" id="taskA">
+      <img
+        class="taskArtwork"
+        src="novera-startwelt.webp"
+        alt="Ausgangswelt von Novera mit Wasser, Naturraum und Felsen"
+      >
+      <div class="taskContent">
+        <span class="taskLabel">Aufgabe A</span>
+        <h2>Was brauchst du, um auf Novera gut leben zu können?</h2>
+        <p class="taskInstruction">
+          Gestalte deine erste Welt. Wähle Farben, gib ihnen eigene Bedeutungen
+          und zeige damit, was für dich zu einem guten Leben gehört.
+        </p>
+        <p class="saveReminder">
+          ⚠️ Vergiss nicht, deine Welt zu speichern.
+        </p>
+        <p class="taskQuestion">
+          Was ist dir für ein gutes Leben besonders wichtig? Erkläre, wie
+          deine Welt das zeigt.
+        </p>
+        <label class="taskAnswerLabel" for="taskAnswerA">
+          Deine Antwort
+        </label>
+        <textarea
+          class="taskAnswer"
+          id="taskAnswerA"
+          data-task-answer="A"
+          maxlength="5000"
+        ></textarea>
+        <p class="taskSaveNote">
+          Deine Antwort wird automatisch in diesem Browser gespeichert.
+        </p>
+      </div>
+    </article>
+
+    <article class="taskCard withArtwork" id="taskB">
+      <img
+        class="taskArtwork"
+        src="novera-aufgabe-b.webp"
+        alt="Illustration zu zwei weiteren Personen auf Novera"
+      >
+      <div class="taskContent">
+        <span class="taskLabel">Aufgabe B</span>
+        <h2>
+          Zwei weitere Personen erreichen deine Welt. Sie wollen auch ein
+          gutes Leben führen. Was veränderst du?
+        </h2>
+        <p class="taskInstruction">
+          Gestalte die Welt so um, dass du und zwei weitere Personen dort gut
+          leben können.
+        </p>
+        <p class="saveReminder">
+          ⚠️ Vergiss nicht, deine Welt zu speichern.
+        </p>
+        <p class="taskQuestion">
+          Was hast du in der zweiten Welt verändert? Und warum?
+        </p>
+        <label class="taskAnswerLabel" for="taskAnswerB">
+          Deine Antwort
+        </label>
+        <textarea
+          class="taskAnswer"
+          id="taskAnswerB"
+          data-task-answer="B"
+          maxlength="5000"
+        ></textarea>
+        <p class="taskSaveNote">
+          Deine Antwort wird automatisch in diesem Browser gespeichert.
+        </p>
+      </div>
+    </article>
+
+    <article class="taskCard withArtwork" id="taskC">
+      <img
+        class="taskArtwork"
+        src="novera-aufgabe-c.webp"
+        alt="Illustration zur gemeinsamen Gestaltung von Novera"
+      >
+      <div class="taskContent">
+        <span class="taskLabel">Aufgabe C</span>
+        <h2>
+          Schliesse dich mit jemandem zusammen. Einigt euch auf eine gemeinsame
+          Welt, in der ihr beide und die insgesamt vier weiteren Personen gut
+          leben können.
+        </h2>
+        <p class="taskInstruction">
+          Besprecht, was euch für ein gutes Leben wichtig ist. Einigt euch auf
+          eine gemeinsame Welt, in der ihr beide und vier weitere Personen gut
+          leben können. Beide gestalten diese gemeinsame Welt in ihrer eigenen
+          Simulation gleich.
+        </p>
+        <p class="saveReminder">
+          ⚠️ Vergiss nicht, deine Welt zu speichern.
+        </p>
+        <p class="taskQuestion">
+          Was war euch beiden wichtig? Wo wart ihr unterschiedlicher Meinung?
+          Worauf musstet ihr euch einigen?
+        </p>
+        <label class="taskAnswerLabel" for="taskAnswerC">
+          Eure Antwort
+        </label>
+        <textarea
+          class="taskAnswer"
+          id="taskAnswerC"
+          data-task-answer="C"
+          maxlength="5000"
+        ></textarea>
+        <p class="taskSaveNote">
+          Eure Antwort wird automatisch in diesem Browser gespeichert.
+        </p>
+      </div>
+    </article>
+
+    <article class="taskCard" id="taskD">
+      <div class="taskContent">
+        <span class="taskLabel">Aufgabe D</span>
+        <h2>
+          Hat sich deine Vorstellung von einem guten Leben durch die Aufgabe
+          verändert?
+        </h2>
+        <p class="taskQuestion">
+          Schreibe alleine eine begründete Antwort.
+        </p>
+        <label class="taskAnswerLabel" for="taskAnswerD">
+          Deine Antwort
+        </label>
+        <textarea
+          class="taskAnswer"
+          id="taskAnswerD"
+          data-task-answer="D"
+          maxlength="5000"
+        ></textarea>
+        <p class="taskSaveNote">
+          Deine Antwort wird automatisch in diesem Browser gespeichert.
+        </p>
+      </div>
+    </article>
+
+    <div class="taskDownload">
+      <button
+        class="action"
+        id="downloadPdf"
+      >
+        Alle Aufgaben und Welten herunterladen
+      </button>
+    </div>
+
+  </section>
+
+  </div>
 
 </main>
 
@@ -821,9 +1241,9 @@ button.full-width{
 
     <p>
       Novera verwendet keine Benutzerkonten, Kontaktformulare oder
-      Analysewerkzeuge. Eingegebene Begriffe und gespeicherte Welten werden
-      im lokalen Speicher des verwendeten Browsers abgelegt und von der
-      Anwendung nicht an den Verantwortlichen übermittelt. Auch die
+      Analysewerkzeuge. Eingegebene Begriffe, Antworten und gespeicherte
+      Welten werden im lokalen Speicher des verwendeten Browsers abgelegt und
+      von der Anwendung nicht an den Verantwortlichen übermittelt. Auch die
       PDF-Datei wird direkt im Browser erstellt. Die lokal gespeicherten
       Welten können einzeln über «Löschen» in der Galerie oder vollständig
       durch Löschen der Website-Daten im Browser entfernt werden.
@@ -870,6 +1290,7 @@ button.full-width{
    ============================================================ */
 
 const STORAGE_KEY = "mons_novera_saved_worlds";
+const TASK_ANSWERS_KEY = "novera_task_answers";
 const VALID_SLOTS = ["1","2","3"];
 
 const COLS = 20;
@@ -1343,6 +1764,85 @@ function saveSavedWorlds(worlds){
     STORAGE_KEY,
     JSON.stringify(worlds)
   );
+}
+
+
+function getTaskAnswers(){
+
+  try{
+
+    return {
+      A:"",
+      B:"",
+      C:"",
+      D:"",
+      ...(
+        JSON.parse(
+          localStorage.getItem(
+            TASK_ANSWERS_KEY
+          )
+        ) || {}
+      )
+    };
+
+  }catch(e){
+
+    return {
+      A:"",
+      B:"",
+      C:"",
+      D:""
+    };
+  }
+}
+
+
+function saveTaskAnswers(answers){
+
+  try{
+
+    localStorage.setItem(
+      TASK_ANSWERS_KEY,
+      JSON.stringify(answers)
+    );
+
+  }catch(e){}
+}
+
+
+function initTaskAnswers(){
+
+  const answers =
+    getTaskAnswers();
+
+  document
+    .querySelectorAll(
+      "[data-task-answer]"
+    )
+    .forEach(textarea => {
+
+      const key =
+        textarea.dataset.taskAnswer;
+
+      textarea.value =
+        answers[key] || "";
+
+      textarea.addEventListener(
+        "input",
+        () => {
+
+          const currentAnswers =
+            getTaskAnswers();
+
+          currentAnswers[key] =
+            textarea.value;
+
+          saveTaskAnswers(
+            currentAnswers
+          );
+        }
+      );
+    });
 }
 
 
@@ -3075,6 +3575,92 @@ document.getElementById(
     pdf.internal.pageSize.getHeight();
 
 
+  const margin = 15;
+
+
+  const maxTextWidth =
+    pageWidth -
+    (margin * 2);
+
+
+  const answers =
+    getTaskAnswers();
+
+
+  const taskByWorld = {
+    "1":{
+      key:"A",
+      question:
+        "Was ist dir für ein gutes Leben besonders wichtig? Erkläre, wie deine Welt das zeigt."
+    },
+    "2":{
+      key:"B",
+      question:
+        "Was hast du in der zweiten Welt verändert? Und warum?"
+    },
+    "3":{
+      key:"C",
+      question:
+        "Was war euch beiden wichtig? Wo wart ihr unterschiedlicher Meinung? Worauf musstet ihr euch einigen?"
+    }
+  };
+
+
+  function writePdfParagraph(
+    text,
+    startY,
+    options = {}
+  ){
+
+    const fontSize =
+      options.fontSize || 10;
+
+    const lineHeight =
+      options.lineHeight || 5;
+
+    pdf.setFontSize(fontSize);
+
+    pdf.setFont(
+      "helvetica",
+      options.fontStyle || "normal"
+    );
+
+    const lines =
+      pdf.splitTextToSize(
+        text,
+        maxTextWidth
+      );
+
+    let y = startY;
+
+    lines.forEach(line => {
+
+      if(y > pageHeight - margin){
+
+        pdf.addPage();
+        y = 20;
+
+        pdf.setFontSize(fontSize);
+
+        pdf.setFont(
+          "helvetica",
+          options.fontStyle || "normal"
+        );
+      }
+
+      pdf.text(
+        line,
+        margin,
+        y
+      );
+
+      y += lineHeight;
+    });
+
+    return y;
+  }
+
+
   worlds.forEach(
     (world,index) => {
 
@@ -3113,19 +3699,13 @@ document.getElementById(
         imgProps.height;
 
 
-      const margin =
-        15;
-
-
       const maxImgWidth =
         pageWidth -
         (margin * 2);
 
 
       const maxImgHeight =
-        pageHeight -
-        30 -
-        margin;
+        155;
 
 
       let imgW =
@@ -3166,8 +3746,90 @@ document.getElementById(
         imgW,
         imgH
       );
+
+
+      const task =
+        taskByWorld[world.id];
+
+
+      let textY =
+        25 +
+        imgH +
+        10;
+
+
+      textY = writePdfParagraph(
+        "Kommentar zu Aufgabe " +
+        task.key,
+        textY,
+        {
+          fontSize:12,
+          lineHeight:6,
+          fontStyle:"bold"
+        }
+      );
+
+
+      textY = writePdfParagraph(
+        task.question,
+        textY + 1,
+        {
+          fontSize:9,
+          lineHeight:4.5,
+          fontStyle:"italic"
+        }
+      );
+
+
+      writePdfParagraph(
+        answers[task.key].trim() ||
+        "Noch keine Antwort eingetragen.",
+        textY + 3,
+        {
+          fontSize:10,
+          lineHeight:5,
+          fontStyle:"normal"
+        }
+      );
     }
   );
+
+
+  if(answers.D.trim()){
+
+    pdf.addPage();
+
+    let textY =
+      writePdfParagraph(
+        "Aufgabe D – Abschliessende Reflexion",
+        20,
+        {
+          fontSize:16,
+          lineHeight:8,
+          fontStyle:"bold"
+        }
+      );
+
+    textY = writePdfParagraph(
+      "Hat sich deine Vorstellung von einem guten Leben durch die Aufgabe verändert?",
+      textY + 3,
+      {
+        fontSize:11,
+        lineHeight:5.5,
+        fontStyle:"bold"
+      }
+    );
+
+    writePdfParagraph(
+      answers.D.trim(),
+      textY + 4,
+      {
+        fontSize:10,
+        lineHeight:5,
+        fontStyle:"normal"
+      }
+    );
+  }
 
 
   pdf.save(
@@ -3259,6 +3921,8 @@ document.addEventListener(
 /* ============================================================
    START
    ============================================================ */
+
+initTaskAnswers();
 
 renderGallery();
 
