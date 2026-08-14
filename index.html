@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mons Novera – Fantasiewelt-Simulation</title>
+<title>Novera – Fantasiewelt-Simulation</title>
 
 <!-- jsPDF für die PDF-Ausgabe -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -257,6 +257,49 @@ h2{
   font-size:12px;
 }
 
+.colorShares{
+  margin:14px 0 8px;
+  padding:10px 12px;
+  background:#f4f1ea;
+  border-radius:9px;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.colorSharesTitle{
+  margin:0 0 7px;
+  font-weight:700;
+}
+
+.colorShareRow{
+  display:grid;
+  grid-template-columns:14px minmax(0,1fr) auto;
+  align-items:center;
+  gap:7px;
+  margin-top:4px;
+}
+
+.colorShareDot{
+  width:12px;
+  height:12px;
+  border:1px solid #555;
+  border-radius:3px;
+}
+
+.colorShareName{
+  overflow-wrap:anywhere;
+}
+
+.colorShareValue{
+  font-variant-numeric:tabular-nums;
+  font-weight:700;
+}
+
+.colorSharesPrompt{
+  margin:8px 0 0;
+  color:#8a3f2d;
+}
+
 /* Wortvorschläge */
 
 .suggestionBox{
@@ -393,7 +436,7 @@ button.full-width{
   color:#fff;
 }
 
-/* Kommentar für Lehrpersonen */
+/* Hinweise und Impressum */
 
 .teacherCommentLink{
   max-width:1200px;
@@ -548,7 +591,7 @@ button.full-width{
 <body>
 
 <header>
-  <h1>Mons Novera</h1>
+  <h1>Novera</h1>
   <p class="subtitle">Was brauchst du, um hier gut leben zu können?</p>
 </header>
 
@@ -599,6 +642,12 @@ button.full-width{
     </div>
 
     <div class="palette" id="userPalette"></div>
+
+    <div
+      class="colorShares"
+      id="colorShares"
+      aria-live="polite"
+    ></div>
 
     <div class="smallNote">
       Farbe auswählen, benennen und auf der Welt einsetzen.
@@ -686,12 +735,12 @@ button.full-width{
 </div>
 
 
-<!-- Kommentar für Lehrpersonen -->
+<!-- Hinweise und Impressum -->
 
 <div class="teacherCommentLink">
 
   <button id="openTeacherComment">
-    Kommentar für Lehrpersonen · Nutzen und Grenzen der Simulation
+    Hinweise und Impressum
   </button>
 
 </div>
@@ -710,17 +759,17 @@ button.full-width{
     <button
       class="commentClose"
       id="closeTeacherComment"
-      aria-label="Kommentar schliessen"
+      aria-label="Hinweise und Impressum schliessen"
     >
       Schliessen
     </button>
 
     <h2 id="commentTitle">
-      Kommentar für Lehrpersonen
+      Hinweise und Impressum
     </h2>
 
     <p>
-      <strong>Mons Novera</strong> ist eine offene Gestaltungs- und
+      <strong>Novera</strong> ist eine offene Gestaltungs- und
       Konfrontationsaufgabe zur Frage, was es für ein gutes Leben braucht.
       Die Farben haben keine vorgegebene Bedeutung; die Lernenden benennen
       und gestalten ihre Welt selbst.
@@ -739,9 +788,7 @@ button.full-width{
 
     <p>
       Die Simulation bewertet keine Welt und berechnet keine Nachhaltigkeit.
-      Die Darstellung durch Farbfelder vereinfacht komplexe Vorstellungen stark. Auch die automatische
-      Begriffserkennung ist begrenzt und kann Eingaben falsch oder gar nicht
-      zuordnen. Die anschliessende Reflexion im Unterricht ist deshalb zentral.
+      Die Darstellung durch Farbfelder vereinfacht komplexe Vorstellungen stark. Die anschliessende Reflexion im Unterricht ist deshalb zentral.
     </p>
 
     <h3>Technische Transparenz</h3>
@@ -749,6 +796,62 @@ button.full-width{
     <p>
       Die Anwendung wurde im Rahmen eines <strong>Vibe-Coding-Prozesses</strong>
       mit Unterstützung von <strong>ChatGPT</strong> entwickelt. Programmierung und automatische Begriffserkennung können Fehler enthalten.
+    </p>
+
+    <h3>Impressum und Kontakt</h3>
+
+    <p>
+      Erstellt und verantwortlich für diese Website:<br>
+      Ivo Jost<br>
+      Hauptstrasse 82<br>
+      3854 Oberried<br>
+      Schweiz
+    </p>
+
+    <p>
+      Kontakt über das
+      <a
+        href="https://github.com/bfkids/novera"
+        target="_blank"
+        rel="noopener noreferrer"
+      >GitHub-Repository von Novera</a>.
+    </p>
+
+    <h3>Datenschutz</h3>
+
+    <p>
+      Novera verwendet keine Benutzerkonten, Kontaktformulare oder
+      Analysewerkzeuge. Eingegebene Begriffe und gespeicherte Welten werden
+      im lokalen Speicher des verwendeten Browsers abgelegt und von der
+      Anwendung nicht an den Verantwortlichen übermittelt. Auch die
+      PDF-Datei wird direkt im Browser erstellt. Die lokal gespeicherten
+      Welten können einzeln über «Löschen» in der Galerie oder vollständig
+      durch Löschen der Website-Daten im Browser entfernt werden.
+    </p>
+
+    <p>
+      Beim Aufruf der Website können der Hosting-Anbieter GitHub und beim
+      Laden der PDF-Bibliothek der CDN-Anbieter Cloudflare technisch
+      notwendige Verbindungsdaten bearbeiten, insbesondere IP-Adresse,
+      Zeitpunkt, aufgerufene Datei und Browserangaben. Dabei kann eine
+      Bearbeitung im Ausland stattfinden. Es gelten die
+      <a
+        href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Datenschutzhinweise von GitHub</a>
+      und die
+      <a
+        href="https://www.cloudflare.com/privacypolicy/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Datenschutzhinweise von Cloudflare</a>.
+    </p>
+
+    <p>
+      Fragen zum Datenschutz sowie Begehren um Auskunft, Berichtigung oder
+      Löschung können über die oben genannten Kontaktangaben gestellt werden.
+      Stand: 14. August 2026.
     </p>
 
   </div>
@@ -2019,12 +2122,152 @@ function draw(){
       }
     }
   }
+
+  updateColorShares();
 }
 
 
 /* ============================================================
    PALETTE
    ============================================================ */
+
+function updateColorShares(){
+
+  const container =
+    document.getElementById(
+      "colorShares"
+    );
+
+  if(!container){
+    return;
+  }
+
+  const counts =
+    Array(userColors.length).fill(0);
+
+  let total = 0;
+
+  for(let y = 0; y < ROWS; y++){
+
+    for(let x = 0; x < COLS; x++){
+
+      if(!mask[y][x]){
+        continue;
+      }
+
+      total++;
+
+      const colorIndex =
+        grid[y][x];
+
+      if(
+        colorIndex >= 0 &&
+        colorIndex < counts.length
+      ){
+
+        counts[colorIndex]++;
+      }
+    }
+  }
+
+  container.innerHTML = "";
+
+  const title =
+    document.createElement("p");
+
+  title.className =
+    "colorSharesTitle";
+
+  title.textContent =
+    "Aufteilung der Farbflächen";
+
+  container.appendChild(title);
+
+  let needsName = false;
+
+  userColors.forEach(
+    (color,index) => {
+
+      if(counts[index] === 0){
+        return;
+      }
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "colorShareRow";
+
+      const dot =
+        document.createElement("span");
+
+      dot.className =
+        "colorShareDot";
+
+      dot.style.background =
+        color;
+
+      const label =
+        document.createElement("span");
+
+      label.className =
+        "colorShareName";
+
+      const enteredName =
+        userColorNames[index].trim();
+
+      if(
+        !enteredName &&
+        counts[index] > 0
+      ){
+        needsName = true;
+      }
+
+      label.textContent =
+        enteredName ||
+        "Farbe " + (index + 1) +
+        " (noch nicht benannt)";
+
+      const value =
+        document.createElement("span");
+
+      value.className =
+        "colorShareValue";
+
+      value.textContent =
+        (
+          total > 0
+            ? counts[index] / total * 100
+            : 0
+        ).toLocaleString(
+          "de-CH",
+          {
+            minimumFractionDigits:1,
+            maximumFractionDigits:1
+          }
+        ) + " %";
+
+      row.appendChild(dot);
+      row.appendChild(label);
+      row.appendChild(value);
+      container.appendChild(row);
+    }
+  );
+
+  if(needsName){
+
+    const prompt =
+      document.createElement("p");
+
+    prompt.className =
+      "colorSharesPrompt";
+
+    prompt.textContent =
+      "Bitte benenne oben alle verwendeten Farben, damit die Aufteilung eindeutig ist.";
+
+    container.appendChild(prompt);
+  }
+}
 
 function makePalette(){
 
@@ -2316,6 +2559,8 @@ function makePalette(){
               userColorNames[index] =
                 currentText;
 
+              updateColorShares();
+
               suggestBox.style.display =
                 "none";
             };
@@ -2335,6 +2580,8 @@ function makePalette(){
           name.value;
 
         checkSuggestions();
+
+        updateColorShares();
       };
 
 
@@ -2579,7 +2826,7 @@ document.getElementById(
 
 
   exportCtx.fillText(
-    "Mons Novera – meine Welt",
+    "Novera – meine Welt",
     pad,
     canvas.height +
     pad +
@@ -2848,7 +3095,7 @@ document.getElementById(
 
 
       pdf.text(
-        "Mons Novera – Welt " +
+        "Novera – Welt " +
         world.id,
         15,
         18
@@ -2924,13 +3171,13 @@ document.getElementById(
 
 
   pdf.save(
-    "mons-novera-welten.pdf"
+    "novera-welten.pdf"
   );
 };
 
 
 /* ============================================================
-   LEHRPERSONEN-KOMMENTAR
+   HINWEISE UND IMPRESSUM
    ============================================================ */
 
 const commentOverlay =
