@@ -1205,7 +1205,7 @@ button.full-width{
 .phase2Lockable.phase2Locked:hover{box-shadow:0 2px 12px #00000012,0 0 0 2px #75c56b55}
 
 /* Weiter- und Zurücknavigation gleich */
-.phaseNavEnd #toPhase2{width:auto!important;padding:10px 13px!important;font-size:14px!important}
+.phaseNavEnd #toPhase2{padding:10px 13px!important;font-size:14px!important}
 
 
 .phaseEndActions{
@@ -1729,6 +1729,264 @@ button,
 .statusGood{color:#1f7a35}
 .statusBad{color:#a12a2a}
 
+
+/* ===== Lesbarkeit und responsive Feinabstimmung ===== */
+
+/* Allgemeine Schriften moderat grösser, ohne die Struktur zu verändern */
+body{
+  font-size:16px;
+}
+.taskIntro p,
+.taskCard p,
+.learnCard p,
+.mission p,
+.phase2Mission p,
+.treeStoryCopy p{
+  font-size:16px!important;
+  line-height:1.62!important;
+}
+.taskAnswer,
+.labField textarea,
+.labField input,
+.labField select,
+.needEditor textarea,
+.needEditor input,
+.needEditor select{
+  font-size:16px!important;
+  line-height:1.5!important;
+}
+.taskInstruction,
+.taskQuestion,
+.theoryBox,
+.conceptReveal,
+.exampleStrip,
+.helpBox{
+  font-size:15px!important;
+  line-height:1.58!important;
+}
+.taskAnswerLabel,
+.labField label,
+.pairCard label,
+.understoodCheck{
+  font-size:14px!important;
+}
+.smallNote,
+.taskSaveNote,
+.phase1LockHint,
+.phase2LockHint,
+.roundLegend{
+  font-size:13px!important;
+}
+.learnCard h2,
+.taskCard h2,
+.taskIntro h2{
+  font-size:21px;
+}
+.treeStoryCopy h3,
+.phase2Mission h2{
+  font-size:26px;
+}
+.action,
+button{
+  line-height:1.25!important;
+}
+
+/* Die Arbeitsstand-Leiste: keine sichtbare Scroll-Linie,
+   dafür klarer Abstand zum nachfolgenden Inhalt */
+.workStateControls{
+  margin-bottom:14px!important;
+}
+@media(max-width:700px){
+  .workStateControls{
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding-bottom:0!important;
+    margin-bottom:18px!important;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+  }
+  .workStateControls::-webkit-scrollbar{
+    display:none;
+    width:0;
+    height:0;
+  }
+  .workStateControls .action{
+    font-size:12.5px!important;
+    padding:8px 10px!important;
+  }
+}
+
+/* Phase 2: auf kleinen Bildschirmen die Bildfläche wirklich ausnutzen */
+@media(max-width:800px){
+  .phase2Mission .banner,
+  .treeStoryMedia{
+    width:100%!important;
+    max-width:100%!important;
+    justify-self:stretch!important;
+  }
+  .phase2Mission .banner img,
+  .treeStoryMedia .treeStoryImage{
+    width:100%!important;
+    max-width:100%!important;
+  }
+}
+
+/* Mobil: Browser sollen beim Fokussieren von Formularfeldern nicht
+   wegen zu kleiner Schrift automatisch hineinzoomen. */
+@media(max-width:700px){
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+  textarea,
+  select,
+  button{
+    font-size:16px;
+  }
+
+  .sourceTile{
+    font-size:16px!important;
+  }
+
+  .taskIntro p,
+  .taskCard p,
+  .learnCard p,
+  .mission p,
+  .phase2Mission p,
+  .treeStoryCopy p{
+    font-size:16px!important;
+  }
+
+  .taskInstruction,
+  .taskQuestion,
+  .theoryBox,
+  .conceptReveal,
+  .exampleStrip,
+  .helpBox{
+    font-size:15px!important;
+  }
+
+  .treeStoryCopy h3,
+  .phase2Mission h2{
+    font-size:23px!important;
+  }
+
+  .learnCard h2,
+  .taskCard h2,
+  .taskIntro h2{
+    font-size:20px!important;
+  }
+}
+
+
+/* ===== Finale Vereinheitlichung Navigation & Responsive Layout ===== */
+
+/* Vor-/Zurück-Navigation optisch identisch */
+.phaseNav .action,
+.phaseNavEnd .action,
+.bottomNav .action,
+.phaseBack{
+  font-family:system-ui,-apple-system,sans-serif!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  font-style:normal!important;
+  line-height:1.2!important;
+  letter-spacing:normal!important;
+  text-transform:none!important;
+  padding:10px 13px!important;
+  min-height:40px!important;
+  border-radius:8px!important;
+}
+
+/* Gleiche Breite/Anmutung für die großen Phasen-Navigationsbuttons */
+.phaseNavEnd .action,
+.bottomNav .action{
+  width:100%!important;
+}
+
+/* Desktop: Seitenbreiten und Abstände konsistent */
+.phase2Mission,
+.treeStorySimple{
+  gap:24px!important;
+}
+.learnTasks,
+.tasks{
+  min-width:0;
+}
+.learnCard,
+.taskCard,
+.panel{
+  min-width:0;
+}
+
+/* Bilder nie über ihren Container hinaus */
+img{
+  max-width:100%;
+}
+
+/* Responsive: saubere einspaltige Anordnung */
+@media(max-width:800px){
+  .phase2Mission,
+  .treeStorySimple,
+  .simLayout,
+  .profileGrid,
+  .allocationGrid,
+  .pairGrid,
+  .simpleGrid,
+  .choiceGrid{
+    grid-template-columns:1fr!important;
+  }
+
+  .phase2Mission .banner,
+  .treeStoryMedia{
+    width:100%!important;
+    max-width:100%!important;
+    justify-self:stretch!important;
+  }
+
+  .phase2Mission .banner img,
+  .treeStoryMedia .treeStoryImage{
+    width:100%!important;
+    height:auto!important;
+  }
+
+  .phaseNavEnd .action,
+  .bottomNav .action{
+    width:100%!important;
+  }
+}
+
+/* Sehr schmale Geräte: keine abgeschnittenen Inhalte */
+@media(max-width:480px){
+  .learnCard,
+  .taskCard,
+  .panel,
+  .sourceChooser{
+    padding:15px!important;
+  }
+
+  .counterBox{
+    align-items:center!important;
+    gap:10px!important;
+  }
+
+  .simNumbers,
+  .socialStatus{
+    gap:8px!important;
+  }
+
+  .simNumbers strong,
+  .socialStatus strong{
+    font-size:14px!important;
+  }
+
+  .roundActions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+
+  .roundActions .action{
+    width:100%!important;
+  }
+}
+
 </style>
 </head>
 
@@ -1990,7 +2248,7 @@ button,
 <section class="phaseTop panel mission phase2Mission">
   <div class="missionCopy">
     <span class="missionKicker">Deine Mission</span>
-    <h2>Erkunde Novera weiter</h2>
+    <h2>Herausfinden, wie Novera tickt</h2>
     <p>Du arbeitest mit einer bisherigen oder vorbereiteten Novera-Welt weiter. Finde heraus, was Menschen brauchen und wünschen, welche Voraussetzungen dafür nötig sind und wie heutige Entscheidungen spätere Möglichkeiten verändern.</p>
   </div>
 
@@ -2176,7 +2434,7 @@ button,
   </div>
 </article>
 </section>
-<div class="phaseNav bottomNav"><button class="action secondary" id="backToPhase1Bottom" data-t="nav.back">← Zurück</button></div></div>
+<div class="phaseNav bottomNav"><button class="action secondary phaseNext" id="backToPhase1Bottom" data-t="nav.back">← Zurück</button></div></div>
 </main>
 
 
@@ -5773,10 +6031,6 @@ function initErarbeitung(){
     termsUnderstood.onchange=()=>{
       ePatch({termsUnderstood:termsUnderstood.checked});
       updatePhase2Progress();
-      if(termsUnderstood.checked){
-        const next=id("learn2");
-        if(next)next.scrollIntoView({behavior:"smooth",block:"start"});
-      }
     };
   }
 
@@ -5785,10 +6039,6 @@ function initErarbeitung(){
     requirementsUnderstood.onchange=()=>{
       ePatch({requirementsUnderstood:requirementsUnderstood.checked});
       updatePhase2Progress();
-      if(requirementsUnderstood.checked){
-        const next=id("learn3");
-        if(next)next.scrollIntoView({behavior:"smooth",block:"start"});
-      }
     };
   }
 
@@ -5910,10 +6160,12 @@ function initErarbeitung(){
       refText.focus();
       return;
     }
+    const keepY=window.scrollY;
     ePatch({individualReflectionSaved:true});
     theory.classList.remove("hidden");
     confirmed.classList.add("hidden");
     updatePhase2Progress();
+    requestAnimationFrame(()=>window.scrollTo({top:keepY,left:0,behavior:"auto"}));
   };
 
   if(recognized)recognized.onclick=()=>{
