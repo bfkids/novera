@@ -2754,6 +2754,52 @@ button.action,
   }
 }
 
+
+/* Sichtbare Kurzbilanz der zuletzt abgeschlossenen Runde */
+.simOutcome{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
+  margin:8px 0 14px!important;
+}
+.simOutcomeItem{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  background:#f4f1ea!important;
+  border-radius:8px!important;
+  padding:7px 10px!important;
+  line-height:1.2!important;
+}
+.simOutcomeItem strong{
+  font-size:14px!important;
+  font-weight:700!important;
+}
+.simOutcomeItem > span:last-child{
+  font-size:18px!important;
+  font-weight:800!important;
+}
+.statusGood{color:#2f7d32!important}
+.statusBad{color:#b33a2f!important}
+
+@media(max-width:700px){
+  .simOutcome{
+    margin:7px 0 12px!important;
+    gap:7px!important;
+  }
+  .simOutcomeItem{
+    padding:6px 9px!important;
+  }
+  .simOutcomeItem strong{
+    font-size:13px!important;
+  }
+  .simOutcomeItem > span:last-child{
+    font-size:17px!important;
+  }
+}
+
 </style>
 </head>
 
@@ -6199,12 +6245,14 @@ function ensureGameSummaryRow(referenceEl,rowId,needsId,desiresId){
   if(!referenceEl)return;
   let row=document.getElementById(rowId);
   if(!row){
-    const baseRow=referenceEl.closest(".treeStatus");
+    const baseRow=referenceEl.closest(".simNumbers, .socialStatus");
     if(!baseRow)return;
     row=document.createElement("div");
-    row.className="treeStatus treeStatusSecondary";
+    row.className="simOutcome";
     row.id=rowId;
-    row.innerHTML='<span><strong>Needs:</strong> <strong id="'+needsId+'">–</strong></span><span><strong>Desires:</strong> <strong id="'+desiresId+'">–</strong></span>';
+    row.innerHTML=
+      '<span class="simOutcomeItem"><strong>Needs</strong><span id="'+needsId+'">–</span></span>'+
+      '<span class="simOutcomeItem"><strong>Desires</strong><span id="'+desiresId+'">–</span></span>';
     baseRow.insertAdjacentElement("afterend",row);
   }
 }
