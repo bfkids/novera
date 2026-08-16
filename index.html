@@ -1551,6 +1551,77 @@ button,
   }
 }
 
+
+/* Entdeckungsphase – Bild-Einbindung kompakter und einheitlich */
+.phase2Mission .banner{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+}
+.phase2Mission .banner img{
+  width:88%!important;
+  max-height:400px!important;
+  border-radius:14px!important;
+  object-fit:contain!important;
+}
+
+.treeStoryImage{
+  width:88%!important;
+  max-height:400px!important;
+  justify-self:end!important;
+  border-radius:14px!important;
+  object-fit:contain!important;
+}
+
+@media(max-width:800px){
+  .phase2Mission .banner{
+    justify-content:center;
+  }
+  .phase2Mission .banner img,
+  .treeStoryImage{
+    width:92%!important;
+    max-height:none!important;
+    justify-self:center!important;
+  }
+}
+
+
+/* Einheitliche Buttons und Rundenaktionen */
+.phaseNav .action,
+.phaseNavEnd .action,
+.bottomNav .action,
+.roundActions .action{
+  width:auto!important;
+  padding:10px 13px!important;
+  font-family:system-ui,-apple-system,sans-serif!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  font-style:normal!important;
+  line-height:1.2!important;
+  letter-spacing:normal!important;
+  text-transform:none!important;
+}
+
+.roundActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+.roundActions .action{
+  flex:0 0 auto!important;
+}
+
+@media(max-width:480px){
+  .roundActions{
+    flex-direction:column;
+  }
+  .roundActions .action{
+    width:100%!important;
+  }
+}
+
 </style>
 </head>
 
@@ -1876,7 +1947,10 @@ button,
     <p data-t="t3.story">Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt. Hier siehst du die Zuordnung für deine Needs und Desires.</p>
   </div>
   <img class="treeStoryImage" src="baum.png" alt="Magischer Baum auf Novera">
-</div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Zurückgelegt</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später zurücklegen</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th data-t="log.reserve">Zurückgelegt</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
+</div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Zurückgelegt</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später zurücklegen</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><div class="roundActions">
+  <button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button>
+  <button class="action secondary" id="resetPersonalRounds" type="button">Runden zurücksetzen</button>
+</div></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th data-t="log.reserve">Zurückgelegt</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn4">
   <span class="taskLabel">Aufgabe D</span>
   <h2>Was hast du beobachtet?</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
@@ -1950,7 +2024,10 @@ button,
     </div>
   </div>
 
+  <div class="roundActions">
   <button class="action" id="gFinish" type="button">Gemeinsame Runde abschliessen</button>
+  <button class="action secondary" id="resetGroupRounds" type="button">Runden zurücksetzen</button>
+</div>
   <div id="groupFeedback" class="experimentResult"></div>
 
   <div class="tableScroll">
@@ -4933,6 +5010,16 @@ function renderPersonalSim(){
   personalLog.innerHTML=(q.log||[]).map(r=>'<tr class="'+(r.needs===3?'needsComplete':'needsMissing')+'"><td>'+r.round+'</td><td>'+r.harvest+'</td><td>'+r.left+'</td><td>+'+r.regrow+'</td><td>'+r.reserve+'</td><td>'+r.needs+'/3</td><td>'+r.desires+'/3</td></tr>').join("");
 }
 function regen(left){if(left<=3)return rand(0,1);if(left<=7)return rand(1,2);if(left<=12)return rand(2,4);return rand(3,6)}
+function resetPersonalRounds(){
+  ePatch({psim:{tree:20,reserve:0,round:1,harvest:0,secure:0,log:[]}});
+  const feedback=document.getElementById("roundFeedback");
+  if(feedback){
+    feedback.classList.remove("active");
+    feedback.innerHTML="";
+  }
+  renderPersonalSim();
+}
+
 function finishPRound(){const s=eState(),q=s.psim,p=s.personal||[];if(p.length<3){alert(t("sim.needFirst","Schliesse zuerst Aufgabe 2 ab."));return}let available=q.harvest-q.secure+q.reserve,needs=0,desires=0;for(const x of p){if(available>=x.needFruit){available-=x.needFruit;needs++}}for(const x of p){if(available>=x.desireFruit){available-=x.desireFruit;desires++}}const left=q.tree-q.harvest,reg=Math.min(20-left,regen(left)),newReserve=q.secure+available,next=Math.min(20,left+reg);q.log.push({round:q.round,harvest:q.harvest,left,regrow:reg,reserve:newReserve,needs,desires});Object.assign(q,{tree:next,reserve:newReserve,round:q.round+1,harvest:0,secure:0});ePatch({psim:q});roundFeedback.classList.add("active");roundFeedback.innerHTML=t("sim.feedback","Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.").replace("{harvest}",q.log[q.log.length-1].harvest).replace("{left}",left).replace("{regrow}",reg).replace("{needs}",needs).replace("{desires}",desires);renderPersonalSim()}
 const PROFILE_POOL=[
 {needs:["regelmässig Nahrung essen, die ich gut vertrage","einen ruhigen und sicheren Schlafplatz haben","mit wichtigen Menschen in Kontakt bleiben"],desires:["eine besonders grosse Auswahl an Lieblingsessen haben","ein eigenes grosses Zimmer haben","jederzeit ein persönliches Kommunikationsgerät nutzen"]},
@@ -4985,6 +5072,18 @@ function renderAlloc(){
   }
 }
 function allocItem(pi,k,i,txt,n){return '<label class="allocItem '+(k==="n"?"needAlloc":"desireAlloc")+'"><input type="checkbox" data-p="'+pi+'" data-k="'+k+'" data-i="'+i+'"> <span><strong>'+(k==="n"?"Need":"Desire")+'</strong><br>'+escapeHtml(txt)+'</span> '+fruitIcons(n)+'</label>'}
+function resetGroupRounds(){
+  const s=eState();
+  ePatch({gsim:{tree:20,reserve:0,round:1,secure:0,log:[]}});
+  const feedback=document.getElementById("groupFeedback");
+  if(feedback){
+    feedback.classList.remove("active");
+    feedback.innerHTML="";
+  }
+  document.querySelectorAll(".allocItem input").forEach(cb=>cb.checked=false);
+  renderAlloc();
+}
+
 function finishGroup(){
   const s=eState(),q=s.gsim,[a,b]=s.profiles;
   if(!q.log)q.log=[];
@@ -5422,6 +5521,7 @@ function initErarbeitung(){
   };
 
   id("finishRound").onclick=finishPRound;
+  id("resetPersonalRounds").onclick=resetPersonalRounds;
 
   id("newProfiles").onclick=()=>ensureProfiles(true);
 
@@ -5440,6 +5540,7 @@ function initErarbeitung(){
   };
 
   id("gFinish").onclick=finishGroup;
+  id("resetGroupRounds").onclick=resetGroupRounds;
 
   const checkRef=id("checkIndividualReflection");
   const theory=id("individualTheory");
