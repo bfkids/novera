@@ -1504,6 +1504,53 @@ button,
   image-rendering:pixelated;
 }
 
+
+/* Aufgabe C – Baumintro analog zur Missionsdarstellung */
+.treeStorySimple{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(320px,1.35fr)!important;
+  gap:24px!important;
+  align-items:center!important;
+  margin:8px 0 14px;
+}
+.treeStoryCopy{
+  padding:8px 4px;
+}
+.treeStoryCopy h3{
+  margin:0 0 10px;
+  font-size:25px;
+  line-height:1.25;
+}
+.treeStoryCopy p{
+  margin:0!important;
+  font-size:15px!important;
+  line-height:1.65!important;
+}
+.treeStoryImage{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:520px;
+  border-radius:10px;
+  object-fit:contain;
+  object-position:center;
+  image-rendering:pixelated;
+}
+@media(max-width:800px){
+  .treeStorySimple{
+    grid-template-columns:1fr!important;
+  }
+  .treeStoryImage{
+    order:-1;
+    max-height:none;
+  }
+}
+@media(max-width:480px){
+  .treeStoryCopy h3{
+    font-size:21px;
+  }
+}
+
 </style>
 </head>
 
@@ -1823,9 +1870,12 @@ button,
     <span>Gelesen und verstanden</span>
   </label>
 </div></article>
-<article class="learnCard phase2Lockable phase2Locked" id="learn3"><span class="taskLabel">Aufgabe C</span><h2 data-t="t3.title">Der wundersame Baum</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p><div class="treeStory treeStorySimple">
+<article class="learnCard phase2Lockable phase2Locked" id="learn3"><span class="taskLabel">Aufgabe C</span><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p><div class="treeStory treeStorySimple">
+  <div class="treeStoryCopy">
+    <h3>Der wundersame Baum</h3>
+    <p data-t="t3.story">Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt. Hier siehst du die Zuordnung für deine Needs und Desires.</p>
+  </div>
   <img class="treeStoryImage" src="baum.png" alt="Magischer Baum auf Novera">
-  <p data-t="t3.story">Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt. Hier siehst du die Zuordnung für deine Needs und Desires.</p>
 </div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Zurückgelegt</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später zurücklegen</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th data-t="log.reserve">Zurückgelegt</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn4">
   <span class="taskLabel">Aufgabe D</span>
