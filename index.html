@@ -1661,6 +1661,63 @@ button,
   }
 }
 
+
+/* ===== Entdeckungsphase: Bilddarstellung wie in Phase 1 ===== */
+
+/* Die Mission-Grafik: Container wird verkleinert, Bild füllt ihn vollständig.
+   Dadurch keine seitlichen blauen Flächen. */
+.phase2Mission .banner{
+  width:88%!important;
+  justify-self:end!important;
+  display:block!important;
+  overflow:hidden!important;
+  border-radius:14px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  line-height:0!important;
+}
+.phase2Mission .banner img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:initial!important;
+  border-radius:0!important;
+  background:#fff!important;
+}
+
+/* Baum-Grafik nach demselben Prinzip */
+.treeStoryMedia{
+  width:88%!important;
+  max-width:none!important;
+  justify-self:end!important;
+  display:block!important;
+  overflow:hidden!important;
+  border-radius:14px!important;
+  background:transparent!important;
+  line-height:0!important;
+}
+.treeStoryMedia .treeStoryImage{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:initial!important;
+  border-radius:0!important;
+  background:#fff!important;
+  image-rendering:pixelated;
+}
+
+/* Mobil: wie bei der Mission der ersten Phase – Bild oben, mittig */
+@media(max-width:800px){
+  .phase2Mission .banner,
+  .treeStoryMedia{
+    width:92%!important;
+    justify-self:center!important;
+    order:-1!important;
+  }
+}
+
 </style>
 </head>
 
