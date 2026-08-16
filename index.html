@@ -1475,6 +1475,25 @@ button,
   border-top:1px solid #ead7a5;
 }
 
+
+.understoodCheck{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid #e3d69d;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+.understoodCheck input{
+  width:18px;
+  height:18px;
+  margin:0;
+  accent-color:#222;
+}
+
 </style>
 </head>
 
@@ -1778,10 +1797,21 @@ button,
 
 <section class="carryWorlds panel sourceWorldSelector"><h2 data-t="worlds.title">Deine gespeicherten Welten</h2><p class="smallNote" data-t="worlds.note">Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.</p><div class="galleryGrid" id="phase2Worlds"></div></section>
 <section class="learnTasks sourceDependent">
-<article class="learnCard phase2Lockable phase2Locked" id="learn1"><span class="taskLabel">Aufgabe A</span><h2 data-t="t1.title">Das brauche ich – das möchte ich zusätzlich</h2><p class="phase2LockHint">Wähle zuerst eine Welt aus.</p><p class="taskInstruction" data-t="t1.instruction">Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.</p><div id="categorySort" class="sortList"></div><div id="hardDecision" class="hardDecision"><div class="labField taskQuestion"><label>Wähle einen schwierigen Entscheid und beschreibe, was du daran schwierig findest.</label><textarea id="hardWhy" data-e-save="hardWhy"></textarea></div></div><button class="action compactAction" id="confirmSort" data-t="t1.confirm">Meine Auswahl bestätigen</button><div class="theoryBox hidden" id="needReveal"><p data-t="t1.reveal">Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.</p><p data-t="t1.allergy">Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.</p></div></article>
+<article class="learnCard phase2Lockable phase2Locked" id="learn1"><span class="taskLabel">Aufgabe A</span><h2 data-t="t1.title">Das brauche ich – das möchte ich zusätzlich</h2><p class="phase2LockHint">Wähle zuerst eine Welt aus.</p><p class="taskInstruction" data-t="t1.instruction">Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.</p><div id="categorySort" class="sortList"></div><div id="hardDecision" class="hardDecision"><div class="labField taskQuestion"><label>Wähle einen schwierigen Entscheid und beschreibe, was du daran schwierig findest.</label><textarea id="hardWhy" data-e-save="hardWhy"></textarea></div></div><button class="action compactAction" id="confirmSort" data-t="t1.confirm">Meine Auswahl bestätigen</button><div class="theoryBox hidden" id="needReveal">
+  <p data-t="t1.reveal">Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.</p>
+  <p data-t="t1.allergy">Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.</p>
+  <label class="understoodCheck">
+    <input type="checkbox" id="termsUnderstood">
+    <span>Gelesen und verstanden</span>
+  </label>
+</div></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn2"><span class="taskLabel">Aufgabe B</span><h2 data-t="t2.title">Drei Needs genauer anschauen</h2><p class="phase2LockHint">Wähle zuerst eine Welt aus.</p><p class="taskInstruction" data-t="t2.instruction">Wähle drei Needs aus. Beschreibe jeden Need genauer und ergänze dazu einen passenden Desire.</p><div class="exampleStrip"><strong data-t="common.example">Beispiel</strong><br><span data-t="t2.example">Need: mit anderen Menschen kommunizieren können. Desire: dafür immer das neueste Smartphone haben.</span></div><div id="needEditors" class="needEditors"></div><div class="phaseNav"><button class="action" id="makeNeeds" data-t="t2.confirm">Auswahl übernehmen</button></div><div class="theoryBox hidden" id="requirementsReveal">
   <p><strong>Um Needs und Desires erfüllen zu können, braucht es Voraussetzungen.</strong> Manche davon sind natürliche Voraussetzungen, zum Beispiel Wasser, Boden, Rohstoffe oder Energie. Andere sind gesellschaftliche Voraussetzungen, zum Beispiel Wissen, Arbeit, Infrastruktur, Regeln oder Zusammenarbeit. Oft braucht es beides gleichzeitig. Welche Voraussetzungen nötig sind, hängt davon ab, was Menschen brauchen oder sich wünschen und unter welchen Bedingungen sie leben.</p>
   <div id="requirementsList"></div>
+  <label class="understoodCheck">
+    <input type="checkbox" id="requirementsUnderstood">
+    <span>Gelesen und verstanden</span>
+  </label>
 </div></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn3"><span class="taskLabel">Aufgabe C</span><h2 data-t="t3.title">Der wundersame Baum</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p><div class="treeStory treeStorySimple">
   <div class="treeImagePlaceholder" aria-hidden="true"></div>
@@ -4734,26 +4764,40 @@ function importNoveraHtml(file){
 function updatePhase2Progress(){
   const s=eState();
   const hasWorld=!!s.selectedWorldId;
+  const termsOk=s.termsUnderstood===true;
   const bComplete=s.stageBComplete===true;
+  const requirementsOk=s.requirementsUnderstood===true;
+  const afterBOk=bComplete&&requirementsOk;
 
   const a=document.getElementById("learn1");
   const b=document.getElementById("learn2");
 
   if(a)a.classList.toggle("phase2Locked",!hasWorld);
-  if(b)b.classList.toggle("phase2Locked",!hasWorld);
+  if(b)b.classList.toggle("phase2Locked",!(hasWorld&&termsOk));
 
   ["learn3","learn4","learn5","learn7"].forEach(taskId=>{
     const card=document.getElementById(taskId);
-    if(card)card.classList.toggle("phase2Locked",!bComplete);
+    if(card)card.classList.toggle("phase2Locked",!afterBOk);
   });
 
   document.querySelectorAll(".phase2LockHint").forEach(hint=>{
     const parent=hint.closest(".phase2Lockable");
     if(!parent)return;
-    if(parent.id==="learn1"||parent.id==="learn2"){
+
+    if(parent.id==="learn1"){
       hint.textContent=hasWorld?"":"Wähle zuerst eine Welt aus.";
+    }else if(parent.id==="learn2"){
+      hint.textContent=!hasWorld
+        ?"Wähle zuerst eine Welt aus."
+        :termsOk
+          ?""
+          :"Lies zuerst die Erklärung in Aufgabe A und bestätige «Gelesen und verstanden».";
     }else{
-      hint.textContent=bComplete?"":"Bearbeite zuerst Aufgabe B vollständig.";
+      hint.textContent=afterBOk
+        ?""
+        :!bComplete
+          ?"Bearbeite zuerst Aufgabe B vollständig."
+          :"Lies die Erklärung zu den Voraussetzungen und bestätige «Gelesen und verstanden».";
     }
   });
 }
@@ -4769,6 +4813,8 @@ function resetAfterWorldChoice(){
   delete s.personal;
   delete s.psim;
   delete s.stageBComplete;
+  delete s.termsUnderstood;
+  delete s.requirementsUnderstood;
   delete s.individualReflection;
   delete s.groupReflection;
   delete s.groupRule;
@@ -5201,9 +5247,13 @@ function initErarbeitung(){
         e.stopPropagation();
         const s=eState();
         if(!s.selectedWorldId){
-          alert("Du musst zuerst eine Welt auswählen, damit du Aufgabe A und B öffnen kannst.");
-        }else{
-          alert("Du musst zuerst Aufgabe B fertig bearbeiten, damit du die nächsten Aufgaben öffnen kannst.");
+          alert("Du musst zuerst eine Welt auswählen.");
+        }else if(card.id==="learn2" && s.termsUnderstood!==true){
+          alert("Lies zuerst die Erklärung in Aufgabe A und bestätige «Gelesen und verstanden».");
+        }else if(s.stageBComplete!==true){
+          alert("Du musst zuerst Aufgabe B fertig bearbeiten.");
+        }else if(s.requirementsUnderstood!==true){
+          alert("Lies zuerst die Erklärung zu den Voraussetzungen und bestätige «Gelesen und verstanden».");
         }
       }
     });
@@ -5214,10 +5264,39 @@ function initErarbeitung(){
     if(s[el.dataset.eSave]!==undefined)el.value=s[el.dataset.eSave];
     el.oninput=()=>ePatch({[el.dataset.eSave]:el.value});
   });
+  const termsUnderstood=id("termsUnderstood");
+  const requirementsUnderstood=id("requirementsUnderstood");
+  const savedState=eState();
+
+  if(termsUnderstood){
+    termsUnderstood.checked=savedState.termsUnderstood===true;
+    termsUnderstood.onchange=()=>{
+      ePatch({termsUnderstood:termsUnderstood.checked});
+      updatePhase2Progress();
+      if(termsUnderstood.checked){
+        const next=id("learn2");
+        if(next)next.scrollIntoView({behavior:"smooth",block:"start"});
+      }
+    };
+  }
+
+  if(requirementsUnderstood){
+    requirementsUnderstood.checked=savedState.requirementsUnderstood===true;
+    requirementsUnderstood.onchange=()=>{
+      ePatch({requirementsUnderstood:requirementsUnderstood.checked});
+      updatePhase2Progress();
+      if(requirementsUnderstood.checked){
+        const next=id("learn3");
+        if(next)next.scrollIntoView({behavior:"smooth",block:"start"});
+      }
+    };
+  }
+
 
   id("confirmSort").onclick=()=>{
     id("needReveal").classList.remove("hidden");
     renderNeedEditors();
+    updatePhase2Progress();
   };
 
   id("makeNeeds").onclick=()=>{
@@ -5227,9 +5306,9 @@ function initErarbeitung(){
       renderPersonalSim();
       updatePhase2Progress();
 
-      const nextTask=id("learn3");
-      if(nextTask){
-        nextTask.scrollIntoView({behavior:"smooth",block:"start"});
+      const explanation=id("requirementsReveal");
+      if(explanation){
+        explanation.scrollIntoView({behavior:"smooth",block:"center"});
       }
     }
   };
@@ -5332,6 +5411,17 @@ function initErarbeitung(){
   updatePhase2Progress();
 
   configurePhase2Source();
+
+  const restoreState=eState();
+  if(restoreState.termsUnderstood===true){
+    const reveal=id("needReveal");
+    if(reveal)reveal.classList.remove("hidden");
+  }
+  if(restoreState.stageBComplete===true){
+    const reveal=id("requirementsReveal");
+    if(reveal)reveal.classList.remove("hidden");
+  }
+
 }
 
 
