@@ -4358,6 +4358,9 @@ function configurePhase2Source(){
 
   const usableSaved=saved.filter(worldHasDefinedLegend);
 
+  /* Brauchbare Welten aus der Willkommensphase haben weiterhin Vorrang.
+     Sind zwar Welten vorhanden, aber keine davon hat eine definierte Legende,
+     darf die bewusst gewählte Demoquelle aktiv bleiben. */
   if(saved.length && usableSaved.length){
     if(s.sourceMode!=="saved"){
       resetAfterWorldChoice();
@@ -4388,6 +4391,27 @@ function configurePhase2Source(){
         : "<strong>Welten aus der Willkommensphase gefunden.</strong><span>Sie wurden automatisch übernommen. Wähle unten eine Welt aus, mit der du weiterarbeiten möchtest.</span>";
     }
 
+  }else if(s.sourceMode==="demo"){
+    /* Wenn die vorhandenen Welten keine brauchbare Legende haben,
+       muss die Demoquelle nach der Auswahl tatsächlich aktiv bleiben. */
+    if(tiles)tiles.style.display="grid";
+    if(demoBtn)demoBtn.style.display="";
+    if(loadBtn)loadBtn.style.display=saved.length ? "none" : "";
+
+    phase.classList.add("hasSource");
+    renderPhase2Worlds();
+
+    if(s.selectedWorldId){
+      phase.classList.add("sourceReady");
+    }else{
+      phase.classList.remove("sourceReady");
+    }
+
+    if(notice){
+      notice.className="sourceStatusNotice statusOk";
+      notice.innerHTML="<strong>Demowelten geladen.</strong><span>Wähle unten eine Demowelt aus.</span>";
+    }
+
   }else if(saved.length && !usableSaved.length){
     /* Welten sind vorhanden, aber ohne benannte Farbfelder:
        Sie werden angezeigt, können aber nicht für die Erarbeitung gewählt werden. */
@@ -4407,25 +4431,6 @@ function configurePhase2Source(){
     if(notice){
       notice.className="sourceStatusNotice";
       notice.innerHTML="<strong>Keine Farbfelder definiert.</strong><span>"+noLegendMessage()+"</span>";
-    }
-
-  }else if(s.sourceMode==="demo"){
-    if(tiles)tiles.style.display="grid";
-    if(demoBtn)demoBtn.style.display="";
-    if(loadBtn)loadBtn.style.display="";
-
-    phase.classList.add("hasSource");
-    renderPhase2Worlds();
-
-    if(s.selectedWorldId){
-      phase.classList.add("sourceReady");
-    }else{
-      phase.classList.remove("sourceReady");
-    }
-
-    if(notice){
-      notice.className="sourceStatusNotice statusOk";
-      notice.innerHTML="<strong>Demowelten geladen.</strong><span>Wähle unten eine Demowelt aus. Du kannst stattdessen auch einen gespeicherten Arbeitsstand laden.</span>";
     }
 
   }else{
@@ -5147,12 +5152,21 @@ function loadWorkStateFile(file){
         throw new Error("wrong-format");
       }
 
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(data.worlds||[]));
+      const loadedWorlds=Array.isArray(data.worlds)?data.worlds:[];
+      const hasUsableLoadedWorld=loadedWorlds.some(worldHasDefinedLegend);
+
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(loadedWorlds));
       localStorage.setItem(TASK_ANSWERS_KEY,JSON.stringify(data.taskAnswers||{}));
       localStorage.setItem(E_KEY,JSON.stringify(data.learning||{}));
 
       sessionStorage.setItem("novera_workstate_just_loaded","1");
-      alert("Der Arbeitsstand wurde geladen. Die Seite wird jetzt aktualisiert.");
+
+      if(loadedWorlds.length && !hasUsableLoadedWorld){
+        alert(noLegendMessage());
+      }else{
+        alert("Der Arbeitsstand wurde geladen. Die Seite wird jetzt aktualisiert.");
+      }
+
       window.location.reload();
     }catch(err){
       console.error(err);
