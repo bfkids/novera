@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Novera – Fantasiewelt-Simulation</title>
 
-<!-- jsPDF für die PDF-Ausgabe -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 *{
@@ -846,16 +844,643 @@ button.full-width{
     padding-right:14px;
   }
 }
+
+/* ===== Phasen-Navigation und vereinfachte Erarbeitung ===== */
+.phaseView{display:none}
+.phaseView.active{display:contents}
+.phaseNav{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.phaseNavEnd{margin-top:4px}
+.phaseNext{width:100%;padding:14px 16px!important}
+.phaseTop,.carryWorlds{grid-column:1/-1;margin-bottom:18px}
+.phaseTop{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.phaseTop h2{font-size:25px;margin:2px 0 7px}
+.phaseTop p{margin:0;line-height:1.55}
+.phaseBack{flex:0 0 auto!important}
+.learnTasks{grid-column:1/-1;display:grid;gap:18px}
+.learnCard{background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 12px #00000012;border-top:5px solid #75c56b}
+.learnCard h2{font-size:20px;margin:0 0 10px}
+.learnCard p{font-size:14px;line-height:1.6}
+.learnArt{display:block;width:min(100%,720px);height:auto;margin:12px auto 16px;border-radius:10px;image-rendering:pixelated}
+.exampleStrip,.conceptReveal{padding:11px 12px;border-radius:8px;background:#f4f1ea;font-size:13px;line-height:1.5;margin:10px 0 14px}
+.conceptReveal{background:#edf6fb;border-left:4px solid #5db7de}
+.conceptReveal.hidden{display:none}
+.pairGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pairCard{display:grid;gap:7px;padding:12px;border:1px solid #ddd;border-radius:10px;background:#faf9f6}
+.pairCard label{font-size:12px;font-weight:700}
+.pairCard input,.labField textarea,.labField select{width:100%;padding:9px 10px;border:1px solid #bbb;border-radius:8px;font:inherit;font-size:14px}
+.labField{display:grid;gap:6px}
+.labField label{font-size:13px;font-weight:700}
+.labField textarea{min-height:88px;resize:vertical}
+.simpleGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.helpBtn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:0;border-radius:50%;background:#edf6fb;color:#356d86;font-weight:800;cursor:pointer}
+.helpBox{display:none;margin:7px 0;padding:10px 12px;border-radius:8px;background:#edf6fb;border-left:4px solid #5db7de;font-size:13px;line-height:1.5}
+.helpBox.active{display:block}
+.treeStatus{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
+.treeStatus>div{background:#f4f1ea;border-radius:9px;padding:10px;text-align:center}
+.treeStatus span{display:block;font-size:12px;color:#666}
+.treeStatus strong{display:block;font-size:24px;margin-top:3px}
+.fruitBar{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;margin:12px 0 16px}
+.fruitDot{aspect-ratio:1;border-radius:4px;background:#e8e5de;border:1px solid #c9c6bf}
+.fruitDot.on{background:#e76f51;border-color:#b4523d}
+.choiceGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.desireCard{padding:11px;border:1px solid #ddd;border-radius:9px;background:#faf9f6;font-size:13px}
+.desireCard strong{display:block;margin-bottom:5px}
+.desireCard label{display:flex;gap:7px;align-items:flex-start}
+.predictionField{margin-top:14px}
+.experimentResult{display:none;margin-top:14px;padding:12px;border-radius:9px;background:#edf7ea;font-size:13px;line-height:1.5}
+.experimentResult.active{display:block}
+.tableScroll{overflow-x:auto;margin-top:14px}
+.simpleTable{width:100%;border-collapse:collapse;font-size:12px}
+.simpleTable th,.simpleTable td{padding:7px;border-bottom:1px solid #ddd;text-align:left;white-space:nowrap}
+.simpleTable th{background:#f4f1ea}
+.radioStack,.agreementCards{display:grid;gap:8px;margin:12px 0}
+.radioStack label,.agreementCards label{padding:9px 10px;border:1px solid #ddd;border-radius:8px;font-size:14px;line-height:1.45}
+.compactAction{width:auto!important;margin:10px 0}
+.nextQuestion{font-size:18px!important;padding:15px;border-radius:10px;background:#edf6fb;border-left:5px solid #5db7de}
+.bottomNav{grid-column:1/-1;margin:18px 0 0}
+.carryWorlds .galleryGrid{margin-top:12px}
+@media(max-width:700px){
+ .phaseTop{display:grid}
+ .pairGrid,.simpleGrid,.choiceGrid,.treeStatus{grid-template-columns:1fr}
+ .fruitBar{grid-template-columns:repeat(10,1fr)}
+}
+
+
+/* ===== Erarbeitung V3 ===== */
+.sortList,.needEditors,.miniCards,.allocList{display:grid;gap:10px}.sortRow{display:grid;grid-template-columns:minmax(150px,1fr) 2fr;gap:12px;align-items:center;padding:11px;border:1px solid #ddd;border-radius:9px}.sortChoices{display:flex;gap:12px;flex-wrap:wrap;font-size:13px}.hardDecision{display:grid;grid-template-columns:1fr 2fr;gap:12px;margin:14px 0;padding:14px;background:#fff7df;border-radius:10px}.hidden{display:none!important}.needEditor{display:grid;grid-template-columns:1fr 1.4fr 1.4fr;gap:10px;padding:12px;background:#faf9f6;border:1px solid #ddd;border-radius:10px}.reqRow{display:flex;justify-content:space-between;gap:15px;padding:8px 0;border-bottom:1px solid #d9e7ed}.fruitIcons{color:#f4c84a;letter-spacing:3px;text-shadow:0 1px #7a6530}.treeStory{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center}.storyTree{position:relative;width:140px;height:125px}.storyCrown{position:absolute;left:15px;top:4px;width:110px;height:78px;background:#263d73;border-radius:42% 48% 40% 46%;image-rendering:pixelated}.storyTrunk{position:absolute;left:61px;top:70px;width:20px;height:50px;background:#7d4aa8}.storyFruit{position:absolute;width:10px;height:10px;background:#f4c84a}.f1{left:40px;top:25px}.f2{left:70px;top:18px}.f3{left:95px;top:32px}.f4{left:54px;top:48px}.f5{left:84px;top:54px}.simLayout{display:grid;grid-template-columns:minmax(280px,1fr) minmax(300px,1fr);gap:22px;align-items:start}.pixelTree{position:relative;width:min(100%,430px);aspect-ratio:1.35;margin:auto}.pixelCrown{position:absolute;left:8%;top:3%;width:84%;height:68%;background:#263d73;clip-path:polygon(18% 10%,38% 2%,50% 10%,67% 2%,85% 16%,96% 37%,89% 61%,72% 74%,51% 70%,32% 78%,11% 64%,3% 40%)}.pixelTrunk{position:absolute;left:45%;top:63%;width:12%;height:34%;background:#7d4aa8}.pixelFruit{position:absolute;width:4.3%;aspect-ratio:1;background:#f4c84a;box-shadow:2px 2px 0 #b49327}.simNumbers,.socialStatus{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.simNumbers strong,.socialStatus strong{background:#f4f1ea;padding:8px 10px;border-radius:8px}.miniCard{padding:9px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px}.counterBox{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0;padding:10px;background:#f4f1ea;border-radius:9px}.counter{display:flex;align-items:center;gap:10px}.counter button{width:36px;height:36px;border:0;border-radius:8px;background:#222;color:#fff;font-size:20px;cursor:pointer}.profileGrid,.allocationGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.profile{padding:14px;border:1px solid #ddd;border-radius:10px;background:#faf9f6}.profile h3{font-size:19px;margin:0 0 8px}.profile h4{font-size:13px;margin:13px 0 5px;color:#555}.profile p{margin:5px 0}.socialStart{border-top-color:#5db7de}.allocItem{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:start;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:13px}.nextQuestion{margin-top:18px}.textLoadWarning{background:#fff3cd;padding:10px;border-radius:8px}@media(max-width:700px){.sortRow,.hardDecision,.needEditor,.treeStory,.simLayout,.profileGrid,.allocationGrid{grid-template-columns:1fr}.sortChoices{display:grid}.storyTree{margin:auto}}
+
+
+/* Needs und Desires konsequent unterscheiden */
+.needHeading{color:#356d86!important}
+.desireHeading{color:#79548c!important}
+.profileNeed,.miniNeed,.reqNeed{
+  margin-top:6px;
+  padding:9px 10px;
+  border:1px solid #5db7de;
+  border-radius:8px;
+  background:#edf6fb;
+}
+.profileDesire,.miniDesire,.reqDesire{
+  margin-top:6px;
+  padding:9px 10px;
+  border:1px solid #b58ad8;
+  border-radius:8px;
+  background:#f5eef9;
+}
+.needAlloc{
+  background:#edf6fb!important;
+  border-color:#5db7de!important;
+}
+.desireAlloc{
+  background:#f5eef9!important;
+  border-color:#b58ad8!important;
+}
+.reqRow{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+}
+.miniCard{
+  display:grid!important;
+  gap:7px!important;
+}
+@media(max-width:700px){
+  .reqRow{grid-template-columns:1fr!important}
+}
+
+
+/* ===== Überarbeitung Erarbeitung ===== */
+
+/* Texteingaben immer untereinander / volle Breite */
+.simpleGrid{grid-template-columns:1fr!important}
+.hardDecision{grid-template-columns:1fr!important}
+.labField textarea,.labField input,.labField select{width:100%}
+
+/* Auftrag und Reflexion entsprechen der ersten Phase */
+.learnCard .taskInstruction{
+  margin:14px 0 10px!important;
+  padding:11px 12px;
+  border-left:4px solid #75c56b;
+  border-radius:8px;
+  background:#edf7ea;
+  font-weight:400;
+}
+.learnCard .taskQuestion{
+  margin:12px 0 8px!important;
+  padding:11px 12px;
+  border-left:4px solid #5db7de;
+  border-radius:8px;
+  background:#edf6fb;
+  font-weight:400;
+}
+.learnCard .taskInstruction::before,
+.learnCard .taskQuestion::before,
+.theoryBox::before{
+  display:block;
+  margin-bottom:5px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.learnCard .taskInstruction::before{content:"✦ Auftrag";color:#376a3b}
+.learnCard .taskQuestion::before{content:"💭 Reflexion";color:#356d86}
+
+/* Theorie / Erklärung bewusst dritte Kategorie */
+.theoryBox{
+  margin:12px 0;
+  padding:11px 12px;
+  border-left:4px solid #d6a23d;
+  border-radius:8px;
+  background:#fff7df;
+  font-size:13px;
+  line-height:1.55;
+}
+.theoryBox::before{content:"◆ Erklärung";color:#8a641f}
+.theoryBox.hidden{display:none}
+
+/* Startwahl */
+.sourceChooser{
+  grid-column:1/-1;
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 2px 12px #00000012;
+  margin-bottom:18px;
+}
+.sourceChooser h2{font-size:21px;margin:0 0 8px}
+.sourceChooser p{font-size:14px;line-height:1.55}
+.sourceTiles{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:14px;
+}
+.sourceTile{
+  display:grid;
+  align-content:start;
+  gap:7px;
+  min-height:150px;
+  padding:15px;
+  border:2px solid #ddd;
+  border-radius:12px;
+  background:#faf9f6;
+  cursor:pointer;
+  text-align:left;
+  font:inherit;
+  color:#222;
+}
+.sourceTile:hover,.sourceTile:focus{border-color:#75c56b;outline:none}
+.sourceTile strong{font-size:15px}
+.sourceTile span{font-size:12px;line-height:1.45;color:#555}
+.sourceIcon{font-size:25px!important;line-height:1!important}
+.sourceMessage{
+  display:none;
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:8px;
+  background:#fff3cd;
+  border-left:4px solid #d6a23d;
+  font-size:13px;
+}
+.sourceMessage.active{display:block}
+.sourceDependent{display:none!important}
+#phase2.sourceReady .sourceDependent{display:block!important}
+#phase2.sourceReady .learnTasks{display:grid!important}
+
+/* Need / Desire */
+.needHeading{color:#356d86!important}
+.desireHeading{color:#79548c!important}
+.profileNeed,.miniNeed,.reqNeed{
+  margin-top:6px;padding:9px 10px;border:1px solid #5db7de;border-radius:8px;background:#edf6fb;
+}
+.profileDesire,.miniDesire,.reqDesire{
+  margin-top:6px;padding:9px 10px;border:1px solid #b58ad8;border-radius:8px;background:#f5eef9;
+}
+.needAlloc{background:#edf6fb!important;border-color:#5db7de!important}
+.desireAlloc{background:#f5eef9!important;border-color:#b58ad8!important}
+.reqRow{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
+.miniCard{display:grid!important;gap:7px!important}
+
+/* Früchte überall als Quadrate */
+.fruitIcons{display:inline-flex;gap:4px;flex-wrap:wrap;vertical-align:middle}
+.fruitIcons i{display:inline-block;width:11px;height:11px;background:#f4c84a;box-shadow:1px 1px 0 #b49327}
+
+/* Baum etwas ansprechender, weiterhin einfache CSS-Pixelgrafik */
+.pixelTree{filter:drop-shadow(0 7px 0 #00000010)}
+.pixelCrown{background:#263d73!important}
+.pixelTree::before{
+  content:"";
+  position:absolute;left:19%;top:17%;width:62%;height:40%;
+  background:#315184;
+  clip-path:polygon(5% 35%,18% 8%,39% 18%,52% 2%,70% 16%,91% 10%,98% 46%,82% 69%,62% 61%,47% 83%,28% 65%,9% 75%);
+  z-index:1;opacity:.72;
+}
+.pixelTrunk{box-shadow:inset -7px 0 0 #674087}
+#fruitLayer,#groupFruitLayer{position:absolute;inset:0;z-index:3}
+.groupTree{max-width:390px;margin:10px auto 14px}
+
+/* Rundenauswertung */
+.simpleTable tbody tr.needsComplete td{background:#eef7ec}
+.simpleTable tbody tr.needsMissing td{background:#fff0ee}
+.roundLegend{font-size:11px!important;color:#666;margin:8px 0 0!important}
+.legendOk,.legendMiss{display:inline-block;width:12px;height:12px;border:1px solid #bbb;vertical-align:-2px;margin-right:4px}
+.legendOk{background:#eef7ec}
+.legendMiss{background:#fff0ee}
+
+/* Partnerphase: Need + passender Desire als Paar */
+.allocPair{
+  display:grid;gap:4px;padding:7px;margin-bottom:10px;
+  border:1px solid #ddd;border-radius:10px;background:#faf9f6;
+}
+.allocPair .allocItem{margin:0}
+
+/* Reflexionsfelder als ganze Box */
+.labField.taskQuestion{display:grid}
+.labField.taskQuestion label{margin:0 0 5px}
+
+@media(max-width:800px){
+  .sourceTiles{grid-template-columns:1fr}
+  .reqRow{grid-template-columns:1fr!important}
+}
+
+
+/* Eingabefelder in der Erarbeitung immer untereinander */
+.needEditor{grid-template-columns:1fr!important}
+.needEditors{grid-template-columns:1fr!important}
+
+/* Finale Layoutanpassungen */
+.needEditor{grid-template-columns:1fr!important}
+.needEditors{grid-template-columns:1fr!important}
+.needEditor textarea{min-height:3.6em;resize:vertical}
+.largeReflection{min-height:190px!important;width:100%}
+.reflectionPrompt ul{margin:8px 0 12px;padding-left:22px}
+.reflectionPrompt li{margin:4px 0;font-size:14px;line-height:1.45}
+.reflectionDecision{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.reflectionDecision button{flex:1 1 220px}
+.treeStorySimple{grid-template-columns:minmax(160px,.55fr) minmax(0,1fr)!important}
+.treeImagePlaceholder{
+  min-height:150px;
+  border-radius:10px;
+  background:#dff1fa;
+}
+.sourceWorldCard{
+  border:1px solid #ddd;
+  border-radius:10px;
+  overflow:hidden;
+  background:#fff;
+}
+.sourceWorldCard img{display:block;width:100%;height:auto;background:#dff1fa}
+.sourceLegend{display:grid;gap:5px;padding:10px}
+.sourceLegendRow{display:grid;grid-template-columns:16px 1fr;gap:7px;align-items:center;font-size:12px}
+.sourceLegendColor{width:14px;height:14px;border:1px solid #555;border-radius:3px}
+@media(max-width:700px){
+  .treeStorySimple{grid-template-columns:1fr!important}
+}
+
+
+.helpBtn{
+  width:34px!important;
+  height:34px!important;
+  border:2px solid #356d86!important;
+  border-radius:50%!important;
+  background:#edf6fb!important;
+  color:#356d86!important;
+  font-size:18px!important;
+  font-weight:900!important;
+  box-shadow:0 1px 3px #00000018;
+  cursor:pointer;
+  margin-top:6px;
+}
+.helpBtn:hover,.helpBtn:focus{
+  background:#dceff8!important;
+  outline:3px solid #5db7de33;
+}
+
+
+.sourceChooser{padding:16px!important}
+.sourceTiles{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin-top:10px!important;
+}
+.sourceTile{
+  min-height:105px!important;
+  padding:11px!important;
+  gap:4px!important;
+}
+.sourceTile strong{font-size:13px!important}
+.sourceTile span{font-size:11px!important}
+.sourceIcon{font-size:20px!important}
+
+.sourceWorldSelector{display:none}
+#phase2.hasSource .sourceWorldSelector{display:block}
+#phase2.sourceReady .sourceDependent{display:block!important}
+#phase2.sourceReady .learnTasks{display:grid!important}
+#phase2:not(.sourceReady) .learnTasks{display:none!important}
+
+#phase2Worlds{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+.sourceWorldCard{
+  border:2px solid #ddd;
+  border-radius:10px;
+  overflow:hidden;
+  background:#fff;
+  padding:0;
+  cursor:pointer;
+  text-align:left;
+  color:#222;
+  font:inherit;
+}
+.sourceWorldCard.selected{
+  border-color:#222;
+  box-shadow:0 0 0 3px #75c56b55;
+}
+.chooseWorldText{
+  padding:8px 10px;
+  background:#f4f1ea;
+  font-size:12px;
+  font-weight:700;
+  text-align:center;
+}
+.requirementGrid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:12px 0;
+}
+.requirementCard{
+  padding:9px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  background:#faf9f6;
+}
+@media(max-width:760px){
+  .sourceTiles{grid-template-columns:1fr!important}
+  #phase2Worlds{grid-template-columns:1fr!important}
+  .requirementGrid{grid-template-columns:1fr}
+}
+
+
+/* ===== Fortschrittslogik Seite 2 ===== */
+.phase2Lockable.phase2Locked{cursor:pointer;padding-bottom:14px}
+.phase2Lockable.phase2Locked > *:not(.taskLabel):not(.phase2LockHint){display:none!important}
+.phase2LockHint{display:none;margin:4px 0 0!important;color:#666;font-size:12px!important}
+.phase2Lockable.phase2Locked .phase2LockHint{display:block}
+.phase2Lockable.phase2Locked:hover{box-shadow:0 2px 12px #00000012,0 0 0 2px #75c56b55}
+
+/* Weiter- und Zurücknavigation gleich */
+.phaseNavEnd #toPhase2{width:auto!important;padding:10px 13px!important;font-size:14px!important}
+
+
+.phaseEndActions{
+  grid-column:1/-1;
+  margin-top:18px;
+}
+.phaseEndActions .action{
+  width:100%;
+  padding:14px 16px;
+  font-size:15px;
+}
+
+
+/* ===== Arbeitsstand sichern / laden ===== */
+.headerBar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+.headerBar h1{margin:0}
+.workStateControls{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+@media(max-width:700px){
+  .headerBar{display:grid}
+  .workStateControls{justify-content:start}
+}
+
+
+.autoWorldsNotice,
+.noWorldsNotice{
+  padding:11px 13px;
+  border-radius:9px;
+  font-size:13px;
+  line-height:1.5;
+}
+.autoWorldsNotice{
+  background:#edf7ea;
+  border-left:4px solid #75c56b;
+}
+.noWorldsNotice{
+  background:#fff7df;
+  border-left:4px solid #d6a23d;
+  margin-bottom:10px;
+}
+.autoWorldsNotice strong,
+.noWorldsNotice strong{display:block;margin-bottom:2px}
+
+
+
+/* Einheitliche Aktionsbuttons */
+.workStateControls .action{
+  margin:0;
+  min-height:36px;
+  padding:8px 12px;
+  font-size:12px;
+}
+/* Schwarz = Eingabe bestätigen / speichern */
+.action:not(.secondary){
+  background:#222;
+  color:#fff;
+}
+/* Hell = Navigation, Zurücksetzen, Laden */
+.action.secondary{
+  background:#fff;
+  color:#222;
+  border:1px solid #bbb;
+}
+.action.secondary:hover,
+.action.secondary:focus{
+  border-color:#356d86;
+}
+
+
+/* Geschlossene Aufgaben der Willkommensphase – gleiches Prinzip wie Seite 2 */
+.phase1Lockable.phase1Locked{
+  display:block!important;
+  cursor:pointer;
+  padding-bottom:14px;
+}
+.phase1Lockable.phase1Locked > *:not(.taskLabel):not(.phase1LockHint){
+  display:none!important;
+}
+.phase1LockHint{
+  display:none;
+  margin:4px 0 0!important;
+  color:#666;
+  font-size:12px!important;
+}
+.phase1Lockable.phase1Locked .phase1LockHint{
+  display:block!important;
+}
+.phase1Lockable.phase1Locked:hover{
+  box-shadow:0 2px 12px #00000012,0 0 0 2px #75c56b55;
+}
+
+/* Offen: Bild und Text wieder in der bisherigen Anordnung */
+.phase1TaskBody{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:12px;
+  margin-top:12px;
+}
+.phase1TaskBody .taskArtwork{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:10px;
+}
+.phase1FinalReflection{
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid #d9d9d9;
+}
+
+
+/* Einheitliche Typografie für alle Buttons */
+button,
+.action,
+.sourceTile,
+.helpBtn,
+.deleteBtn,
+.commentClose,
+#openTeacherComment{
+  font-family:system-ui,-apple-system,sans-serif!important;
+  font-style:normal!important;
+  letter-spacing:normal!important;
+  text-transform:none!important;
+}
+.action{
+  font-weight:700!important;
+  line-height:1.2!important;
+}
+
+
+.phase1Lockable.phase1Locked > h2,
+.phase2Lockable.phase2Locked > h2{
+  display:none!important;
+}
+.phase1Lockable.phase1Locked .taskLabel,
+.phase2Lockable.phase2Locked .taskLabel{
+  margin-bottom:5px!important;
+}
+
+
+/* Grosse Missionsgrafik auf Seite 2 – analog zur Willkommensphase */
+.phase2Mission{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(320px,1.35fr);
+  gap:24px;
+  align-items:center;
+}
+.phase2Mission .missionCopy{
+  padding:8px 4px;
+}
+.phase2Mission h2{
+  margin:0 0 10px;
+  font-size:25px;
+}
+.phase2Mission p{
+  margin:0;
+  font-size:15px;
+  line-height:1.65;
+}
+.phase2Mission .banner{
+  grid-column:auto;
+  box-shadow:none;
+}
+.phase2Mission .banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:520px;
+  object-fit:contain;
+  object-position:center;
+}
+@media(max-width:800px){
+  .phase2Mission{
+    grid-template-columns:1fr;
+  }
+}
+
+
+.sourceStatusNotice{
+  padding:11px 13px;
+  border-radius:9px;
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:10px;
+  background:#fff7df;
+  border-left:4px solid #d6a23d;
+}
+.sourceStatusNotice.statusOk{
+  background:#edf7ea;
+  border-left-color:#75c56b;
+}
+.sourceStatusNotice strong{
+  display:block;
+  margin-bottom:2px;
+}
+#phase2SourceChooser #sourceTiles{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  max-width:760px;
+}
+@media(max-width:700px){
+  #phase2SourceChooser #sourceTiles{
+    grid-template-columns:1fr!important;
+  }
+}
+
+
+/* Aufgabe A – Reflexion wie alle anderen Reflexionsfelder */
+.hardDecision{
+  display:block!important;
+  margin:14px 0!important;
+  padding:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+}
+.hardDecision .taskQuestion{
+  margin:0!important;
+  width:100%;
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>Willkommen auf Novera</h1>
+  <div class="headerBar">
+    <h1>Willkommen auf Novera</h1>
+    <div class="workStateControls">
+      <button class="action compactAction" id="saveWorkState" type="button">Arbeitsstand herunterladen</button>
+      <button class="action secondary compactAction" id="loadWorkState" type="button">Arbeitsstand laden</button>
+      <input id="loadWorkStateFile" type="file" accept=".html,text/html" hidden>
+    </div>
+  </div>
 </header>
 
 <main>
+<div id="phase1" class="phaseView active">
 
   <!-- Mission -->
 
@@ -979,115 +1604,112 @@ button.full-width{
       </div>
     </article>
 
-    <article class="taskCard withArtwork" id="taskB">
+    <article class="taskCard withArtwork phase1Lockable phase1Locked" id="taskB">
       <span class="taskLabel">Aufgabe B</span>
-      <img
-        class="taskArtwork"
-        src="novera-aufgabe-b.webp"
-        alt="Illustration zu zwei weiteren Personen auf Novera"
-      >
-      <div class="taskContent">
-        <h2>
-          Zwei weitere Personen erreichen deine Welt. Sie wollen auch ein
-          gutes Leben führen. Was veränderst du?
-        </h2>
-        <p class="taskInstruction">
-          Gestalte die Welt so um, dass du und zwei weitere Personen dort gut
-          leben können.
-        </p>
-        <p class="saveReminder">
-          ⚠️ Vergiss nicht, deine Welt zu speichern.
-        </p>
-        <p class="taskQuestion">
-          Was hast du in der zweiten Welt verändert? Und warum?
-        </p>
-        <label class="taskAnswerLabel" for="taskAnswerB">
-          Deine Antwort
-        </label>
-        <textarea
-          class="taskAnswer"
-          id="taskAnswerB"
-          data-task-answer="B"
-          maxlength="5000"
-        ></textarea>
-        <p class="taskSaveNote">
-          Deine Antwort wird automatisch in diesem Browser gespeichert.
-        </p>
+      <h2>
+        Zwei weitere Personen erreichen deine Welt. Sie wollen auch ein
+        gutes Leben führen. Was veränderst du?
+      </h2>
+      <p class="phase1LockHint">Bearbeite zuerst Aufgabe A vollständig.</p>
+
+      <div class="phase1TaskBody">
+        <img
+          class="taskArtwork"
+          src="novera-aufgabe-b.webp"
+          alt="Illustration zu zwei weiteren Personen auf Novera"
+        >
+        <div class="taskContent">
+          <p class="taskInstruction">
+            Gestalte die Welt so um, dass du und zwei weitere Personen dort gut
+            leben können.
+          </p>
+          <p class="saveReminder">
+            ⚠️ Vergiss nicht, deine Welt zu speichern.
+          </p>
+          <p class="taskQuestion">
+            Was hast du in der zweiten Welt verändert? Und warum?
+          </p>
+          <label class="taskAnswerLabel" for="taskAnswerB">
+            Deine Antwort
+          </label>
+          <textarea
+            class="taskAnswer"
+            id="taskAnswerB"
+            data-task-answer="B"
+            maxlength="5000"
+          ></textarea>
+          <p class="taskSaveNote">
+            Deine Antwort wird automatisch in diesem Browser gespeichert.
+          </p>
+        </div>
       </div>
     </article>
 
-    <article class="taskCard withArtwork" id="taskC">
+<article class="taskCard withArtwork phase1Lockable phase1Locked" id="taskC">
       <span class="taskLabel">Aufgabe C</span>
-      <img
-        class="taskArtwork"
-        src="novera-aufgabe-c.webp"
-        alt="Illustration zur gemeinsamen Gestaltung von Novera"
-      >
-      <div class="taskContent">
-        <h2>
-          Schliesse dich mit jemandem zusammen. Einigt euch auf eine gemeinsame
-          Welt, in der ihr beide und die insgesamt vier weiteren Personen gut
-          leben können.
-        </h2>
-        <p class="taskInstruction">
-          Besprecht, was euch für ein gutes Leben wichtig ist. Einigt euch auf
-          eine gemeinsame Welt, in der ihr beide und vier weitere Personen gut
-          leben können. Beide gestalten diese gemeinsame Welt in ihrer eigenen
-          Simulation gleich.
-        </p>
-        <p class="saveReminder">
-          ⚠️ Vergiss nicht, deine Welt zu speichern.
-        </p>
-        <p class="taskQuestion">
-          Was war euch beiden wichtig? Wo wart ihr unterschiedlicher Meinung?
-          Worauf musstet ihr euch einigen?
-        </p>
-        <label class="taskAnswerLabel" for="taskAnswerC">
-          Eure Antwort
-        </label>
-        <textarea
-          class="taskAnswer"
-          id="taskAnswerC"
-          data-task-answer="C"
-          maxlength="5000"
-        ></textarea>
-        <p class="taskSaveNote">
-          Eure Antwort wird automatisch in diesem Browser gespeichert.
-        </p>
+      <h2>
+        Schliesse dich mit jemandem zusammen. Einigt euch auf eine gemeinsame
+        Welt, in der ihr beide und die insgesamt vier weiteren Personen gut
+        leben können.
+      </h2>
+      <p class="phase1LockHint">Bearbeite zuerst Aufgabe B vollständig.</p>
+
+      <div class="phase1TaskBody">
+        <img
+          class="taskArtwork"
+          src="novera-aufgabe-c.webp"
+          alt="Illustration zur gemeinsamen Gestaltung von Novera"
+        >
+        <div class="taskContent">
+          <p class="taskInstruction">
+            Besprecht, was euch für ein gutes Leben wichtig ist. Einigt euch auf
+            eine gemeinsame Welt, in der ihr beide und vier weitere Personen gut
+            leben können. Beide gestalten diese gemeinsame Welt in ihrer eigenen
+            Simulation gleich.
+          </p>
+          <p class="saveReminder">
+            ⚠️ Vergiss nicht, deine Welt zu speichern.
+          </p>
+          <p class="taskQuestion">
+            Was war euch beiden wichtig? Wo wart ihr unterschiedlicher Meinung?
+            Worauf musstet ihr euch einigen?
+          </p>
+          <label class="taskAnswerLabel" for="taskAnswerC">
+            Eure Antwort
+          </label>
+          <textarea
+            class="taskAnswer"
+            id="taskAnswerC"
+            data-task-answer="C"
+            maxlength="5000"
+          ></textarea>
+
+          <div class="phase1FinalReflection">
+            <p class="taskQuestion">
+              Hat sich deine Vorstellung von einem guten Leben durch die Aufgaben verändert?
+              Begründe deine Antwort.
+            </p>
+            <label class="taskAnswerLabel" for="taskAnswerD">
+              Deine Antwort
+            </label>
+            <textarea
+              class="taskAnswer"
+              id="taskAnswerD"
+              data-task-answer="D"
+              maxlength="5000"
+            ></textarea>
+          </div>
+
+          <p class="taskSaveNote">
+            Eure Antworten werden automatisch in diesem Browser gespeichert.
+          </p>
+        </div>
       </div>
     </article>
 
-    <article class="taskCard" id="taskD">
-      <div class="taskContent">
-        <span class="taskLabel">Aufgabe D</span>
-        <h2>
-          Hat sich deine Vorstellung von einem guten Leben durch die Aufgaben
-          verändert?
-        </h2>
-        <p class="taskQuestion">
-          Schreibe alleine eine begründete Antwort.
-        </p>
-        <label class="taskAnswerLabel" for="taskAnswerD">
-          Deine Antwort
-        </label>
-        <textarea
-          class="taskAnswer"
-          id="taskAnswerD"
-          data-task-answer="D"
-          maxlength="5000"
-        ></textarea>
-        <p class="taskSaveNote">
-          Deine Antwort wird automatisch in diesem Browser gespeichert.
-        </p>
-      </div>
-    </article>
-
-    <div class="taskDownload">
-      <button
-        class="action"
-        id="downloadPdf"
-      >
-        Alle Aufgaben und Welten herunterladen
+<div class="phaseNav phaseNavEnd">
+      <button class="action secondary" id="toPhase2" type="button">
+        Novera weiter entdecken →
       </button>
     </div>
 
@@ -1095,6 +1717,168 @@ button.full-width{
 
   </div>
 
+</div>
+
+<div id="phase2" class="phaseView">
+<section class="phaseTop panel mission phase2Mission">
+  <div class="missionCopy">
+    <span class="missionKicker">Deine Mission</span>
+    <h2>Erkunde Novera weiter</h2>
+    <p>Du arbeitest mit einer bisherigen oder vorbereiteten Novera-Welt weiter. Untersuche, was Menschen brauchen und wünschen, welche Voraussetzungen dafür nötig sind und wie heutige Entscheidungen spätere Möglichkeiten verändern.</p>
+  </div>
+
+  <div class="banner">
+    <img
+      src="novera-entdecken.webp"
+      alt="Illustration zur Mission «Novera entdecken»"
+    >
+  </div>
+</section>
+<section class="sourceChooser" id="phase2SourceChooser">
+  <div id="sourceStatusNotice" class="sourceStatusNotice"></div>
+
+  <div class="sourceTiles sourceTilesTwo" id="sourceTiles">
+    <button class="sourceTile" id="sourceDemo" type="button">
+      <span class="sourceIcon">▦</span>
+      <strong>Mit Demowelten starten</strong>
+      <span>Drei vorbereitete Beispielwelten ansehen und eine auswählen.</span>
+    </button>
+
+    <button class="sourceTile" id="sourcePdf" type="button">
+      <span class="sourceIcon">⇧</span>
+      <strong>Gespeicherten Arbeitsstand laden</strong>
+      <span>Einen zuvor heruntergeladenen Novera-Arbeitsstand wiederherstellen.</span>
+    </button>
+
+    <!-- bleibt technisch vorhanden, wird aber nicht angezeigt -->
+    <button class="sourceTile hidden" id="sourceSaved" type="button" aria-hidden="true" tabindex="-1">
+      <strong>Welten aus der Willkommensphase</strong>
+    </button>
+
+    <input id="sourcePdfFile" type="file" accept=".html,text/html" hidden>
+  </div>
+
+  <div class="sourceMessage" id="sourceMessage"></div>
+</section>
+
+
+
+<section class="carryWorlds panel sourceWorldSelector"><h2 data-t="worlds.title">Deine gespeicherten Welten</h2><p class="smallNote" data-t="worlds.note">Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.</p><div class="galleryGrid" id="phase2Worlds"></div></section>
+<section class="learnTasks sourceDependent">
+<article class="learnCard phase2Lockable phase2Locked" id="learn1"><span class="taskLabel">Aufgabe A</span><h2 data-t="t1.title">Das brauche ich – das möchte ich zusätzlich</h2><p class="phase2LockHint">Wähle zuerst eine Welt aus.</p><p class="taskInstruction" data-t="t1.instruction">Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.</p><div id="categorySort" class="sortList"></div><div id="hardDecision" class="hardDecision"><div class="labField taskQuestion"><label>Wähle einen schwierigen Entscheid und beschreibe, was du daran schwierig findest.</label><textarea id="hardWhy" data-e-save="hardWhy"></textarea></div></div><button class="action compactAction" id="confirmSort" data-t="t1.confirm">Meine Auswahl bestätigen</button><div class="theoryBox hidden" id="needReveal"><p data-t="t1.reveal">Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.</p><p data-t="t1.allergy">Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.</p></div></article>
+<article class="learnCard phase2Lockable phase2Locked" id="learn2"><span class="taskLabel">Aufgabe B</span><h2 data-t="t2.title">Drei Needs genauer anschauen</h2><p class="phase2LockHint">Wähle zuerst eine Welt aus.</p><p class="taskInstruction" data-t="t2.instruction">Wähle drei Needs aus. Beschreibe jeden Need genauer und ergänze dazu einen passenden Desire.</p><div class="exampleStrip"><strong data-t="common.example">Beispiel</strong><br><span data-t="t2.example">Need: mit anderen Menschen kommunizieren können. Desire: dafür immer das neueste Smartphone haben.</span></div><div id="needEditors" class="needEditors"></div><div class="phaseNav"><button class="action" id="makeNeeds" data-t="t2.confirm">Auswahl übernehmen</button></div><div class="theoryBox hidden" id="requirementsReveal">
+  <p><strong>Auf Novera ist nicht alles gleich einfach zu ermöglichen.</strong> Ob ein Need oder Desire leicht oder schwierig zu erfüllen ist, kann davon abhängen, wo du dich befindest, was bereits vorhanden ist und was du dafür aus der Natur oder von anderen Menschen brauchst. In der nächsten Aufgabe lernst du eine besondere Möglichkeit kennen, mit der Novera diese unterschiedlichen Voraussetzungen sichtbar macht.</p>
+  <div id="requirementsList"></div>
+</div></article>
+<article class="learnCard phase2Lockable phase2Locked" id="learn3"><span class="taskLabel">Aufgabe C</span><h2 data-t="t3.title">Der wundersame Baum</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p><div class="treeStory treeStorySimple">
+  <div class="treeImagePlaceholder" aria-hidden="true"></div>
+  <p data-t="t3.story">Auf Novera wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit Needs und Desires erfüllen. Nicht alle Needs oder Desires sind aber gleich einfach zu erfüllen. Was wie viele Früchte braucht, kann von vielen Faktoren abhängen: Wo du dich befindest, was schon da ist oder was du dazu allenfalls aus der Natur oder von anderen Menschen brauchst. Im Spiel wird die benötigte Zahl der Früchte zufällig festgelegt. Hier siehst du nun die Zuordnung für deine Needs und Desires.</p>
+</div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später sichern.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Sicherheit</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später sichern</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th data-t="log.reserve">Sicherheit</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
+<article class="learnCard phase2Lockable phase2Locked" id="learn4">
+  <span class="taskLabel">Aufgabe D</span>
+  <h2>Was hast du beobachtet?</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
+  <div class="taskQuestion reflectionPrompt">
+    <strong>Reflektiere deine Spielrunden.</strong>
+    <p>Gehe dabei auf diese Fragen ein:</p>
+    <ul>
+      <li>Was geschah, wenn du viele Früchte genutzt hast?</li>
+      <li>Wann war dein Sicherheitsvorrat hilfreich?</li>
+      <li>Was geschah mit deinen Desires?</li>
+      <li>Was war bei der Erneuerung nicht vorhersehbar?</li>
+    </ul>
+    <textarea id="individualReflection" data-e-save="individualReflection" class="largeReflection"></textarea>
+  </div>
+  <button class="action compactAction" id="checkIndividualReflection" type="button">Reflexion speichern</button>
+
+  <div class="theoryBox hidden" id="individualTheory">
+    <strong>Deine Reflexion sollte mindestens folgende Erkenntnis beinhalten:</strong>
+    <p><strong>Nutzung heute beeinflusst Möglichkeiten morgen.</strong> Die Erneuerung ist begrenzt und nicht vollständig vorhersehbar. Sich Gedanken darüber zu machen, was später noch möglich sein soll, kann helfen, mit dieser Unsicherheit umzugehen.</p>
+    <div class="reflectionDecision">
+      <button class="action" id="reflectionRecognized" type="button">Das habe ich so erkannt</button>
+      <button class="action secondary" id="reflectionRevise" type="button">Meine Reflexion überarbeiten</button>
+    </div>
+  </div>
+  <p class="smallNote hidden" id="reflectionConfirmed">Erkenntnis bestätigt.</p>
+</article>
+<article class="learnCard socialStart phase2Lockable phase2Locked" id="learn5">
+  <span class="taskLabel">Aufgabe E</span>
+  <h2>Jetzt arbeitet ihr zu zweit</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
+
+  <p class="taskInstruction">Setzt euch zu zweit zusammen. Ihr erhaltet Person A und Person B mit je zwei Needs und zwei dazugehörigen Desires. Entscheidet gemeinsam, welche davon in jeder Runde erfüllt werden sollen.</p>
+
+  <div class="socialStatus">
+    <strong>Am Baum: <span id="gTree">20</span>/20</strong>
+    <strong>Sicherheit: <span id="gReserve">0</span></strong>
+    <strong>Runde: <span id="gRound">1</span></strong>
+  </div>
+
+  <div class="pixelTree groupTree">
+    <div class="pixelCrown"></div>
+    <div class="pixelTrunk"></div>
+    <div id="groupFruitLayer"></div>
+  </div>
+
+  <button class="action secondary compactAction" id="newProfiles" type="button">Andere Profile</button>
+
+  <div class="allocationGrid">
+    <div>
+      <h3>Person A</h3>
+      <div id="allocA" class="allocList"></div>
+    </div>
+    <div>
+      <h3>Person B</h3>
+      <div id="allocB" class="allocList"></div>
+    </div>
+  </div>
+
+  <div class="labField taskInstruction">
+    <label for="groupRule">Eure Abmachung</label>
+    <textarea id="groupRule" data-e-save="groupRule" placeholder="Einigt euch auf eine Regel, nach der ihr die Früchte verteilen wollt."></textarea>
+    <button class="helpBtn" data-help="ruleHelp" type="button">?</button>
+    <div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Sollen zuerst Needs erfüllt werden? Soll jede Person gleich viel erhalten? Was geschieht, wenn nicht alles möglich ist? Wie viel wollt ihr für später sichern?</div>
+  </div>
+
+  <div class="counterBox">
+    <label>Für später sichern</label>
+    <div class="counter">
+      <button id="gSecureMinus" type="button">−</button>
+      <strong id="gSecureCount">0</strong>
+      <button id="gSecurePlus" type="button">+</button>
+    </div>
+  </div>
+
+  <button class="action" id="gFinish" type="button">Gemeinsame Runde abschliessen</button>
+  <div id="groupFeedback" class="experimentResult"></div>
+
+  <div class="tableScroll">
+    <table class="simpleTable">
+      <thead>
+        <tr>
+          <th>Runde</th><th>Needs A</th><th>Needs B</th><th>Desires A</th><th>Desires B</th>
+          <th>Rest am Baum</th><th>Nachgewachsen</th><th>Sicherheit</th>
+        </tr>
+      </thead>
+      <tbody id="groupLog"></tbody>
+    </table>
+  </div>
+  <p class="roundLegend"><span class="legendOk"></span> alle Needs beider Personen erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p>
+</article>
+<article class="learnCard phase2Lockable phase2Locked" id="learn7">
+  <span class="taskLabel">Aufgabe F</span>
+  <h2>Was hat sich verändert?</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
+  <div class="taskQuestion reflectionPrompt">
+    <strong>Reflektiert eure gemeinsamen Spielrunden.</strong>
+    <p>Geht dabei auf diese Fragen ein:</p>
+    <ul>
+      <li>War eure Verteilung für Person A und Person B gerecht? Warum?</li>
+      <li>Welche Bedeutung hatte euer gemeinsamer Sicherheitsvorrat?</li>
+      <li>Habt ihr eure Abmachung im Verlauf verändert? Warum?</li>
+    </ul>
+    <textarea id="groupReflection" data-e-save="groupReflection" class="largeReflection"></textarea>
+  </div>
+</article>
+</section>
+<div class="phaseNav bottomNav"><button class="action secondary" id="backToPhase1Bottom" data-t="nav.back">← Zurück</button></div></div>
 </main>
 
 
@@ -1184,33 +1968,51 @@ button.full-width{
     </h2>
 
     <p>
-      <strong>Novera</strong> ist eine offene Gestaltungs- und
-      Konfrontationsaufgabe zur Frage, was es für ein gutes Leben braucht.
-      Die Farben haben keine vorgegebene Bedeutung; die Lernenden benennen
-      und gestalten ihre Welt selbst.
+      <strong>Novera</strong> ist eine digitale Lernumgebung, in der Lernende
+      zunächst eigene Vorstellungen eines guten Lebens gestalten und vergleichen.
+      In der anschliessenden Erarbeitungsphase untersuchen sie Needs und Desires,
+      begrenzte Möglichkeiten, Erneuerung, Unsicherheit, Vorsorge sowie gemeinsame
+      Regeln und Verteilungsentscheidungen.
     </p>
 
-    <h3>Nutzen</h3>
+    <h3>Didaktischer Zweck</h3>
 
     <p>
-      Die Gestaltung macht unterschiedliche Bedürfnisse und Vorstellungen
-      sichtbar und schafft eine Grundlage für Austausch und Weiterarbeit.
-      Beim Speichern erscheinen nur kurze Denkimpulse, wenn Wohnen oder
-      Nahrung in den Eingaben nicht erkennbar sind.
+      Die Lernumgebung verbindet offene Gestaltung, Reflexion und eine vereinfachte
+      Simulation. Die erste Phase macht unterschiedliche Bedürfnisse, Wünsche und
+      Vorstellungen sichtbar. Die zweite Phase lenkt den Blick auf Zusammenhänge
+      zwischen heutiger Nutzung, zukünftigen Möglichkeiten und Entscheidungen unter
+      begrenzten und nicht vollständig vorhersehbaren Bedingungen. In der
+      Partnerphase werden zusätzlich Aushandlung, Verteilung und gemeinsame Regeln
+      thematisiert.
     </p>
 
-    <h3>Grenzen</h3>
+    <h3>Hinweise zur Verwendung</h3>
 
     <p>
-      Die Simulation bewertet keine Welt und berechnet keine Nachhaltigkeit.
-      Die Darstellung durch Farbfelder vereinfacht komplexe Vorstellungen stark. Die anschliessende Reflexion im Unterricht ist deshalb zentral.
+      Novera gibt keine «richtige» Welt und kein bestimmtes nachhaltiges Verhalten
+      vor. Begriffe, Fruchtzuordnungen und Erneuerungsraten sind Teil einer bewusst
+      vereinfachten Fantasiewelt. Die Ergebnisse sollten deshalb nicht als reale
+      Nachhaltigkeitsbewertung verstanden werden. Für den Unterricht ist die
+      anschliessende Diskussion wichtig: Welche Zusammenhänge zeigt das Spiel,
+      welche vereinfacht es und was lässt sich nicht direkt auf die reale Welt
+      übertragen?
     </p>
 
-    <h3>Technische Transparenz</h3>
+    <h3>Technische Hinweise</h3>
 
     <p>
-      Die Anwendung wurde im Rahmen eines <strong>Vibe-Coding-Prozesses</strong>
-      mit Unterstützung von <strong>ChatGPT</strong> entwickelt. Programmierung und automatische Begriffserkennung können Fehler enthalten.
+      Arbeitsstände werden grundsätzlich im lokalen Speicher des verwendeten
+      Browsers abgelegt. Über «Arbeitsstand herunterladen» kann zusätzlich eine
+      HTML-Datei als Sicherung gespeichert werden. Diese Datei lässt sich später
+      wieder in Novera laden und kann geöffnet, gedruckt oder über den
+      Browser-Druckdialog als PDF gesichert werden.
+    </p>
+
+    <p>
+      Die Anwendung wurde mit Unterstützung von <strong>ChatGPT</strong> entwickelt.
+      Programmierung, automatische Begriffserkennung und Darstellungen können Fehler
+      oder unerwartetes Verhalten enthalten.
     </p>
 
     <h3>Impressum und Kontakt</h3>
@@ -1236,40 +2038,19 @@ button.full-width{
 
     <p>
       Novera verwendet keine Benutzerkonten, Kontaktformulare oder
-      Analysewerkzeuge. Eingegebene Begriffe, Antworten und gespeicherte
-      Welten werden im lokalen Speicher des verwendeten Browsers abgelegt und
-      von der Anwendung nicht an den Verantwortlichen übermittelt. Auch die
-      PDF-Datei wird direkt im Browser erstellt. Die lokal gespeicherten
-      Welten können einzeln über «Löschen» in der Galerie oder vollständig
-      durch Löschen der Website-Daten im Browser entfernt werden.
+      Analysewerkzeuge. Eingegebene Begriffe, Antworten, Spielstände und
+      gespeicherte Welten werden im lokalen Speicher des verwendeten Browsers
+      abgelegt und von der Anwendung nicht an den Verantwortlichen übermittelt.
+      Auch die Arbeitsstandsdatei wird direkt im Browser erstellt.
     </p>
 
     <p>
-      Beim Aufruf der Website können der Hosting-Anbieter GitHub und beim
-      Laden der PDF-Bibliothek der CDN-Anbieter Cloudflare technisch
-      notwendige Verbindungsdaten bearbeiten, insbesondere IP-Adresse,
-      Zeitpunkt, aufgerufene Datei und Browserangaben. Dabei kann eine
-      Bearbeitung im Ausland stattfinden. Es gelten die
-      <a
-        href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Datenschutzhinweise von GitHub</a>
-      und die
-      <a
-        href="https://www.cloudflare.com/privacypolicy/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Datenschutzhinweise von Cloudflare</a>.
+      Beim Aufruf der Website kann der Hosting-Anbieter GitHub technisch
+      notwendige Verbindungsdaten verarbeiten, beispielsweise IP-Adresse,
+      Zeitpunkt, aufgerufene Datei und Browserangaben. Es gelten die
+      Datenschutzbestimmungen des Hosting-Anbieters.
     </p>
-
-    <p>
-      Fragen zum Datenschutz sowie Begehren um Auskunft, Berichtigung oder
-      Löschung können über die oben genannten Kontaktangaben gestellt werden.
-      Stand: 14. August 2026.
-    </p>
-
-  </div>
+</div>
 
 </div>
 
@@ -2091,6 +2872,37 @@ function deleteWorld(id){
    GALERIE
    ============================================================ */
 
+
+function updatePhase1Progress(){
+  const worlds=getSavedWorlds().slice().sort((a,b)=>Number(a.id)-Number(b.id));
+  const b=document.getElementById("taskB");
+  const c=document.getElementById("taskC");
+
+  if(b)b.classList.toggle("phase1Locked",worlds.length<1);
+  if(c)c.classList.toggle("phase1Locked",worlds.length<2);
+}
+
+function initPhase1Progress(){
+  updatePhase1Progress();
+
+  document.querySelectorAll(".phase1Lockable").forEach(card=>{
+    card.addEventListener("click",e=>{
+      if(!card.classList.contains("phase1Locked"))return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      if(card.id==="taskB"){
+        alert("Bearbeite zuerst Aufgabe A vollständig.");
+      }else if(card.id==="taskC"){
+        alert("Bearbeite zuerst Aufgabe B vollständig.");
+      }else{
+        alert("Bearbeite zuerst die vorangehende Aufgabe vollständig.");
+      }
+    });
+  });
+}
+
 function renderGallery(){
 
   const galleryWrap =
@@ -2224,6 +3036,8 @@ function renderGallery(){
       thumbCard
     );
   });
+
+  updatePhase1Progress();
 }
 
 
@@ -3572,329 +4386,6 @@ document.getElementById(
    PDF
    ============================================================ */
 
-document.getElementById(
-  "downloadPdf"
-).onclick = () => {
-
-  const worlds =
-    getSavedWorlds();
-
-
-  if(worlds.length === 0){
-
-    alert(
-      "Es sind noch keine Welten gespeichert."
-    );
-
-    return;
-  }
-
-
-  if(
-    !window.jspdf ||
-    !window.jspdf.jsPDF
-  ){
-
-    alert(
-      "Die PDF-Bibliothek konnte nicht geladen werden."
-    );
-
-    return;
-  }
-
-
-  worlds.sort(
-    (a,b) =>
-      Number(a.id) -
-      Number(b.id)
-  );
-
-
-  const {
-    jsPDF
-  } =
-    window.jspdf;
-
-
-  const pdf =
-    new jsPDF({
-      orientation:"p",
-      unit:"mm",
-      format:"a4"
-    });
-
-
-  const pageWidth =
-    pdf.internal.pageSize.getWidth();
-
-
-  const pageHeight =
-    pdf.internal.pageSize.getHeight();
-
-
-  const margin = 15;
-
-
-  const maxTextWidth =
-    pageWidth -
-    (margin * 2);
-
-
-  const answers =
-    getTaskAnswers();
-
-
-  const taskByWorld = {
-    "1":{
-      key:"A",
-      question:
-        "Was ist dir für ein gutes Leben besonders wichtig? Erkläre, wie deine Welt das zeigt."
-    },
-    "2":{
-      key:"B",
-      question:
-        "Was hast du in der zweiten Welt verändert? Und warum?"
-    },
-    "3":{
-      key:"C",
-      question:
-        "Was war euch beiden wichtig? Wo wart ihr unterschiedlicher Meinung? Worauf musstet ihr euch einigen?"
-    }
-  };
-
-
-  function writePdfParagraph(
-    text,
-    startY,
-    options = {}
-  ){
-
-    const fontSize =
-      options.fontSize || 10;
-
-    const lineHeight =
-      options.lineHeight || 5;
-
-    pdf.setFontSize(fontSize);
-
-    pdf.setFont(
-      "helvetica",
-      options.fontStyle || "normal"
-    );
-
-    const lines =
-      pdf.splitTextToSize(
-        text,
-        maxTextWidth
-      );
-
-    let y = startY;
-
-    lines.forEach(line => {
-
-      if(y > pageHeight - margin){
-
-        pdf.addPage();
-        y = 20;
-
-        pdf.setFontSize(fontSize);
-
-        pdf.setFont(
-          "helvetica",
-          options.fontStyle || "normal"
-        );
-      }
-
-      pdf.text(
-        line,
-        margin,
-        y
-      );
-
-      y += lineHeight;
-    });
-
-    return y;
-  }
-
-
-  worlds.forEach(
-    (world,index) => {
-
-      if(index > 0){
-        pdf.addPage();
-      }
-
-
-      pdf.setFontSize(
-        16
-      );
-
-
-      pdf.setFont(
-        "helvetica",
-        "bold"
-      );
-
-
-      pdf.text(
-        "Novera – Welt " +
-        world.id,
-        15,
-        18
-      );
-
-
-      const imgProps =
-        pdf.getImageProperties(
-          world.dataUrl
-        );
-
-
-      const imgRatio =
-        imgProps.width /
-        imgProps.height;
-
-
-      const maxImgWidth =
-        pageWidth -
-        (margin * 2);
-
-
-      const maxImgHeight =
-        155;
-
-
-      let imgW =
-        maxImgWidth;
-
-
-      let imgH =
-        imgW /
-        imgRatio;
-
-
-      if(
-        imgH >
-        maxImgHeight
-      ){
-
-        imgH =
-          maxImgHeight;
-
-        imgW =
-          imgH *
-          imgRatio;
-      }
-
-
-      const imgX =
-        (
-          pageWidth -
-          imgW
-        ) / 2;
-
-
-      pdf.addImage(
-        world.dataUrl,
-        "PNG",
-        imgX,
-        25,
-        imgW,
-        imgH
-      );
-
-
-      const task =
-        taskByWorld[world.id];
-
-
-      let textY =
-        25 +
-        imgH +
-        10;
-
-
-      textY = writePdfParagraph(
-        "Kommentar zu Aufgabe " +
-        task.key,
-        textY,
-        {
-          fontSize:12,
-          lineHeight:6,
-          fontStyle:"bold"
-        }
-      );
-
-
-      textY = writePdfParagraph(
-        task.question,
-        textY + 1,
-        {
-          fontSize:9,
-          lineHeight:4.5,
-          fontStyle:"italic"
-        }
-      );
-
-
-      writePdfParagraph(
-        answers[task.key].trim() ||
-        "Noch keine Antwort eingetragen.",
-        textY + 3,
-        {
-          fontSize:10,
-          lineHeight:5,
-          fontStyle:"normal"
-        }
-      );
-    }
-  );
-
-
-  if(answers.D.trim()){
-
-    pdf.addPage();
-
-    let textY =
-      writePdfParagraph(
-        "Aufgabe D – Abschliessende Reflexion",
-        20,
-        {
-          fontSize:16,
-          lineHeight:8,
-          fontStyle:"bold"
-        }
-      );
-
-    textY = writePdfParagraph(
-      "Hat sich deine Vorstellung von einem guten Leben durch die Aufgabe verändert?",
-      textY + 3,
-      {
-        fontSize:11,
-        lineHeight:5.5,
-        fontStyle:"bold"
-      }
-    );
-
-    writePdfParagraph(
-      answers.D.trim(),
-      textY + 4,
-      {
-        fontSize:10,
-        lineHeight:5,
-        fontStyle:"normal"
-      }
-    );
-  }
-
-
-  pdf.save(
-    "novera-welten.pdf"
-  );
-};
-
-
 /* ============================================================
    HINWEISE UND IMPRESSUM
    ============================================================ */
@@ -3975,11 +4466,934 @@ document.addEventListener(
 );
 
 
+
+/* ============================================================
+   ERARBEITUNG V3 – lokal, ohne Backend
+   ============================================================ */
+const E_KEY="novera_erarbeitung_v4";
+const TXT={"p2.kicker": "Novera", "p2.title": "Novera weiter entdecken", "p2.intro": "Du arbeitest mit deinen bisherigen Welten weiter und untersuchst, wie Bedürfnisse, Wünsche, begrenzte Möglichkeiten und Entscheidungen zusammenhängen.", "nav.back": "← Zurück", "worlds.title": "Deine gespeicherten Welten", "worlds.note": "Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.", "worlds.empty": "Noch keine Welt gespeichert.", "worlds.world": "Welt", "t1.title": "Das brauche ich – das möchte ich zusätzlich", "t1.instruction": "Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.", "sort.need": "Das brauche ich", "sort.desire": "Das möchte ich zusätzlich", "sort.hard": "Schwierig zu entscheiden", "t1.hardWhat": "Was ist schwierig einzuordnen?", "t1.hardWhy": "Warum ist die Entscheidung schwierig?", "t1.confirm": "Meine Auswahl bestätigen", "t1.reveal": "Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.", "t1.allergy": "Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.", "t1.noCategories": "In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.", "t2.title": "Drei Needs genauer anschauen", "t2.instruction": "Wähle drei Needs aus. Beschreibe jeden Need genauer und ergänze dazu einen passenden Desire.", "common.example": "Beispiel", "t2.example": "Need: mit anderen Menschen kommunizieren können. Desire: dafür immer das neueste Smartphone haben.", "t2.choose": "Kategorie auswählen", "t2.needLabel": "Need", "t2.desireLabel": "Desire", "t2.confirm": "Auswahl übernehmen", "t2.requirementsIntro": "Auf Novera ist nicht alles gleich einfach zu ermöglichen. Deshalb wird für jeden Need und Desire festgelegt, wie viele Früchte in diesem Versuch benötigt werden.", "t2.requirementsNote": "Die Früchte stehen im Modell für begrenzte Möglichkeiten. Sie sind kein Geld und keine wirklichen «Kosten».", "t2.needThree": "Ordne in Aufgabe 1 mindestens drei Kategorien bei «Das brauche ich» ein.", "t2.fill": "Bitte fülle bei allen drei Beispielen beide Felder aus.", "t3.title": "Der wundersame Baum", "t3.story": "Auf Novera wächst ein wundersamer Baum. Seine Früchte stehen in diesem Modell für begrenzte Möglichkeiten, die du für deine Bedürfnisse und zusätzlichen Wünsche nutzen kannst. Der Baum trägt höchstens 20 Früchte.", "t3.goal": "Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später sichern.", "sim.tree": "Am Baum", "sim.reserve": "Sicherheit", "sim.round": "Runde", "sim.harvest": "Ernten", "sim.secure": "Davon für später sichern", "sim.finish": "Runde abschliessen", "sim.needFirst": "Schliesse zuerst Aufgabe 2 ab.", "sim.feedback": "Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.", "log.round": "Runde", "log.harvest": "Ernte", "log.treeleft": "Rest am Baum", "log.regrow": "Nachgewachsen", "log.reserve": "Sicherheit", "log.needs": "Needs", "log.desires": "Desires", "t4.title": "Was hast du beobachtet?", "t4.intro": "Schau auf deine Runden zurück und beschreibe deine Erfahrungen.", "t4.q1": "Was geschah, wenn du viele Früchte genutzt hast?", "t4.q2": "Wann war dein Sicherheitsvorrat hilfreich?", "t4.q3": "Was geschah mit deinen Desires?", "t4.q4": "Was war bei der Erneuerung nicht vorhersehbar?", "t4.rememberTitle": "Das kannst du festhalten:", "t4.remember": "Nutzung heute beeinflusst Möglichkeiten morgen. Die Erneuerung ist begrenzt und nicht vollständig vorhersehbar. Vorsorge kann helfen, mit Unsicherheit umzugehen.", "t5.title": "Jetzt arbeitet ihr zu zweit", "t5.intro": "Setzt euch zu zweit zusammen. Für die gemeinsame Aufgabe erhaltet ihr zwei fiktive Personen: Person A und Person B. Beide haben eigene Needs und Desires.", "t5.newProfiles": "Andere Profile", "t5.rule": "Eure Abmachung", "t5.help": "Denkt zum Beispiel darüber nach: Sollen zuerst Needs erfüllt werden? Soll jede Person gleich viel erhalten? Was geschieht, wenn nicht alles möglich ist? Wie viel wollt ihr für später sichern?", "profile.needs": "Needs – das braucht die Person", "profile.desires": "Desires – das möchte die Person zusätzlich", "t6.title": "Gemeinsam entscheiden", "t6.intro": "Wählt selbst per Klick aus, welche Needs und Desires ihr in dieser Runde erfüllen wollt. Die Website zeigt nur die Folgen eurer Entscheidung.", "t6.secure": "Für später sichern", "t6.finish": "Gemeinsame Runde abschliessen", "t6.changeRule": "Habt ihr eure Abmachung verändert? Wenn ja: warum?", "t6.tooMuch": "Dafür reichen die verfügbaren Früchte nicht.", "t6.feedback": "Ihr habt {used} Früchte verteilt und {secure} für später gesichert. {aN}/3 Needs von Person A und {bN}/3 Needs von Person B wurden erfüllt. Am Baum blieben {left}; über Nacht wuchsen {reg} nach.", "t7.title": "Was hat sich verändert?", "t7.q1": "Welche Needs konnten nicht immer erfüllt werden?", "t7.q2": "War eure Verteilung für Person A und Person B gerecht? Warum?", "t7.q3": "Welche Bedeutung hatte euer gemeinsamer Sicherheitsvorrat?", "t7.q4": "Was habt ihr über gemeinsame Regeln und Entscheidungen herausgefunden?", "end.question": "Was hat Novera mit der Erde zu tun?", "end.note": "Der Baum und seine Früchte sind erfunden. Gibt es auf der Erde trotzdem ähnliche Zusammenhänge? Diese Frage verfolgt ihr im anschliessenden Mystery weiter."};
+function eState(){try{return JSON.parse(localStorage.getItem(E_KEY))||{};}catch(e){return {};}}
+function ePatch(p){const s=eState();Object.assign(s,p);localStorage.setItem(E_KEY,JSON.stringify(s));return s;}
+function t(k,f=""){return TXT[k]||f||k}
+function applyTexts(){
+  document.querySelectorAll("[data-t]").forEach(el=>{
+    if(!el.textContent.trim() && TXT[el.dataset.t]!==undefined){
+      el.textContent=TXT[el.dataset.t];
+    }
+  });
+}
+
+function configurePhase2Source(){
+  const notice=document.getElementById("sourceStatusNotice");
+  const phase=document.getElementById("phase2");
+  const saved=getSavedWorlds();
+  const s=eState();
+  const justLoaded=sessionStorage.getItem("novera_workstate_just_loaded")==="1";
+
+  if(!phase)return;
+
+  if(justLoaded){
+    sessionStorage.removeItem("novera_workstate_just_loaded");
+  }
+
+  if(saved.length && s.sourceMode!=="demo"){
+    if(s.sourceMode!=="saved"){
+      resetAfterWorldChoice();
+      ePatch({sourceMode:"saved",selectedWorldId:null});
+    }
+
+    phase.classList.add("hasSource");
+    renderPhase2Worlds();
+
+    const state=eState();
+    if(state.selectedWorldId){
+      phase.classList.add("sourceReady");
+    }else{
+      phase.classList.remove("sourceReady");
+    }
+
+    if(notice){
+      notice.className="sourceStatusNotice statusOk";
+      notice.innerHTML=justLoaded ? "<strong>Gespeicherter Arbeitsstand geladen.</strong><span>Deine Welten und bisherigen Eingaben wurden wiederhergestellt. Du kannst mit ihnen weiterarbeiten oder eine andere Startmöglichkeit wählen.</span>" : "<strong>Welten aus der Willkommensphase gefunden.</strong><span>Sie wurden automatisch übernommen. Du kannst unten eine Welt auswählen oder zu einer anderen Startmöglichkeit wechseln.</span>";
+    }
+
+  }else if(s.sourceMode==="demo"){
+    phase.classList.add("hasSource");
+    renderPhase2Worlds();
+
+    if(s.selectedWorldId){
+      phase.classList.add("sourceReady");
+    }else{
+      phase.classList.remove("sourceReady");
+    }
+
+    if(notice){
+      notice.className="sourceStatusNotice statusOk";
+      notice.innerHTML="<strong>Demowelten geladen.</strong><span>Wähle unten eine Demowelt aus. Du kannst jederzeit stattdessen einen gespeicherten Arbeitsstand laden.</span>";
+    }
+
+  }else{
+    phase.classList.remove("hasSource");
+    phase.classList.remove("sourceReady");
+
+    if(notice){
+      notice.className="sourceStatusNotice";
+      notice.innerHTML="<strong>Keine bestehenden Welten gefunden.</strong><span>Erstelle zuerst Welten in der Willkommensphase oder wähle eine der folgenden Optionen:</span>";
+    }
+  }
+
+  updatePhase2Progress();
+}
+
+function showPhase(n){
+  const p1=document.getElementById("phase1");
+  const p2=document.getElementById("phase2");
+  const headerTitle=document.querySelector("header h1");
+
+  if(p1)p1.classList.toggle("active",n===1);
+  if(p2)p2.classList.toggle("active",n===2);
+
+  if(headerTitle){
+    headerTitle.textContent=n===2?"Novera entdecken":"Willkommen auf Novera";
+  }
+
+  if(n===2){
+    configurePhase2Source();
+
+    const s=eState();
+    if(s.selectedWorldId){
+      renderSort();
+      renderNeedEditors();
+      renderRequirements();
+      renderPersonalSim();
+      ensureProfiles(false);
+    }
+  }
+
+  window.scrollTo(0,0);
+}
+function currentSourceWorlds(){
+  const s=eState();
+  if(s.sourceMode==="demo")return makeDemoWorlds();
+  if(s.sourceMode==="html")return s.importedWorlds||[];
+  if(s.sourceMode==="saved")return getSavedWorlds();
+  return [];
+}
+function worldPreviewDataUrl(world){
+  if(world.dataUrl)return world.dataUrl;
+  if(!world.grid)return "";
+  const c=document.createElement("canvas");
+  c.width=COLS*SCALE;c.height=ROWS*SCALE;
+  const ctx=c.getContext("2d");
+  ctx.fillStyle="#dff1fa";ctx.fillRect(0,0,c.width,c.height);
+  const colors=world.userColors||defaultUserColors;
+  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+    const v=world.grid[y]&&world.grid[y][x];
+    if(typeof v==="number"&&v>=0){
+      ctx.fillStyle=colors[v]||"#999";
+      ctx.fillRect(x*SCALE,y*SCALE,SCALE,SCALE);
+    }
+  }
+  return c.toDataURL("image/png");
+}
+function makeDemoWorlds(){
+  const defs=[
+    {
+      labels:["Wohnen","Nahrung","Wasser","Natur","Gemeinschaft"],
+      colors:["#E76F51","#F4C84A","#5DB7DE","#75C56B","#B58AD8"],
+      seeds:[[5,5],[14,5],[10,8],[5,11],[15,11]]
+    },
+    {
+      labels:["Wohnen","Feld","See","Wald","Mobilität"],
+      colors:["#B58AD8","#F4C84A","#5DB7DE","#75C56B","#8A9A9B"],
+      seeds:[[5,4],[14,4],[10,8],[4,11],[16,11]]
+    },
+    {
+      labels:["Unterkunft","Garten","Trinkwasser","Naturraum","Treffpunkt"],
+      colors:["#E78AB3","#F4C84A","#5DB7DE","#75C56B","#5E8FA8"],
+      seeds:[[6,5],[14,5],[10,9],[4,11],[16,10]]
+    }
+  ];
+
+  return defs.map((def,wi)=>{
+    const g=Array.from({length:ROWS},()=>Array(COLS).fill(-1));
+
+    for(let y=0;y<ROWS;y++){
+      for(let x=0;x<COLS;x++){
+        if(!mask[y]||!mask[y][x])continue;
+
+        let best=0;
+        let bestD=Infinity;
+
+        def.seeds.forEach((seed,i)=>{
+          const dx=x-seed[0],dy=y-seed[1];
+          const d=dx*dx+dy*dy;
+          if(d<bestD){bestD=d;best=i}
+        });
+
+        g[y][x]=best;
+      }
+    }
+
+    const userColors=[...def.colors,...defaultUserColors.slice(def.colors.length)];
+    const userColorNames=Array(10).fill("");
+    def.labels.forEach((name,i)=>userColorNames[i]=name);
+
+    const w={
+      id:String(wi+1),
+      grid:g,
+      userColors,
+      userColorNames
+    };
+    w.dataUrl=worldPreviewDataUrl(w);
+    return w;
+  });
+}
+function selectedSourceWorld(){
+  const s=eState();
+  const ws=currentSourceWorlds();
+  if(!ws.length)return null;
+  return ws.find(w=>String(w.id)===String(s.selectedWorldId))||null;
+}
+
+function renderPhase2Worlds(){
+  const box=document.getElementById("phase2Worlds");
+  box.innerHTML="";
+  const ws=currentSourceWorlds().slice().sort((a,b)=>Number(a.id)-Number(b.id));
+  const s=eState();
+
+  if(!ws.length){
+    box.innerHTML='<p class="smallNote">Keine Welten vorhanden.</p>';
+    return;
+  }
+
+  ws.forEach(w=>{
+    const c=document.createElement("button");
+    c.type="button";
+    c.className="sourceWorldCard"+(String(s.selectedWorldId)===String(w.id)?" selected":"");
+
+    const used=new Set();
+    (w.grid||[]).forEach(row=>(row||[]).forEach(v=>{
+      if(typeof v==="number"&&v>=0)used.add(v);
+    }));
+
+    const legend=[...used].sort((a,b)=>a-b).map(i=>{
+      const name=(w.userColorNames&&w.userColorNames[i])||("Fläche "+(i+1));
+      const color=(w.userColors&&w.userColors[i])||defaultUserColors[i]||"#999";
+      return '<div class="sourceLegendRow"><span class="sourceLegendColor" style="background:'+color+'"></span><span>'+escapeHtml(name)+'</span></div>';
+    }).join("");
+
+    c.innerHTML=
+      '<div class="thumbLabel">Welt '+w.id+'</div>'+
+      '<img alt="Welt '+w.id+'" src="'+worldPreviewDataUrl(w)+'">'+
+      '<div class="sourceLegend">'+legend+'</div>'+
+      '<div class="chooseWorldText">'+(String(s.selectedWorldId)===String(w.id)?"Ausgewählt":"Diese Welt wählen")+'</div>';
+
+    c.onclick=()=>selectSourceWorld(w.id);
+    box.appendChild(c);
+  });
+}
+
+function latestCategories(){
+  const w=selectedSourceWorld();
+  let names=(w&&w.userColorNames)||[];
+  names=names.map(x=>(x||"").trim()).filter(Boolean);
+  return [...new Set(names)];
+}
+
+function selectSourceWorld(id){
+  ePatch({selectedWorldId:String(id)});
+  resetAfterWorldChoice();
+  ePatch({selectedWorldId:String(id)});
+  document.getElementById("phase2").classList.add("sourceReady");
+  updatePhase2Progress();
+  renderPhase2Worlds();
+  renderSort();
+  renderNeedEditors();
+  renderRequirements();
+  renderPersonalSim();
+  ensureProfiles(false);
+  const firstTask=document.getElementById("learn1");
+  if(firstTask)firstTask.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function setLearningSource(mode,worlds){
+  resetAfterWorldChoice();
+  const p={
+    sourceMode:mode,
+    selectedWorldId:null
+  };
+
+  if(mode==="html"){
+    p.importedWorlds=worlds||[];
+  }
+
+  ePatch(p);
+
+  const phase=document.getElementById("phase2");
+  phase.classList.add("hasSource");
+  phase.classList.remove("sourceReady");
+
+  document.getElementById("sourceMessage").classList.remove("active");
+  renderPhase2Worlds();
+
+  if(p.selectedWorldId){
+    renderSort();
+    renderNeedEditors();
+    renderRequirements();
+    renderPersonalSim();
+    ensureProfiles(false);
+  }
+}
+
+function showSourceMessage(msg){
+  const box=document.getElementById("sourceMessage");
+  box.textContent=msg;
+  box.classList.add("active");
+}
+
+function importNoveraHtml(file){
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+    try{
+      const doc=new DOMParser().parseFromString(String(reader.result),"text/html");
+      const dataNode=doc.getElementById("novera-export-data");
+
+      if(!dataNode)throw new Error("marker");
+
+      const data=JSON.parse(dataNode.textContent||"");
+
+      if(data.format!=="novera-export"||!Array.isArray(data.worlds)||!data.worlds.length){
+        throw new Error("worlds");
+      }
+
+      const worlds=data.worlds.map((w,i)=>{
+        const world={
+          id:String(w.id||i+1),
+          grid:w.grid,
+          userColors:w.userColors,
+          userColorNames:w.userColorNames,
+          dataUrl:w.dataUrl||""
+        };
+
+        if(!world.dataUrl){
+          world.dataUrl=worldPreviewDataUrl(world);
+        }
+
+        return world;
+      });
+
+      setLearningSource("html",worlds);
+      document.getElementById("phase2Worlds").scrollIntoView({behavior:"smooth",block:"start"});
+    }catch(err){
+      showSourceMessage("Diese Datei enthält keine lesbaren Novera-Welten. Wähle eine HTML-Datei, die zuvor über «Alle Aufgaben und Welten herunterladen» erstellt wurde.");
+    }
+  };
+
+  reader.readAsText(file,"utf-8");
+}
+function updatePhase2Progress(){
+  const s=eState();
+  const hasWorld=!!s.selectedWorldId;
+  const bComplete=s.stageBComplete===true;
+
+  const a=document.getElementById("learn1");
+  const b=document.getElementById("learn2");
+
+  if(a)a.classList.toggle("phase2Locked",!hasWorld);
+  if(b)b.classList.toggle("phase2Locked",!hasWorld);
+
+  ["learn3","learn4","learn5","learn7"].forEach(taskId=>{
+    const card=document.getElementById(taskId);
+    if(card)card.classList.toggle("phase2Locked",!bComplete);
+  });
+
+  document.querySelectorAll(".phase2LockHint").forEach(hint=>{
+    const parent=hint.closest(".phase2Lockable");
+    if(!parent)return;
+    if(parent.id==="learn1"||parent.id==="learn2"){
+      hint.textContent=hasWorld?"":"Wähle zuerst eine Welt aus.";
+    }else{
+      hint.textContent=bComplete?"":"Bearbeite zuerst Aufgabe B vollständig.";
+    }
+  });
+}
+
+function postBIsComplete(){
+  const s=eState();
+  return s.stageBComplete===true;
+}
+
+function resetAfterWorldChoice(){
+  const s=eState();
+  delete s.sort;
+  delete s.personal;
+  delete s.psim;
+  delete s.stageBComplete;
+  delete s.individualReflection;
+  delete s.groupReflection;
+  delete s.groupRule;
+  delete s.profiles;
+  delete s.gsim;
+  localStorage.setItem(E_KEY,JSON.stringify(s));
+}
+
+function renderSort(){const box=document.getElementById("categorySort"),cats=latestCategories(),s=eState();box.innerHTML="";if(!cats.length){box.innerHTML='<p class="smallNote">'+t("t1.noCategories","In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.")+'</p>';return}const sort=s.sort||{};cats.forEach((c,i)=>{const row=document.createElement("div");row.className="sortRow";row.innerHTML='<strong>'+escapeHtml(c)+'</strong><div class="sortChoices">'+["need","desire","hard"].map(v=>'<label><input type="radio" name="sort'+i+'" value="'+v+'" '+(sort[c]===v?'checked':'')+'> '+t("sort."+v,v)+'</label>').join("")+'</div>';row.querySelectorAll("input").forEach(inp=>inp.onchange=()=>{const st=eState();st.sort=st.sort||{};st.sort[c]=inp.value;localStorage.setItem(E_KEY,JSON.stringify(st));renderNeedEditors()});box.appendChild(row)})}
+function escapeHtml(s){return String(s).replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function renderNeedEditors(){const box=document.getElementById("needEditors"),s=eState(),needs=Object.entries(s.sort||{}).filter(x=>x[1]==="need").map(x=>x[0]),saved=s.personal||[];box.innerHTML="";if(needs.length<3){box.innerHTML='<p class="smallNote">'+t("t2.needThree","Ordne in Aufgabe 1 mindestens drei Kategorien bei «Das brauche ich» ein.")+'</p>';return}for(let i=0;i<3;i++){const d=document.createElement("div");d.className="needEditor";const opts=needs.map(n=>'<option '+((saved[i]||{}).source===n?'selected':'')+'>'+escapeHtml(n)+'</option>').join("");d.innerHTML='<div class="labField"><label>'+t("t2.choose","Kategorie auswählen")+'</label><select data-i="'+i+'" class="sourceNeed">'+opts+'</select></div><div class="labField needField"><label>'+t("t2.needLabel","Need")+'</label><textarea rows="2" data-i="'+i+'" class="needText">'+escapeHtml((saved[i]||{}).need||"")+'</textarea></div><div class="labField desireField"><label>'+t("t2.desireLabel","Desire")+'</label><textarea rows="2" data-i="'+i+'" class="desireText">'+escapeHtml((saved[i]||{}).desire||"")+'</textarea></div>';box.appendChild(d)} }
+function savePersonal(){const rows=[...document.querySelectorAll(".needEditor")];if(rows.length<3){alert("Wähle zuerst drei Needs aus und fülle alle Felder aus.");return false;}const old=eState().personal||[];const p=rows.map((r,i)=>({source:r.querySelector(".sourceNeed").value,need:r.querySelector(".needText").value.trim(),desire:r.querySelector(".desireText").value.trim(),needFruit:old[i]?.needFruit||rand(2,4),desireFruit:old[i]?.desireFruit||rand(1,3)}));if(p.some(x=>!x.need||!x.desire)){alert("Die Eingabe ist noch unvollständig. Fülle bei allen drei Needs auch den dazugehörigen Desire aus.");return false}ePatch({personal:p});return true}
+function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function fruitIcons(n){return '<span class="fruitIcons">'+Array.from({length:n},()=>'<i></i>').join("")+'</span>'}
+function renderRequirements(){
+  const p=eState().personal||[];
+  if(!p.length)return;
+  const reveal=document.getElementById("requirementsReveal");
+  if(reveal)reveal.classList.remove("hidden");
+  const box=document.getElementById("requirementsList");
+  if(box)box.innerHTML="";
+}
+function renderTaskCRequirements(){
+  const box=document.getElementById("taskCRequirements");
+  if(!box)return;
+  const p=eState().personal||[];
+  box.innerHTML=p.map(x=>
+    '<div class="requirementCard">'+
+      '<div class="reqNeed"><strong>Need</strong><br>'+escapeHtml(x.need)+' '+fruitIcons(x.needFruit)+'</div>'+
+      '<div class="reqDesire"><strong>Desire</strong><br>'+escapeHtml(x.desire)+' '+fruitIcons(x.desireFruit)+'</div>'+
+    '</div>'
+  ).join("");
+}
+const FRUIT_POS=[[27,19],[38,15],[50,18],[62,14],[72,21],[31,29],[43,26],[55,29],[67,27],[77,32],[25,40],[37,38],[49,41],[61,38],[73,42],[32,51],[45,49],[58,52],[69,50],[51,59]];
+function drawTreeTo(layerId,count){const l=document.getElementById(layerId);if(!l)return;l.innerHTML="";FRUIT_POS.forEach((p,i)=>{if(i<count){const f=document.createElement("i");f.className="pixelFruit";f.style.left=p[0]+"%";f.style.top=p[1]+"%";l.appendChild(f)}})}
+function drawTree(count){drawTreeTo("fruitLayer",count)}
+function initPSim(){const s=eState();if(!s.psim)ePatch({psim:{tree:20,reserve:0,round:1,harvest:0,secure:0,log:[]}})}
+function renderPersonalSim(){
+  initPSim();
+  renderTaskCRequirements();
+  const s=eState(),p=s.personal||[],q=s.psim;
+  drawTree(q.tree);
+  treeCount.textContent=q.tree;
+  reserveCount.textContent=q.reserve;
+  roundCount.textContent=q.round;
+  harvestCount.textContent=q.harvest;
+  secureCount.textContent=q.secure;
+  personalCards.innerHTML=p.map(x=>'<div class="miniCard"><div class="miniNeed"><strong>Need</strong><br>'+escapeHtml(x.need)+' '+fruitIcons(x.needFruit)+'</div><div class="miniDesire"><strong>Desire</strong><br>'+escapeHtml(x.desire)+' '+fruitIcons(x.desireFruit)+'</div></div>').join("");
+  personalLog.innerHTML=(q.log||[]).map(r=>'<tr class="'+(r.needs===3?'needsComplete':'needsMissing')+'"><td>'+r.round+'</td><td>'+r.harvest+'</td><td>'+r.left+'</td><td>+'+r.regrow+'</td><td>'+r.reserve+'</td><td>'+r.needs+'/3</td><td>'+r.desires+'/3</td></tr>').join("");
+}
+function regen(left){if(left<=3)return rand(0,1);if(left<=7)return rand(1,2);if(left<=12)return rand(2,4);return rand(3,6)}
+function finishPRound(){const s=eState(),q=s.psim,p=s.personal||[];if(p.length<3){alert(t("sim.needFirst","Schliesse zuerst Aufgabe 2 ab."));return}let available=q.harvest-q.secure+q.reserve,needs=0,desires=0;for(const x of p){if(available>=x.needFruit){available-=x.needFruit;needs++}}for(const x of p){if(available>=x.desireFruit){available-=x.desireFruit;desires++}}const left=q.tree-q.harvest,reg=Math.min(20-left,regen(left)),newReserve=q.secure+available,next=Math.min(20,left+reg);q.log.push({round:q.round,harvest:q.harvest,left,regrow:reg,reserve:newReserve,needs,desires});Object.assign(q,{tree:next,reserve:newReserve,round:q.round+1,harvest:0,secure:0});ePatch({psim:q});roundFeedback.classList.add("active");roundFeedback.innerHTML=t("sim.feedback","Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.").replace("{harvest}",q.log[q.log.length-1].harvest).replace("{left}",left).replace("{regrow}",reg).replace("{needs}",needs).replace("{desires}",desires);renderPersonalSim()}
+const PROFILE_POOL=[
+{needs:["regelmässig Nahrung essen, die ich gut vertrage","einen ruhigen und sicheren Schlafplatz haben","mit wichtigen Menschen in Kontakt bleiben"],desires:["eine besonders grosse Auswahl an Lieblingsessen haben","ein eigenes grosses Zimmer haben","jederzeit ein persönliches Kommunikationsgerät nutzen"]},
+{needs:["mich auch über längere Strecken fortbewegen können","genug trinken und essen können","mich mit anderen austauschen und dazugehören"],desires:["ein besonders schnelles Fahrzeug nutzen","oft besondere Getränke und Snacks haben","grosse Feste veranstalten"]},
+{needs:["mich vor Kälte und schlechtem Wetter schützen können","regelmässig lernen und Informationen erhalten","genug Nahrung bekommen"],desires:["eine sehr grosse und komfortable Unterkunft haben","immer die neuesten Geräte zum Lernen besitzen","häufig aufwendig zubereitete Speisen essen"]},
+{needs:["medizinische Hilfe erhalten, wenn ich sie brauche","einen sicheren Ort zum Wohnen haben","mit anderen gemeinsam Zeit verbringen können"],desires:["jederzeit besonders schnelle Hilfe verfügbar haben","mehrere eigene Räume nur für mich haben","häufig grosse gemeinsame Veranstaltungen organisieren"]},
+{needs:["sauberes Wasser zum Trinken haben","mich sicher fortbewegen können","regelmässig mit meiner Familie sprechen können"],desires:["jeden Tag verschiedene besondere Getränke wählen","ein eigenes Fahrzeug nur für mich nutzen","immer das neueste Kommunikationsgerät besitzen"]},
+{needs:["genug schlafen und mich erholen können","ausreichend und verträglich essen können","lernen und Neues ausprobieren können"],desires:["einen besonders luxuriösen Schlafplatz haben","häufig importierte Spezialitäten essen","für jedes Hobby eigene Geräte besitzen"]},
+{needs:["mich waschen und sauber halten können","einen geschützten Wohnplatz haben","mich mit Freunden treffen können"],desires:["sehr viel Wasser für lange Duschen nutzen","ein besonders grosses Haus haben","einen eigenen grossen Treffpunkt besitzen"]},
+{needs:["genug Nahrung erhalten","bei Dunkelheit Licht nutzen können","mich bei anderen Menschen sicher fühlen"],desires:["täglich besonders aufwendige Gerichte essen","meine Umgebung die ganze Nacht hell beleuchten","häufig grosse Feiern organisieren"]},
+{needs:["bei Hitze einen kühlen Rückzugsort haben","genug Wasser trinken können","wichtige Informationen erhalten können"],desires:["alle Räume jederzeit stark kühlen","einen grossen privaten Wasservorrat haben","mehrere persönliche digitale Geräte gleichzeitig nutzen"]},
+{needs:["mich bewegen und körperlich aktiv sein können","einen sicheren Schlafplatz haben","genug essen können"],desires:["eine grosse private Sportanlage nutzen","besonders viel Wohnraum nur für mich haben","jederzeit eine sehr grosse Essensauswahl haben"]},
+{needs:["regelmässig mit anderen kommunizieren können","mich vor Regen und Kälte schützen können","sauberes Wasser haben"],desires:["immer das neueste Smartphone besitzen","eine besonders komfortable Unterkunft haben","einen privaten Pool nutzen"]},
+{needs:["mich orientieren und wichtige Orte erreichen können","genug Nahrung erhalten","Ruhe und Rückzug finden können"],desires:["für jeden Weg ein schnelles Fahrzeug nutzen","häufig besondere Lebensmittel von weit her bekommen","einen sehr grossen privaten Rückzugsraum haben"]},
+{"needs":["regelmässig frische Luft atmen können","mich vor grosser Hitze schützen können","mit anderen sprechen und Informationen austauschen können"],"desires":["meine Räume ständig stark kühlen","für kurze Wege motorisiert unterwegs sein","mehrere neue digitale Geräte besitzen"]},
+{"needs":["genug und ausgewogen essen können","einen Ort zum Lernen haben","mich sicher mit anderen treffen können"],"desires":["täglich eine sehr grosse Speisenauswahl haben","einen eigenen grossen Lernraum besitzen","häufig grosse Veranstaltungen besuchen"]},
+{"needs":["sauberes Trinkwasser haben","mich bei Krankheit erholen können","einen verlässlichen Schlafplatz haben"],"desires":["Wasser jederzeit für Freizeitangebote nutzen","einen besonders luxuriösen Erholungsbereich haben","mehrere grosse private Räume besitzen"]},
+{"needs":["mich mit anderen verständigen können","genug Nahrung bekommen","mich vor Wetter schützen können"],"desires":["ständig das schnellste Kommunikationsgerät nutzen","Lebensmittel aus vielen verschiedenen Regionen essen","eine besonders grosse beheizte Unterkunft besitzen"]},
+{"needs":["einen sicheren Weg zu wichtigen Orten haben","lernen und mich informieren können","genug trinken können"],"desires":["jeden Weg mit einem privaten Fahrzeug zurücklegen","mehrere Geräte für Lernen und Unterhaltung besitzen","eine grosse Auswahl besonderer Getränke haben"]},
+{"needs":["regelmässig soziale Kontakte haben","einen geschützten Rückzugsort besitzen","ausreichend Nahrung erhalten"],"desires":["häufig grosse Feiern veranstalten","sehr viel persönlichen Wohnraum haben","täglich besondere Speisen auswählen"]},
+{"needs":["mich bei Dunkelheit orientieren können","mich bei Kälte warm halten können","mit anderen in Verbindung bleiben können"],"desires":["meine Umgebung die ganze Nacht stark beleuchten","alle Räume sehr warm halten","mehrere persönliche Kommunikationsgeräte gleichzeitig besitzen"]},
+{"needs":["genug Wasser für Trinken und Hygiene haben","einen sicheren Ort zum Schlafen besitzen","wichtige Orte erreichen können"],"desires":["einen privaten Pool haben","ein besonders grosses Schlafzimmer besitzen","für alle Wege ein schnelles eigenes Fahrzeug nutzen"]}
+];
+function profileWithFruits(x){const needs=x.needs.slice(0,2),desires=x.desires.slice(0,2);return {needs,desires,needFruit:needs.map(()=>rand(2,4)),desireFruit:desires.map(()=>rand(1,3))}}
+function ensureProfiles(force=false){let s=eState();if(force||!s.profiles){let a=rand(0,PROFILE_POOL.length-1),b;do{b=rand(0,PROFILE_POOL.length-1)}while(b===a);s=ePatch({profiles:[{...profileWithFruits(PROFILE_POOL[a]),label:"Person A"},{...profileWithFruits(PROFILE_POOL[b]),label:"Person B"}],gsim:{tree:20,reserve:0,round:1,secure:0,log:[]}})}renderProfiles()}
+function renderProfiles(){renderAlloc()}
+function renderAlloc(){
+  const s=eState(),[a,b]=s.profiles||[];
+  if(!a)return;
+  const q=s.gsim||{tree:20,reserve:0,round:1,secure:0,log:[]};
+  if(!q.log)q.log=[];
+  gTree.textContent=q.tree;
+  gReserve.textContent=q.reserve;
+  gRound.textContent=q.round;
+  gSecureCount.textContent=q.secure||0;
+  drawTreeTo("groupFruitLayer",q.tree);
+
+  const mk=(p,pi)=>p.needs.slice(0,2).map((x,i)=>'<div class="allocPair">'+
+    allocItem(pi,"n",i,x,p.needFruit[i])+
+    allocItem(pi,"d",i,p.desires[i],p.desireFruit[i])+
+    '</div>').join("");
+  allocA.innerHTML=mk(a,0);
+  allocB.innerHTML=mk(b,1);
+
+  const gl=document.getElementById("groupLog");
+  if(gl){
+    gl.innerHTML=(q.log||[]).map(r=>'<tr class="'+(r.needsA===2&&r.needsB===2?'needsComplete':'needsMissing')+'">'+
+      '<td>'+r.round+'</td><td>'+r.needsA+'/2</td><td>'+r.needsB+'/2</td><td>'+r.desA+'/2</td><td>'+r.desB+'/2</td>'+
+      '<td>'+r.left+'</td><td>+'+r.reg+'</td><td>'+r.reserve+'</td></tr>').join("");
+  }
+}
+function allocItem(pi,k,i,txt,n){return '<label class="allocItem '+(k==="n"?"needAlloc":"desireAlloc")+'"><input type="checkbox" data-p="'+pi+'" data-k="'+k+'" data-i="'+i+'"> <span><strong>'+(k==="n"?"Need":"Desire")+'</strong><br>'+escapeHtml(txt)+'</span> '+fruitIcons(n)+'</label>'}
+function finishGroup(){
+  const s=eState(),q=s.gsim,[a,b]=s.profiles;
+  if(!q.log)q.log=[];
+  let used=0,needs=[0,0],des=[0,0];
+
+  document.querySelectorAll(".allocItem input:checked").forEach(cb=>{
+    const p=cb.dataset.p==="0"?a:b;
+    const i=+cb.dataset.i;
+    const n=cb.dataset.k==="n"?p.needFruit[i]:p.desireFruit[i];
+    used+=n;
+    if(cb.dataset.k==="n")needs[+cb.dataset.p]++;else des[+cb.dataset.p]++;
+  });
+
+  const secure=q.secure||0;
+  if(used+secure>q.tree+q.reserve){
+    alert("Dafür reichen die verfügbaren Früchte nicht.");
+    return;
+  }
+
+  const fromTree=Math.min(q.tree,used+secure);
+  const left=q.tree-fromTree;
+  const oldReserve=q.reserve;
+  const fromReserve=Math.max(0,used+secure-q.tree);
+  const newReserve=Math.max(0,oldReserve-fromReserve)+secure;
+  const reg=Math.min(20-left,regen(left));
+
+  q.log.push({
+    round:q.round,needsA:needs[0],needsB:needs[1],
+    desA:des[0],desB:des[1],left,reg,reserve:newReserve
+  });
+
+  q.tree=Math.min(20,left+reg);
+  q.reserve=newReserve;
+  q.round++;
+  q.secure=0;
+  ePatch({gsim:q});
+
+  groupFeedback.classList.add("active");
+  groupFeedback.innerHTML="Person A: "+needs[0]+"/2 Needs und "+des[0]+"/2 Desires erfüllt. "+
+    "Person B: "+needs[1]+"/2 Needs und "+des[1]+"/2 Desires erfüllt. "+
+    "Am Baum blieben "+left+" Früchte; über Nacht wuchsen "+reg+" nach.";
+  renderAlloc();
+}
+
+
+function collectNoveraWorkState(){
+  return {
+    format:"novera-workstate",
+    version:1,
+    savedAt:new Date().toISOString(),
+    worlds:getSavedWorlds(),
+    taskAnswers:getTaskAnswers(),
+    learning:eState()
+  };
+}
+
+function makeWorkStateHtml(){
+  const data=collectNoveraWorkState();
+
+  const esc=value=>String(value??"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+
+  const worlds=(data.worlds||[])
+    .slice()
+    .sort((a,b)=>Number(a.id)-Number(b.id));
+
+  const answers=data.taskAnswers||{};
+  const learning=data.learning||{};
+
+  const worldSections=worlds.map(world=>{
+    const used=new Set();
+    (world.grid||[]).forEach(row=>(row||[]).forEach(v=>{
+      if(typeof v==="number"&&v>=0)used.add(v);
+    }));
+
+    const legend=[...used].sort((a,b)=>a-b).map(i=>{
+      const name=(world.userColorNames&&world.userColorNames[i])||"Noch nicht benannt";
+      const color=(world.userColors&&world.userColors[i])||"#999";
+      return '<div class="legendRow"><span class="legendColor" style="background:'+esc(color)+'"></span><span>'+esc(name)+'</span></div>';
+    }).join("");
+
+    const key=String.fromCharCode(64+Number(world.id));
+    const answer=answers[key]||"";
+
+    return '<section class="printCard">'+
+      '<h2>Willkommensphase – Welt '+esc(world.id)+'</h2>'+
+      '<img class="worldImage" src="'+esc(world.dataUrl||worldPreviewDataUrl(world))+'" alt="Novera Welt '+esc(world.id)+'">'+
+      '<div class="legend"><h3>Legende</h3>'+legend+'</div>'+
+      '<h3>Antwort zu Aufgabe '+esc(key)+'</h3>'+
+      '<div class="answer">'+esc(answer).replace(/\n/g,"<br>")+'</div>'+
+    '</section>';
+  }).join("");
+
+  const sortRows=Object.entries(learning.sort||{}).map(([name,type])=>
+    '<tr><td>'+esc(name)+'</td><td>'+esc(type==="need"?"Need":type==="desire"?"Desire":"Schwierig zu entscheiden")+'</td></tr>'
+  ).join("");
+
+  const personalRows=(learning.personal||[]).map((x,i)=>
+    '<tr><td>'+(i+1)+'</td><td>'+esc(x.source||"")+'</td><td>'+esc(x.need||"")+'</td><td>'+esc(x.desire||"")+'</td></tr>'
+  ).join("");
+
+  const personalLog=((learning.psim&&learning.psim.log)||[]).map(r=>
+    '<tr class="'+(r.needs===3?'ok':'miss')+'"><td>'+r.round+'</td><td>'+r.harvest+'</td><td>'+r.left+'</td><td>'+r.regrow+'</td><td>'+r.reserve+'</td><td>'+r.needs+'/3</td><td>'+r.desires+'/3</td></tr>'
+  ).join("");
+
+  const groupLog=((learning.gsim&&learning.gsim.log)||[]).map(r=>
+    '<tr class="'+(r.needsA===2&&r.needsB===2?'ok':'miss')+'"><td>'+r.round+'</td><td>'+r.needsA+'/2</td><td>'+r.needsB+'/2</td><td>'+r.desA+'/2</td><td>'+r.desB+'/2</td><td>'+r.left+'</td><td>'+r.reg+'</td><td>'+r.reserve+'</td></tr>'
+  ).join("");
+
+  let selectedWorldBlock="";
+  try{
+    const sourceWorld=selectedSourceWorld();
+    if(sourceWorld){
+      const used=new Set();
+      (sourceWorld.grid||[]).forEach(row=>(row||[]).forEach(v=>{
+        if(typeof v==="number"&&v>=0)used.add(v);
+      }));
+
+      const legend=[...used].sort((a,b)=>a-b).map(i=>{
+        const name=(sourceWorld.userColorNames&&sourceWorld.userColorNames[i])||"Noch nicht benannt";
+        const color=(sourceWorld.userColors&&sourceWorld.userColors[i])||"#999";
+        return '<div class="legendRow"><span class="legendColor" style="background:'+esc(color)+'"></span><span>'+esc(name)+'</span></div>';
+      }).join("");
+
+      selectedWorldBlock='<section class="printCard"><h2>Novera entdecken – ausgewählte Welt</h2>'+
+        '<img class="worldImage" src="'+esc(worldPreviewDataUrl(sourceWorld))+'" alt="Ausgewählte Welt">'+
+        '<div class="legend">'+legend+'</div></section>';
+    }
+  }catch(e){}
+
+  const json=JSON.stringify(data).replace(/</g,"\\u003c");
+
+  return '<!doctype html><html lang="de"><head><meta charset="utf-8">'+
+    '<meta name="viewport" content="width=device-width,initial-scale=1">'+
+    '<title>Novera – Arbeitsstand</title>'+
+    '<style>'+
+    'body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#f4f1ea;color:#222}'+
+    'header,main{max-width:980px;margin:auto;padding:24px}header{padding-bottom:0}'+
+    '.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 20px}'+
+    '.toolbar button{border:0;border-radius:8px;background:#222;color:#fff;padding:10px 14px;font-weight:700;cursor:pointer}'+
+    '.note{font-size:13px;color:#555;line-height:1.5}'+
+    '.printCard{background:#fff;border-radius:14px;padding:20px;margin:18px 0;box-shadow:0 2px 12px #00000012;break-inside:avoid}'+
+    '.worldImage{display:block;width:100%;height:auto;border-radius:10px;background:#dff1fa}'+
+    '.legend{display:grid;gap:5px;margin:12px 0}.legend h3{margin:4px 0}'+
+    '.legendRow{display:grid;grid-template-columns:18px 1fr;gap:8px;align-items:center;font-size:13px}'+
+    '.legendColor{width:16px;height:16px;border:1px solid #555;border-radius:3px}'+
+    '.answer{white-space:pre-wrap;line-height:1.55}'+
+    'table{width:100%;border-collapse:collapse;font-size:12px;overflow-wrap:anywhere}'+
+    'th,td{padding:7px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}'+
+    'tr.ok td{background:#eef7ec}tr.miss td{background:#fff0ee}'+
+    '@media print{body{background:#fff}header{padding-top:0}.toolbar,.note{display:none!important}.printCard{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}a{color:#000;text-decoration:none}}'+
+    '</style></head><body>'+
+    '<header><h1>Novera – Arbeitsstand</h1>'+
+    '<p class="note">Diese Datei ist eine Sicherung deines Arbeitsstands. Du kannst sie über «Arbeitsstand laden» wieder in Novera einlesen.</p>'+
+    '<div class="toolbar"><button onclick="window.print()">Arbeitsstand drucken / als PDF sichern</button></div></header>'+
+    '<main>'+
+    worldSections+
+    (answers.D?'<section class="printCard"><h2>Willkommensphase – abschliessende Reflexion zu Aufgabe C</h2><div class="answer">'+esc(answers.D)+'</div></section>':"")+
+    selectedWorldBlock+
+    '<section class="printCard"><h2>Novera entdecken – Aufgabe A</h2><table><thead><tr><th>Kategorie</th><th>Einordnung</th></tr></thead><tbody>'+sortRows+'</tbody></table>'+
+    '<h3>Schwieriger Entscheid</h3><div class="answer">'+esc(learning.hardWhy||"")+'</div></section>'+
+    '<section class="printCard"><h2>Novera entdecken – Aufgabe B</h2><table><thead><tr><th>#</th><th>Kategorie</th><th>Need</th><th>Desire</th></tr></thead><tbody>'+personalRows+'</tbody></table></section>'+
+    '<section class="printCard"><h2>Novera entdecken – Aufgabe C</h2><table><thead><tr><th>Runde</th><th>Ernte</th><th>Rest</th><th>Nachgewachsen</th><th>Sicherheit</th><th>Needs</th><th>Desires</th></tr></thead><tbody>'+personalLog+'</tbody></table></section>'+
+    '<section class="printCard"><h2>Novera entdecken – Aufgabe D</h2><div class="answer">'+esc(learning.individualReflection||"")+'</div></section>'+
+    '<section class="printCard"><h2>Novera entdecken – Aufgabe E</h2><h3>Eure Abmachung</h3><div class="answer">'+esc(learning.groupRule||"")+'</div>'+
+    '<table><thead><tr><th>Runde</th><th>Needs A</th><th>Needs B</th><th>Desires A</th><th>Desires B</th><th>Rest</th><th>Nachgewachsen</th><th>Sicherheit</th></tr></thead><tbody>'+groupLog+'</tbody></table></section>'+
+    '<section class="printCard"><h2>Novera entdecken – Aufgabe F</h2><div class="answer">'+esc(learning.groupReflection||"")+'</div></section>'+
+    '</main>'+
+    '<script type="application/json" id="novera-workstate-data">'+json+'<\/script>'+
+    '</body></html>';
+}
+
+function downloadWorkState(){
+  const exportHtml=makeWorkStateHtml();
+
+  try{
+    const blob=new Blob([exportHtml],{type:"text/html;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download="novera-arbeitsstand.html";
+    a.style.display="none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),5000);
+  }catch(err){
+    console.error(err);
+    try{
+      window.open("data:text/html;charset=utf-8,"+encodeURIComponent(exportHtml),"_blank","noopener");
+    }catch(e){
+      alert("Der Arbeitsstand konnte nicht erstellt werden.");
+    }
+  }
+}
+
+function loadWorkStateFile(file){
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+    try{
+      const doc=new DOMParser().parseFromString(String(reader.result),"text/html");
+      const node=doc.getElementById("novera-workstate-data");
+
+      if(!node){
+        throw new Error("no-data");
+      }
+
+      const data=JSON.parse(node.textContent||"");
+
+      if(data.format!=="novera-workstate"){
+        throw new Error("wrong-format");
+      }
+
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(data.worlds||[]));
+      localStorage.setItem(TASK_ANSWERS_KEY,JSON.stringify(data.taskAnswers||{}));
+      localStorage.setItem(E_KEY,JSON.stringify(data.learning||{}));
+
+      sessionStorage.setItem("novera_workstate_just_loaded","1");
+      alert("Der Arbeitsstand wurde geladen. Die Seite wird jetzt aktualisiert.");
+      window.location.reload();
+    }catch(err){
+      console.error(err);
+      alert("Diese Datei enthält keinen gültigen Novera-Arbeitsstand.");
+    }
+  };
+
+  reader.readAsText(file,"utf-8");
+}
+
+function initWorkStateControls(){
+  const saveBtn=document.getElementById("saveWorkState");
+  const loadBtn=document.getElementById("loadWorkState");
+  const fileInput=document.getElementById("loadWorkStateFile");
+
+  if(saveBtn)saveBtn.onclick=downloadWorkState;
+
+  if(loadBtn&&fileInput){
+    loadBtn.onclick=()=>fileInput.click();
+    fileInput.onchange=e=>{
+      const file=e.target.files&&e.target.files[0];
+      if(file)loadWorkStateFile(file);
+      e.target.value="";
+    };
+  }
+}
+
+function initErarbeitung(){
+  applyTexts();
+  const id=x=>document.getElementById(x);
+
+  id("toPhase2").onclick=()=>showPhase(2);
+  id("backToPhase1Bottom").onclick=()=>showPhase(1);
+
+  const sourceDemo=id("sourceDemo");
+  const sourceSaved=id("sourceSaved");
+  const sourceWorkState=id("sourcePdf");
+  const sourceLegacyFile=id("sourcePdfFile");
+
+  if(sourceDemo){
+    sourceDemo.onclick=()=>{
+      setLearningSource("demo");
+      configurePhase2Source();
+      const worldsBox=id("phase2Worlds");
+      if(worldsBox)worldsBox.scrollIntoView({behavior:"smooth",block:"start"});
+    };
+  }
+
+  /* Technischer Fallback: die Welten der Willkommensphase
+     werden normalerweise automatisch übernommen. */
+  if(sourceSaved){
+    sourceSaved.onclick=()=>{
+      const worlds=getSavedWorlds();
+      if(!worlds.length)return;
+      setLearningSource("saved");
+      configurePhase2Source();
+    };
+  }
+
+  /* Verwendet bewusst dieselbe Wiederherstellungsfunktion wie
+     der globale Button oben rechts. */
+  if(sourceWorkState){
+    sourceWorkState.onclick=()=>{
+      const globalInput=id("loadWorkStateFile");
+      if(globalInput){
+        globalInput.click();
+      }else if(sourceLegacyFile){
+        sourceLegacyFile.click();
+      }
+    };
+  }
+
+  if(sourceLegacyFile){
+    sourceLegacyFile.onchange=e=>{
+      const file=e.target.files&&e.target.files[0];
+      if(file)loadWorkStateFile(file);
+      e.target.value="";
+    };
+  }
+
+  document.querySelectorAll("[data-help]").forEach(b=>b.onclick=()=>{
+    const target=id(b.dataset.help);
+    if(target)target.classList.toggle("active");
+  });
+
+  document.querySelectorAll(".phase2Lockable").forEach(card=>{
+    card.addEventListener("click",e=>{
+      if(card.classList.contains("phase2Locked")){
+        e.preventDefault();
+        e.stopPropagation();
+        const s=eState();
+        if(!s.selectedWorldId){
+          alert("Du musst zuerst eine Welt auswählen, damit du Aufgabe A und B öffnen kannst.");
+        }else{
+          alert("Du musst zuerst Aufgabe B fertig bearbeiten, damit du die nächsten Aufgaben öffnen kannst.");
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-e-save]").forEach(el=>{
+    const s=eState();
+    if(s[el.dataset.eSave]!==undefined)el.value=s[el.dataset.eSave];
+    el.oninput=()=>ePatch({[el.dataset.eSave]:el.value});
+  });
+
+  id("confirmSort").onclick=()=>{
+    id("needReveal").classList.remove("hidden");
+    renderNeedEditors();
+  };
+
+  id("makeNeeds").onclick=()=>{
+    if(savePersonal()){
+      ePatch({stageBComplete:true});
+      renderRequirements();
+      renderPersonalSim();
+      updatePhase2Progress();
+
+      const nextTask=id("learn3");
+      if(nextTask){
+        nextTask.scrollIntoView({behavior:"smooth",block:"start"});
+      }
+    }
+  };
+
+  id("harvestMinus").onclick=()=>{
+    const s=eState(),q=s.psim;
+    q.harvest=Math.max(0,q.harvest-1);
+    q.secure=Math.min(q.secure,q.harvest);
+    ePatch({psim:q});
+    renderPersonalSim();
+  };
+
+  id("harvestPlus").onclick=()=>{
+    const s=eState(),q=s.psim;
+    q.harvest=Math.min(q.tree,q.harvest+1);
+    ePatch({psim:q});
+    renderPersonalSim();
+  };
+
+  id("secureMinus").onclick=()=>{
+    const s=eState(),q=s.psim;
+    q.secure=Math.max(0,q.secure-1);
+    ePatch({psim:q});
+    renderPersonalSim();
+  };
+
+  id("securePlus").onclick=()=>{
+    const s=eState(),q=s.psim;
+    q.secure=Math.min(q.harvest,q.secure+1);
+    ePatch({psim:q});
+    renderPersonalSim();
+  };
+
+  id("finishRound").onclick=finishPRound;
+
+  id("newProfiles").onclick=()=>ensureProfiles(true);
+
+  id("gSecureMinus").onclick=()=>{
+    const s=eState(),q=s.gsim;
+    q.secure=Math.max(0,(q.secure||0)-1);
+    ePatch({gsim:q});
+    renderAlloc();
+  };
+
+  id("gSecurePlus").onclick=()=>{
+    const s=eState(),q=s.gsim;
+    q.secure=Math.min(q.tree,(q.secure||0)+1);
+    ePatch({gsim:q});
+    renderAlloc();
+  };
+
+  id("gFinish").onclick=finishGroup;
+
+  const checkRef=id("checkIndividualReflection");
+  const theory=id("individualTheory");
+  const refText=id("individualReflection");
+  const recognized=id("reflectionRecognized");
+  const revise=id("reflectionRevise");
+  const confirmed=id("reflectionConfirmed");
+
+  if(checkRef)checkRef.onclick=()=>{
+    if(!refText.value.trim()){
+      alert("Schreibe zuerst deine Reflexion.");
+      refText.focus();
+      return;
+    }
+    theory.classList.remove("hidden");
+    confirmed.classList.add("hidden");
+  };
+
+  if(recognized)recognized.onclick=()=>{
+    theory.classList.add("hidden");
+    confirmed.classList.remove("hidden");
+  };
+
+  if(revise)revise.onclick=()=>{
+    theory.classList.add("hidden");
+    confirmed.classList.add("hidden");
+    refText.focus();
+  };
+
+  const s=eState();
+
+  updatePhase2Progress();
+
+  if(s.sourceMode){
+    id("phase2").classList.add("hasSource");
+    if(s.selectedWorldId)id("phase2").classList.add("sourceReady");
+    renderPhase2Worlds();
+
+    if(s.selectedWorldId){
+      renderSort();
+      renderNeedEditors();
+      renderRequirements();
+      renderPersonalSim();
+      ensureProfiles(false);
+    }
+  }
+
+  updatePhase2Progress();
+
+  configurePhase2Source();
+}
+
+
 /* ============================================================
    START
    ============================================================ */
 
 initTaskAnswers();
+
+initWorkStateControls();
+
+initPhase1Progress();
+
+initErarbeitung();
 
 renderGallery();
 
