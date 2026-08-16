@@ -1494,6 +1494,16 @@ button,
   accent-color:#222;
 }
 
+
+.treeStoryImage{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:10px;
+  object-fit:contain;
+  image-rendering:pixelated;
+}
+
 </style>
 </head>
 
@@ -1761,7 +1771,7 @@ button,
 
   <div class="banner">
     <img
-      src="novera-entdecken.webp"
+      src="entdecken.png"
       alt="Illustration zur Mission «Novera entdecken»"
     >
   </div>
@@ -1814,7 +1824,7 @@ button,
   </label>
 </div></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn3"><span class="taskLabel">Aufgabe C</span><h2 data-t="t3.title">Der wundersame Baum</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p><div class="treeStory treeStorySimple">
-  <div class="treeImagePlaceholder" aria-hidden="true"></div>
+  <img class="treeStoryImage" src="baum.png" alt="Magischer Baum auf Novera">
   <p data-t="t3.story">Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt. Hier siehst du die Zuordnung für deine Needs und Desires.</p>
 </div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Zurückgelegt</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später zurücklegen</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th data-t="log.reserve">Zurückgelegt</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn4">
@@ -5161,6 +5171,9 @@ function loadWorkStateFile(file){
 
       sessionStorage.setItem("novera_workstate_just_loaded","1");
 
+      const phase2Active=document.getElementById("phase2")?.classList.contains("active");
+      sessionStorage.setItem("novera_return_phase",phase2Active?"2":"1");
+
       if(loadedWorlds.length && !hasUsableLoadedWorld){
         alert(noLegendMessage());
       }else{
@@ -5450,6 +5463,12 @@ initWorkStateControls();
 initPhase1Progress();
 
 initErarbeitung();
+
+const returnPhase=Number(sessionStorage.getItem("novera_return_phase")||1);
+sessionStorage.removeItem("novera_return_phase");
+if(returnPhase===2){
+  showPhase(2);
+}
 
 renderGallery();
 
