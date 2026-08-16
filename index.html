@@ -2565,6 +2565,43 @@ button.action,
   }
 }
 
+
+/* ===== Quellenauswahl: nur die zwei echten Alternativen ===== */
+#sourceSaved{
+  display:none!important;
+}
+
+#phase2SourceChooser #sourceTiles{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:820px!important;
+  gap:10px!important;
+}
+
+#phase2SourceChooser #sourceDemo,
+#phase2SourceChooser #sourcePdf{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
+
+/* Beide Auswahlbuttons wirken gleichwertig und bleiben klar als Buttons erkennbar */
+#phase2SourceChooser .sourceTile{
+  min-height:86px!important;
+  cursor:pointer!important;
+}
+
+@media(max-width:700px){
+  #phase2SourceChooser #sourceTiles{
+    grid-template-columns:1fr!important;
+    max-width:none!important;
+  }
+  #phase2SourceChooser .sourceTile{
+    min-height:0!important;
+  }
+}
+
 </style>
 </head>
 
@@ -2854,7 +2891,7 @@ button.action,
     </button>
 
     <!-- bleibt technisch vorhanden, wird aber nicht angezeigt -->
-    <button class="sourceTile hidden" id="sourceSaved" type="button" aria-hidden="true" tabindex="-1">
+    <button class="sourceTile hidden" id="sourceSaved" type="button" aria-hidden="true" tabindex="-1" style="display:none!important">
       <strong>Welten aus der Willkommensphase</strong>
     </button>
 
@@ -5437,6 +5474,8 @@ function configurePhase2Source(){
   const tiles=document.getElementById("sourceTiles");
   const demoBtn=document.getElementById("sourceDemo");
   const loadBtn=document.getElementById("sourcePdf");
+  const savedBtn=document.getElementById("sourceSaved");
+  if(savedBtn)savedBtn.style.display="none";
   const saved=getSavedWorlds();
   const s=eState();
   const justLoaded=sessionStorage.getItem("novera_workstate_just_loaded")==="1";
