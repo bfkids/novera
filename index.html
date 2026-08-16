@@ -1622,6 +1622,45 @@ button,
   }
 }
 
+
+/* Baumgrafik – sichtbare Rundung wie bei den übrigen Grafiken */
+.treeStoryMedia{
+  width:88%;
+  max-width:100%;
+  justify-self:end;
+  overflow:hidden;
+  border-radius:14px;
+  line-height:0;
+  background:#dff1fa;
+}
+.treeStoryMedia .treeStoryImage{
+  display:block;
+  width:100%!important;
+  max-height:400px!important;
+  height:auto;
+  border-radius:0!important;
+  object-fit:contain!important;
+}
+
+/* Mehr Luft zwischen Baumgeschichte und Need-Zuordnung */
+.treeStorySimple{
+  margin-bottom:32px!important;
+}
+
+@media(max-width:800px){
+  .treeStoryMedia{
+    width:92%;
+    justify-self:center;
+    order:-1;
+  }
+  .treeStoryMedia .treeStoryImage{
+    max-height:none!important;
+  }
+  .treeStorySimple{
+    margin-bottom:28px!important;
+  }
+}
+
 </style>
 </head>
 
@@ -1884,7 +1923,7 @@ button,
   <div class="missionCopy">
     <span class="missionKicker">Deine Mission</span>
     <h2>Erkunde Novera weiter</h2>
-    <p>Du arbeitest mit einer bisherigen oder vorbereiteten Novera-Welt weiter. Untersuche, was Menschen brauchen und wünschen, welche Voraussetzungen dafür nötig sind und wie heutige Entscheidungen spätere Möglichkeiten verändern.</p>
+    <p>Du arbeitest mit einer bisherigen oder vorbereiteten Novera-Welt weiter. Finde heraus, was Menschen brauchen und wünschen, welche Voraussetzungen dafür nötig sind und wie heutige Entscheidungen spätere Möglichkeiten verändern.</p>
   </div>
 
   <div class="banner">
@@ -1927,7 +1966,7 @@ button,
 <section class="learnTasks sourceDependent">
 <article class="learnCard phase2Lockable phase2Locked" id="learn1"><span class="taskLabel">Aufgabe A</span><h2 data-t="t1.title">Das brauche ich – das möchte ich zusätzlich</h2><p class="phase2LockHint">Wähle zuerst eine Welt aus.</p><p class="taskInstruction" data-t="t1.instruction">Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.</p><div id="categorySort" class="sortList"></div><div id="hardDecision" class="hardDecision"><div class="labField taskQuestion"><label>Wähle einen schwierigen Entscheid und beschreibe, was du daran schwierig findest.</label><textarea id="hardWhy" data-e-save="hardWhy"></textarea></div></div><button class="action compactAction" id="confirmSort" data-t="t1.confirm">Meine Auswahl bestätigen</button><div class="theoryBox hidden" id="needReveal">
   <p data-t="t1.reveal">Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.</p>
-  <p data-t="t1.allergy">Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.</p>
+  <p data-t="t1.allergy">Was ein Mensch braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.</p>
   <label class="understoodCheck">
     <input type="checkbox" id="termsUnderstood">
     <span>Gelesen und verstanden</span>
@@ -1946,30 +1985,32 @@ button,
     <h3>Der wundersame Baum</h3>
     <p data-t="t3.story">Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt. Hier siehst du die Zuordnung für deine Needs und Desires.</p>
   </div>
+  <div class="treeStoryMedia">
   <img class="treeStoryImage" src="baum.png" alt="Magischer Baum auf Novera">
-</div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Zurückgelegt</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später zurücklegen</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><div class="roundActions">
+</div>
+</div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Zurückgelegt</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später zurücklegen</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><div class="counterBox"><label>Aus dem Zurückgelegten verwenden</label><div class="counter"><button id="reserveUseMinus">−</button><strong id="reserveUseCount">0</strong><button id="reserveUsePlus">+</button></div></div><div class="roundActions">
   <button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button>
   <button class="action secondary" id="resetPersonalRounds" type="button">Runden zurücksetzen</button>
-</div></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th data-t="log.reserve">Zurückgelegt</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
+</div></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th>Aus Zurückgelegtem</th><th data-t="log.reserve">Zurückgelegt</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn4">
   <span class="taskLabel">Aufgabe D</span>
-  <h2>Was hast du beobachtet?</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
+  <h2>Was hast du beobachtet?</h2><p class="phase2LockHint">Führe zuerst mindestens drei Runden in Aufgabe C durch.</p>
   <div class="taskQuestion reflectionPrompt">
-    <strong>Reflektiere deine Runden.</strong>
+    <strong>Denke über deine Runden nach.</strong>
     <p>Gehe dabei auf diese Fragen ein:</p>
     <ul>
-      <li>Was geschah, wenn du viele Früchte genutzt hast?</li>
+      <li>Was ist passiert, wenn du viele Früchte genutzt hast?</li>
       <li>Was hat sich verändert, wenn du Früchte für später zurückgelegt hast?</li>
-      <li>Was geschah mit deinen Desires?</li>
-      <li>Was war bei der Erneuerung nicht vorhersehbar?</li>
+      <li>Was ist mit deinen Desires passiert?</li>
+      <li>Was konntest du beim Nachwachsen der Früchte nicht vorhersagen?</li>
     </ul>
     <textarea id="individualReflection" data-e-save="individualReflection" class="largeReflection"></textarea>
   </div>
   <button class="action compactAction" id="checkIndividualReflection" type="button">Reflexion speichern</button>
 
   <div class="theoryBox hidden" id="individualTheory">
-    <strong>Deine Reflexion sollte mindestens folgende Erkenntnis beinhalten:</strong>
-    <p><strong>Nutzung heute beeinflusst Möglichkeiten morgen.</strong> Die Erneuerung ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.</p>
+    <strong>Vergleiche deine Beobachtungen mit dieser Erkenntnis:</strong>
+    <p><strong>Nutzung heute beeinflusst Möglichkeiten morgen.</strong> Wie viele Früchte nachwachsen, ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.</p>
     <div class="reflectionDecision">
       <button class="action" id="reflectionRecognized" type="button">Das habe ich so erkannt</button>
       <button class="action secondary" id="reflectionRevise" type="button">Meine Reflexion überarbeiten</button>
@@ -1979,7 +2020,7 @@ button,
 </article>
 <article class="learnCard socialStart phase2Lockable phase2Locked" id="learn5">
   <span class="taskLabel">Aufgabe E</span>
-  <h2>Jetzt arbeitet ihr zu zweit</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
+  <h2>Jetzt arbeitet ihr zu zweit</h2><p class="phase2LockHint">Speichere zuerst deine Reflexion in Aufgabe D.</p>
 
   <p class="taskInstruction">Setzt euch zu zweit zusammen. Ihr erhaltet Person A und Person B mit je zwei Needs und zwei dazugehörigen Desires. Entscheidet gemeinsam, welche davon in jeder Runde erfüllt werden sollen.</p>
 
@@ -2024,6 +2065,15 @@ button,
     </div>
   </div>
 
+  <div class="counterBox">
+    <label>Aus dem Zurückgelegten verwenden</label>
+    <div class="counter">
+      <button id="gReserveUseMinus" type="button">−</button>
+      <strong id="gReserveUseCount">0</strong>
+      <button id="gReserveUsePlus" type="button">+</button>
+    </div>
+  </div>
+
   <div class="roundActions">
   <button class="action" id="gFinish" type="button">Gemeinsame Runde abschliessen</button>
   <button class="action secondary" id="resetGroupRounds" type="button">Runden zurücksetzen</button>
@@ -2035,7 +2085,7 @@ button,
       <thead>
         <tr>
           <th>Runde</th><th>Needs A</th><th>Needs B</th><th>Desires A</th><th>Desires B</th>
-          <th>Rest am Baum</th><th>Nachgewachsen</th><th>Zurückgelegt</th>
+          <th>Rest am Baum</th><th>Nachgewachsen</th><th>Aus Zurückgelegtem</th><th>Zurückgelegt</th>
         </tr>
       </thead>
       <tbody id="groupLog"></tbody>
@@ -2045,14 +2095,14 @@ button,
 </article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn7">
   <span class="taskLabel">Aufgabe F</span>
-  <h2>Was hat sich verändert?</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
+  <h2>Was hat sich verändert?</h2><p class="phase2LockHint">Führt zuerst mindestens drei gemeinsame Runden in Aufgabe E durch.</p>
   <div class="taskQuestion reflectionPrompt">
-    <strong>Reflektiert eure gemeinsamen Runden.</strong>
+    <strong>Denkt über eure gemeinsamen Runden nach.</strong>
     <p>Geht dabei auf diese Fragen ein:</p>
     <ul>
       <li>War eure Verteilung für Person A und Person B gerecht? Warum?</li>
       <li>Was hat sich verändert, wenn ihr gemeinsam Früchte für später zurückgelegt habt?</li>
-      <li>Habt ihr eure Abmachung im Verlauf verändert? Warum?</li>
+      <li>Habt ihr eure Abmachung während der Runden verändert? Warum?</li>
     </ul>
     <textarea id="groupReflection" data-e-save="groupReflection" class="largeReflection"></textarea>
   </div>
@@ -4465,7 +4515,7 @@ document.addEventListener(
    ERARBEITUNG V3 – lokal, ohne Backend
    ============================================================ */
 const E_KEY="novera_erarbeitung_v4";
-const TXT={"p2.kicker": "Novera", "p2.title": "Novera weiter entdecken", "p2.intro": "Du arbeitest mit deinen bisherigen Welten weiter und untersuchst, wie Bedürfnisse, Wünsche, begrenzte Möglichkeiten und Entscheidungen zusammenhängen.", "nav.back": "← Zurück", "worlds.title": "Deine gespeicherten Welten", "worlds.note": "Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.", "worlds.empty": "Noch keine Welt gespeichert.", "worlds.world": "Welt", "t1.title": "Das brauche ich – das möchte ich zusätzlich", "t1.instruction": "Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.", "sort.need": "Das brauche ich", "sort.desire": "Das möchte ich zusätzlich", "sort.hard": "Schwierig zu entscheiden", "t1.hardWhat": "Was ist schwierig einzuordnen?", "t1.hardWhy": "Warum ist die Entscheidung schwierig?", "t1.confirm": "Meine Auswahl bestätigen", "t1.reveal": "Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.", "t1.allergy": "Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.", "t1.noCategories": "In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.", "t2.title": "Drei Needs genauer anschauen", "t2.instruction": "Wähle drei Needs aus. Beschreibe jeden Need genauer und ergänze dazu einen passenden Desire.", "common.example": "Beispiel", "t2.example": "Need: mit anderen Menschen kommunizieren können. Desire: dafür immer das neueste Smartphone haben.", "t2.choose": "Kategorie auswählen", "t2.needLabel": "Need", "t2.desireLabel": "Desire", "t2.confirm": "Auswahl übernehmen", "t2.requirementsIntro": "Um Needs und Desires erfüllen zu können, braucht es natürliche und gesellschaftliche Voraussetzungen.", "t2.requirementsNote": "", "t2.needThree": "Ordne in Aufgabe 1 mindestens drei Kategorien bei «Das brauche ich» ein.", "t2.fill": "Bitte fülle bei allen drei Beispielen beide Felder aus.", "t3.title": "Der wundersame Baum", "t3.story": "Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt.", "t3.goal": "Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.", "sim.tree": "Am Baum", "sim.reserve": "Zurückgelegt", "sim.round": "Runde", "sim.harvest": "Ernten", "sim.secure": "Davon für später zurücklegen", "sim.finish": "Runde abschliessen", "sim.needFirst": "Schliesse zuerst Aufgabe 2 ab.", "sim.feedback": "Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.", "log.round": "Runde", "log.harvest": "Ernte", "log.treeleft": "Rest am Baum", "log.regrow": "Nachgewachsen", "log.reserve": "Zurückgelegt", "log.needs": "Needs", "log.desires": "Desires", "t4.title": "Was hast du beobachtet?", "t4.intro": "Schau auf deine Runden zurück und beschreibe deine Erfahrungen.", "t4.q1": "Was geschah, wenn du viele Früchte genutzt hast?", "t4.q2": "Was hat sich verändert, wenn du Früchte für später zurückgelegt hast?", "t4.q3": "Was geschah mit deinen Desires?", "t4.q4": "Was war bei der Erneuerung nicht vorhersehbar?", "t4.rememberTitle": "Das kannst du festhalten:", "t4.remember": "Nutzung heute beeinflusst Möglichkeiten morgen. Die Erneuerung ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.", "t5.title": "Jetzt arbeitet ihr zu zweit", "t5.intro": "Setzt euch zu zweit zusammen. Für die gemeinsame Aufgabe erhaltet ihr zwei fiktive Personen: Person A und Person B. Beide haben eigene Needs und Desires.", "t5.newProfiles": "Andere Profile", "t5.rule": "Eure Abmachung", "t5.help": "Denkt zum Beispiel darüber nach: Sollen zuerst Needs erfüllt werden? Soll jede Person gleich viel erhalten? Was geschieht, wenn nicht alles möglich ist? Wie viel wollt ihr für später zurücklegen?", "profile.needs": "Needs – das braucht die Person", "profile.desires": "Desires – das möchte die Person zusätzlich", "t6.title": "Gemeinsam entscheiden", "t6.intro": "Wählt selbst per Klick aus, welche Needs und Desires ihr in dieser Runde erfüllen wollt. Die Website zeigt nur die Folgen eurer Entscheidung.", "t6.secure": "Für später zurücklegen", "t6.finish": "Gemeinsame Runde abschliessen", "t6.changeRule": "Habt ihr eure Abmachung verändert? Wenn ja: warum?", "t6.tooMuch": "Dafür reichen die verfügbaren Früchte nicht.", "t6.feedback": "Ihr habt {used} Früchte verteilt und {secure} für später zurückgelegt. {aN}/3 Needs von Person A und {bN}/3 Needs von Person B wurden erfüllt. Am Baum blieben {left}; über Nacht wuchsen {reg} nach.", "t7.title": "Was hat sich verändert?", "t7.q1": "Welche Needs konnten nicht immer erfüllt werden?", "t7.q2": "War eure Verteilung für Person A und Person B gerecht? Warum?", "t7.q3": "Was hat sich verändert, wenn ihr gemeinsam Früchte für später zurückgelegt habt?", "t7.q4": "Was habt ihr über gemeinsame Regeln und Entscheidungen herausgefunden?", "end.question": "Was hat Novera mit der Erde zu tun?", "end.note": "Der Baum und seine Früchte sind erfunden. Gibt es auf der Erde trotzdem ähnliche Zusammenhänge? Diese Frage verfolgt ihr im anschliessenden Mystery weiter."};
+const TXT={"p2.kicker": "Novera", "p2.title": "Novera weiter entdecken", "p2.intro": "Du arbeitest mit deinen bisherigen Welten weiter und findest heraus, wie Bedürfnisse, Wünsche, begrenzte Möglichkeiten und Entscheidungen zusammenhängen.", "nav.back": "← Zurück", "worlds.title": "Deine gespeicherten Welten", "worlds.note": "Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.", "worlds.empty": "Noch keine Welt gespeichert.", "worlds.world": "Welt", "t1.title": "Das brauche ich – das möchte ich zusätzlich", "t1.instruction": "Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.", "sort.need": "Das brauche ich", "sort.desire": "Das möchte ich zusätzlich", "sort.hard": "Schwierig zu entscheiden", "t1.hardWhat": "Was ist schwierig einzuordnen?", "t1.hardWhy": "Warum ist die Entscheidung schwierig?", "t1.confirm": "Meine Auswahl bestätigen", "t1.reveal": "Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.", "t1.allergy": "Was ein Mensch braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.", "t1.noCategories": "In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.", "t2.title": "Drei Needs genauer anschauen", "t2.instruction": "Wähle drei Needs aus. Beschreibe jeden Need genauer und ergänze dazu einen passenden Desire.", "common.example": "Beispiel", "t2.example": "Need: mit anderen Menschen kommunizieren können. Desire: dafür immer das neueste Smartphone haben.", "t2.choose": "Kategorie auswählen", "t2.needLabel": "Need", "t2.desireLabel": "Desire", "t2.confirm": "Auswahl übernehmen", "t2.requirementsIntro": "Um Needs und Desires erfüllen zu können, braucht es natürliche und gesellschaftliche Voraussetzungen.", "t2.requirementsNote": "", "t2.needThree": "Ordne in Aufgabe 1 mindestens drei Kategorien bei «Das brauche ich» ein.", "t2.fill": "Bitte fülle bei allen drei Beispielen beide Felder aus.", "t3.title": "Der wundersame Baum", "t3.story": "Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt.", "t3.goal": "Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.", "sim.tree": "Am Baum", "sim.reserve": "Zurückgelegt", "sim.round": "Runde", "sim.harvest": "Ernten", "sim.secure": "Davon für später zurücklegen", "sim.finish": "Runde abschliessen", "sim.needFirst": "Schliesse zuerst Aufgabe 2 ab.", "sim.feedback": "Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.", "log.round": "Runde", "log.harvest": "Ernte", "log.treeleft": "Rest am Baum", "log.regrow": "Nachgewachsen", "log.reserve": "Zurückgelegt", "log.needs": "Needs", "log.desires": "Desires", "t4.title": "Was hast du beobachtet?", "t4.intro": "Schau auf deine Runden zurück und beschreibe deine Erfahrungen.", "t4.q1": "Was ist passiert, wenn du viele Früchte genutzt hast?", "t4.q2": "Was hat sich verändert, wenn du Früchte für später zurückgelegt hast?", "t4.q3": "Was ist mit deinen Desires passiert?", "t4.q4": "Was konntest du beim Nachwachsen der Früchte nicht vorhersagen?", "t4.rememberTitle": "Vergleiche mit deinen Beobachtungen:", "t4.remember": "Nutzung heute beeinflusst Möglichkeiten morgen. Wie viele Früchte nachwachsen, ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.", "t5.title": "Jetzt arbeitet ihr zu zweit", "t5.intro": "Setzt euch zu zweit zusammen. Für die gemeinsame Aufgabe erhaltet ihr zwei erfundene Personen: Person A und Person B. Beide haben eigene Needs und Desires.", "t5.newProfiles": "Andere Profile", "t5.rule": "Eure Abmachung", "t5.help": "Denkt zum Beispiel darüber nach: Sollen zuerst Needs erfüllt werden? Soll jede Person gleich viel erhalten? Was geschieht, wenn nicht alles möglich ist? Wie viel wollt ihr für später zurücklegen?", "profile.needs": "Needs – das braucht die Person", "profile.desires": "Desires – das möchte die Person zusätzlich", "t6.title": "Gemeinsam entscheiden", "t6.intro": "Wählt selbst per Klick aus, welche Needs und Desires ihr in dieser Runde erfüllen wollt. Die Website zeigt nur die Folgen eurer Entscheidung.", "t6.secure": "Für später zurücklegen", "t6.finish": "Gemeinsame Runde abschliessen", "t6.changeRule": "Habt ihr eure Abmachung während der Runden verändert? Wenn ja: warum?", "t6.tooMuch": "Dafür reichen die verfügbaren Früchte nicht.", "t6.feedback": "Ihr habt {used} Früchte verteilt und {secure} für später zurückgelegt. {aN}/3 Needs von Person A und {bN}/3 Needs von Person B wurden erfüllt. Am Baum blieben {left}; über Nacht wuchsen {reg} nach.", "t7.title": "Was hat sich verändert?", "t7.q1": "Welche Needs konnten nicht immer erfüllt werden?", "t7.q2": "War eure Verteilung für Person A und Person B gerecht? Warum?", "t7.q3": "Was hat sich verändert, wenn ihr gemeinsam Früchte für später zurückgelegt habt?", "t7.q4": "Was habt ihr bei euren gemeinsamen Regeln und Entscheidungen bemerkt?", "end.question": "Was hat Novera mit der Erde zu tun?", "end.note": "Der Baum und seine Früchte sind erfunden. Gibt es auf der Erde trotzdem ähnliche Zusammenhänge? Diese Frage verfolgt ihr im anschliessenden Mystery weiter."};
 function eState(){try{return JSON.parse(localStorage.getItem(E_KEY))||{};}catch(e){return {};}}
 function ePatch(p){const s=eState();Object.assign(s,p);localStorage.setItem(E_KEY,JSON.stringify(s));return s;}
 function t(k,f=""){return TXT[k]||f||k}
@@ -4912,36 +4962,47 @@ function updatePhase2Progress(){
   const bComplete=s.stageBComplete===true;
   const requirementsOk=s.requirementsUnderstood===true;
   const afterBOk=bComplete&&requirementsOk;
+  const cRounds=Array.isArray(s.psim?.log)?s.psim.log.length:0;
+  const cComplete=cRounds>=3;
+  const dComplete=cComplete&&s.individualReflectionSaved===true;
+  const eRounds=Array.isArray(s.gsim?.log)?s.gsim.log.length:0;
+  const eComplete=dComplete&&eRounds>=3;
 
   const a=document.getElementById("learn1");
   const b=document.getElementById("learn2");
+  const c=document.getElementById("learn3");
+  const d=document.getElementById("learn4");
+  const e=document.getElementById("learn5");
+  const f=document.getElementById("learn7");
 
   if(a)a.classList.toggle("phase2Locked",!hasWorld);
   if(b)b.classList.toggle("phase2Locked",!(hasWorld&&termsOk));
-
-  ["learn3","learn4","learn5","learn7"].forEach(taskId=>{
-    const card=document.getElementById(taskId);
-    if(card)card.classList.toggle("phase2Locked",!afterBOk);
-  });
+  if(c)c.classList.toggle("phase2Locked",!afterBOk);
+  if(d)d.classList.toggle("phase2Locked",!(afterBOk&&cComplete));
+  if(e)e.classList.toggle("phase2Locked",!dComplete);
+  if(f)f.classList.toggle("phase2Locked",!eComplete);
 
   document.querySelectorAll(".phase2LockHint").forEach(hint=>{
     const parent=hint.closest(".phase2Lockable");
     if(!parent)return;
-
     if(parent.id==="learn1"){
       hint.textContent=hasWorld?"":"Wähle zuerst eine Welt aus.";
     }else if(parent.id==="learn2"){
-      hint.textContent=!hasWorld
-        ?"Wähle zuerst eine Welt aus."
-        :termsOk
-          ?""
-          :"Lies zuerst die Erklärung in Aufgabe A und bestätige «Gelesen und verstanden».";
-    }else{
-      hint.textContent=afterBOk
-        ?""
-        :!bComplete
-          ?"Bearbeite zuerst Aufgabe B vollständig."
-          :"Lies die Erklärung zu den Voraussetzungen und bestätige «Gelesen und verstanden».";
+      hint.textContent=!hasWorld?"Wähle zuerst eine Welt aus.":termsOk?"":"Lies zuerst die Erklärung in Aufgabe A und bestätige «Gelesen und verstanden».";
+    }else if(parent.id==="learn3"){
+      hint.textContent=afterBOk?"":(!bComplete?"Bearbeite zuerst Aufgabe B vollständig.":"Lies zuerst die Erklärung zu den Voraussetzungen und bestätige «Gelesen und verstanden».");
+    }else if(parent.id==="learn4"){
+      hint.textContent=!afterBOk
+        ?(!bComplete?"Bearbeite zuerst Aufgabe B vollständig.":"Lies zuerst die Erklärung zu den Voraussetzungen und bestätige «Gelesen und verstanden».")
+        :!cComplete?"Führe zuerst mindestens drei Runden in Aufgabe C durch.":"";
+    }else if(parent.id==="learn5"){
+      hint.textContent=!cComplete
+        ?"Führe zuerst mindestens drei Runden in Aufgabe C durch."
+        :s.individualReflectionSaved!==true?"Speichere zuerst deine Reflexion in Aufgabe D.":"";
+    }else if(parent.id==="learn7"){
+      hint.textContent=!dComplete
+        ?"Bearbeite zuerst Aufgabe D vollständig."
+        :!eComplete?"Führt zuerst mindestens drei gemeinsame Runden in Aufgabe E durch.":"";
     }
   });
 }
@@ -4970,7 +5031,47 @@ function resetAfterWorldChoice(){
 function renderSort(){const box=document.getElementById("categorySort"),cats=latestCategories(),s=eState();box.innerHTML="";if(!cats.length){box.innerHTML='<p class="smallNote">'+t("t1.noCategories","In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.")+'</p>';return}const sort=s.sort||{};cats.forEach((c,i)=>{const row=document.createElement("div");row.className="sortRow";row.innerHTML='<strong>'+escapeHtml(c)+'</strong><div class="sortChoices">'+["need","desire","hard"].map(v=>'<label><input type="radio" name="sort'+i+'" value="'+v+'" '+(sort[c]===v?'checked':'')+'> '+t("sort."+v,v)+'</label>').join("")+'</div>';row.querySelectorAll("input").forEach(inp=>inp.onchange=()=>{const st=eState();st.sort=st.sort||{};st.sort[c]=inp.value;localStorage.setItem(E_KEY,JSON.stringify(st));renderNeedEditors()});box.appendChild(row)})}
 function escapeHtml(s){return String(s).replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function renderNeedEditors(){const box=document.getElementById("needEditors"),s=eState(),needs=Object.entries(s.sort||{}).filter(x=>x[1]==="need").map(x=>x[0]),saved=s.personal||[];box.innerHTML="";if(needs.length<3){box.innerHTML='<p class="smallNote">'+t("t2.needThree","Ordne in Aufgabe 1 mindestens drei Kategorien bei «Das brauche ich» ein.")+'</p>';return}for(let i=0;i<3;i++){const d=document.createElement("div");d.className="needEditor";const opts=needs.map(n=>'<option '+((saved[i]||{}).source===n?'selected':'')+'>'+escapeHtml(n)+'</option>').join("");d.innerHTML='<div class="labField"><label>'+t("t2.choose","Kategorie auswählen")+'</label><select data-i="'+i+'" class="sourceNeed">'+opts+'</select></div><div class="labField needField"><label>'+t("t2.needLabel","Need")+'</label><textarea rows="2" data-i="'+i+'" class="needText">'+escapeHtml((saved[i]||{}).need||"")+'</textarea></div><div class="labField desireField"><label>'+t("t2.desireLabel","Desire")+'</label><textarea rows="2" data-i="'+i+'" class="desireText">'+escapeHtml((saved[i]||{}).desire||"")+'</textarea></div>';box.appendChild(d)} }
-function savePersonal(){const rows=[...document.querySelectorAll(".needEditor")];if(rows.length<3){alert("Wähle zuerst drei Needs aus und fülle alle Felder aus.");return false;}const old=eState().personal||[];const p=rows.map((r,i)=>({source:r.querySelector(".sourceNeed").value,need:r.querySelector(".needText").value.trim(),desire:r.querySelector(".desireText").value.trim(),needFruit:old[i]?.needFruit||rand(2,4),desireFruit:old[i]?.desireFruit||rand(1,3)}));if(p.some(x=>!x.need||!x.desire)){alert("Die Eingabe ist noch unvollständig. Fülle bei allen drei Needs auch den dazugehörigen Desire aus.");return false}ePatch({personal:p});return true}
+function shuffledValues(values){
+  const a=values.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=rand(0,i);
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function controlledPersonalCosts(personal){
+  const p=(personal||[]).map(x=>({...x}));
+  if(p.length!==3)return p;
+  const needOk=JSON.stringify(p.map(x=>Number(x.needFruit)).sort((a,b)=>a-b))===JSON.stringify([2,2,3]);
+  const desireOk=JSON.stringify(p.map(x=>Number(x.desireFruit)).sort((a,b)=>a-b))===JSON.stringify([1,1,2]);
+  const needs=needOk?p.map(x=>Number(x.needFruit)):shuffledValues([2,2,3]);
+  const desires=desireOk?p.map(x=>Number(x.desireFruit)):shuffledValues([1,1,2]);
+  return p.map((x,i)=>({...x,needFruit:needs[i],desireFruit:desires[i]}));
+}
+
+function savePersonal(){
+  const rows=[...document.querySelectorAll(".needEditor")];
+  if(rows.length<3){
+    alert("Wähle zuerst drei Needs aus und fülle alle Felder aus.");
+    return false;
+  }
+  const old=eState().personal||[];
+  let p=rows.map((r,i)=>({
+    source:r.querySelector(".sourceNeed").value,
+    need:r.querySelector(".needText").value.trim(),
+    desire:r.querySelector(".desireText").value.trim(),
+    needFruit:old[i]?.needFruit,
+    desireFruit:old[i]?.desireFruit
+  }));
+  if(p.some(x=>!x.need||!x.desire)){
+    alert("Die Eingabe ist noch unvollständig. Fülle bei allen drei Needs auch den dazugehörigen Desire aus.");
+    return false;
+  }
+  p=controlledPersonalCosts(p);
+  ePatch({personal:p});
+  return true;
+}
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function fruitIcons(n){return '<span class="fruitIcons">'+Array.from({length:n},()=>'<i></i>').join("")+'</span>'}
 function renderRequirements(){
@@ -4984,7 +5085,9 @@ function renderRequirements(){
 function renderTaskCRequirements(){
   const box=document.getElementById("taskCRequirements");
   if(!box)return;
-  const p=eState().personal||[];
+  const state=eState();
+  const p=controlledPersonalCosts(state.personal||[]);
+  if(JSON.stringify(p)!==JSON.stringify(state.personal||[]))ePatch({personal:p});
   box.innerHTML=p.map(x=>
     '<div class="requirementCard">'+
       '<div class="reqNeed"><strong>Need</strong><br>'+escapeHtml(x.need)+' '+fruitIcons(x.needFruit)+'</div>'+
@@ -4995,7 +5098,7 @@ function renderTaskCRequirements(){
 const FRUIT_POS=[[27,19],[38,15],[50,18],[62,14],[72,21],[31,29],[43,26],[55,29],[67,27],[77,32],[25,40],[37,38],[49,41],[61,38],[73,42],[32,51],[45,49],[58,52],[69,50],[51,59]];
 function drawTreeTo(layerId,count){const l=document.getElementById(layerId);if(!l)return;l.innerHTML="";FRUIT_POS.forEach((p,i)=>{if(i<count){const f=document.createElement("i");f.className="pixelFruit";f.style.left=p[0]+"%";f.style.top=p[1]+"%";l.appendChild(f)}})}
 function drawTree(count){drawTreeTo("fruitLayer",count)}
-function initPSim(){const s=eState();if(!s.psim)ePatch({psim:{tree:20,reserve:0,round:1,harvest:0,secure:0,log:[]}})}
+function initPSim(){const s=eState();if(!s.psim)ePatch({psim:{tree:20,reserve:0,round:1,harvest:0,secure:0,useReserve:0,log:[]}});else if(s.psim.useReserve===undefined)ePatch({psim:{...s.psim,useReserve:0}})}
 function renderPersonalSim(){
   initPSim();
   renderTaskCRequirements();
@@ -5006,55 +5109,136 @@ function renderPersonalSim(){
   roundCount.textContent=q.round;
   harvestCount.textContent=q.harvest;
   secureCount.textContent=q.secure;
+  const reserveUseCount=document.getElementById("reserveUseCount");
+  if(reserveUseCount)reserveUseCount.textContent=q.useReserve||0;
   personalCards.innerHTML=p.map(x=>'<div class="miniCard"><div class="miniNeed"><strong>Need</strong><br>'+escapeHtml(x.need)+' '+fruitIcons(x.needFruit)+'</div><div class="miniDesire"><strong>Desire</strong><br>'+escapeHtml(x.desire)+' '+fruitIcons(x.desireFruit)+'</div></div>').join("");
-  personalLog.innerHTML=(q.log||[]).map(r=>'<tr class="'+(r.needs===3?'needsComplete':'needsMissing')+'"><td>'+r.round+'</td><td>'+r.harvest+'</td><td>'+r.left+'</td><td>+'+r.regrow+'</td><td>'+r.reserve+'</td><td>'+r.needs+'/3</td><td>'+r.desires+'/3</td></tr>').join("");
+  personalLog.innerHTML=(q.log||[]).map(r=>'<tr class="'+(r.needs===3?'needsComplete':'needsMissing')+'"><td>'+r.round+'</td><td>'+r.harvest+'</td><td>'+r.left+'</td><td>+'+r.regrow+'</td><td>'+(r.usedReserve||0)+'</td><td>'+r.reserve+'</td><td>'+r.needs+'/3</td><td>'+r.desires+'/3</td></tr>').join("");
 }
-function regen(left){if(left<=3)return rand(0,1);if(left<=7)return rand(1,2);if(left<=12)return rand(2,4);return rand(3,6)}
+function regen(left){
+  if(left<=3)return rand(2,6);
+  if(left<=6)return rand(3,7);
+  if(left<=9)return rand(4,8);
+  return rand(5,10);
+}
 function resetPersonalRounds(){
-  ePatch({psim:{tree:20,reserve:0,round:1,harvest:0,secure:0,log:[]}});
+  ePatch({psim:{tree:20,reserve:0,round:1,harvest:0,secure:0,useReserve:0,log:[]},individualReflectionSaved:false});
   const feedback=document.getElementById("roundFeedback");
   if(feedback){
     feedback.classList.remove("active");
     feedback.innerHTML="";
   }
   renderPersonalSim();
+  updatePhase2Progress();
 }
 
-function finishPRound(){const s=eState(),q=s.psim,p=s.personal||[];if(p.length<3){alert(t("sim.needFirst","Schliesse zuerst Aufgabe 2 ab."));return}let available=q.harvest-q.secure+q.reserve,needs=0,desires=0;for(const x of p){if(available>=x.needFruit){available-=x.needFruit;needs++}}for(const x of p){if(available>=x.desireFruit){available-=x.desireFruit;desires++}}const left=q.tree-q.harvest,reg=Math.min(20-left,regen(left)),newReserve=q.secure+available,next=Math.min(20,left+reg);q.log.push({round:q.round,harvest:q.harvest,left,regrow:reg,reserve:newReserve,needs,desires});Object.assign(q,{tree:next,reserve:newReserve,round:q.round+1,harvest:0,secure:0});ePatch({psim:q});roundFeedback.classList.add("active");roundFeedback.innerHTML=t("sim.feedback","Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.").replace("{harvest}",q.log[q.log.length-1].harvest).replace("{left}",left).replace("{regrow}",reg).replace("{needs}",needs).replace("{desires}",desires);renderPersonalSim()}
-const PROFILE_POOL=[
-{needs:["regelmässig Nahrung essen, die ich gut vertrage","einen ruhigen und sicheren Schlafplatz haben","mit wichtigen Menschen in Kontakt bleiben"],desires:["eine besonders grosse Auswahl an Lieblingsessen haben","ein eigenes grosses Zimmer haben","jederzeit ein persönliches Kommunikationsgerät nutzen"]},
-{needs:["mich auch über längere Strecken fortbewegen können","genug trinken und essen können","mich mit anderen austauschen und dazugehören"],desires:["ein besonders schnelles Fahrzeug nutzen","oft besondere Getränke und Snacks haben","grosse Feste veranstalten"]},
-{needs:["mich vor Kälte und schlechtem Wetter schützen können","regelmässig lernen und Informationen erhalten","genug Nahrung bekommen"],desires:["eine sehr grosse und komfortable Unterkunft haben","immer die neuesten Geräte zum Lernen besitzen","häufig aufwendig zubereitete Speisen essen"]},
-{needs:["medizinische Hilfe erhalten, wenn ich sie brauche","einen sicheren Ort zum Wohnen haben","mit anderen gemeinsam Zeit verbringen können"],desires:["jederzeit besonders schnelle Hilfe verfügbar haben","mehrere eigene Räume nur für mich haben","häufig grosse gemeinsame Veranstaltungen organisieren"]},
-{needs:["sauberes Wasser zum Trinken haben","mich sicher fortbewegen können","regelmässig mit meiner Familie sprechen können"],desires:["jeden Tag verschiedene besondere Getränke wählen","ein eigenes Fahrzeug nur für mich nutzen","immer das neueste Kommunikationsgerät besitzen"]},
-{needs:["genug schlafen und mich erholen können","ausreichend und verträglich essen können","lernen und Neues ausprobieren können"],desires:["einen besonders luxuriösen Schlafplatz haben","häufig importierte Spezialitäten essen","für jedes Hobby eigene Geräte besitzen"]},
-{needs:["mich waschen und sauber halten können","einen geschützten Wohnplatz haben","mich mit Freunden treffen können"],desires:["sehr viel Wasser für lange Duschen nutzen","ein besonders grosses Haus haben","einen eigenen grossen Treffpunkt besitzen"]},
-{needs:["genug Nahrung erhalten","bei Dunkelheit Licht nutzen können","mich bei anderen Menschen sicher fühlen"],desires:["täglich besonders aufwendige Gerichte essen","meine Umgebung die ganze Nacht hell beleuchten","häufig grosse Feiern organisieren"]},
-{needs:["bei Hitze einen kühlen Rückzugsort haben","genug Wasser trinken können","wichtige Informationen erhalten können"],desires:["alle Räume jederzeit stark kühlen","einen grossen privaten Wasservorrat haben","mehrere persönliche digitale Geräte gleichzeitig nutzen"]},
-{needs:["mich bewegen und körperlich aktiv sein können","einen sicheren Schlafplatz haben","genug essen können"],desires:["eine grosse private Sportanlage nutzen","besonders viel Wohnraum nur für mich haben","jederzeit eine sehr grosse Essensauswahl haben"]},
-{needs:["regelmässig mit anderen kommunizieren können","mich vor Regen und Kälte schützen können","sauberes Wasser haben"],desires:["immer das neueste Smartphone besitzen","eine besonders komfortable Unterkunft haben","einen privaten Pool nutzen"]},
-{needs:["mich orientieren und wichtige Orte erreichen können","genug Nahrung erhalten","Ruhe und Rückzug finden können"],desires:["für jeden Weg ein schnelles Fahrzeug nutzen","häufig besondere Lebensmittel von weit her bekommen","einen sehr grossen privaten Rückzugsraum haben"]},
-{"needs":["regelmässig frische Luft atmen können","mich vor grosser Hitze schützen können","mit anderen sprechen und Informationen austauschen können"],"desires":["meine Räume ständig stark kühlen","für kurze Wege motorisiert unterwegs sein","mehrere neue digitale Geräte besitzen"]},
-{"needs":["genug und ausgewogen essen können","einen Ort zum Lernen haben","mich sicher mit anderen treffen können"],"desires":["täglich eine sehr grosse Speisenauswahl haben","einen eigenen grossen Lernraum besitzen","häufig grosse Veranstaltungen besuchen"]},
-{"needs":["sauberes Trinkwasser haben","mich bei Krankheit erholen können","einen verlässlichen Schlafplatz haben"],"desires":["Wasser jederzeit für Freizeitangebote nutzen","einen besonders luxuriösen Erholungsbereich haben","mehrere grosse private Räume besitzen"]},
-{"needs":["mich mit anderen verständigen können","genug Nahrung bekommen","mich vor Wetter schützen können"],"desires":["ständig das schnellste Kommunikationsgerät nutzen","Lebensmittel aus vielen verschiedenen Regionen essen","eine besonders grosse beheizte Unterkunft besitzen"]},
-{"needs":["einen sicheren Weg zu wichtigen Orten haben","lernen und mich informieren können","genug trinken können"],"desires":["jeden Weg mit einem privaten Fahrzeug zurücklegen","mehrere Geräte für Lernen und Unterhaltung besitzen","eine grosse Auswahl besonderer Getränke haben"]},
-{"needs":["regelmässig soziale Kontakte haben","einen geschützten Rückzugsort besitzen","ausreichend Nahrung erhalten"],"desires":["häufig grosse Feiern veranstalten","sehr viel persönlichen Wohnraum haben","täglich besondere Speisen auswählen"]},
-{"needs":["mich bei Dunkelheit orientieren können","mich bei Kälte warm halten können","mit anderen in Verbindung bleiben können"],"desires":["meine Umgebung die ganze Nacht stark beleuchten","alle Räume sehr warm halten","mehrere persönliche Kommunikationsgeräte gleichzeitig besitzen"]},
-{"needs":["genug Wasser für Trinken und Hygiene haben","einen sicheren Ort zum Schlafen besitzen","wichtige Orte erreichen können"],"desires":["einen privaten Pool haben","ein besonders grosses Schlafzimmer besitzen","für alle Wege ein schnelles eigenes Fahrzeug nutzen"]}
+function finishPRound(){
+  const s=eState(),q=s.psim,p=controlledPersonalCosts(s.personal||[]);
+  if(p.length<3){
+    alert(t("sim.needFirst","Schliesse zuerst Aufgabe 2 ab."));
+    return;
+  }
+
+  const usedReserve=Math.min(q.reserve||0,q.useReserve||0);
+  let available=Math.max(0,q.harvest-q.secure)+usedReserve;
+  let needs=0,desires=0;
+
+  for(const x of p){
+    if(available>=x.needFruit){available-=x.needFruit;needs++;}
+  }
+  for(const x of p){
+    if(available>=x.desireFruit){available-=x.desireFruit;desires++;}
+  }
+
+  const left=q.tree-q.harvest;
+  const reg=Math.min(20-left,regen(left));
+  const newReserve=Math.max(0,(q.reserve||0)-usedReserve)+(q.secure||0);
+  const next=Math.min(20,left+reg);
+
+  q.log.push({round:q.round,harvest:q.harvest,left,regrow:reg,usedReserve,reserve:newReserve,needs,desires});
+  Object.assign(q,{tree:next,reserve:newReserve,round:q.round+1,harvest:0,secure:0,useReserve:0});
+  ePatch({psim:q,personal:p});
+
+  roundFeedback.classList.add("active");
+  roundFeedback.innerHTML=t("sim.feedback","Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.")
+    .replace("{harvest}",q.log[q.log.length-1].harvest)
+    .replace("{left}",left)
+    .replace("{regrow}",reg)
+    .replace("{needs}",needs)
+    .replace("{desires}",desires)
+    +" Aus dem Zurückgelegten hast du "+usedReserve+" Früchte verwendet.";
+
+  renderPersonalSim();
+  updatePhase2Progress();
+}
+const DOUGHNUT_NEED_DESIRE_POOL=[
+  {category:"Nahrung",need:"regelmässig genug und verträglich essen können",desire:"jeden Tag eine besonders grosse Auswahl an Lieblingsessen haben"},
+  {category:"Wasser",need:"genug sauberes Wasser zum Trinken und für die Körperpflege haben",desire:"sehr viel Wasser für einen privaten Pool oder lange Duschen nutzen"},
+  {category:"Gesundheit",need:"bei Krankheit medizinische Hilfe erhalten können",desire:"jederzeit eine persönliche medizinische Betreuung nur für mich haben"},
+  {category:"Bildung",need:"lernen und wichtige Informationen erhalten können",desire:"für jedes Lerngebiet ein eigenes neues Gerät besitzen"},
+  {category:"Wohnen",need:"einen geschützten und sicheren Ort zum Schlafen und Wohnen haben",desire:"sehr viel Wohnraum nur für mich besitzen"},
+  {category:"Netzwerke",need:"mit wichtigen Menschen in Kontakt bleiben und dazugehören können",desire:"jederzeit mehrere persönliche Kommunikationsgeräte nutzen"},
+  {category:"Energie",need:"Licht, Wärme oder Energie für grundlegende Tätigkeiten nutzen können",desire:"alle Räume jederzeit stark beleuchten, heizen oder kühlen"},
+  {category:"Frieden & Gerechtigkeit",need:"vor Gewalt geschützt sein und bei Konflikten faire Regeln haben",desire:"bei einem Streit immer meinen Willen durchsetzen können"},
+  {category:"Politische Mitsprache",need:"bei Regeln, die mein Leben betreffen, meine Meinung einbringen können",desire:"bei gemeinsamen Entscheidungen das letzte Wort haben"},
+  {category:"Soziale Gleichheit",need:"wichtige gemeinsame Angebote unabhängig von meinem Besitz nutzen können",desire:"bei knappen Angeboten bevorzugt behandelt werden"},
+  {category:"Einkommen & Arbeit",need:"eine verlässliche Möglichkeit haben, zum eigenen Lebensunterhalt beizutragen",desire:"für wenig Aufwand besonders viel für mich erhalten"},
+  {category:"Geschlechtergerechtigkeit",need:"unabhängig vom Geschlecht die gleichen Rechte und Möglichkeiten haben",desire:"aufgrund meines Geschlechts besondere Vorteile erhalten"},
+  {category:"Gesundheit",need:"mich erholen und ausreichend schlafen können",desire:"einen besonders luxuriösen privaten Erholungsbereich haben"},
+  {category:"Bildung",need:"Fragen stellen, Neues ausprobieren und Unterstützung beim Lernen erhalten können",desire:"für jedes Hobby eigene Geräte und Materialien besitzen"},
+  {category:"Netzwerke",need:"mich mit anderen austauschen und Unterstützung bekommen können",desire:"häufig grosse private Veranstaltungen organisieren"},
+  {category:"Frieden & Gerechtigkeit",need:"mich an wichtigen Orten sicher bewegen können",desire:"für jeden Weg einen exklusiven privaten Transport nutzen"},
+  {category:"Wohnen",need:"mich vor Kälte, Hitze und schlechtem Wetter schützen können",desire:"eine besonders grosse, stark beheizte oder gekühlte Unterkunft haben"},
+  {category:"Nahrung",need:"genug Nahrung erhalten, auch wenn sich Bedingungen verändern",desire:"häufig aufwendig produzierte Spezialitäten aus vielen Regionen essen"}
 ];
-function profileWithFruits(x){const needs=x.needs.slice(0,2),desires=x.desires.slice(0,2);return {needs,desires,needFruit:needs.map(()=>rand(2,4)),desireFruit:desires.map(()=>rand(1,3))}}
-function ensureProfiles(force=false){let s=eState();if(force||!s.profiles){let a=rand(0,PROFILE_POOL.length-1),b;do{b=rand(0,PROFILE_POOL.length-1)}while(b===a);s=ePatch({profiles:[{...profileWithFruits(PROFILE_POOL[a]),label:"Person A"},{...profileWithFruits(PROFILE_POOL[b]),label:"Person B"}],gsim:{tree:20,reserve:0,round:1,secure:0,log:[]}})}renderProfiles()}
+
+function profileWithFruits(){
+  const idx=shuffledValues(DOUGHNUT_NEED_DESIRE_POOL.map((_,i)=>i)).slice(0,2);
+  const picks=idx.map(i=>DOUGHNUT_NEED_DESIRE_POOL[i]);
+  return {
+    needs:picks.map(x=>x.need),
+    desires:picks.map(x=>x.desire),
+    categories:picks.map(x=>x.category),
+    needFruit:shuffledValues([2,3]),
+    desireFruit:shuffledValues([1,2])
+  };
+}
+function ensureProfiles(force=false){
+  let s=eState();
+  if(force||!s.profiles){
+    s=ePatch({
+      profiles:[
+        {...profileWithFruits(),label:"Person A"},
+        {...profileWithFruits(),label:"Person B"}
+      ],
+      gsim:{tree:20,reserve:0,round:1,secure:0,useReserve:0,log:[]},
+      groupReflection:""
+    });
+  }else{
+    const normalized=s.profiles.map(p=>{
+      const needSorted=(p.needFruit||[]).map(Number).sort((a,b)=>a-b);
+      const desireSorted=(p.desireFruit||[]).map(Number).sort((a,b)=>a-b);
+      return {
+        ...p,
+        needFruit:JSON.stringify(needSorted)===JSON.stringify([2,3])?p.needFruit.map(Number):shuffledValues([2,3]),
+        desireFruit:JSON.stringify(desireSorted)===JSON.stringify([1,2])?p.desireFruit.map(Number):shuffledValues([1,2])
+      };
+    });
+    s=ePatch({profiles:normalized});
+  }
+  renderProfiles();
+}
 function renderProfiles(){renderAlloc()}
 function renderAlloc(){
   const s=eState(),[a,b]=s.profiles||[];
   if(!a)return;
-  const q=s.gsim||{tree:20,reserve:0,round:1,secure:0,log:[]};
+  const q=s.gsim||{tree:20,reserve:0,round:1,secure:0,useReserve:0,log:[]};
   if(!q.log)q.log=[];
   gTree.textContent=q.tree;
   gReserve.textContent=q.reserve;
   gRound.textContent=q.round;
   gSecureCount.textContent=q.secure||0;
+  const gReserveUseCount=document.getElementById("gReserveUseCount");
+  if(gReserveUseCount)gReserveUseCount.textContent=q.useReserve||0;
   drawTreeTo("groupFruitLayer",q.tree);
 
   const mk=(p,pi)=>p.needs.slice(0,2).map((x,i)=>'<div class="allocPair">'+
@@ -5068,13 +5252,13 @@ function renderAlloc(){
   if(gl){
     gl.innerHTML=(q.log||[]).map(r=>'<tr class="'+(r.needsA===2&&r.needsB===2?'needsComplete':'needsMissing')+'">'+
       '<td>'+r.round+'</td><td>'+r.needsA+'/2</td><td>'+r.needsB+'/2</td><td>'+r.desA+'/2</td><td>'+r.desB+'/2</td>'+
-      '<td>'+r.left+'</td><td>+'+r.reg+'</td><td>'+r.reserve+'</td></tr>').join("");
+      '<td>'+r.left+'</td><td>+'+r.reg+'</td><td>'+(r.usedReserve||0)+'</td><td>'+r.reserve+'</td></tr>').join("");
   }
 }
 function allocItem(pi,k,i,txt,n){return '<label class="allocItem '+(k==="n"?"needAlloc":"desireAlloc")+'"><input type="checkbox" data-p="'+pi+'" data-k="'+k+'" data-i="'+i+'"> <span><strong>'+(k==="n"?"Need":"Desire")+'</strong><br>'+escapeHtml(txt)+'</span> '+fruitIcons(n)+'</label>'}
 function resetGroupRounds(){
   const s=eState();
-  ePatch({gsim:{tree:20,reserve:0,round:1,secure:0,log:[]}});
+  ePatch({gsim:{tree:20,reserve:0,round:1,secure:0,useReserve:0,log:[]}});
   const feedback=document.getElementById("groupFeedback");
   if(feedback){
     feedback.classList.remove("active");
@@ -5082,6 +5266,7 @@ function resetGroupRounds(){
   }
   document.querySelectorAll(".allocItem input").forEach(cb=>cb.checked=false);
   renderAlloc();
+  updatePhase2Progress();
 }
 
 function finishGroup(){
@@ -5098,36 +5283,39 @@ function finishGroup(){
   });
 
   const secure=q.secure||0;
-  if(used+secure>q.tree+q.reserve){
-    alert("Dafür reichen die verfügbaren Früchte nicht.");
+  const usedReserve=Math.min(q.reserve||0,q.useReserve||0,used);
+  const neededFromTree=used+secure-usedReserve;
+
+  if(neededFromTree>q.tree){
+    alert("Dafür reichen die Früchte am Baum und die bewusst eingesetzten zurückgelegten Früchte nicht.");
     return;
   }
 
-  const fromTree=Math.min(q.tree,used+secure);
-  const left=q.tree-fromTree;
-  const oldReserve=q.reserve;
-  const fromReserve=Math.max(0,used+secure-q.tree);
-  const newReserve=Math.max(0,oldReserve-fromReserve)+secure;
+  const left=q.tree-neededFromTree;
+  const newReserve=Math.max(0,(q.reserve||0)-usedReserve)+secure;
   const reg=Math.min(20-left,regen(left));
 
   q.log.push({
     round:q.round,needsA:needs[0],needsB:needs[1],
-    desA:des[0],desB:des[1],left,reg,reserve:newReserve
+    desA:des[0],desB:des[1],left,reg,usedReserve,reserve:newReserve
   });
 
   q.tree=Math.min(20,left+reg);
   q.reserve=newReserve;
   q.round++;
   q.secure=0;
+  q.useReserve=0;
   ePatch({gsim:q});
 
   groupFeedback.classList.add("active");
   groupFeedback.innerHTML="Person A: "+needs[0]+"/2 Needs und "+des[0]+"/2 Desires erfüllt. "+
     "Person B: "+needs[1]+"/2 Needs und "+des[1]+"/2 Desires erfüllt. "+
-    "Am Baum blieben "+left+" Früchte; über Nacht wuchsen "+reg+" nach.";
-  renderAlloc();
-}
+    "Am Baum blieben "+left+" Früchte; über Nacht wuchsen "+reg+" nach. "+
+    "Aus dem Zurückgelegten habt ihr "+usedReserve+" Früchte verwendet.";
 
+  renderAlloc();
+  updatePhase2Progress();
+}
 
 function collectNoveraWorkState(){
   return {
@@ -5182,7 +5370,7 @@ function makeWorkStateHtml(){
   ).join("");
 
   const personalLog=((learning.psim&&learning.psim.log)||[]).map(r=>
-    '<tr class="'+(r.needs===3?'ok':'miss')+'"><td>'+r.round+'</td><td>'+r.harvest+'</td><td>'+r.left+'</td><td>'+r.regrow+'</td><td>'+r.reserve+'</td><td>'+r.needs+'/3</td><td>'+r.desires+'/3</td></tr>'
+    '<tr class="'+(r.needs===3?'ok':'miss')+'"><td>'+r.round+'</td><td>'+r.harvest+'</td><td>'+r.left+'</td><td>'+r.regrow+'</td><td>'+(r.usedReserve||0)+'</td><td>'+r.reserve+'</td><td>'+r.needs+'/3</td><td>'+r.desires+'/3</td></tr>'
   ).join("");
 
   const groupLog=((learning.gsim&&learning.gsim.log)||[]).map(r=>
@@ -5432,6 +5620,14 @@ function initErarbeitung(){
           alert("Du musst zuerst Aufgabe B fertig bearbeiten.");
         }else if(s.requirementsUnderstood!==true){
           alert("Lies zuerst die Erklärung zu den Voraussetzungen und bestätige «Gelesen und verstanden».");
+        }else if((card.id==="learn4"||card.id==="learn5") && (s.psim?.log?.length||0)<3){
+          alert("Führe zuerst mindestens drei Runden in Aufgabe C durch.");
+        }else if(card.id==="learn5" && s.individualReflectionSaved!==true){
+          alert("Speichere zuerst deine Reflexion in Aufgabe D.");
+        }else if(card.id==="learn7" && s.individualReflectionSaved!==true){
+          alert("Bearbeite zuerst Aufgabe D vollständig.");
+        }else if(card.id==="learn7" && (s.gsim?.log?.length||0)<3){
+          alert("Führt zuerst mindestens drei gemeinsame Runden in Aufgabe E durch.");
         }
       }
     });
@@ -5520,6 +5716,20 @@ function initErarbeitung(){
     renderPersonalSim();
   };
 
+  id("reserveUseMinus").onclick=()=>{
+    const s=eState(),q=s.psim;
+    q.useReserve=Math.max(0,(q.useReserve||0)-1);
+    ePatch({psim:q});
+    renderPersonalSim();
+  };
+
+  id("reserveUsePlus").onclick=()=>{
+    const s=eState(),q=s.psim;
+    q.useReserve=Math.min(q.reserve||0,(q.useReserve||0)+1);
+    ePatch({psim:q});
+    renderPersonalSim();
+  };
+
   id("finishRound").onclick=finishPRound;
   id("resetPersonalRounds").onclick=resetPersonalRounds;
 
@@ -5539,6 +5749,20 @@ function initErarbeitung(){
     renderAlloc();
   };
 
+  id("gReserveUseMinus").onclick=()=>{
+    const s=eState(),q=s.gsim;
+    q.useReserve=Math.max(0,(q.useReserve||0)-1);
+    ePatch({gsim:q});
+    renderAlloc();
+  };
+
+  id("gReserveUsePlus").onclick=()=>{
+    const s=eState(),q=s.gsim;
+    q.useReserve=Math.min(q.reserve||0,(q.useReserve||0)+1);
+    ePatch({gsim:q});
+    renderAlloc();
+  };
+
   id("gFinish").onclick=finishGroup;
   id("resetGroupRounds").onclick=resetGroupRounds;
 
@@ -5549,14 +5773,21 @@ function initErarbeitung(){
   const revise=id("reflectionRevise");
   const confirmed=id("reflectionConfirmed");
 
+  if(refText)refText.addEventListener("input",()=>{
+    ePatch({individualReflectionSaved:false});
+    updatePhase2Progress();
+  });
+
   if(checkRef)checkRef.onclick=()=>{
     if(!refText.value.trim()){
       alert("Schreibe zuerst deine Reflexion.");
       refText.focus();
       return;
     }
+    ePatch({individualReflectionSaved:true});
     theory.classList.remove("hidden");
     confirmed.classList.add("hidden");
+    updatePhase2Progress();
   };
 
   if(recognized)recognized.onclick=()=>{
