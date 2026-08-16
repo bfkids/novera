@@ -1718,6 +1718,17 @@ button,
   }
 }
 
+
+/* Kurzstatus für Needs/Desires in beiden Spielübersichten */
+.treeStatusSecondary{
+  margin-top:8px;
+}
+.treeStatusSecondary span{
+  min-width:170px;
+}
+.statusGood{color:#1f7a35}
+.statusBad{color:#a12a2a}
+
 </style>
 </head>
 
@@ -5156,6 +5167,21 @@ const FRUIT_POS=[[27,19],[38,15],[50,18],[62,14],[72,21],[31,29],[43,26],[55,29]
 function drawTreeTo(layerId,count){const l=document.getElementById(layerId);if(!l)return;l.innerHTML="";FRUIT_POS.forEach((p,i)=>{if(i<count){const f=document.createElement("i");f.className="pixelFruit";f.style.left=p[0]+"%";f.style.top=p[1]+"%";l.appendChild(f)}})}
 function drawTree(count){drawTreeTo("fruitLayer",count)}
 function initPSim(){const s=eState();if(!s.psim)ePatch({psim:{tree:20,reserve:0,round:1,harvest:0,secure:0,useReserve:0,log:[]}});else if(s.psim.useReserve===undefined)ePatch({psim:{...s.psim,useReserve:0}})}
+
+function ensureGameSummaryRow(referenceEl,rowId,needsId,desiresId){
+  if(!referenceEl)return;
+  let row=document.getElementById(rowId);
+  if(!row){
+    const baseRow=referenceEl.closest(".treeStatus");
+    if(!baseRow)return;
+    row=document.createElement("div");
+    row.className="treeStatus treeStatusSecondary";
+    row.id=rowId;
+    row.innerHTML='<span><strong>Needs:</strong> <strong id="'+needsId+'">–</strong></span><span><strong>Desires:</strong> <strong id="'+desiresId+'">–</strong></span>';
+    baseRow.insertAdjacentElement("afterend",row);
+  }
+}
+
 function renderPersonalSim(){
   initPSim();
   renderTaskCRequirements();
@@ -5168,6 +5194,27 @@ function renderPersonalSim(){
   secureCount.textContent=q.secure;
   const reserveUseCount=document.getElementById("reserveUseCount");
   if(reserveUseCount)reserveUseCount.textContent=q.useReserve||0;
+
+  ensureGameSummaryRow(treeCount,"personalSummaryRow","needsStatusNow","desiresStatusNow");
+  const needsStatusNow=document.getElementById("needsStatusNow");
+  const desiresStatusNow=document.getElementById("desiresStatusNow");
+  const lastRound=(q.log||[]).length ? q.log[q.log.length-1] : null;
+  if(needsStatusNow && desiresStatusNow){
+    if(!lastRound){
+      needsStatusNow.textContent="–";
+      needsStatusNow.className="";
+      desiresStatusNow.textContent="–";
+      desiresStatusNow.className="";
+    }else{
+      const needsOk=lastRound.needs===3;
+      const desiresCount=lastRound.desires||0;
+      needsStatusNow.textContent=needsOk ? "✓" : "✗";
+      needsStatusNow.className=needsOk ? "statusGood" : "statusBad";
+      desiresStatusNow.textContent=desiresCount===3 ? "✓" : desiresCount+"/3";
+      desiresStatusNow.className=desiresCount===3 ? "statusGood" : "";
+    }
+  }
+
   personalCards.innerHTML=p.map(x=>'<div class="miniCard"><div class="miniNeed"><strong>Need</strong><br>'+escapeHtml(x.need)+' '+fruitIcons(x.needFruit)+'</div><div class="miniDesire"><strong>Desire</strong><br>'+escapeHtml(x.desire)+' '+fruitIcons(x.desireFruit)+'</div></div>').join("");
   personalLog.innerHTML=(q.log||[]).map(r=>'<tr class="'+(r.needs===3?'needsComplete':'needsMissing')+'"><td>'+r.round+'</td><td>'+r.harvest+'</td><td>'+r.left+'</td><td>+'+r.regrow+'</td><td>'+(r.usedReserve||0)+'</td><td>'+r.reserve+'</td><td>'+r.needs+'/3</td><td>'+r.desires+'/3</td></tr>').join("");
 }
@@ -5296,6 +5343,28 @@ function renderAlloc(){
   gSecureCount.textContent=q.secure||0;
   const gReserveUseCount=document.getElementById("gReserveUseCount");
   if(gReserveUseCount)gReserveUseCount.textContent=q.useReserve||0;
+
+  ensureGameSummaryRow(gTree,"groupSummaryRow","groupNeedsStatusNow","groupDesiresStatusNow");
+  const groupNeedsStatusNow=document.getElementById("groupNeedsStatusNow");
+  const groupDesiresStatusNow=document.getElementById("groupDesiresStatusNow");
+  const lastGroupRound=(q.log||[]).length ? q.log[q.log.length-1] : null;
+  if(groupNeedsStatusNow && groupDesiresStatusNow){
+    if(!lastGroupRound){
+      groupNeedsStatusNow.textContent="–";
+      groupNeedsStatusNow.className="";
+      groupDesiresStatusNow.textContent="–";
+      groupDesiresStatusNow.className="";
+    }else{
+      const needsDone=(lastGroupRound.needsA||0)+(lastGroupRound.needsB||0);
+      const desiresDone=(lastGroupRound.desA||0)+(lastGroupRound.desB||0);
+      const needsOk=needsDone===4;
+      groupNeedsStatusNow.textContent=needsOk ? "✓" : "✗";
+      groupNeedsStatusNow.className=needsOk ? "statusGood" : "statusBad";
+      groupDesiresStatusNow.textContent=desiresDone===4 ? "✓" : desiresDone+"/4";
+      groupDesiresStatusNow.className=desiresDone===4 ? "statusGood" : "";
+    }
+  }
+
   drawTreeTo("groupFruitLayer",q.tree);
 
   const mk=(p,pi)=>p.needs.slice(0,2).map((x,i)=>'<div class="allocPair">'+
