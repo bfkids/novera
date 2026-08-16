@@ -2499,6 +2499,72 @@ button.action,
   }
 }
 
+
+/* ===== Quellenauswahl wie normale helle Buttons ===== */
+.sourceTile{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  gap:4px!important;
+
+  background:#fff!important;
+  color:#222!important;
+  border:1px solid #bbb!important;
+  border-radius:8px!important;
+  box-shadow:none!important;
+
+  padding:11px 13px!important;
+  min-height:54px!important;
+
+  font-family:system-ui,-apple-system,sans-serif!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  text-align:left!important;
+}
+
+.sourceTile:hover,
+.sourceTile:focus{
+  border-color:#356d86!important;
+  box-shadow:0 0 0 2px #5db7de22!important;
+  transform:none!important;
+}
+
+.sourceTile strong{
+  font-size:14px!important;
+  line-height:1.25!important;
+  font-weight:700!important;
+}
+
+.sourceTile span,
+.sourceTile small{
+  font-size:14px!important;
+  line-height:1.4!important;
+  font-weight:400!important;
+  color:#555!important;
+}
+
+/* Falls ein Symbol/Icon im Tile vorhanden ist: klein und unaufdringlich */
+.sourceTile .sourceIcon,
+.sourceTile > :first-child:not(strong):not(span):not(small){
+  font-size:13px!important;
+}
+
+/* Quelle-Auswahl nicht künstlich riesig machen */
+#phase2SourceChooser #sourceTiles{
+  max-width:760px!important;
+  gap:10px!important;
+}
+
+@media(max-width:700px){
+  .sourceTile{
+    width:100%!important;
+    min-height:52px!important;
+    padding:11px 12px!important;
+  }
+}
+
 </style>
 </head>
 
