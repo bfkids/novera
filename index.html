@@ -1439,7 +1439,7 @@ button,
   margin-bottom:2px;
 }
 #phase2SourceChooser #sourceTiles{
-  display:grid!important;
+  display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   max-width:760px;
 }
@@ -1463,6 +1463,27 @@ button,
   width:100%;
 }
 
+
+/* Die drei Arbeitsstand-Buttons bleiben in einer Zeile */
+.workStateControls{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center;
+  gap:8px;
+}
+.workStateControls .action{
+  width:auto!important;
+  white-space:nowrap;
+}
+@media(max-width:700px){
+  .workStateControls{
+    width:100%;
+    overflow-x:auto;
+    justify-content:flex-start!important;
+    padding-bottom:2px;
+  }
+}
+
 </style>
 </head>
 
@@ -1474,6 +1495,7 @@ button,
     <div class="workStateControls">
       <button class="action compactAction" id="saveWorkState" type="button">Arbeitsstand herunterladen</button>
       <button class="action secondary compactAction" id="loadWorkState" type="button">Arbeitsstand laden</button>
+      <button class="action secondary compactAction" id="printWorkState" type="button">Drucken</button>
       <input id="loadWorkStateFile" type="file" accept=".html,text/html" hidden>
     </div>
   </div>
@@ -4486,6 +4508,7 @@ function applyTexts(){
 function configurePhase2Source(){
   const notice=document.getElementById("sourceStatusNotice");
   const phase=document.getElementById("phase2");
+  const tiles=document.getElementById("sourceTiles");
   const saved=getSavedWorlds();
   const s=eState();
   const justLoaded=sessionStorage.getItem("novera_workstate_just_loaded")==="1";
@@ -4496,11 +4519,15 @@ function configurePhase2Source(){
     sessionStorage.removeItem("novera_workstate_just_loaded");
   }
 
-  if(saved.length && s.sourceMode!=="demo"){
+  /* Vorhandene Welten haben immer Vorrang.
+     In diesem Fall werden Demo und Laden nicht angeboten. */
+  if(saved.length){
     if(s.sourceMode!=="saved"){
       resetAfterWorldChoice();
       ePatch({sourceMode:"saved",selectedWorldId:null});
     }
+
+    if(tiles)tiles.style.display="none";
 
     phase.classList.add("hasSource");
     renderPhase2Worlds();
@@ -4514,10 +4541,14 @@ function configurePhase2Source(){
 
     if(notice){
       notice.className="sourceStatusNotice statusOk";
-      notice.innerHTML=justLoaded ? "<strong>Gespeicherter Arbeitsstand geladen.</strong><span>Deine Welten und bisherigen Eingaben wurden wiederhergestellt. Du kannst mit ihnen weiterarbeiten oder eine andere Startmöglichkeit wählen.</span>" : "<strong>Welten aus der Willkommensphase gefunden.</strong><span>Sie wurden automatisch übernommen. Du kannst unten eine Welt auswählen oder zu einer anderen Startmöglichkeit wechseln.</span>";
+      notice.innerHTML=justLoaded
+        ? "<strong>Gespeicherter Arbeitsstand geladen.</strong><span>Deine Welten und bisherigen Eingaben wurden wiederhergestellt. Wähle unten eine Welt aus, mit der du weiterarbeiten möchtest.</span>"
+        : "<strong>Welten aus der Willkommensphase gefunden.</strong><span>Sie wurden automatisch übernommen. Wähle unten eine Welt aus, mit der du weiterarbeiten möchtest.</span>";
     }
 
   }else if(s.sourceMode==="demo"){
+    if(tiles)tiles.style.display="grid";
+
     phase.classList.add("hasSource");
     renderPhase2Worlds();
 
@@ -4529,10 +4560,12 @@ function configurePhase2Source(){
 
     if(notice){
       notice.className="sourceStatusNotice statusOk";
-      notice.innerHTML="<strong>Demowelten geladen.</strong><span>Wähle unten eine Demowelt aus. Du kannst jederzeit stattdessen einen gespeicherten Arbeitsstand laden.</span>";
+      notice.innerHTML="<strong>Demowelten geladen.</strong><span>Wähle unten eine Demowelt aus. Du kannst stattdessen auch einen gespeicherten Arbeitsstand laden.</span>";
     }
 
   }else{
+    if(tiles)tiles.style.display="grid";
+
     phase.classList.remove("hasSource");
     phase.classList.remove("sourceReady");
 
@@ -4580,20 +4613,38 @@ function currentSourceWorlds(){
   return [];
 }
 function worldPreviewDataUrl(world){
-  if(world.dataUrl)return world.dataUrl;
-  if(!world.grid)return "";
+  /* Für die Entdeckungsphase wird die Vorschau immer frisch aus dem
+     Raster erzeugt. Ältere gespeicherte dataUrls können bereits eine
+     vollständige Legende enthalten und werden deshalb hier bewusst
+     nicht wiederverwendet. */
+  if(!world||!world.grid)return "";
+
   const c=document.createElement("canvas");
-  c.width=COLS*SCALE;c.height=ROWS*SCALE;
+  c.width=COLS*SCALE;
+  c.height=ROWS*SCALE;
+
   const ctx=c.getContext("2d");
-  ctx.fillStyle="#dff1fa";ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle="#dff1fa";
+  ctx.fillRect(0,0,c.width,c.height);
+
   const colors=world.userColors||defaultUserColors;
-  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
-    const v=world.grid[y]&&world.grid[y][x];
-    if(typeof v==="number"&&v>=0){
-      ctx.fillStyle=colors[v]||"#999";
-      ctx.fillRect(x*SCALE,y*SCALE,SCALE,SCALE);
+
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      const v=world.grid[y]&&world.grid[y][x];
+
+      if(typeof v==="number"&&v>=0){
+        ctx.fillStyle=colors[v]||"#999";
+        ctx.fillRect(x*SCALE,y*SCALE,SCALE,SCALE);
+
+        /* feine Rasterlinie wie in der Weltgestaltung */
+        ctx.strokeStyle="rgba(255,255,255,.28)";
+        ctx.lineWidth=1;
+        ctx.strokeRect(x*SCALE+.5,y*SCALE+.5,SCALE-1,SCALE-1);
+      }
     }
   }
+
   return c.toDataURL("image/png");
 }
 function makeDemoWorlds(){
@@ -4656,6 +4707,33 @@ function selectedSourceWorld(){
   return ws.find(w=>String(w.id)===String(s.selectedWorldId))||null;
 }
 
+
+function validLegendName(name){
+  const n=String(name||"").trim();
+  if(!n)return false;
+  if(/^farbe\s*\d+$/i.test(n))return false;
+  if(/^fläche\s*\d+$/i.test(n))return false;
+  if(/^noch nicht benannt$/i.test(n))return false;
+  if(/^noch keine bedeutung$/i.test(n))return false;
+  return true;
+}
+
+function worldLegendEntries(world){
+  const used=new Set();
+  (world.grid||[]).forEach(row=>(row||[]).forEach(v=>{
+    if(typeof v==="number"&&v>=0)used.add(v);
+  }));
+
+  return [...used]
+    .sort((a,b)=>a-b)
+    .map(i=>({
+      index:i,
+      name:String((world.userColorNames&&world.userColorNames[i])||"").trim(),
+      color:(world.userColors&&world.userColors[i])||defaultUserColors[i]||"#999"
+    }))
+    .filter(entry=>validLegendName(entry.name));
+}
+
 function renderPhase2Worlds(){
   const box=document.getElementById("phase2Worlds");
   box.innerHTML="";
@@ -4672,16 +4750,9 @@ function renderPhase2Worlds(){
     c.type="button";
     c.className="sourceWorldCard"+(String(s.selectedWorldId)===String(w.id)?" selected":"");
 
-    const used=new Set();
-    (w.grid||[]).forEach(row=>(row||[]).forEach(v=>{
-      if(typeof v==="number"&&v>=0)used.add(v);
-    }));
-
-    const legend=[...used].sort((a,b)=>a-b).map(i=>{
-      const name=(w.userColorNames&&w.userColorNames[i])||("Fläche "+(i+1));
-      const color=(w.userColors&&w.userColors[i])||defaultUserColors[i]||"#999";
-      return '<div class="sourceLegendRow"><span class="sourceLegendColor" style="background:'+color+'"></span><span>'+escapeHtml(name)+'</span></div>';
-    }).join("");
+    const legend=worldLegendEntries(w).map(entry=>
+      '<div class="sourceLegendRow"><span class="sourceLegendColor" style="background:'+entry.color+'"></span><span>'+escapeHtml(entry.name)+'</span></div>'
+    ).join("");
 
     c.innerHTML=
       '<div class="thumbLabel">Welt '+w.id+'</div>'+
@@ -4696,9 +4767,8 @@ function renderPhase2Worlds(){
 
 function latestCategories(){
   const w=selectedSourceWorld();
-  let names=(w&&w.userColorNames)||[];
-  names=names.map(x=>(x||"").trim()).filter(Boolean);
-  return [...new Set(names)];
+  if(!w)return [];
+  return [...new Set(worldLegendEntries(w).map(entry=>entry.name))];
 }
 
 function selectSourceWorld(id){
@@ -5007,23 +5077,16 @@ function makeWorkStateHtml(){
   const learning=data.learning||{};
 
   const worldSections=worlds.map(world=>{
-    const used=new Set();
-    (world.grid||[]).forEach(row=>(row||[]).forEach(v=>{
-      if(typeof v==="number"&&v>=0)used.add(v);
-    }));
-
-    const legend=[...used].sort((a,b)=>a-b).map(i=>{
-      const name=(world.userColorNames&&world.userColorNames[i])||"Noch nicht benannt";
-      const color=(world.userColors&&world.userColors[i])||"#999";
-      return '<div class="legendRow"><span class="legendColor" style="background:'+esc(color)+'"></span><span>'+esc(name)+'</span></div>';
-    }).join("");
+    const legend=worldLegendEntries(world).map(entry=>
+      '<div class="legendRow"><span class="legendColor" style="background:'+esc(entry.color)+'"></span><span>'+esc(entry.name)+'</span></div>'
+    ).join("");
 
     const key=String.fromCharCode(64+Number(world.id));
     const answer=answers[key]||"";
 
     return '<section class="printCard">'+
       '<h2>Willkommensphase – Welt '+esc(world.id)+'</h2>'+
-      '<img class="worldImage" src="'+esc(world.dataUrl||worldPreviewDataUrl(world))+'" alt="Novera Welt '+esc(world.id)+'">'+
+      '<img class="worldImage" src="'+esc(worldPreviewDataUrl(world))+'" alt="Novera Welt '+esc(world.id)+'">'+
       '<div class="legend"><h3>Legende</h3>'+legend+'</div>'+
       '<h3>Antwort zu Aufgabe '+esc(key)+'</h3>'+
       '<div class="answer">'+esc(answer).replace(/\n/g,"<br>")+'</div>'+
@@ -5050,16 +5113,9 @@ function makeWorkStateHtml(){
   try{
     const sourceWorld=selectedSourceWorld();
     if(sourceWorld){
-      const used=new Set();
-      (sourceWorld.grid||[]).forEach(row=>(row||[]).forEach(v=>{
-        if(typeof v==="number"&&v>=0)used.add(v);
-      }));
-
-      const legend=[...used].sort((a,b)=>a-b).map(i=>{
-        const name=(sourceWorld.userColorNames&&sourceWorld.userColorNames[i])||"Noch nicht benannt";
-        const color=(sourceWorld.userColors&&sourceWorld.userColors[i])||"#999";
-        return '<div class="legendRow"><span class="legendColor" style="background:'+esc(color)+'"></span><span>'+esc(name)+'</span></div>';
-      }).join("");
+      const legend=worldLegendEntries(sourceWorld).map(entry=>
+        '<div class="legendRow"><span class="legendColor" style="background:'+esc(entry.color)+'"></span><span>'+esc(entry.name)+'</span></div>'
+      ).join("");
 
       selectedWorldBlock='<section class="printCard"><h2>Novera entdecken – ausgewählte Welt</h2>'+
         '<img class="worldImage" src="'+esc(worldPreviewDataUrl(sourceWorld))+'" alt="Ausgewählte Welt">'+
@@ -5075,9 +5131,7 @@ function makeWorkStateHtml(){
     '<style>'+
     'body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#f4f1ea;color:#222}'+
     'header,main{max-width:980px;margin:auto;padding:24px}header{padding-bottom:0}'+
-    '.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 20px}'+
-    '.toolbar button{border:0;border-radius:8px;background:#222;color:#fff;padding:10px 14px;font-weight:700;cursor:pointer}'+
-    '.note{font-size:13px;color:#555;line-height:1.5}'+
+        '.note{font-size:13px;color:#555;line-height:1.5}'+
     '.printCard{background:#fff;border-radius:14px;padding:20px;margin:18px 0;box-shadow:0 2px 12px #00000012;break-inside:avoid}'+
     '.worldImage{display:block;width:100%;height:auto;border-radius:10px;background:#dff1fa}'+
     '.legend{display:grid;gap:5px;margin:12px 0}.legend h3{margin:4px 0}'+
@@ -5087,11 +5141,10 @@ function makeWorkStateHtml(){
     'table{width:100%;border-collapse:collapse;font-size:12px;overflow-wrap:anywhere}'+
     'th,td{padding:7px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}'+
     'tr.ok td{background:#eef7ec}tr.miss td{background:#fff0ee}'+
-    '@media print{body{background:#fff}header{padding-top:0}.toolbar,.note{display:none!important}.printCard{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}a{color:#000;text-decoration:none}}'+
+    '@media print{body{background:#fff}header{padding-top:0}.note{display:none!important}.printCard{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}a{color:#000;text-decoration:none}}'+
     '</style></head><body>'+
     '<header><h1>Novera – Arbeitsstand</h1>'+
-    '<p class="note">Diese Datei ist eine Sicherung deines Arbeitsstands. Du kannst sie über «Arbeitsstand laden» wieder in Novera einlesen.</p>'+
-    '<div class="toolbar"><button onclick="window.print()">Arbeitsstand drucken / als PDF sichern</button></div></header>'+
+    '<p class="note">Diese Datei ist eine Sicherung deines Arbeitsstands. Du kannst sie über «Arbeitsstand laden» wieder in Novera einlesen.</p></header>'+
     '<main>'+
     worldSections+
     (answers.D?'<section class="printCard"><h2>Willkommensphase – abschliessende Reflexion zu Aufgabe C</h2><div class="answer">'+esc(answers.D)+'</div></section>':"")+
@@ -5107,6 +5160,35 @@ function makeWorkStateHtml(){
     '</main>'+
     '<script type="application/json" id="novera-workstate-data">'+json+'<\/script>'+
     '</body></html>';
+}
+
+
+function printCurrentWorkState(){
+  try{
+    let report=makeWorkStateHtml();
+
+    /* Die Sicherungsdaten bleiben im Dokument; für den Druck stören sie nicht.
+       Direkt nach dem Laden wird der Browser-Druckdialog geöffnet. */
+    report=report.replace(
+      "</body>",
+      '<script>window.addEventListener("load",function(){setTimeout(function(){window.print();},250);});<\/script></body>'
+    );
+
+    const blob=new Blob([report],{type:"text/html;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const printWindow=window.open(url,"_blank");
+
+    if(!printWindow){
+      URL.revokeObjectURL(url);
+      alert("Das Druckfenster wurde vom Browser blockiert. Erlaube Pop-ups für diese Seite und versuche es erneut.");
+      return;
+    }
+
+    setTimeout(()=>URL.revokeObjectURL(url),15000);
+  }catch(err){
+    console.error(err);
+    alert("Der Arbeitsstand konnte nicht für den Druck vorbereitet werden.");
+  }
 }
 
 function downloadWorkState(){
@@ -5171,8 +5253,10 @@ function initWorkStateControls(){
   const saveBtn=document.getElementById("saveWorkState");
   const loadBtn=document.getElementById("loadWorkState");
   const fileInput=document.getElementById("loadWorkStateFile");
+  const printBtn=document.getElementById("printWorkState");
 
   if(saveBtn)saveBtn.onclick=downloadWorkState;
+  if(printBtn)printBtn.onclick=printCurrentWorkState;
 
   if(loadBtn&&fileInput){
     loadBtn.onclick=()=>fileInput.click();
