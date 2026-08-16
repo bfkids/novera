@@ -2800,6 +2800,64 @@ button.action,
   }
 }
 
+
+/* ===== Kurzstatus typografisch vollständig vereinheitlicht ===== */
+.simOutcomeItem{
+  font-size:14px!important;
+  line-height:1.2!important;
+}
+
+.simOutcomeItem strong,
+.simOutcomeItem > span:last-child,
+#needsStatusNow,
+#desiresStatusNow,
+#groupNeedsStatusNow,
+#groupDesiresStatusNow{
+  font-family:system-ui,-apple-system,sans-serif!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  line-height:1.2!important;
+  letter-spacing:normal!important;
+}
+
+@media(max-width:700px){
+  .simOutcomeItem,
+  .simOutcomeItem strong,
+  .simOutcomeItem > span:last-child,
+  #needsStatusNow,
+  #desiresStatusNow,
+  #groupNeedsStatusNow,
+  #groupDesiresStatusNow{
+    font-size:13px!important;
+    line-height:1.2!important;
+  }
+}
+
+
+/* Kurzbilanz: Label und Wert garantiert exakt gleich gross */
+.simOutcomeItem,
+.simOutcomeItem *,
+#needsStatusNow,
+#desiresStatusNow,
+#groupNeedsStatusNow,
+#groupDesiresStatusNow{
+  font-family:system-ui,-apple-system,sans-serif!important;
+  font-size:14px!important;
+  line-height:1.2!important;
+  font-weight:700!important;
+  letter-spacing:normal!important;
+}
+@media(max-width:700px){
+  .simOutcomeItem,
+  .simOutcomeItem *,
+  #needsStatusNow,
+  #desiresStatusNow,
+  #groupNeedsStatusNow,
+  #groupDesiresStatusNow{
+    font-size:13px!important;
+  }
+}
+
 </style>
 </head>
 
@@ -6529,7 +6587,7 @@ function collectNoveraWorkState(){
   };
 }
 
-function makeWorkStateHtml(){
+function makeWorkStateHtml(printOnlyCompleted=false){
   const data=collectNoveraWorkState();
 
   const esc=value=>String(value??"")
@@ -6544,6 +6602,19 @@ function makeWorkStateHtml(){
 
   const answers=data.taskAnswers||{};
   const learning=data.learning||{};
+
+  /* Für den Ausdruck nur tatsächlich bearbeitete Aufgaben zeigen.
+     Die Sicherungsdatei bleibt vollständig, damit der Arbeitsstand
+     weiterhin zuverlässig wiederhergestellt werden kann. */
+  const taskAWorked=Object.keys(learning.sort||{}).length>0 || !!String(learning.hardWhy||"").trim();
+  const taskBWorked=learning.stageBComplete===true && Array.isArray(learning.personal) && learning.personal.length>0;
+  const taskCWorked=Array.isArray(learning.psim?.log) && learning.psim.log.length>0;
+  const taskDWorked=!!String(learning.individualReflection||"").trim();
+  const taskEWorked=(
+    !!String(learning.groupRule||"").trim() ||
+    (Array.isArray(learning.gsim?.log) && learning.gsim.log.length>0)
+  );
+  const taskFWorked=!!String(learning.groupReflection||"").trim();
 
   const worldSections=worlds.map(world=>{
     const legend=worldLegendEntries(world).map(entry=>
@@ -6592,6 +6663,32 @@ function makeWorkStateHtml(){
     }
   }catch(e){}
 
+  const taskABlock='<section class="printCard"><h2>Novera entdecken – Aufgabe A</h2><table><thead><tr><th>Kategorie</th><th>Einordnung</th></tr></thead><tbody>'+sortRows+'</tbody></table>'+
+    '<h3>Schwieriger Entscheid</h3><div class="answer">'+esc(learning.hardWhy||"")+'</div></section>';
+
+  const taskBBlock='<section class="printCard"><h2>Novera entdecken – Aufgabe B</h2><table><thead><tr><th>#</th><th>Kategorie</th><th>Need</th><th>Desire</th></tr></thead><tbody>'+personalRows+'</tbody></table></section>';
+
+  const taskCBlock='<section class="printCard"><h2>Novera entdecken – Aufgabe C</h2><table><thead><tr><th>Runde</th><th>Ernte</th><th>Rest</th><th>Nachgewachsen</th><th>Aus Zurückgelegtem</th><th>Zurückgelegt</th><th>Needs</th><th>Desires</th></tr></thead><tbody>'+personalLog+'</tbody></table></section>';
+
+  const taskDBlock='<section class="printCard"><h2>Novera entdecken – Aufgabe D</h2><div class="answer">'+esc(learning.individualReflection||"")+'</div></section>';
+
+  const taskEBlock='<section class="printCard"><h2>Novera entdecken – Aufgabe E</h2><h3>Eure Abmachung</h3><div class="answer">'+esc(learning.groupRule||"")+'</div>'+
+    '<table><thead><tr><th>Runde</th><th>Needs A</th><th>Needs B</th><th>Desires A</th><th>Desires B</th><th>Rest</th><th>Nachgewachsen</th><th>Zurückgelegt</th></tr></thead><tbody>'+groupLog+'</tbody></table></section>';
+
+  const taskFBlock='<section class="printCard"><h2>Novera entdecken – Aufgabe F</h2><div class="answer">'+esc(learning.groupReflection||"")+'</div></section>';
+
+  const phase2Blocks=
+    (!printOnlyCompleted || taskAWorked ? taskABlock : "")+
+    (!printOnlyCompleted || taskBWorked ? taskBBlock : "")+
+    (!printOnlyCompleted || taskCWorked ? taskCBlock : "")+
+    (!printOnlyCompleted || taskDWorked ? taskDBlock : "")+
+    (!printOnlyCompleted || taskEWorked ? taskEBlock : "")+
+    (!printOnlyCompleted || taskFWorked ? taskFBlock : "");
+
+  const selectedWorldForOutput=(!printOnlyCompleted || taskAWorked || taskBWorked || taskCWorked || taskDWorked || taskEWorked || taskFWorked)
+    ? selectedWorldBlock
+    : "";
+
   const json=JSON.stringify(data).replace(/</g,"\\u003c");
 
   return '<!doctype html><html lang="de"><head><meta charset="utf-8">'+
@@ -6617,15 +6714,8 @@ function makeWorkStateHtml(){
     '<main>'+
     worldSections+
     (answers.D?'<section class="printCard"><h2>Willkommensphase – abschliessende Reflexion zu Aufgabe C</h2><div class="answer">'+esc(answers.D)+'</div></section>':"")+
-    selectedWorldBlock+
-    '<section class="printCard"><h2>Novera entdecken – Aufgabe A</h2><table><thead><tr><th>Kategorie</th><th>Einordnung</th></tr></thead><tbody>'+sortRows+'</tbody></table>'+
-    '<h3>Schwieriger Entscheid</h3><div class="answer">'+esc(learning.hardWhy||"")+'</div></section>'+
-    '<section class="printCard"><h2>Novera entdecken – Aufgabe B</h2><table><thead><tr><th>#</th><th>Kategorie</th><th>Need</th><th>Desire</th></tr></thead><tbody>'+personalRows+'</tbody></table></section>'+
-    '<section class="printCard"><h2>Novera entdecken – Aufgabe C</h2><table><thead><tr><th>Runde</th><th>Ernte</th><th>Rest</th><th>Nachgewachsen</th><th>Zurückgelegt</th><th>Needs</th><th>Desires</th></tr></thead><tbody>'+personalLog+'</tbody></table></section>'+
-    '<section class="printCard"><h2>Novera entdecken – Aufgabe D</h2><div class="answer">'+esc(learning.individualReflection||"")+'</div></section>'+
-    '<section class="printCard"><h2>Novera entdecken – Aufgabe E</h2><h3>Eure Abmachung</h3><div class="answer">'+esc(learning.groupRule||"")+'</div>'+
-    '<table><thead><tr><th>Runde</th><th>Needs A</th><th>Needs B</th><th>Desires A</th><th>Desires B</th><th>Rest</th><th>Nachgewachsen</th><th>Zurückgelegt</th></tr></thead><tbody>'+groupLog+'</tbody></table></section>'+
-    '<section class="printCard"><h2>Novera entdecken – Aufgabe F</h2><div class="answer">'+esc(learning.groupReflection||"")+'</div></section>'+
+    selectedWorldForOutput+
+    phase2Blocks+
     '</main>'+
     '<script type="application/json" id="novera-workstate-data">'+json+'<\/script>'+
     '</body></html>';
@@ -6634,7 +6724,7 @@ function makeWorkStateHtml(){
 
 function printCurrentWorkState(){
   try{
-    let report=makeWorkStateHtml();
+    let report=makeWorkStateHtml(true);
 
     /* Die Sicherungsdaten bleiben im Dokument; für den Druck stören sie nicht.
        Direkt nach dem Laden wird der Browser-Druckdialog geöffnet. */
