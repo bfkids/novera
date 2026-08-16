@@ -1452,9 +1452,6 @@ button,
 @media(max-width:700px){
   .workStateControls{
     width:100%;
-    overflow-x:auto;
-    justify-content:flex-start!important;
-    padding-bottom:2px;
   }
 }
 
@@ -1798,21 +1795,7 @@ button{
 }
 @media(max-width:700px){
   .workStateControls{
-    overflow-x:auto!important;
-    overflow-y:hidden!important;
-    padding-bottom:0!important;
     margin-bottom:18px!important;
-    scrollbar-width:none;
-    -ms-overflow-style:none;
-  }
-  .workStateControls::-webkit-scrollbar{
-    display:none;
-    width:0;
-    height:0;
-  }
-  .workStateControls .action{
-    font-size:12.5px!important;
-    padding:8px 10px!important;
   }
 }
 
@@ -1984,6 +1967,283 @@ img{
 
   .roundActions .action{
     width:100%!important;
+  }
+}
+
+
+/* ===== Mobile Feinschliff nach Gerätetest ===== */
+
+/* Einheitliche Schriftgröße für normale Textbuttons */
+button.action,
+.action,
+.checkButtons button,
+.teacherCommentLink button,
+.commentClose,
+.sourceTile,
+.deleteBtn,
+#openTeacherComment{
+  font-size:14px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+}
+
+/* Steuerelemente + / − bleiben als Symbole etwas größer */
+.counter button{
+  font-size:20px!important;
+}
+
+/* Sperrhinweise und Legenden bewusst kleiner als Aufgabentext */
+.phase2LockHint,
+.phase1LockHint{
+  font-size:14px!important;
+  line-height:1.45!important;
+}
+.roundLegend{
+  font-size:12px!important;
+  line-height:1.45!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:6px 14px!important;
+  align-items:center!important;
+}
+.roundLegend .legendOk,
+.roundLegend .legendMiss{
+  flex:0 0 auto;
+}
+
+/* Tabellen auf Mobilgeräten klar als horizontal scrollbare Elemente */
+.tableScroll{
+  width:100%;
+  max-width:100%;
+  overflow-x:auto!important;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+}
+.simpleTable{
+  width:max-content!important;
+  min-width:100%;
+  font-size:12px!important;
+}
+.simpleTable th,
+.simpleTable td{
+  padding:7px 8px!important;
+  white-space:nowrap!important;
+}
+
+/* Lange Texte dürfen nie den Kartenrand sprengen */
+.learnCard,
+.taskCard,
+.theoryBox,
+.taskQuestion,
+.taskInstruction,
+.exampleStrip,
+.experimentResult{
+  min-width:0!important;
+  overflow-wrap:anywhere;
+}
+
+/* Reflexionsentscheidung: Desktop darf zweispaltig bleiben */
+.reflectionDecision{
+  display:flex!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+}
+.reflectionDecision .action,
+.reflectionDecision button{
+  min-width:0!important;
+}
+
+/* Mobile: die beiden Entscheidungsbuttons untereinander */
+@media(max-width:700px){
+  .reflectionDecision{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+  .reflectionDecision .action,
+  .reflectionDecision button{
+    width:100%!important;
+    max-width:100%!important;
+    flex:none!important;
+  }
+
+  /* Aktionstasten innerhalb der Aufgaben nicht unnötig übergroß */
+  .compactAction{
+    width:auto!important;
+    max-width:100%!important;
+  }
+
+  /* Rundenbuttons bleiben klar untereinander */
+  .roundActions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+  .roundActions .action{
+    width:100%!important;
+  }
+
+  /* Tabellen etwas kompakter, damit mehr Spalten sichtbar werden */
+  .simpleTable{
+    font-size:11.5px!important;
+  }
+  .simpleTable th,
+  .simpleTable td{
+    padding:6px 7px!important;
+  }
+
+  .roundLegend{
+    font-size:12px!important;
+    margin-top:10px!important;
+  }
+
+  /* Statusfelder im Baum kompakt halten */
+  .simNumbers,
+  .socialStatus{
+    gap:7px!important;
+  }
+  .simNumbers strong,
+  .socialStatus strong{
+    padding:7px 9px!important;
+    font-size:13px!important;
+  }
+
+  /* Textfelder bleiben groß genug gegen Browser-Autozoom */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+  textarea,
+  select{
+    font-size:16px!important;
+  }
+}
+
+/* Sehr schmale Geräte */
+@media(max-width:420px){
+  .learnCard,
+  .taskCard,
+  .panel{
+    padding:14px!important;
+  }
+
+  .taskLabel{
+    font-size:12px!important;
+  }
+
+  .roundLegend{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+  }
+}
+
+
+/* ===== Responsive Nachprüfung: echte mobile Breiten ===== */
+
+/* Arbeitsstand-Buttons dürfen auf kleinen Geräten umbrechen,
+   damit kein Button abgeschnitten wird. */
+@media(max-width:700px){
+  .workStateControls{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+    width:100%!important;
+    overflow:visible!important;
+    margin-bottom:20px!important;
+  }
+
+  .workStateControls .action{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    text-align:center!important;
+    font-size:14px!important;
+    padding:10px 9px!important;
+  }
+
+  /* Der wichtigste Button erhält die volle erste Zeile,
+     die beiden Sekundäraktionen teilen sich die zweite. */
+  .workStateControls .action:first-child{
+    grid-column:1 / -1!important;
+  }
+}
+
+/* Auf sehr schmalen Geräten alle drei untereinander. */
+@media(max-width:430px){
+  .workStateControls{
+    grid-template-columns:1fr!important;
+  }
+  .workStateControls .action:first-child{
+    grid-column:auto!important;
+  }
+}
+
+/* Genereller Schutz vor horizontalem Überlaufen */
+html,body{
+  max-width:100%;
+  overflow-x:hidden;
+}
+header,
+main,
+.phase,
+.panel,
+.taskCard,
+.learnCard,
+.mission,
+.phase2Mission,
+.treeStorySimple,
+.simLayout,
+.workStateControls{
+  max-width:100%;
+  min-width:0;
+}
+
+/* Responsive Karten-/Grid-Kinder dürfen sich wirklich verkleinern */
+.phase2Mission > *,
+.treeStorySimple > *,
+.simLayout > *,
+.allocationGrid > *,
+.profileGrid > *,
+.pairGrid > *,
+.simpleGrid > *{
+  min-width:0!important;
+}
+
+/* Breite Controls nicht über ihren Container hinaus */
+.action,
+button,
+textarea,
+input,
+select{
+  max-width:100%;
+}
+
+/* Mobile Tabellen bleiben der einzige bewusst horizontal scrollbare Bereich */
+.tableScroll{
+  max-width:100%!important;
+  overflow-x:auto!important;
+}
+
+/* Mobile Statuszeilen dürfen umbrechen statt überlaufen */
+@media(max-width:700px){
+  .simNumbers,
+  .socialStatus{
+    flex-wrap:wrap!important;
+    justify-content:center!important;
+  }
+
+  .simNumbers strong,
+  .socialStatus strong{
+    white-space:normal!important;
+    text-align:center!important;
+  }
+
+  .counterBox{
+    min-width:0!important;
+  }
+
+  .counterBox label{
+    min-width:0!important;
+    overflow-wrap:anywhere;
   }
 }
 
