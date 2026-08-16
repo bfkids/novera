@@ -528,33 +528,7 @@ h2{
 
 /* Wortvorschläge */
 
-.suggestionBox{
-  font-size:11px;
-  color:#66512c;
-  background:#fcf8e3;
-  border:1px solid #faebcc;
-  border-radius:6px;
-  padding:5px 8px;
-  margin-top:2px;
-  display:none;
-  line-height:1.4;
-}
 
-.suggestionChip{
-  display:inline-block;
-  background:#222;
-  color:#fff;
-  padding:2px 6px;
-  border-radius:4px;
-  cursor:pointer;
-  margin-left:4px;
-  font-weight:600;
-  font-size:11px;
-}
-
-.suggestionChip:hover{
-  background:#444;
-}
 
 /* Buttons */
 
@@ -1484,6 +1458,23 @@ button,
   }
 }
 
+
+.sourceWorldCard.sourceWorldUnusable{
+  opacity:.72;
+  cursor:not-allowed;
+}
+.sourceWorldCard.sourceWorldUnusable:hover{
+  transform:none!important;
+  box-shadow:none!important;
+}
+.sourceLegendEmpty{
+  padding:10px;
+  font-size:12px;
+  color:#7b4b18;
+  background:#fff7df;
+  border-top:1px solid #ead7a5;
+}
+
 </style>
 </head>
 
@@ -1789,22 +1780,22 @@ button,
 <section class="learnTasks sourceDependent">
 <article class="learnCard phase2Lockable phase2Locked" id="learn1"><span class="taskLabel">Aufgabe A</span><h2 data-t="t1.title">Das brauche ich – das möchte ich zusätzlich</h2><p class="phase2LockHint">Wähle zuerst eine Welt aus.</p><p class="taskInstruction" data-t="t1.instruction">Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.</p><div id="categorySort" class="sortList"></div><div id="hardDecision" class="hardDecision"><div class="labField taskQuestion"><label>Wähle einen schwierigen Entscheid und beschreibe, was du daran schwierig findest.</label><textarea id="hardWhy" data-e-save="hardWhy"></textarea></div></div><button class="action compactAction" id="confirmSort" data-t="t1.confirm">Meine Auswahl bestätigen</button><div class="theoryBox hidden" id="needReveal"><p data-t="t1.reveal">Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.</p><p data-t="t1.allergy">Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.</p></div></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn2"><span class="taskLabel">Aufgabe B</span><h2 data-t="t2.title">Drei Needs genauer anschauen</h2><p class="phase2LockHint">Wähle zuerst eine Welt aus.</p><p class="taskInstruction" data-t="t2.instruction">Wähle drei Needs aus. Beschreibe jeden Need genauer und ergänze dazu einen passenden Desire.</p><div class="exampleStrip"><strong data-t="common.example">Beispiel</strong><br><span data-t="t2.example">Need: mit anderen Menschen kommunizieren können. Desire: dafür immer das neueste Smartphone haben.</span></div><div id="needEditors" class="needEditors"></div><div class="phaseNav"><button class="action" id="makeNeeds" data-t="t2.confirm">Auswahl übernehmen</button></div><div class="theoryBox hidden" id="requirementsReveal">
-  <p><strong>Auf Novera ist nicht alles gleich einfach zu ermöglichen.</strong> Ob ein Need oder Desire leicht oder schwierig zu erfüllen ist, kann davon abhängen, wo du dich befindest, was bereits vorhanden ist und was du dafür aus der Natur oder von anderen Menschen brauchst. In der nächsten Aufgabe lernst du eine besondere Möglichkeit kennen, mit der Novera diese unterschiedlichen Voraussetzungen sichtbar macht.</p>
+  <p><strong>Um Needs und Desires erfüllen zu können, braucht es Voraussetzungen.</strong> Manche davon sind natürliche Voraussetzungen, zum Beispiel Wasser, Boden, Rohstoffe oder Energie. Andere sind gesellschaftliche Voraussetzungen, zum Beispiel Wissen, Arbeit, Infrastruktur, Regeln oder Zusammenarbeit. Oft braucht es beides gleichzeitig. Welche Voraussetzungen nötig sind, hängt davon ab, was Menschen brauchen oder sich wünschen und unter welchen Bedingungen sie leben.</p>
   <div id="requirementsList"></div>
 </div></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn3"><span class="taskLabel">Aufgabe C</span><h2 data-t="t3.title">Der wundersame Baum</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p><div class="treeStory treeStorySimple">
   <div class="treeImagePlaceholder" aria-hidden="true"></div>
-  <p data-t="t3.story">Auf Novera wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit Needs und Desires erfüllen. Nicht alle Needs oder Desires sind aber gleich einfach zu erfüllen. Was wie viele Früchte braucht, kann von vielen Faktoren abhängen: Wo du dich befindest, was schon da ist oder was du dazu allenfalls aus der Natur oder von anderen Menschen brauchst. Im Spiel wird die benötigte Zahl der Früchte zufällig festgelegt. Hier siehst du nun die Zuordnung für deine Needs und Desires.</p>
-</div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später sichern.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Sicherheit</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später sichern</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th data-t="log.reserve">Sicherheit</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
+  <p data-t="t3.story">Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt. Hier siehst du die Zuordnung für deine Needs und Desires.</p>
+</div><div id="taskCRequirements" class="requirementGrid"></div><p class="taskInstruction" data-t="t3.goal">Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.</p><div class="simLayout"><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">20</span>/20</strong><strong><span data-t="sim.reserve">Zurückgelegt</span>: <span id="reserveCount">0</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div><div id="personalCards" class="miniCards"></div><div class="counterBox"><label data-t="sim.harvest">Ernten</label><div class="counter"><button id="harvestMinus">−</button><strong id="harvestCount">0</strong><button id="harvestPlus">+</button></div></div><div class="counterBox"><label data-t="sim.secure">Davon für später zurücklegen</label><div class="counter"><button id="secureMinus">−</button><strong id="secureCount">0</strong><button id="securePlus">+</button></div></div><button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button></div></div><div id="roundFeedback" class="experimentResult"></div><div class="tableScroll"><table class="simpleTable"><thead><tr><th data-t="log.round">Runde</th><th data-t="log.harvest">Ernte</th><th data-t="log.treeleft">Rest am Baum</th><th data-t="log.regrow">Nachgewachsen</th><th data-t="log.reserve">Zurückgelegt</th><th data-t="log.needs">Needs</th><th data-t="log.desires">Desires</th></tr></thead><tbody id="personalLog"></tbody></table></div><p class="roundLegend"><span class="legendOk"></span> alle Needs erfüllt &nbsp;&nbsp; <span class="legendMiss"></span> mindestens ein Need nicht erfüllt</p></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn4">
   <span class="taskLabel">Aufgabe D</span>
   <h2>Was hast du beobachtet?</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
   <div class="taskQuestion reflectionPrompt">
-    <strong>Reflektiere deine Spielrunden.</strong>
+    <strong>Reflektiere deine Runden.</strong>
     <p>Gehe dabei auf diese Fragen ein:</p>
     <ul>
       <li>Was geschah, wenn du viele Früchte genutzt hast?</li>
-      <li>Wann war dein Sicherheitsvorrat hilfreich?</li>
+      <li>Was hat sich verändert, wenn du Früchte für später zurückgelegt hast?</li>
       <li>Was geschah mit deinen Desires?</li>
       <li>Was war bei der Erneuerung nicht vorhersehbar?</li>
     </ul>
@@ -1814,7 +1805,7 @@ button,
 
   <div class="theoryBox hidden" id="individualTheory">
     <strong>Deine Reflexion sollte mindestens folgende Erkenntnis beinhalten:</strong>
-    <p><strong>Nutzung heute beeinflusst Möglichkeiten morgen.</strong> Die Erneuerung ist begrenzt und nicht vollständig vorhersehbar. Sich Gedanken darüber zu machen, was später noch möglich sein soll, kann helfen, mit dieser Unsicherheit umzugehen.</p>
+    <p><strong>Nutzung heute beeinflusst Möglichkeiten morgen.</strong> Die Erneuerung ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.</p>
     <div class="reflectionDecision">
       <button class="action" id="reflectionRecognized" type="button">Das habe ich so erkannt</button>
       <button class="action secondary" id="reflectionRevise" type="button">Meine Reflexion überarbeiten</button>
@@ -1830,7 +1821,7 @@ button,
 
   <div class="socialStatus">
     <strong>Am Baum: <span id="gTree">20</span>/20</strong>
-    <strong>Sicherheit: <span id="gReserve">0</span></strong>
+    <strong>Zurückgelegt: <span id="gReserve">0</span></strong>
     <strong>Runde: <span id="gRound">1</span></strong>
   </div>
 
@@ -1857,11 +1848,11 @@ button,
     <label for="groupRule">Eure Abmachung</label>
     <textarea id="groupRule" data-e-save="groupRule" placeholder="Einigt euch auf eine Regel, nach der ihr die Früchte verteilen wollt."></textarea>
     <button class="helpBtn" data-help="ruleHelp" type="button">?</button>
-    <div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Sollen zuerst Needs erfüllt werden? Soll jede Person gleich viel erhalten? Was geschieht, wenn nicht alles möglich ist? Wie viel wollt ihr für später sichern?</div>
+    <div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Sollen zuerst Needs erfüllt werden? Soll jede Person gleich viel erhalten? Was geschieht, wenn nicht alles möglich ist? Wie viel wollt ihr für später zurücklegen?</div>
   </div>
 
   <div class="counterBox">
-    <label>Für später sichern</label>
+    <label>Für später zurücklegen</label>
     <div class="counter">
       <button id="gSecureMinus" type="button">−</button>
       <strong id="gSecureCount">0</strong>
@@ -1877,7 +1868,7 @@ button,
       <thead>
         <tr>
           <th>Runde</th><th>Needs A</th><th>Needs B</th><th>Desires A</th><th>Desires B</th>
-          <th>Rest am Baum</th><th>Nachgewachsen</th><th>Sicherheit</th>
+          <th>Rest am Baum</th><th>Nachgewachsen</th><th>Zurückgelegt</th>
         </tr>
       </thead>
       <tbody id="groupLog"></tbody>
@@ -1889,11 +1880,11 @@ button,
   <span class="taskLabel">Aufgabe F</span>
   <h2>Was hat sich verändert?</h2><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p>
   <div class="taskQuestion reflectionPrompt">
-    <strong>Reflektiert eure gemeinsamen Spielrunden.</strong>
+    <strong>Reflektiert eure gemeinsamen Runden.</strong>
     <p>Geht dabei auf diese Fragen ein:</p>
     <ul>
       <li>War eure Verteilung für Person A und Person B gerecht? Warum?</li>
-      <li>Welche Bedeutung hatte euer gemeinsamer Sicherheitsvorrat?</li>
+      <li>Was hat sich verändert, wenn ihr gemeinsam Früchte für später zurückgelegt habt?</li>
       <li>Habt ihr eure Abmachung im Verlauf verändert? Warum?</li>
     </ul>
     <textarea id="groupReflection" data-e-save="groupReflection" class="largeReflection"></textarea>
@@ -1993,7 +1984,7 @@ button,
       <strong>Novera</strong> ist eine digitale Lernumgebung, in der Lernende
       zunächst eigene Vorstellungen eines guten Lebens gestalten und vergleichen.
       In der anschliessenden Erarbeitungsphase untersuchen sie Needs und Desires,
-      begrenzte Möglichkeiten, Erneuerung, Unsicherheit, Vorsorge sowie gemeinsame
+      begrenzte Möglichkeiten, Erneuerung, Unsicherheit, Zukunftsüberlegungen sowie gemeinsame
       Regeln und Verteilungsentscheidungen.
     </p>
 
@@ -2003,7 +1994,7 @@ button,
       Die Lernumgebung verbindet offene Gestaltung, Reflexion und eine vereinfachte
       Simulation. Die erste Phase macht unterschiedliche Bedürfnisse, Wünsche und
       Vorstellungen sichtbar. Die zweite Phase lenkt den Blick auf Zusammenhänge
-      zwischen heutiger Nutzung, zukünftigen Möglichkeiten und Entscheidungen unter
+      zwischen heutiger Nutzung, zukünftigen Möglichkeiten und dem Umgang mit
       begrenzten und nicht vollständig vorhersehbaren Bedingungen. In der
       Partnerphase werden zusätzlich Aushandlung, Verteilung und gemeinsame Regeln
       thematisiert.
@@ -2016,7 +2007,7 @@ button,
       vor. Begriffe, Fruchtzuordnungen und Erneuerungsraten sind Teil einer bewusst
       vereinfachten Fantasiewelt. Die Ergebnisse sollten deshalb nicht als reale
       Nachhaltigkeitsbewertung verstanden werden. Für den Unterricht ist die
-      anschliessende Diskussion wichtig: Welche Zusammenhänge zeigt das Spiel,
+      anschliessende Diskussion wichtig: Welche Zusammenhänge zeigt Novera,
       welche vereinfacht es und was lässt sich nicht direkt auf die reale Welt
       übertragen?
     </p>
@@ -2060,7 +2051,7 @@ button,
 
     <p>
       Novera verwendet keine Benutzerkonten, Kontaktformulare oder
-      Analysewerkzeuge. Eingegebene Begriffe, Antworten, Spielstände und
+      Analysewerkzeuge. Eingegebene Begriffe, Antworten, Arbeitsstände und
       gespeicherte Welten werden im lokalen Speicher des verwendeten Browsers
       abgelegt und von der Anwendung nicht an den Verantwortlichen übermittelt.
       Auch die Arbeitsstandsdatei wird direkt im Browser erstellt.
@@ -3789,203 +3780,17 @@ function makePalette(){
         userColorNames[index];
 
 
-      /*
-       * Vorschlagsbox
-       */
-
-      const suggestBox =
-        document.createElement(
-          "div"
-        );
-
-      suggestBox.className =
-        "suggestionBox";
-
-
-      function checkSuggestions(){
-
-        const val =
-          name.value.trim();
-
-        suggestBox.innerHTML = "";
-
-        suggestBox.style.display =
-          "none";
-
-
-        if(!val){
-          return;
-        }
-
-
-        const words =
-          val.split(/\s+/);
-
-        const suggestions = [];
-
-
-        words.forEach(word => {
-
-          const match =
-            getBestFuzzyMatch(word);
-
-          if(
-            match &&
-            match.toLowerCase() !==
-            word.toLowerCase()
-          ){
-
-            if(
-              !suggestions.includes(match)
-            ){
-
-              suggestions.push(
-                match
-              );
-            }
-          }
-        });
-
-
-        if(
-          suggestions.length === 0
-        ){
-
-          return;
-        }
-
-
-        suggestBox.style.display =
-          "block";
-
-
-        const labelText =
-          document.createElement(
-            "span"
-          );
-
-        labelText.textContent =
-          "Meintest du: ";
-
-        suggestBox.appendChild(
-          labelText
-        );
-
-
-        suggestions.forEach(
-          suggestion => {
-
-            const chip =
-              document.createElement(
-                "span"
-              );
-
-            chip.className =
-              "suggestionChip";
-
-            chip.textContent =
-              suggestion;
-
-
-            chip.onclick = () => {
-
-              let currentText =
-                name.value;
-
-
-              words.forEach(word => {
-
-                const normalizedWord =
-                  normalizeWord(word);
-
-                const normalizedSuggestion =
-                  normalizeWord(
-                    suggestion
-                  );
-
-
-                if(
-                  normalizedWord ===
-                  normalizedSuggestion ||
-                  getBestFuzzyMatch(word) ===
-                  suggestion
-                ){
-
-                  const escaped =
-                    word.replace(
-                      /[.*+?^${}()|[\]\\]/g,
-                      "\\$&"
-                    );
-
-
-                  const reg =
-                    new RegExp(
-                      "\\b" +
-                      escaped +
-                      "\\b",
-                      "gi"
-                    );
-
-
-                  currentText =
-                    currentText.replace(
-                      reg,
-                      suggestion
-                    );
-                }
-              });
-
-
-              if(
-                currentText ===
-                name.value
-              ){
-
-                currentText =
-                  suggestion;
-              }
-
-
-              name.value =
-                currentText;
-
-              userColorNames[index] =
-                currentText;
-
-              updateColorShares();
-
-              suggestBox.style.display =
-                "none";
-            };
-
-
-            suggestBox.appendChild(
-              chip
-            );
-          }
-        );
-      }
-
-
       name.oninput = () => {
 
         userColorNames[index] =
           name.value;
-
-        checkSuggestions();
 
         updateColorShares();
       };
 
 
       card.appendChild(name);
-
-      card.appendChild(
-        suggestBox
-      );
-
-
-      userP.appendChild(card);
+userP.appendChild(card);
     }
   );
 }
@@ -4493,7 +4298,7 @@ document.addEventListener(
    ERARBEITUNG V3 – lokal, ohne Backend
    ============================================================ */
 const E_KEY="novera_erarbeitung_v4";
-const TXT={"p2.kicker": "Novera", "p2.title": "Novera weiter entdecken", "p2.intro": "Du arbeitest mit deinen bisherigen Welten weiter und untersuchst, wie Bedürfnisse, Wünsche, begrenzte Möglichkeiten und Entscheidungen zusammenhängen.", "nav.back": "← Zurück", "worlds.title": "Deine gespeicherten Welten", "worlds.note": "Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.", "worlds.empty": "Noch keine Welt gespeichert.", "worlds.world": "Welt", "t1.title": "Das brauche ich – das möchte ich zusätzlich", "t1.instruction": "Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.", "sort.need": "Das brauche ich", "sort.desire": "Das möchte ich zusätzlich", "sort.hard": "Schwierig zu entscheiden", "t1.hardWhat": "Was ist schwierig einzuordnen?", "t1.hardWhy": "Warum ist die Entscheidung schwierig?", "t1.confirm": "Meine Auswahl bestätigen", "t1.reveal": "Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.", "t1.allergy": "Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.", "t1.noCategories": "In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.", "t2.title": "Drei Needs genauer anschauen", "t2.instruction": "Wähle drei Needs aus. Beschreibe jeden Need genauer und ergänze dazu einen passenden Desire.", "common.example": "Beispiel", "t2.example": "Need: mit anderen Menschen kommunizieren können. Desire: dafür immer das neueste Smartphone haben.", "t2.choose": "Kategorie auswählen", "t2.needLabel": "Need", "t2.desireLabel": "Desire", "t2.confirm": "Auswahl übernehmen", "t2.requirementsIntro": "Auf Novera ist nicht alles gleich einfach zu ermöglichen. Deshalb wird für jeden Need und Desire festgelegt, wie viele Früchte in diesem Versuch benötigt werden.", "t2.requirementsNote": "Die Früchte stehen im Modell für begrenzte Möglichkeiten. Sie sind kein Geld und keine wirklichen «Kosten».", "t2.needThree": "Ordne in Aufgabe 1 mindestens drei Kategorien bei «Das brauche ich» ein.", "t2.fill": "Bitte fülle bei allen drei Beispielen beide Felder aus.", "t3.title": "Der wundersame Baum", "t3.story": "Auf Novera wächst ein wundersamer Baum. Seine Früchte stehen in diesem Modell für begrenzte Möglichkeiten, die du für deine Bedürfnisse und zusätzlichen Wünsche nutzen kannst. Der Baum trägt höchstens 20 Früchte.", "t3.goal": "Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später sichern.", "sim.tree": "Am Baum", "sim.reserve": "Sicherheit", "sim.round": "Runde", "sim.harvest": "Ernten", "sim.secure": "Davon für später sichern", "sim.finish": "Runde abschliessen", "sim.needFirst": "Schliesse zuerst Aufgabe 2 ab.", "sim.feedback": "Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.", "log.round": "Runde", "log.harvest": "Ernte", "log.treeleft": "Rest am Baum", "log.regrow": "Nachgewachsen", "log.reserve": "Sicherheit", "log.needs": "Needs", "log.desires": "Desires", "t4.title": "Was hast du beobachtet?", "t4.intro": "Schau auf deine Runden zurück und beschreibe deine Erfahrungen.", "t4.q1": "Was geschah, wenn du viele Früchte genutzt hast?", "t4.q2": "Wann war dein Sicherheitsvorrat hilfreich?", "t4.q3": "Was geschah mit deinen Desires?", "t4.q4": "Was war bei der Erneuerung nicht vorhersehbar?", "t4.rememberTitle": "Das kannst du festhalten:", "t4.remember": "Nutzung heute beeinflusst Möglichkeiten morgen. Die Erneuerung ist begrenzt und nicht vollständig vorhersehbar. Vorsorge kann helfen, mit Unsicherheit umzugehen.", "t5.title": "Jetzt arbeitet ihr zu zweit", "t5.intro": "Setzt euch zu zweit zusammen. Für die gemeinsame Aufgabe erhaltet ihr zwei fiktive Personen: Person A und Person B. Beide haben eigene Needs und Desires.", "t5.newProfiles": "Andere Profile", "t5.rule": "Eure Abmachung", "t5.help": "Denkt zum Beispiel darüber nach: Sollen zuerst Needs erfüllt werden? Soll jede Person gleich viel erhalten? Was geschieht, wenn nicht alles möglich ist? Wie viel wollt ihr für später sichern?", "profile.needs": "Needs – das braucht die Person", "profile.desires": "Desires – das möchte die Person zusätzlich", "t6.title": "Gemeinsam entscheiden", "t6.intro": "Wählt selbst per Klick aus, welche Needs und Desires ihr in dieser Runde erfüllen wollt. Die Website zeigt nur die Folgen eurer Entscheidung.", "t6.secure": "Für später sichern", "t6.finish": "Gemeinsame Runde abschliessen", "t6.changeRule": "Habt ihr eure Abmachung verändert? Wenn ja: warum?", "t6.tooMuch": "Dafür reichen die verfügbaren Früchte nicht.", "t6.feedback": "Ihr habt {used} Früchte verteilt und {secure} für später gesichert. {aN}/3 Needs von Person A und {bN}/3 Needs von Person B wurden erfüllt. Am Baum blieben {left}; über Nacht wuchsen {reg} nach.", "t7.title": "Was hat sich verändert?", "t7.q1": "Welche Needs konnten nicht immer erfüllt werden?", "t7.q2": "War eure Verteilung für Person A und Person B gerecht? Warum?", "t7.q3": "Welche Bedeutung hatte euer gemeinsamer Sicherheitsvorrat?", "t7.q4": "Was habt ihr über gemeinsame Regeln und Entscheidungen herausgefunden?", "end.question": "Was hat Novera mit der Erde zu tun?", "end.note": "Der Baum und seine Früchte sind erfunden. Gibt es auf der Erde trotzdem ähnliche Zusammenhänge? Diese Frage verfolgt ihr im anschliessenden Mystery weiter."};
+const TXT={"p2.kicker": "Novera", "p2.title": "Novera weiter entdecken", "p2.intro": "Du arbeitest mit deinen bisherigen Welten weiter und untersuchst, wie Bedürfnisse, Wünsche, begrenzte Möglichkeiten und Entscheidungen zusammenhängen.", "nav.back": "← Zurück", "worlds.title": "Deine gespeicherten Welten", "worlds.note": "Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.", "worlds.empty": "Noch keine Welt gespeichert.", "worlds.world": "Welt", "t1.title": "Das brauche ich – das möchte ich zusätzlich", "t1.instruction": "Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich passt.", "sort.need": "Das brauche ich", "sort.desire": "Das möchte ich zusätzlich", "sort.hard": "Schwierig zu entscheiden", "t1.hardWhat": "Was ist schwierig einzuordnen?", "t1.hardWhy": "Warum ist die Entscheidung schwierig?", "t1.confirm": "Meine Auswahl bestätigen", "t1.reveal": "Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.", "t1.allergy": "Was ein Mensch wirklich braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.", "t1.noCategories": "In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.", "t2.title": "Drei Needs genauer anschauen", "t2.instruction": "Wähle drei Needs aus. Beschreibe jeden Need genauer und ergänze dazu einen passenden Desire.", "common.example": "Beispiel", "t2.example": "Need: mit anderen Menschen kommunizieren können. Desire: dafür immer das neueste Smartphone haben.", "t2.choose": "Kategorie auswählen", "t2.needLabel": "Need", "t2.desireLabel": "Desire", "t2.confirm": "Auswahl übernehmen", "t2.requirementsIntro": "Um Needs und Desires erfüllen zu können, braucht es natürliche und gesellschaftliche Voraussetzungen.", "t2.requirementsNote": "", "t2.needThree": "Ordne in Aufgabe 1 mindestens drei Kategorien bei «Das brauche ich» ein.", "t2.fill": "Bitte fülle bei allen drei Beispielen beide Felder aus.", "t3.title": "Der wundersame Baum", "t3.story": "Auf Novera braucht es zur Erfüllung von Needs und Desires keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Wer seine Früchte pflückt, kann damit erfüllen, was er braucht und was er sich wünscht. Welche Needs und Desires wie viele Früchte benötigen, folgt keiner bestimmten Logik. Die benötigte Zahl der Früchte wird zufällig festgelegt.", "t3.goal": "Versuche, deine Needs über mehrere Runden zu erfüllen. Wenn genug Früchte vorhanden sind, kannst du auch Desires erfüllen. Du kannst einen Teil deiner Ernte für später zurücklegen.", "sim.tree": "Am Baum", "sim.reserve": "Zurückgelegt", "sim.round": "Runde", "sim.harvest": "Ernten", "sim.secure": "Davon für später zurücklegen", "sim.finish": "Runde abschliessen", "sim.needFirst": "Schliesse zuerst Aufgabe 2 ab.", "sim.feedback": "Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Du konntest {needs} von 3 Needs und {desires} von 3 Desires erfüllen.", "log.round": "Runde", "log.harvest": "Ernte", "log.treeleft": "Rest am Baum", "log.regrow": "Nachgewachsen", "log.reserve": "Zurückgelegt", "log.needs": "Needs", "log.desires": "Desires", "t4.title": "Was hast du beobachtet?", "t4.intro": "Schau auf deine Runden zurück und beschreibe deine Erfahrungen.", "t4.q1": "Was geschah, wenn du viele Früchte genutzt hast?", "t4.q2": "Was hat sich verändert, wenn du Früchte für später zurückgelegt hast?", "t4.q3": "Was geschah mit deinen Desires?", "t4.q4": "Was war bei der Erneuerung nicht vorhersehbar?", "t4.rememberTitle": "Das kannst du festhalten:", "t4.remember": "Nutzung heute beeinflusst Möglichkeiten morgen. Die Erneuerung ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.", "t5.title": "Jetzt arbeitet ihr zu zweit", "t5.intro": "Setzt euch zu zweit zusammen. Für die gemeinsame Aufgabe erhaltet ihr zwei fiktive Personen: Person A und Person B. Beide haben eigene Needs und Desires.", "t5.newProfiles": "Andere Profile", "t5.rule": "Eure Abmachung", "t5.help": "Denkt zum Beispiel darüber nach: Sollen zuerst Needs erfüllt werden? Soll jede Person gleich viel erhalten? Was geschieht, wenn nicht alles möglich ist? Wie viel wollt ihr für später zurücklegen?", "profile.needs": "Needs – das braucht die Person", "profile.desires": "Desires – das möchte die Person zusätzlich", "t6.title": "Gemeinsam entscheiden", "t6.intro": "Wählt selbst per Klick aus, welche Needs und Desires ihr in dieser Runde erfüllen wollt. Die Website zeigt nur die Folgen eurer Entscheidung.", "t6.secure": "Für später zurücklegen", "t6.finish": "Gemeinsame Runde abschliessen", "t6.changeRule": "Habt ihr eure Abmachung verändert? Wenn ja: warum?", "t6.tooMuch": "Dafür reichen die verfügbaren Früchte nicht.", "t6.feedback": "Ihr habt {used} Früchte verteilt und {secure} für später zurückgelegt. {aN}/3 Needs von Person A und {bN}/3 Needs von Person B wurden erfüllt. Am Baum blieben {left}; über Nacht wuchsen {reg} nach.", "t7.title": "Was hat sich verändert?", "t7.q1": "Welche Needs konnten nicht immer erfüllt werden?", "t7.q2": "War eure Verteilung für Person A und Person B gerecht? Warum?", "t7.q3": "Was hat sich verändert, wenn ihr gemeinsam Früchte für später zurückgelegt habt?", "t7.q4": "Was habt ihr über gemeinsame Regeln und Entscheidungen herausgefunden?", "end.question": "Was hat Novera mit der Erde zu tun?", "end.note": "Der Baum und seine Früchte sind erfunden. Gibt es auf der Erde trotzdem ähnliche Zusammenhänge? Diese Frage verfolgt ihr im anschliessenden Mystery weiter."};
 function eState(){try{return JSON.parse(localStorage.getItem(E_KEY))||{};}catch(e){return {};}}
 function ePatch(p){const s=eState();Object.assign(s,p);localStorage.setItem(E_KEY,JSON.stringify(s));return s;}
 function t(k,f=""){return TXT[k]||f||k}
@@ -4509,6 +4314,8 @@ function configurePhase2Source(){
   const notice=document.getElementById("sourceStatusNotice");
   const phase=document.getElementById("phase2");
   const tiles=document.getElementById("sourceTiles");
+  const demoBtn=document.getElementById("sourceDemo");
+  const loadBtn=document.getElementById("sourcePdf");
   const saved=getSavedWorlds();
   const s=eState();
   const justLoaded=sessionStorage.getItem("novera_workstate_just_loaded")==="1";
@@ -4519,9 +4326,9 @@ function configurePhase2Source(){
     sessionStorage.removeItem("novera_workstate_just_loaded");
   }
 
-  /* Vorhandene Welten haben immer Vorrang.
-     In diesem Fall werden Demo und Laden nicht angeboten. */
-  if(saved.length){
+  const usableSaved=saved.filter(worldHasDefinedLegend);
+
+  if(saved.length && usableSaved.length){
     if(s.sourceMode!=="saved"){
       resetAfterWorldChoice();
       ePatch({sourceMode:"saved",selectedWorldId:null});
@@ -4533,10 +4340,15 @@ function configurePhase2Source(){
     renderPhase2Worlds();
 
     const state=eState();
-    if(state.selectedWorldId){
+    const selected=state.selectedWorldId
+      ? saved.find(w=>String(w.id)===String(state.selectedWorldId))
+      : null;
+
+    if(selected&&worldHasDefinedLegend(selected)){
       phase.classList.add("sourceReady");
     }else{
       phase.classList.remove("sourceReady");
+      if(state.selectedWorldId)ePatch({selectedWorldId:null});
     }
 
     if(notice){
@@ -4546,8 +4358,31 @@ function configurePhase2Source(){
         : "<strong>Welten aus der Willkommensphase gefunden.</strong><span>Sie wurden automatisch übernommen. Wähle unten eine Welt aus, mit der du weiterarbeiten möchtest.</span>";
     }
 
+  }else if(saved.length && !usableSaved.length){
+    /* Welten sind vorhanden, aber ohne benannte Farbfelder:
+       Sie werden angezeigt, können aber nicht für die Erarbeitung gewählt werden. */
+    if(s.sourceMode!=="saved"){
+      resetAfterWorldChoice();
+      ePatch({sourceMode:"saved",selectedWorldId:null});
+    }
+
+    if(tiles)tiles.style.display="grid";
+    if(demoBtn)demoBtn.style.display="";
+    if(loadBtn)loadBtn.style.display="none";
+
+    phase.classList.add("hasSource");
+    phase.classList.remove("sourceReady");
+    renderPhase2Worlds();
+
+    if(notice){
+      notice.className="sourceStatusNotice";
+      notice.innerHTML="<strong>Keine Farbfelder definiert.</strong><span>"+noLegendMessage()+"</span>";
+    }
+
   }else if(s.sourceMode==="demo"){
     if(tiles)tiles.style.display="grid";
+    if(demoBtn)demoBtn.style.display="";
+    if(loadBtn)loadBtn.style.display="";
 
     phase.classList.add("hasSource");
     renderPhase2Worlds();
@@ -4565,6 +4400,8 @@ function configurePhase2Source(){
 
   }else{
     if(tiles)tiles.style.display="grid";
+    if(demoBtn)demoBtn.style.display="";
+    if(loadBtn)loadBtn.style.display="";
 
     phase.classList.remove("hasSource");
     phase.classList.remove("sourceReady");
@@ -4594,7 +4431,11 @@ function showPhase(n){
     configurePhase2Source();
 
     const s=eState();
-    if(s.selectedWorldId){
+    const selected=s.selectedWorldId
+      ? currentSourceWorlds().find(w=>String(w.id)===String(s.selectedWorldId))
+      : null;
+
+    if(selected&&worldHasDefinedLegend(selected)){
       renderSort();
       renderNeedEditors();
       renderRequirements();
@@ -4734,6 +4575,14 @@ function worldLegendEntries(world){
     .filter(entry=>validLegendName(entry.name));
 }
 
+function worldHasDefinedLegend(world){
+  return worldLegendEntries(world).length > 0;
+}
+
+function noLegendMessage(){
+  return "Du hast keine Farbfelder definiert. Beschreibe sie in der vorangehenden Phase oder wähle die Option Demowelten, damit du weiterarbeiten kannst.";
+}
+
 function renderPhase2Worlds(){
   const box=document.getElementById("phase2Worlds");
   box.innerHTML="";
@@ -4746,9 +4595,12 @@ function renderPhase2Worlds(){
   }
 
   ws.forEach(w=>{
+    const usable=worldHasDefinedLegend(w);
     const c=document.createElement("button");
     c.type="button";
-    c.className="sourceWorldCard"+(String(s.selectedWorldId)===String(w.id)?" selected":"");
+    c.className="sourceWorldCard"+
+      (String(s.selectedWorldId)===String(w.id)?" selected":"")+
+      (!usable?" sourceWorldUnusable":"");
 
     const legend=worldLegendEntries(w).map(entry=>
       '<div class="sourceLegendRow"><span class="sourceLegendColor" style="background:'+entry.color+'"></span><span>'+escapeHtml(entry.name)+'</span></div>'
@@ -4757,14 +4609,22 @@ function renderPhase2Worlds(){
     c.innerHTML=
       '<div class="thumbLabel">Welt '+w.id+'</div>'+
       '<img alt="Welt '+w.id+'" src="'+worldPreviewDataUrl(w)+'">'+
-      '<div class="sourceLegend">'+legend+'</div>'+
-      '<div class="chooseWorldText">'+(String(s.selectedWorldId)===String(w.id)?"Ausgewählt":"Diese Welt wählen")+'</div>';
+      (legend?'<div class="sourceLegend">'+legend+'</div>':'<div class="sourceLegendEmpty">Keine Farbfelder definiert</div>')+
+      '<div class="chooseWorldText">'+
+        (!usable?"Nicht auswählbar":String(s.selectedWorldId)===String(w.id)?"Ausgewählt":"Diese Welt wählen")+
+      '</div>';
 
-    c.onclick=()=>selectSourceWorld(w.id);
+    c.onclick=()=>{
+      if(!usable){
+        alert(noLegendMessage());
+        return;
+      }
+      selectSourceWorld(w.id);
+    };
+
     box.appendChild(c);
   });
 }
-
 function latestCategories(){
   const w=selectedSourceWorld();
   if(!w)return [];
@@ -4772,6 +4632,14 @@ function latestCategories(){
 }
 
 function selectSourceWorld(id){
+  const world=currentSourceWorlds().find(w=>String(w.id)===String(id));
+  if(!world||!worldHasDefinedLegend(world)){
+    alert(noLegendMessage());
+    document.getElementById("phase2").classList.remove("sourceReady");
+    updatePhase2Progress();
+    return;
+  }
+
   ePatch({selectedWorldId:String(id)});
   resetAfterWorldChoice();
   ePatch({selectedWorldId:String(id)});
@@ -5152,10 +5020,10 @@ function makeWorkStateHtml(){
     '<section class="printCard"><h2>Novera entdecken – Aufgabe A</h2><table><thead><tr><th>Kategorie</th><th>Einordnung</th></tr></thead><tbody>'+sortRows+'</tbody></table>'+
     '<h3>Schwieriger Entscheid</h3><div class="answer">'+esc(learning.hardWhy||"")+'</div></section>'+
     '<section class="printCard"><h2>Novera entdecken – Aufgabe B</h2><table><thead><tr><th>#</th><th>Kategorie</th><th>Need</th><th>Desire</th></tr></thead><tbody>'+personalRows+'</tbody></table></section>'+
-    '<section class="printCard"><h2>Novera entdecken – Aufgabe C</h2><table><thead><tr><th>Runde</th><th>Ernte</th><th>Rest</th><th>Nachgewachsen</th><th>Sicherheit</th><th>Needs</th><th>Desires</th></tr></thead><tbody>'+personalLog+'</tbody></table></section>'+
+    '<section class="printCard"><h2>Novera entdecken – Aufgabe C</h2><table><thead><tr><th>Runde</th><th>Ernte</th><th>Rest</th><th>Nachgewachsen</th><th>Zurückgelegt</th><th>Needs</th><th>Desires</th></tr></thead><tbody>'+personalLog+'</tbody></table></section>'+
     '<section class="printCard"><h2>Novera entdecken – Aufgabe D</h2><div class="answer">'+esc(learning.individualReflection||"")+'</div></section>'+
     '<section class="printCard"><h2>Novera entdecken – Aufgabe E</h2><h3>Eure Abmachung</h3><div class="answer">'+esc(learning.groupRule||"")+'</div>'+
-    '<table><thead><tr><th>Runde</th><th>Needs A</th><th>Needs B</th><th>Desires A</th><th>Desires B</th><th>Rest</th><th>Nachgewachsen</th><th>Sicherheit</th></tr></thead><tbody>'+groupLog+'</tbody></table></section>'+
+    '<table><thead><tr><th>Runde</th><th>Needs A</th><th>Needs B</th><th>Desires A</th><th>Desires B</th><th>Rest</th><th>Nachgewachsen</th><th>Zurückgelegt</th></tr></thead><tbody>'+groupLog+'</tbody></table></section>'+
     '<section class="printCard"><h2>Novera entdecken – Aufgabe F</h2><div class="answer">'+esc(learning.groupReflection||"")+'</div></section>'+
     '</main>'+
     '<script type="application/json" id="novera-workstate-data">'+json+'<\/script>'+
