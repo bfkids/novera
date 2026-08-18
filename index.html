@@ -3151,6 +3151,36 @@ body.explanationOpen{
   }
 }
 
+
+/* Partnerauftrag: Text und Abmachung als ein einziges grünes Auftragsfeld */
+.partnerTaskCombined{
+  display:block!important;
+}
+.partnerTaskCombined > p{
+  margin:0 0 14px!important;
+}
+.partnerAgreementField{
+  margin:0!important;
+  padding-top:12px!important;
+  border-top:1px solid rgba(55,106,59,.18);
+}
+.partnerAgreementField textarea{
+  min-height:105px;
+  background:#fff;
+}
+.partnerTaskCombined .helpBtn{
+  margin-top:8px;
+}
+#learn5 .groupTreeRuleLayout{
+  grid-template-columns:1fr!important;
+  max-width:760px;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+#learn5 .groupTreeColumn{
+  width:100%;
+}
+
 </style>
 </head>
 
@@ -3541,7 +3571,15 @@ body.explanationOpen{
   <span class="taskLabel">Aufgabe E</span>
   <h2>Jetzt arbeitet ihr zu zweit</h2><p class="phase2LockHint">Lies zuerst beide Erklärungen zu Needs und Desires und bestätige sie.</p>
 
-  <p class="taskInstruction">Setzt euch zu zweit zusammen. Ihr seid Person A und Person B. Jede Person bekommt zwei vorgegebene Needs und zwei Desires. Besprecht zuerst, wie ihr die Früchte ernten wollt, und schreibt eure Abmachung hier auf. Entscheidet danach gemeinsam, wofür ihr in jeder Runde Früchte erntet. Für jede Sache braucht es zwei Früchte. Die Früchte reichen nicht immer für alles.</p>
+  <div class="taskInstruction partnerTaskCombined">
+    <p>Setzt euch zu zweit zusammen. Ihr seid Person A und Person B. Jede Person bekommt zwei vorgegebene Needs und zwei Desires. Besprecht zuerst, wie ihr die Früchte ernten wollt, und schreibt eure Abmachung hier auf. Entscheidet danach gemeinsam, wofür ihr in jeder Runde Früchte erntet. Für jede Sache braucht es zwei Früchte. Die Früchte reichen nicht immer für alles.</p>
+    <div class="labField partnerAgreementField">
+      <label for="groupRule">Eure Abmachung</label>
+      <textarea id="groupRule" data-e-save="groupRule" placeholder="Schreibt hier auf, wie ihr die Früchte ernten wollt."></textarea>
+      <button class="helpBtn" data-help="ruleHelp" type="button">?</button>
+      <div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Was ist euch beim Ernten wichtig? Was soll Person A bekommen, was Person B? Wann erntet ihr für Needs, wann für Desires?</div>
+    </div>
+  </div>
 
   <div class="groupTreeRuleLayout">
     <div class="groupTreeColumn">
@@ -3554,12 +3592,6 @@ body.explanationOpen{
         <div class="pixelTrunk"></div>
         <div id="groupFruitLayer"></div>
       </div>
-    </div>
-    <div class="labField taskInstruction groupRuleBox">
-      <label for="groupRule">Eure Abmachung</label>
-      <textarea id="groupRule" data-e-save="groupRule" placeholder="Schreibt hier auf, wie ihr die Früchte ernten wollt."></textarea>
-      <button class="helpBtn" data-help="ruleHelp" type="button">?</button>
-      <div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Was ist euch beim Ernten wichtig? Was soll Person A bekommen, was Person B? Wann erntet ihr für Needs, wann für Desires?</div>
     </div>
   </div>
 
@@ -6150,6 +6182,8 @@ function configurePhase2Source(){
   updatePhase2Progress();
 }
 
+let suppressThoughtHints=true;
+
 function clearThoughtHints(){
   document.querySelectorAll(".thoughtHint").forEach(box=>{
     box.classList.remove("active");
@@ -6158,6 +6192,10 @@ function clearThoughtHints(){
 }
 
 function showPhase(n){
+  /* Ein blosses Vor-/Zurückwechseln darf keinen alten Rundenhinweis
+     erneut anzeigen. Erst eine neu abgeschlossene Runde aktiviert
+     Hinweise wieder. */
+  suppressThoughtHints=true;
   /* Beim Wechsel zwischen den Phasen bleiben Erklärungen und alte
      Denkhinweise geschlossen. Sie erscheinen erst wieder durch
      einen neuen Arbeitsschritt bzw. eine neue Runde. */
@@ -6923,6 +6961,7 @@ function regen(left,max=TREE_MAX){
 }
 
 function resetPersonalRounds(){
+  suppressThoughtHints=true;
   const p=normalizedPersonal(eState().personal||[]);
   const max=personalTreeMax(p.length);
   ePatch({
@@ -6977,6 +7016,7 @@ function finishPRound(){
   });
   Object.assign(q,{tree:next,max,round:q.round+1,selectedNeeds:validNeeds,selectedDesires:validDesires});
   ePatch({psim:q});
+  suppressThoughtHints=false;
   renderPersonalSim();
   updatePhase2Progress();
 }
@@ -7242,6 +7282,7 @@ function allocItem(pi,k,i,txt,n,selectedSet=new Set()){
 }
 
 function resetGroupRounds(){
+  suppressThoughtHints=true;
   ePatch({gsim:{tree:TREE_START,round:1,log:[],selected:[]}});
   renderAlloc();
   updatePhase2Progress();
@@ -7284,6 +7325,7 @@ function finishGroup(){
   q.selected=[...document.querySelectorAll("#allocA .allocItem input:checked,#allocB .allocItem input:checked")]
     .map(cb=>cb.dataset.p+":"+cb.dataset.k+":"+cb.dataset.i);
   ePatch({gsim:q});
+  suppressThoughtHints=false;
   renderAlloc();
   updatePhase2Progress();
 }
@@ -7599,6 +7641,11 @@ function closeExplanation(box){
 function setPersonalThoughtHint(lastRound,needTotal,desireTotal){
   const box=document.getElementById("personalThoughtHint");
   if(!box)return;
+  if(suppressThoughtHints){
+    box.classList.remove("active");
+    box.textContent="";
+    return;
+  }
   if(!lastRound){
     box.classList.remove("active");
     box.textContent="";
@@ -7656,6 +7703,12 @@ function setGroupThoughtHint(lastRound,currentTree){
     box.className="thoughtHint";
     box.setAttribute("aria-live","polite");
     summary.insertAdjacentElement("afterend",box);
+  }
+
+  if(suppressThoughtHints){
+    box.classList.remove("active");
+    box.textContent="";
+    return;
   }
 
   if(!lastRound){
