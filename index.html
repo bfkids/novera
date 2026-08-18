@@ -3136,6 +3136,21 @@ body.explanationOpen{
   }
 }
 
+
+/* Baumhinweise immer in Standard-Textgrösse */
+#personalThoughtHint,
+#groupThoughtHint{
+  font-size:16px!important;
+  line-height:1.55!important;
+}
+@media(max-width:700px){
+  #personalThoughtHint,
+  #groupThoughtHint{
+    font-size:16px!important;
+    line-height:1.55!important;
+  }
+}
+
 </style>
 </head>
 
@@ -6135,10 +6150,19 @@ function configurePhase2Source(){
   updatePhase2Progress();
 }
 
+function clearThoughtHints(){
+  document.querySelectorAll(".thoughtHint").forEach(box=>{
+    box.classList.remove("active");
+    box.textContent="";
+  });
+}
+
 function showPhase(n){
-  /* Beim Wechsel zwischen den Phasen bleiben Erklärungen geschlossen.
-     Sie öffnen sich nur durch den vorgesehenen Arbeitsschritt. */
+  /* Beim Wechsel zwischen den Phasen bleiben Erklärungen und alte
+     Denkhinweise geschlossen. Sie erscheinen erst wieder durch
+     einen neuen Arbeitsschritt bzw. eine neue Runde. */
   closeAllExplanationsOnLoad();
+  clearThoughtHints();
 
   const p1=document.getElementById("phase1");
   const p2=document.getElementById("phase2");
@@ -6176,6 +6200,11 @@ function showPhase(n){
       if(tr1)tr1.classList.add("hidden");
       if(tr2)tr2.classList.add("hidden");
     }
+
+    /* Die Renderfunktionen können den Hinweis der letzten Runde
+       wieder einsetzen. Beim blossen Phasenwechsel soll er nicht
+       erneut erscheinen. */
+    clearThoughtHints();
   }
 
   window.scrollTo(0,0);
@@ -6862,7 +6891,13 @@ function renderPersonalSim(){
   const show=(el,value,total,required)=>{
     if(!el)return;
     const item=el.closest(".simOutcomeItem");
-    if(item)item.style.display=total===0?"none":"inline-flex";
+    if(item){
+      if(total===0){
+        item.style.setProperty("display","none","important");
+      }else{
+        item.style.setProperty("display","inline-flex","important");
+      }
+    }
     if(total===0)return;
     if(!lastRound){el.textContent="–";el.className="";return;}
     el.textContent=value===total?"✓":value+"/"+total;
@@ -6940,7 +6975,7 @@ function finishPRound(){
     needTotal:p.filter(x=>x.kind==="need").length,
     desireTotal:p.filter(x=>x.kind==="desire").length
   });
-  Object.assign(q,{tree:next,max,round:q.round+1,selectedNeeds:[],selectedDesires:[]});
+  Object.assign(q,{tree:next,max,round:q.round+1,selectedNeeds:validNeeds,selectedDesires:validDesires});
   ePatch({psim:q});
   renderPersonalSim();
   updatePhase2Progress();
@@ -7133,7 +7168,7 @@ function renderAlloc(){
   const s=eState(),[a,b]=s.profiles||[];
   if(!a)return;
 
-  const q=s.gsim||{tree:TREE_START,round:1,log:[]};
+  const q=s.gsim||{tree:TREE_START,round:1,log:[],selected:[]};
   if(!q.log)q.log=[];
   q.tree=Math.min(TREE_MAX,Math.max(0,Number(q.tree)));
   if(!Number.isFinite(q.tree))q.tree=TREE_START;
@@ -7171,34 +7206,49 @@ function renderAlloc(){
   drawTreeTo("groupFruitLayer",q.tree);
   setGroupThoughtHint(last,q.tree);
 
+  const selectedSet=new Set(Array.isArray(q.selected)?q.selected:[]);
   const mk=(p,pi)=>
     '<div class="profileChoiceSection"><h4 class="needHeading">Needs</h4>'+
-      p.needs.slice(0,2).map((x,i)=>allocItem(pi,"n",i,x,p.needFruit[i])).join("")+
+      p.needs.slice(0,2).map((x,i)=>allocItem(pi,"n",i,x,p.needFruit[i],selectedSet)).join("")+
     '</div>'+
     '<div class="profileChoiceSection"><h4 class="desireHeading">Desires</h4>'+
-      p.desires.slice(0,2).map((x,i)=>allocItem(pi,"d",i,x,p.desireFruit[i])).join("")+
+      p.desires.slice(0,2).map((x,i)=>allocItem(pi,"d",i,x,p.desireFruit[i],selectedSet)).join("")+
     '</div>';
 
   allocA.innerHTML=mk(a,0);
   allocB.innerHTML=mk(b,1);
+
+  /* Änderungen an den Haken sofort im Arbeitsstand speichern. */
+  document.querySelectorAll("#allocA .allocItem input,#allocB .allocItem input").forEach(cb=>{
+    cb.addEventListener("change",()=>{
+      const state=eState();
+      const g={...(state.gsim||{tree:TREE_START,round:1,log:[],selected:[]})};
+      const key=cb.dataset.p+":"+cb.dataset.k+":"+cb.dataset.i;
+      const set=new Set(Array.isArray(g.selected)?g.selected:[]);
+      if(cb.checked)set.add(key);else set.delete(key);
+      g.selected=[...set];
+      ePatch({gsim:g});
+    });
+  });
 }
 
-function allocItem(pi,k,i,txt,n){
+function allocItem(pi,k,i,txt,n,selectedSet=new Set()){
   const isDesire=k==="d";
+  const key=pi+":"+k+":"+i;
   return '<label class="allocItem '+(isDesire?"desireAlloc":"needAlloc")+'">'+
-    '<input type="checkbox" data-p="'+pi+'" data-k="'+k+'" data-i="'+i+'"> '+
+    '<input type="checkbox" data-p="'+pi+'" data-k="'+k+'" data-i="'+i+'" '+(selectedSet.has(key)?'checked':'')+'> '+
     '<span>'+escapeHtml(txt)+'</span> '+fruitIcons(n)+
     '</label>';
 }
 
 function resetGroupRounds(){
-  ePatch({gsim:{tree:TREE_START,round:1,log:[]}});
+  ePatch({gsim:{tree:TREE_START,round:1,log:[],selected:[]}});
   renderAlloc();
   updatePhase2Progress();
 }
 
 function finishGroup(){
-  const s=eState(),q={...(s.gsim||{tree:TREE_START,round:1,log:[]})},[a,b]=s.profiles;
+  const s=eState(),q={...(s.gsim||{tree:TREE_START,round:1,log:[],selected:[]})},[a,b]=s.profiles;
   if(!q.log)q.log=[];
   let used=0,needs=[0,0],des=[0,0];
 
@@ -7231,6 +7281,8 @@ function finishGroup(){
 
   q.tree=Math.min(TREE_MAX,left+reg);
   q.round++;
+  q.selected=[...document.querySelectorAll("#allocA .allocItem input:checked,#allocB .allocItem input:checked")]
+    .map(cb=>cb.dataset.p+":"+cb.dataset.k+":"+cb.dataset.i);
   ePatch({gsim:q});
   renderAlloc();
   updatePhase2Progress();
