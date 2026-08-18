@@ -6687,8 +6687,12 @@ function savePersonal(){
     alert("Wähle verschiedene Bereiche aus.");
     return false;
   }
-  if(p.some(x=>!x.text||!x.kind)){
-    alert("Beschreibe jeden Bereich genauer und entscheide bei jedem, wie du ihn persönlich einordnest.");
+  if(p.some(x=>!x.text)){
+    alert("Es sind noch Beschreibungen leer. Beschreibe in allen Feldern, was du genau meinst.");
+    return false;
+  }
+  if(p.some(x=>!x.kind)){
+    alert("Entscheide bei jedem Bereich, was du ganz sicher brauchst und was du dir eher zusätzlich wünschst.");
     return false;
   }
 
@@ -6799,15 +6803,24 @@ function renderPersonalSim(){
   if(maxEl)maxEl.textContent=q.max||personalTreeMax(p.length);
   roundCount.textContent=q.round;
 
-  ensureGameSummaryRow(treeCount,"personalSummaryRow","needsStatusNow","desiresStatusNow","Ganz sicher","Zusätzlich");
+  const desireLabel=needTotal===0 && desireTotal>0 ? "Wünsche" : "Zusätzlich";
+  ensureGameSummaryRow(treeCount,"personalSummaryRow","needsStatusNow","desiresStatusNow","Ganz sicher",desireLabel);
   const needsStatusNow=document.getElementById("needsStatusNow");
   const desiresStatusNow=document.getElementById("desiresStatusNow");
+  const personalSummaryRow=document.getElementById("personalSummaryRow");
+  if(personalSummaryRow){
+    const labels=personalSummaryRow.querySelectorAll(".simOutcomeItem strong");
+    if(labels[0])labels[0].textContent="Ganz sicher";
+    if(labels[1])labels[1].textContent=desireLabel;
+  }
   const lastRound=(q.log||[]).length ? q.log[q.log.length-1] : null;
 
   const show=(el,value,total,required)=>{
     if(!el)return;
+    const item=el.closest(".simOutcomeItem");
+    if(item)item.style.display=total===0?"none":"inline-flex";
+    if(total===0)return;
     if(!lastRound){el.textContent="–";el.className="";return;}
-    if(total===0){el.textContent="–";el.className="";return;}
     el.textContent=value===total?"✓":value+"/"+total;
     el.className=value===total?"statusGood":(required?"statusBad":"");
   };
@@ -7494,7 +7507,22 @@ function setPersonalThoughtHint(lastRound,needTotal,desireTotal){
   const d=lastRound.desires||0;
   let text="";
 
-  if(needTotal>0 && desireTotal>0 && n===needTotal && d===desireTotal){
+  if(lastRound.left===0){
+    text="Der Baum ist leer. Über Nacht sind keine neuen Früchte gewachsen. Was bedeutet das für dein gutes Leben und den Baum?";
+  }else if(needTotal===0 && desireTotal>0 && d===desireTotal){
+    text="Du hast dir alle deine Wünsche erfüllt. Und wie geht es dem Baum? Beobachte ihn in den nächsten Runden weiter und entscheide dann, ob das für dich ein gutes Leben ist.";
+  }else if(needTotal===0 && desireTotal>0 && d>0){
+    text="Du hast dir einige deiner Wünsche erfüllt. Wäre das für dich ein gutes Leben? Beobachte auch den Baum weiter.";
+  }else if(desireTotal===0 && needTotal>0 && n===needTotal){
+    text="Du hast alles bekommen, was du ganz sicher brauchst. Und wie geht es dem Baum? Beobachte ihn in den nächsten Runden weiter und entscheide dann, ob das für dich ein gutes Leben ist.";
+  }else if(desireTotal===0 && needTotal>0 && n<needTotal){
+    const lowThreshold=needTotal>=4 ? 2 : 1;
+    if(n<=lowThreshold){
+      text="Du hast nur wenig von dem bekommen, was du ganz sicher brauchst. Wäre das für dich ein gutes Leben? Beobachte auch den Baum weiter.";
+    }else{
+      text="Du hast nur einen Teil von dem bekommen, was du ganz sicher brauchst. Wäre das für dich ein gutes Leben? Beobachte auch den Baum weiter.";
+    }
+  }else if(needTotal>0 && desireTotal>0 && n===needTotal && d===desireTotal){
     text="Du hast dir alles erfüllt. Und wie geht es dem Baum? Beobachte ihn in den nächsten Runden weiter und entscheide dann, ob das für dich ein gutes Leben ist.";
   }else if(needTotal>0 && n===needTotal && d>0){
     text="Du hast alles bekommen, was du ganz sicher brauchst, und einige zusätzliche Wünsche erfüllt. Wäre das für dich ein gutes Leben? Beobachte den Baum weiter.";
@@ -7503,9 +7531,12 @@ function setPersonalThoughtHint(lastRound,needTotal,desireTotal){
   }else if(needTotal>0 && n===0 && d>0){
     text="Du hast dir zusätzliche Wünsche erfüllt, aber nichts von dem bekommen, was du ganz sicher brauchst. Wäre das für dich ein gutes Leben? Beobachte den Baum weiter.";
   }else if(needTotal>0 && n<needTotal){
-    text="Du hast nur einen Teil von dem bekommen, was du ganz sicher brauchst. Wäre das für dich ein gutes Leben? Beobachte den Baum weiter.";
-  }else if(desireTotal>0 && d>0){
-    text="Du hast einige zusätzliche Wünsche erfüllt. Wäre das für dich ein gutes Leben? Beobachte den Baum weiter.";
+    const lowThreshold=needTotal>=4 ? 2 : 1;
+    if(n<=lowThreshold){
+      text="Du hast nur wenig von dem bekommen, was du ganz sicher brauchst. Wäre das für dich ein gutes Leben? Beobachte den Baum weiter.";
+    }else{
+      text="Du hast nur einen Teil von dem bekommen, was du ganz sicher brauchst. Wäre das für dich ein gutes Leben? Beobachte den Baum weiter.";
+    }
   }
 
   box.textContent=text;
@@ -7536,7 +7567,9 @@ function setGroupThoughtHint(lastRound){
   const totalN=aN+bN,totalD=aD+bD;
   let text="";
 
-  if(totalN===4 && totalD===4){
+  if(lastRound.left===0){
+    text="Der Baum ist leer. Über Nacht sind keine neuen Früchte gewachsen. Was bedeutet das für ein gutes Leben für beide und den Baum?";
+  }else if(totalN===4 && totalD===4){
     text="Ihr habt alles erfüllt. Und wie geht es dem Baum? Beobachtet ihn in den nächsten Runden weiter und entscheidet dann, ob das für beide ein gutes Leben ist.";
   }else if(totalN===4 && totalD>0){
     text="Alle Needs sind erfüllt. Dazu kommen einige Desires. Ist das für beide ein gutes Leben? Beobachtet den Baum weiter.";
