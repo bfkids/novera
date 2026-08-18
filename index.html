@@ -3511,7 +3511,7 @@ body.explanationOpen{
 </article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn3"><span class="taskLabel">Aufgabe C</span><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p><div class="treeStory treeStorySimple">
   <div class="treeStoryCopy">
-    <h3>Der wundersame Baum</h3>
+    <h3>Der magische Baum</h3>
     <p data-t="t3.story">Auf Novera braucht es keine natürlichen oder gesellschaftlichen Voraussetzungen um Dinge für ein gutes Leben zu ermöglichen. Hier wächst ein magischer Baum. Seine Früchte können dir geben, was du brauchst. Für alles was du dir erfüllst, werden zwei Früchte geerntet. Nach jeder Runde wachsen über Nacht neue Früchte. Wie viele es genau sind, siehst du erst nach der Nacht.</p>
   </div>
   <div class="treeStoryMedia">
@@ -6058,7 +6058,7 @@ document.addEventListener(
    ERARBEITUNG V3 – lokal, ohne Backend
    ============================================================ */
 const E_KEY="novera_erarbeitung_v4";
-const TXT={"p2.kicker": "Novera", "p2.title": "Novera weiter entdecken", "p2.intro": "Du arbeitest mit deinen bisherigen Welten weiter und findest heraus, wie Bedürfnisse, Wünsche, begrenzte Möglichkeiten und Entscheidungen zusammenhängen.", "nav.back": "← Zurück", "worlds.title": "Deine gespeicherten Welten", "worlds.note": "Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.", "worlds.empty": "Noch keine Welt gespeichert.", "worlds.world": "Welt", "t1.title": "Das brauche ich ganz sicher – das wünsche ich mir eher zusätzlich", "t1.instruction": "Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich persönlich passt.", "sort.need": "Das brauche ich ganz sicher", "sort.desire": "Das wünsche ich mir eher zusätzlich", "sort.hard": "Schwierig zu entscheiden", "t1.hardWhat": "Was ist schwierig einzuordnen?", "t1.hardWhy": "Warum ist die Entscheidung schwierig?", "t1.confirm": "Meine Auswahl bestätigen", "t1.reveal": "Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.", "t1.allergy": "Was ein Mensch braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.", "t1.noCategories": "In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.", "t2.title": "Drei Dinge genauer anschauen", "t2.instruction": "Wähle drei Dinge aus, die du ganz sicher für ein gutes Leben brauchst. Schreibe genauer, was du damit meinst. Ergänze zu jedem einen Wunsch, den du dir zusätzlich erfüllen möchtest.", "common.example": "Beispiel", "t2.example": "Das brauche ich ganz sicher: mit anderen Menschen in Kontakt sein können. Das wünsche ich mir zusätzlich: dafür immer das neueste Smartphone haben.", "t2.choose": "Kategorie auswählen", "t2.needLabel": "Das brauche ich ganz sicher", "t2.desireLabel": "Das wünsche ich mir zusätzlich", "t2.confirm": "Auswahl übernehmen", "t2.requirementsIntro": "Damit Menschen etwas bekommen oder tun können, braucht es natürliche und gesellschaftliche Voraussetzungen.", "t2.requirementsNote": "", "t2.needThree": "Ordne in Aufgabe A mindestens drei Kategorien bei «Das brauche ich ganz sicher» ein.", "t2.fill": "Bitte fülle bei allen drei Beispielen beide Felder aus.", "t3.title": "Der wundersame Baum", "t3.story": "Auf Novera braucht es für deine ausgewählten Dinge keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Seine Früchte können all diese Dinge möglich machen. Für jede Sache braucht es zwei Früchte. In der Wirklichkeit brauchen verschiedene Dinge unterschiedliche Voraussetzungen.", "t3.goal": "Wähle aus, was du dir in dieser Runde ermöglichen willst. Für jede Sache braucht es zwei Früchte. Beim Klick auf «Runde abschliessen» werden die benötigten Früchte vom Baum genommen. Danach wachsen über Nacht neue Früchte nach. Wie viele nachwachsen, hängt davon ab, ob noch viele oder wenige Früchte am Baum sind. Wie viele genau nachwachsen, kannst du nicht steuern.", "sim.tree": "Am Baum", "sim.reserve": "Zurückgelegt", "sim.round": "Runde", "sim.harvest": "Ernten", "sim.secure": "Davon für später zurücklegen", "sim.finish": "Runde abschliessen", "sim.needFirst": "Schliesse zuerst Aufgabe B ab.", "sim.feedback": "Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Erfüllt wurden {needs} von 3 Dingen, die du ganz sicher brauchst, und {desires} von 3 zusätzlichen Wünschen.", "log.round": "Runde", "log.harvest": "Ernte", "log.treeleft": "Rest am Baum", "log.regrow": "Nachgewachsen", "log.reserve": "Zurückgelegt", "log.needs": "Needs", "log.desires": "Desires", "t4.title": "Was hast du beobachtet?", "t4.intro": "Schau auf deine Runden zurück und beschreibe deine Erfahrungen.", "t4.q1": "Was ist passiert, wenn du viele Früchte genutzt hast?", "t4.q2": "Was ist passiert, wenn du weniger Früchte genutzt hast?", "t4.q3": "Wann konntest du dir auch zusätzliche Wünsche erfüllen – und wann nicht?", "t4.q4": "Was konntest du beim Nachwachsen der Früchte nicht vorhersagen?", "t4.rememberTitle": "Vergleiche mit deinen Beobachtungen:", "t4.remember": "Nutzung heute beeinflusst Möglichkeiten morgen. Wie viele Früchte nachwachsen, ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.", "t5.title": "Jetzt arbeitet ihr zu zweit", "t5.intro": "Setzt euch zu zweit zusammen. Ihr bekommt zwei erfundene Personen: Person A und Person B. Beide haben eigene Needs und Desires.", "t5.newProfiles": "Andere Profile", "t5.rule": "Eure Abmachung", "t5.help": "Denkt zum Beispiel darüber nach: Welche Needs sollen zuerst erfüllt werden? Soll jede Person gleich viel erhalten? Wann erfüllt ihr zusätzlich Desires? Was macht ihr, wenn nicht alles möglich ist?", "profile.needs": "Needs – das braucht die Person", "profile.desires": "Desires – das möchte die Person zusätzlich", "t6.title": "Gemeinsam entscheiden", "t6.intro": "Wählt selbst per Klick aus, welche Needs und Desires ihr in dieser Runde erfüllen wollt. Die Website zeigt nur die Folgen eurer Entscheidung.", "t6.secure": "Für später zurücklegen", "t6.finish": "Gemeinsame Runde abschliessen", "t6.changeRule": "Habt ihr eure Abmachung während der Runden verändert? Wenn ja: warum?", "t6.tooMuch": "Dafür reichen die verfügbaren Früchte nicht.", "t6.feedback": "Ihr habt {used} Früchte verteilt und {secure} für später zurückgelegt. {aN}/3 Needs von Person A und {bN}/3 Needs von Person B wurden erfüllt. Am Baum blieben {left}; über Nacht wuchsen {reg} nach.", "t7.title": "Was hat sich verändert?", "t7.q1": "Welche Needs konnten nicht immer erfüllt werden?", "t7.q2": "War eure Verteilung für Person A und Person B gerecht? Warum?", "t7.q3": "Was ist passiert, wenn ihr viele Früchte für Needs und Desires eingesetzt habt?", "t7.q4": "Was habt ihr bei euren gemeinsamen Regeln und Entscheidungen bemerkt?", "end.question": "Was hat Novera mit der Erde zu tun?", "end.note": "Der Baum und seine Früchte sind erfunden. Gibt es auf der Erde trotzdem ähnliche Zusammenhänge? Diese Frage verfolgt ihr im anschliessenden Mystery weiter."};
+const TXT={"p2.kicker": "Novera", "p2.title": "Novera weiter entdecken", "p2.intro": "Du arbeitest mit deinen bisherigen Welten weiter und findest heraus, wie Bedürfnisse, Wünsche, begrenzte Möglichkeiten und Entscheidungen zusammenhängen.", "nav.back": "← Zurück", "worlds.title": "Deine gespeicherten Welten", "worlds.note": "Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.", "worlds.empty": "Noch keine Welt gespeichert.", "worlds.world": "Welt", "t1.title": "Das brauche ich ganz sicher – das wünsche ich mir eher zusätzlich", "t1.instruction": "Schau dir die Begriffe aus deiner zuletzt gespeicherten Welt an. Ordne jeden Begriff so ein, wie es für dich persönlich passt.", "sort.need": "Das brauche ich ganz sicher", "sort.desire": "Das wünsche ich mir eher zusätzlich", "sort.hard": "Schwierig zu entscheiden", "t1.hardWhat": "Was ist schwierig einzuordnen?", "t1.hardWhy": "Warum ist die Entscheidung schwierig?", "t1.confirm": "Meine Auswahl bestätigen", "t1.reveal": "Für «Das brauche ich» wird auch der Begriff Need (Bedürfnis) verwendet. Für «Das möchte ich zusätzlich» wird Desire (zusätzlicher Wunsch) verwendet.", "t1.allergy": "Was ein Mensch braucht, hängt teilweise von seiner Situation ab. Wer zum Beispiel eine Lebensmittelallergie hat, braucht möglicherweise bestimmte Nahrung, die für andere nur eine zusätzliche Wahl wäre.", "t1.noCategories": "In deiner letzten gespeicherten Welt wurden keine benannten Kategorien gefunden. Gehe zurück und benenne die verwendeten Farben.", "t2.title": "Drei Dinge genauer anschauen", "t2.instruction": "Wähle drei Dinge aus, die du ganz sicher für ein gutes Leben brauchst. Schreibe genauer, was du damit meinst. Ergänze zu jedem einen Wunsch, den du dir zusätzlich erfüllen möchtest.", "common.example": "Beispiel", "t2.example": "Das brauche ich ganz sicher: mit anderen Menschen in Kontakt sein können. Das wünsche ich mir zusätzlich: dafür immer das neueste Smartphone haben.", "t2.choose": "Kategorie auswählen", "t2.needLabel": "Das brauche ich ganz sicher", "t2.desireLabel": "Das wünsche ich mir zusätzlich", "t2.confirm": "Auswahl übernehmen", "t2.requirementsIntro": "Damit Menschen etwas bekommen oder tun können, braucht es natürliche und gesellschaftliche Voraussetzungen.", "t2.requirementsNote": "", "t2.needThree": "Ordne in Aufgabe A mindestens drei Kategorien bei «Das brauche ich ganz sicher» ein.", "t2.fill": "Bitte fülle bei allen drei Beispielen beide Felder aus.", "t3.title": "Der magische Baum", "t3.story": "Auf Novera braucht es für deine ausgewählten Dinge keine natürlichen oder gesellschaftlichen Voraussetzungen. Hier wächst ein magischer Baum. Seine Früchte können all diese Dinge möglich machen. Für jede Sache braucht es zwei Früchte. In der Wirklichkeit brauchen verschiedene Dinge unterschiedliche Voraussetzungen.", "t3.goal": "Wähle aus, was du dir in dieser Runde ermöglichen willst. Für jede Sache braucht es zwei Früchte. Beim Klick auf «Runde abschliessen» werden die benötigten Früchte vom Baum genommen. Danach wachsen über Nacht neue Früchte nach. Wie viele nachwachsen, hängt davon ab, ob noch viele oder wenige Früchte am Baum sind. Wie viele genau nachwachsen, kannst du nicht steuern.", "sim.tree": "Am Baum", "sim.reserve": "Zurückgelegt", "sim.round": "Runde", "sim.harvest": "Ernten", "sim.secure": "Davon für später zurücklegen", "sim.finish": "Runde abschliessen", "sim.needFirst": "Schliesse zuerst Aufgabe B ab.", "sim.feedback": "Du hast {harvest} Früchte geerntet. {left} blieben am Baum. Über Nacht wuchsen {regrow} nach. Erfüllt wurden {needs} von 3 Dingen, die du ganz sicher brauchst, und {desires} von 3 zusätzlichen Wünschen.", "log.round": "Runde", "log.harvest": "Ernte", "log.treeleft": "Rest am Baum", "log.regrow": "Nachgewachsen", "log.reserve": "Zurückgelegt", "log.needs": "Needs", "log.desires": "Desires", "t4.title": "Was hast du beobachtet?", "t4.intro": "Schau auf deine Runden zurück und beschreibe deine Erfahrungen.", "t4.q1": "Was ist passiert, wenn du viele Früchte genutzt hast?", "t4.q2": "Was ist passiert, wenn du weniger Früchte genutzt hast?", "t4.q3": "Wann konntest du dir auch zusätzliche Wünsche erfüllen – und wann nicht?", "t4.q4": "Was konntest du beim Nachwachsen der Früchte nicht vorhersagen?", "t4.rememberTitle": "Vergleiche mit deinen Beobachtungen:", "t4.remember": "Nutzung heute beeinflusst Möglichkeiten morgen. Wie viele Früchte nachwachsen, ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.", "t5.title": "Jetzt arbeitet ihr zu zweit", "t5.intro": "Setzt euch zu zweit zusammen. Ihr bekommt zwei erfundene Personen: Person A und Person B. Beide haben eigene Needs und Desires.", "t5.newProfiles": "Andere Profile", "t5.rule": "Eure Abmachung", "t5.help": "Denkt zum Beispiel darüber nach: Welche Needs sollen zuerst erfüllt werden? Soll jede Person gleich viel erhalten? Wann erfüllt ihr zusätzlich Desires? Was macht ihr, wenn nicht alles möglich ist?", "profile.needs": "Needs – das braucht die Person", "profile.desires": "Desires – das möchte die Person zusätzlich", "t6.title": "Gemeinsam entscheiden", "t6.intro": "Wählt selbst per Klick aus, welche Needs und Desires ihr in dieser Runde erfüllen wollt. Die Website zeigt nur die Folgen eurer Entscheidung.", "t6.secure": "Für später zurücklegen", "t6.finish": "Gemeinsame Runde abschliessen", "t6.changeRule": "Habt ihr eure Abmachung während der Runden verändert? Wenn ja: warum?", "t6.tooMuch": "Dafür reichen die verfügbaren Früchte nicht.", "t6.feedback": "Ihr habt {used} Früchte verteilt und {secure} für später zurückgelegt. {aN}/3 Needs von Person A und {bN}/3 Needs von Person B wurden erfüllt. Am Baum blieben {left}; über Nacht wuchsen {reg} nach.", "t7.title": "Was hat sich verändert?", "t7.q1": "Welche Needs konnten nicht immer erfüllt werden?", "t7.q2": "War eure Verteilung für Person A und Person B gerecht? Warum?", "t7.q3": "Was ist passiert, wenn ihr viele Früchte für Needs und Desires eingesetzt habt?", "t7.q4": "Was habt ihr bei euren gemeinsamen Regeln und Entscheidungen bemerkt?", "end.question": "Was hat Novera mit der Erde zu tun?", "end.note": "Der Baum und seine Früchte sind erfunden. Gibt es auf der Erde trotzdem ähnliche Zusammenhänge? Diese Frage verfolgt ihr im anschliessenden Mystery weiter."};
 function eState(){try{return JSON.parse(localStorage.getItem(E_KEY))||{};}catch(e){return {};}}
 function ePatch(p){const s=eState();Object.assign(s,p);localStorage.setItem(E_KEY,JSON.stringify(s));return s;}
 function t(k,f=""){return TXT[k]||f||k}
@@ -6245,6 +6245,9 @@ function showPhase(n){
     clearThoughtHints();
   }
 
+  requestAnimationFrame(()=>{
+    clearThoughtHints();
+  });
   window.scrollTo(0,0);
 }
 function currentSourceWorlds(){
@@ -6943,21 +6946,28 @@ function renderPersonalSim(){
   };
   show(needsStatusNow,lastRound?.needs||0,needTotal,true);
   show(desiresStatusNow,lastRound?.desires||0,desireTotal,false);
-  setPersonalThoughtHint(lastRound,needTotal,desireTotal);
 }
 
 /* Je mehr am Baum bleibt, desto stärker kann er sich erholen.
    Die genaue Menge bleibt innerhalb eines kleinen Bereichs offen. */
 function regen(left,max=TREE_MAX){
+  /* Ist der Baum ganz leer, wächst nichts mehr nach. */
   if(left<=0)return 0;
 
   const share=left/Math.max(1,max);
+  let reg=0;
 
-  if(share<=0.15)return 1;
-  if(share<=0.35)return rand(1,2);
-  if(share<=0.55)return rand(2,3);
-  if(share<=0.75)return rand(2,4);
-  return rand(1,3);
+  if(share<=0.15)reg=2;
+  else if(share<=0.35)reg=rand(2,3);
+  else if(share<=0.55)reg=rand(3,4);
+  else if(share<=0.75)reg=rand(4,5);
+  else reg=rand(4,6);
+
+  /* Seltener besonders guter Nachwuchs:
+     In etwa jeder zehnten Runde wachsen zusätzlich 3 Früchte nach. */
+  if(Math.random()<0.10)reg+=3;
+
+  return reg;
 }
 
 function resetPersonalRounds(){
@@ -7016,8 +7026,12 @@ function finishPRound(){
   });
   Object.assign(q,{tree:next,max,round:q.round+1,selectedNeeds:validNeeds,selectedDesires:validDesires});
   ePatch({psim:q});
-  suppressThoughtHints=false;
   renderPersonalSim();
+  suppressThoughtHints=false;
+  setPersonalThoughtHint(q.log[q.log.length-1],
+    p.filter(x=>x.kind==="need").length,
+    p.filter(x=>x.kind==="desire").length
+  );
   updatePhase2Progress();
 }
 
@@ -7244,7 +7258,6 @@ function renderAlloc(){
   setStatus("groupBDesires",last?.desB||0,2,false);
 
   drawTreeTo("groupFruitLayer",q.tree);
-  setGroupThoughtHint(last,q.tree);
 
   const selectedSet=new Set(Array.isArray(q.selected)?q.selected:[]);
   const mk=(p,pi)=>
@@ -7325,8 +7338,9 @@ function finishGroup(){
   q.selected=[...document.querySelectorAll("#allocA .allocItem input:checked,#allocB .allocItem input:checked")]
     .map(cb=>cb.dataset.p+":"+cb.dataset.k+":"+cb.dataset.i);
   ePatch({gsim:q});
-  suppressThoughtHints=false;
   renderAlloc();
+  suppressThoughtHints=false;
+  setGroupThoughtHint(q.log[q.log.length-1],q.tree);
   updatePhase2Progress();
 }
 
