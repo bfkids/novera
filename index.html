@@ -3121,6 +3121,21 @@ body.explanationOpen{
   padding:11px 12px!important;
 }
 
+
+/* Needs/Desires-Erklärungen sind bewusst kurz und sollen ohne Scrollen lesbar sein */
+#termsReveal1.theoryBox:not(.hidden),
+#termsReveal2.theoryBox:not(.hidden){
+  max-height:none!important;
+  overflow:visible!important;
+}
+@media(max-height:620px){
+  #termsReveal1.theoryBox:not(.hidden),
+  #termsReveal2.theoryBox:not(.hidden){
+    max-height:88vh!important;
+    overflow:auto!important;
+  }
+}
+
 </style>
 </head>
 
@@ -3486,10 +3501,17 @@ body.explanationOpen{
     </label>
   </div>
 
-  <div class="theoryBox hidden" id="termsReveal">
+  <div class="theoryBox hidden" id="termsReveal1">
     <p>Bis jetzt hast du selbst entschieden, was du <strong>ganz sicher für ein gutes Leben brauchst</strong> und was du dir <strong>eher zusätzlich wünschst</strong>. Dabei ging es um deine persönliche Sicht.</p>
     <p>Nun schauen wir darauf, <strong>was Menschen allgemein brauchen, damit sie gut leben können</strong>. Dafür unterscheiden wir zwischen <strong>Needs</strong> und <strong>Desires</strong>.</p>
     <p><strong>Needs</strong> sind Dinge und Bedingungen, die für ein gutes Leben grundlegend sind. Dazu gehören zum Beispiel Nahrung, Wasser, Gesundheit, Bildung, Wohnen, soziale Beziehungen, Energie oder die Möglichkeit mitzubestimmen.</p>
+    <label class="understoodCheck">
+      <input type="checkbox" id="termsPart1Understood">
+      <span>Gelesen und verstanden</span>
+    </label>
+  </div>
+
+  <div class="theoryBox hidden" id="termsReveal2">
     <p><strong>Desires</strong> sind zusätzliche Wünsche. Sie können uns sehr wichtig sein, sind aber nicht dasselbe wie grundlegende Needs.</p>
     <p>Oft steckt hinter einem Desire ein Need: Ein bestimmtes Smartphone ist kein Need. Mit anderen Menschen in Kontakt sein zu können, kann dagegen einer sein.</p>
     <p>Was wir uns wünschen, wird auch von <strong>Werbung, sozialen Medien, Trends und unserem Umfeld</strong> beeinflusst. Dadurch kann sich ein Desire manchmal so wichtig anfühlen wie ein Need.</p>
@@ -3502,9 +3524,9 @@ body.explanationOpen{
 </article>
 <article class="learnCard socialStart phase2Lockable phase2Locked" id="learn5">
   <span class="taskLabel">Aufgabe E</span>
-  <h2>Jetzt arbeitet ihr zu zweit</h2><p class="phase2LockHint">Lies zuerst die Erklärung zu Needs und Desires und bestätige «Gelesen und verstanden».</p>
+  <h2>Jetzt arbeitet ihr zu zweit</h2><p class="phase2LockHint">Lies zuerst beide Erklärungen zu Needs und Desires und bestätige sie.</p>
 
-  <p class="taskInstruction">Setzt euch zu zweit zusammen. Ihr bekommt Person A und Person B mit je zwei Needs und zwei Desires. Entscheidet gemeinsam, wofür ihr in jeder Runde Früchte einsetzen wollt. Für jede Sache braucht es zwei Früchte. Die Früchte reichen nicht immer für alles.</p>
+  <p class="taskInstruction">Setzt euch zu zweit zusammen. Ihr seid Person A und Person B. Jede Person bekommt zwei vorgegebene Needs und zwei Desires. Besprecht zuerst, wie ihr die Früchte ernten wollt, und schreibt eure Abmachung hier auf. Entscheidet danach gemeinsam, wofür ihr in jeder Runde Früchte erntet. Für jede Sache braucht es zwei Früchte. Die Früchte reichen nicht immer für alles.</p>
 
   <div class="groupTreeRuleLayout">
     <div class="groupTreeColumn">
@@ -3520,13 +3542,13 @@ body.explanationOpen{
     </div>
     <div class="labField taskInstruction groupRuleBox">
       <label for="groupRule">Eure Abmachung</label>
-      <textarea id="groupRule" data-e-save="groupRule" placeholder="Einigt euch auf eine Regel, nach der ihr die Früchte verteilen wollt."></textarea>
+      <textarea id="groupRule" data-e-save="groupRule" placeholder="Schreibt hier auf, wie ihr die Früchte ernten wollt."></textarea>
       <button class="helpBtn" data-help="ruleHelp" type="button">?</button>
-      <div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Welche Needs sollen zuerst erfüllt werden? Soll jede Person gleich viel erhalten? Wann erfüllt ihr zusätzlich Desires? Was macht ihr, wenn nicht alles möglich ist?</div>
+      <div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Was ist euch beim Ernten wichtig? Was soll Person A bekommen, was Person B? Wann erntet ihr für Needs, wann für Desires?</div>
     </div>
   </div>
 
-  <button class="action secondary compactAction" id="newProfiles" type="button">Andere Profile</button>
+  <button class="action secondary compactAction" id="newProfiles" type="button">Andere Needs und Desires</button>
 
   <div class="allocationGrid">
     <div>
@@ -3552,8 +3574,7 @@ body.explanationOpen{
     <p>Geht dabei auf diese Fragen ein:</p>
     <ul>
       <li>War eure Verteilung für Person A und Person B gerecht? Warum?</li>
-      <li>Was ist passiert, wenn ihr viele Früchte für Needs und Desires eingesetzt habt?</li>
-      <li>Habt ihr eure Abmachung während der Runden verändert? Warum?</li>
+      <li>Hat eure Abmachung funktioniert? Würdet ihr sie für weitere Runden beibehalten oder verändern? Warum?</li>
     </ul>
     <textarea id="groupReflection" data-e-save="groupReflection" class="largeReflection"></textarea>
   </div>
@@ -6115,6 +6136,10 @@ function configurePhase2Source(){
 }
 
 function showPhase(n){
+  /* Beim Wechsel zwischen den Phasen bleiben Erklärungen geschlossen.
+     Sie öffnen sich nur durch den vorgesehenen Arbeitsschritt. */
+  closeAllExplanationsOnLoad();
+
   const p1=document.getElementById("phase1");
   const p2=document.getElementById("phase2");
   const headerTitle=document.querySelector("header h1");
@@ -6142,9 +6167,14 @@ function showPhase(n){
       renderRequirements();
       renderPersonalSim();
       ensureProfiles(false);
-      if(s.individualReflectionSaved===true && theory)theory.classList.remove("hidden");
-      if(reflectionUnderstood)reflectionUnderstood.checked=s.reflectionUnderstandingConfirmed===true;
-      if(termsReveal)termsReveal.classList.toggle("hidden",s.reflectionUnderstandingConfirmed!==true);
+      if(theory)theory.classList.add("hidden");
+      if(reflectionUnderstood)reflectionUnderstood.checked=false;
+      const req=document.getElementById("requirementsReveal");
+      if(req)req.classList.add("hidden");
+      const tr1=document.getElementById("termsReveal1");
+      const tr2=document.getElementById("termsReveal2");
+      if(tr1)tr1.classList.add("hidden");
+      if(tr2)tr2.classList.add("hidden");
     }
   }
 
@@ -6446,7 +6476,7 @@ function updatePhase2Progress(){
   const cComplete=cRounds>=3;
   const dComplete=cComplete&&s.individualReflectionSaved===true;
   const reflectionOk=dComplete&&s.reflectionUnderstandingConfirmed===true;
-  const termsOk=reflectionOk&&s.universalTermsUnderstood===true;
+  const termsOk=reflectionOk&&s.termsPart1Understood===true&&s.universalTermsUnderstood===true;
   const eRounds=Array.isArray(s.gsim?.log)?s.gsim.log.length:0;
   const eComplete=dComplete&&termsOk&&eRounds>=3;
 
@@ -6481,10 +6511,10 @@ function updatePhase2Progress(){
       hint.textContent=!dComplete
         ?"Speichere zuerst deine Reflexion in Aufgabe D."
         :!reflectionOk?"Lies die Erkenntnis in Aufgabe D und bestätige «Das habe ich so verstanden»."
-        :!termsOk?"Lies zuerst die Erklärung zu Needs und Desires und bestätige «Gelesen und verstanden».":"";
+        :!termsOk?"Lies zuerst beide Erklärungen zu Needs und Desires und bestätige sie.":"";
     }else if(parent.id==="learn7"){
       hint.textContent=!termsOk
-        ?"Lies zuerst die Erklärung zu Needs und Desires."
+        ?"Lies zuerst beide Erklärungen zu Needs und Desires."
         :!eComplete?"Führt zuerst mindestens drei gemeinsame Runden in Aufgabe E durch.":"";
     }
   });
@@ -6503,6 +6533,7 @@ function resetAfterWorldChoice(){
   delete s.psim;
   delete s.stageBComplete;
   delete s.termsUnderstood;
+  delete s.termsPart1Understood;
   delete s.universalTermsUnderstood;
   delete s.requirementsUnderstood;
   delete s.individualReflection;
@@ -6702,6 +6733,7 @@ function savePersonal(){
     psim:{tree:max,max,round:1,log:[],selectedNeeds:[],selectedDesires:[]},
     individualReflectionSaved:false,
     reflectionUnderstandingConfirmed:false,
+    termsPart1Understood:false,
     universalTermsUnderstood:false
   });
   return true;
@@ -6785,7 +6817,19 @@ function ensureGameSummaryRow(referenceEl,rowId,needsId,desiresId,needsLabel="Ne
     row.innerHTML=
       '<span class="simOutcomeItem"><strong>'+escapeHtml(needsLabel)+'</strong><span id="'+needsId+'">–</span></span>'+
       '<span class="simOutcomeItem"><strong>'+escapeHtml(desiresLabel)+'</strong><span id="'+desiresId+'">–</span></span>';
-    baseRow.insertAdjacentElement("afterend",row);
+
+    /* Beim gemeinsamen Baum gehört die Auswertung unter die Baumgrafik.
+       In der persönlichen Runde steht die Statuszeile bereits unter dem Baum. */
+    if(rowId==="groupSummaryRow"){
+      const tree=baseRow.parentElement?.querySelector(".groupTree");
+      if(tree){
+        tree.insertAdjacentElement("afterend",row);
+      }else{
+        baseRow.insertAdjacentElement("afterend",row);
+      }
+    }else{
+      baseRow.insertAdjacentElement("afterend",row);
+    }
   }
 }
 
@@ -6850,6 +6894,7 @@ function resetPersonalRounds(){
     psim:{tree:max,max,round:1,log:[],selectedNeeds:[],selectedDesires:[]},
     individualReflectionSaved:false,
     reflectionUnderstandingConfirmed:false,
+    termsPart1Understood:false,
     universalTermsUnderstood:false
   });
   renderPersonalSim();
@@ -6903,64 +6948,64 @@ function finishPRound(){
 
 const DOUGHNUT_NEEDS={
   "Nahrung":[
-    "regelmässig genug zu essen haben",
-    "genug verträgliche Nahrung bekommen können",
-    "auch bei Veränderungen zuverlässig Nahrung bekommen können"
+    "jeden Tag genug zu essen haben",
+    "Essen bekommen, das ich vertrage",
+    "auch bei Veränderungen genug zu essen haben"
   ],
   "Wasser":[
     "genug sauberes Trinkwasser haben",
-    "sicheres Wasser für die tägliche Versorgung nutzen können",
-    "jederzeit Zugang zu sauberem Wasser haben"
+    "Wasser zum Trinken, Kochen und Waschen haben",
+    "jederzeit sauberes Wasser bekommen können"
   ],
   "Gesundheit":[
-    "medizinische Hilfe bekommen, wenn ich krank bin",
-    "notwendige Behandlung und Medikamente erhalten können",
-    "Hilfe bekommen, wenn meine Gesundheit gefährdet ist"
+    "medizinische Hilfe bekommen, wenn ich krank oder verletzt bin",
+    "Medikamente und Behandlungen bekommen, wenn ich sie brauche",
+    "Hilfe bekommen, wenn es mir körperlich oder psychisch schlecht geht"
   ],
   "Bildung":[
-    "lernen und eine gute Bildung erhalten können",
-    "Zugang zu Schule und Lernmöglichkeiten haben",
-    "wichtige Fähigkeiten für das eigene Leben lernen können"
+    "zur Schule gehen und lernen können",
+    "Dinge lernen, die ich für meine Zukunft brauche",
+    "Unterstützung bekommen, wenn ich beim Lernen Hilfe brauche"
   ],
   "Einkommen & Arbeit":[
-    "später den eigenen Lebensunterhalt sichern können",
-    "eine faire Möglichkeit haben, mit Arbeit Einkommen zu erzielen",
-    "Arbeit finden können, von der ich leben kann"
+    "später eine Arbeit finden, von der ich leben kann",
+    "später eigenes Geld verdienen können",
+    "später bei der Arbeit fair behandelt werden"
   ],
   "Frieden & Gerechtigkeit":[
     "vor Gewalt geschützt sein",
-    "bei Konflikten Schutz durch faire Regeln erhalten",
-    "sich ohne Angst vor Gewalt bewegen können"
+    "Hilfe bekommen, wenn ich unfair behandelt werde",
+    "leben können, ohne Angst vor Gewalt zu haben"
   ],
   "Politische Mitsprache":[
-    "bei Entscheidungen, die mein Leben betreffen, mitreden können",
-    "meine Meinung zu gemeinsamen Regeln einbringen können",
-    "bei wichtigen öffentlichen Entscheidungen eine Stimme haben"
+    "bei Entscheidungen, die mich betreffen, mitreden können",
+    "meine Meinung sagen können und gehört werden",
+    "bei gemeinsamen Regeln mitbestimmen können"
   ],
   "Soziale Gleichheit":[
-    "wichtige Angebote unabhängig vom eigenen Besitz nutzen können",
-    "faire Chancen haben und nicht wegen der Herkunft ausgeschlossen werden",
-    "am gesellschaftlichen Leben teilnehmen können, ohne ausgegrenzt zu werden"
+    "wichtige Angebote nutzen können, auch wenn ich wenig Geld habe",
+    "die gleichen Chancen haben, egal aus welcher Familie ich komme",
+    "dazugehören können, ohne ausgegrenzt zu werden"
   ],
   "Geschlechtergerechtigkeit":[
     "unabhängig vom Geschlecht die gleichen Rechte haben",
-    "unabhängig vom Geschlecht die gleichen Bildungs- und Berufschancen haben",
-    "nicht wegen des Geschlechts benachteiligt werden"
+    "unabhängig vom Geschlecht die gleichen Chancen in Schule und Beruf haben",
+    "nicht wegen meines Geschlechts benachteiligt werden"
   ],
   "Wohnen":[
     "einen sicheren Ort zum Wohnen haben",
-    "vor Kälte, Hitze und schlechtem Wetter geschützt wohnen können",
-    "einen verlässlichen Platz zum Schlafen und Leben haben"
+    "warm und trocken wohnen können",
+    "einen Ort zum Schlafen und Zurückziehen haben"
   ],
   "Netzwerke":[
-    "mit anderen Menschen verbunden sein und dazugehören können",
-    "Menschen haben, von denen ich Unterstützung bekommen kann",
-    "Kontakt zu wichtigen Menschen halten können"
+    "Menschen haben, zu denen ich gehöre",
+    "Menschen haben, die mir helfen, wenn ich sie brauche",
+    "Kontakt zu Menschen halten können, die mir wichtig sind"
   ],
   "Energie":[
-    "genug Energie für Licht und grundlegende Geräte nutzen können",
-    "Energie für Wärme und wichtige tägliche Tätigkeiten haben",
-    "zuverlässig Zugang zu Energie haben"
+    "Strom für Licht und wichtige Geräte haben",
+    "Energie zum Kochen und Heizen haben",
+    "zuverlässig Strom oder andere Energie nutzen können"
   ]
 };
 
@@ -7060,10 +7105,10 @@ function profileSet(){
 
 function ensureProfiles(force=false){
   let s=eState();
-  if(force||!s.profiles||s.profilePoolVersion!=="independent-v2"){
+  if(force||!s.profiles||s.profilePoolVersion!=="independent-v3"){
     s=ePatch({
       profiles:profileSet(),
-      profilePoolVersion:"independent-v2",
+      profilePoolVersion:"independent-v3",
       gsim:{tree:TREE_START,round:1,log:[]},
       groupReflection:""
     });
@@ -7103,7 +7148,12 @@ function renderAlloc(){
     summary.innerHTML=
       '<div class="personOutcome"><span class="simOutcomeItem"><strong>A · Needs</strong><span id="groupANeeds">–</span></span><span class="simOutcomeItem"><strong>A · Desires</strong><span id="groupADesires">–</span></span></div>'+
       '<div class="personOutcome"><span class="simOutcomeItem"><strong>B · Needs</strong><span id="groupBNeeds">–</span></span><span class="simOutcomeItem"><strong>B · Desires</strong><span id="groupBDesires">–</span></span></div>';
-    gTree.closest(".socialStatus")?.insertAdjacentElement("afterend",summary);
+    const groupTree=document.querySelector(".groupTree");
+    if(groupTree){
+      groupTree.insertAdjacentElement("afterend",summary);
+    }else{
+      gTree.closest(".socialStatus")?.insertAdjacentElement("afterend",summary);
+    }
   }
 
   const last=(q.log||[]).length?q.log[q.log.length-1]:null;
@@ -7117,9 +7167,9 @@ function renderAlloc(){
   setStatus("groupADesires",last?.desA||0,2,false);
   setStatus("groupBNeeds",last?.needsB||0,2,true);
   setStatus("groupBDesires",last?.desB||0,2,false);
-  setGroupThoughtHint(last);
 
   drawTreeTo("groupFruitLayer",q.tree);
+  setGroupThoughtHint(last,q.tree);
 
   const mk=(p,pi)=>
     '<div class="profileChoiceSection"><h4 class="needHeading">Needs</h4>'+
@@ -7543,7 +7593,7 @@ function setPersonalThoughtHint(lastRound,needTotal,desireTotal){
   box.classList.toggle("active",!!text);
 }
 
-function setGroupThoughtHint(lastRound){
+function setGroupThoughtHint(lastRound,currentTree){
   let box=document.getElementById("groupThoughtHint");
   const summary=document.getElementById("groupSummaryRow");
   if(!summary)return;
@@ -7565,9 +7615,12 @@ function setGroupThoughtHint(lastRound){
   const aN=lastRound.needsA||0,bN=lastRound.needsB||0;
   const aD=lastRound.desA||0,bD=lastRound.desB||0;
   const totalN=aN+bN,totalD=aD+bD;
+  const treeNow=Number(currentTree);
   let text="";
 
-  if(lastRound.left===0){
+  /* Ein leerer Baum hat immer Vorrang vor allen
+     Kommentaren zur Verteilung. */
+  if(treeNow===0 || Number(lastRound.left)===0){
     text="Der Baum ist leer. Über Nacht sind keine neuen Früchte gewachsen. Was bedeutet das für ein gutes Leben für beide und den Baum?";
   }else if(totalN===4 && totalD===4){
     text="Ihr habt alles erfüllt. Und wie geht es dem Baum? Beobachtet ihn in den nächsten Runden weiter und entscheidet dann, ob das für beide ein gutes Leben ist.";
@@ -7677,8 +7730,8 @@ function initErarbeitung(){
           alert("Speichere zuerst deine Reflexion in Aufgabe D.");
         }else if((card.id==="learn5"||card.id==="learn7") && s.reflectionUnderstandingConfirmed!==true){
           alert("Lies die Erkenntnis in Aufgabe D und bestätige «Das habe ich so verstanden».");
-        }else if((card.id==="learn5"||card.id==="learn7") && s.universalTermsUnderstood!==true){
-          alert("Lies zuerst die Erklärung zu Needs und Desires und bestätige «Gelesen und verstanden».");
+        }else if((card.id==="learn5"||card.id==="learn7") && (s.termsPart1Understood!==true||s.universalTermsUnderstood!==true)){
+          alert("Lies zuerst beide Erklärungen zu Needs und Desires und bestätige sie.");
         }else if(card.id==="learn7" && (s.gsim?.log?.length||0)<3){
           alert("Führt zuerst mindestens drei gemeinsame Runden in Aufgabe E durch.");
         }
@@ -7691,16 +7744,29 @@ function initErarbeitung(){
     if(s[el.dataset.eSave]!==undefined)el.value=s[el.dataset.eSave];
     el.oninput=()=>ePatch({[el.dataset.eSave]:el.value});
   });
+  const termsPart1Understood=id("termsPart1Understood");
   const termsUnderstood=id("termsUnderstood");
   const requirementsUnderstood=id("requirementsUnderstood");
   const savedState=eState();
+
+  if(termsPart1Understood){
+    termsPart1Understood.checked=false;
+    termsPart1Understood.onchange=()=>{
+      ePatch({termsPart1Understood:termsPart1Understood.checked});
+      if(termsPart1Understood.checked){
+        closeExplanation(id("termsReveal1"));
+        openExplanation(id("termsReveal2"));
+      }
+      updatePhase2Progress();
+    };
+  }
 
   if(termsUnderstood){
     termsUnderstood.checked=false;
     termsUnderstood.onchange=()=>{
       ePatch({universalTermsUnderstood:termsUnderstood.checked});
       if(termsUnderstood.checked){
-        closeExplanation(id("termsReveal"));
+        closeExplanation(id("termsReveal2"));
       }
       updatePhase2Progress();
     };
@@ -7768,14 +7834,17 @@ function initErarbeitung(){
   const theory=id("individualTheory");
   const refText=id("individualReflection");
   const reflectionUnderstood=id("reflectionUnderstood");
-  const termsReveal=id("termsReveal");
+  const termsReveal1=id("termsReveal1");
+  const termsReveal2=id("termsReveal2");
 
   if(refText)refText.addEventListener("input",()=>{
-    ePatch({individualReflectionSaved:false,reflectionUnderstandingConfirmed:false,universalTermsUnderstood:false});
+    ePatch({individualReflectionSaved:false,reflectionUnderstandingConfirmed:false,termsPart1Understood:false,universalTermsUnderstood:false});
     if(reflectionUnderstood)reflectionUnderstood.checked=false;
+    if(termsPart1Understood)termsPart1Understood.checked=false;
     if(termsUnderstood)termsUnderstood.checked=false;
     closeExplanation(theory);
-    closeExplanation(termsReveal);
+    closeExplanation(termsReveal1);
+    closeExplanation(termsReveal2);
     updatePhase2Progress();
   });
 
@@ -7788,7 +7857,8 @@ function initErarbeitung(){
     const keepY=window.scrollY;
     ePatch({individualReflectionSaved:true});
     if(reflectionUnderstood)reflectionUnderstood.checked=false;
-    if(termsReveal)termsReveal.classList.add("hidden");
+    if(termsReveal1)termsReveal1.classList.add("hidden");
+    if(termsReveal2)termsReveal2.classList.add("hidden");
     openExplanation(theory);
     updatePhase2Progress();
     requestAnimationFrame(()=>window.scrollTo({top:keepY,left:0,behavior:"auto"}));
@@ -7800,10 +7870,15 @@ function initErarbeitung(){
       ePatch({reflectionUnderstandingConfirmed:reflectionUnderstood.checked});
       if(reflectionUnderstood.checked){
         closeExplanation(theory);
-        if(termsReveal)openExplanation(termsReveal);
+        ePatch({termsPart1Understood:false,universalTermsUnderstood:false});
+        if(termsPart1Understood)termsPart1Understood.checked=false;
+        if(termsUnderstood)termsUnderstood.checked=false;
+        if(termsReveal1)openExplanation(termsReveal1);
       }else{
-        if(termsReveal)closeExplanation(termsReveal);
-        ePatch({universalTermsUnderstood:false});
+        if(termsReveal1)closeExplanation(termsReveal1);
+        if(termsReveal2)closeExplanation(termsReveal2);
+        ePatch({termsPart1Understood:false,universalTermsUnderstood:false});
+        if(termsPart1Understood)termsPart1Understood.checked=false;
         if(termsUnderstood)termsUnderstood.checked=false;
       }
       updatePhase2Progress();
@@ -7837,10 +7912,12 @@ function initErarbeitung(){
   const restoreState=eState();
   const restoredRequirements=id("requirementsReveal");
   const restoredTheory=id("individualTheory");
-  const restoredTerms=id("termsReveal");
+  const restoredTerms1=id("termsReveal1");
+  const restoredTerms2=id("termsReveal2");
   if(restoredRequirements)restoredRequirements.classList.add("hidden");
   if(restoredTheory)restoredTheory.classList.add("hidden");
-  if(restoredTerms)restoredTerms.classList.add("hidden");
+  if(restoredTerms1)restoredTerms1.classList.add("hidden");
+  if(restoredTerms2)restoredTerms2.classList.add("hidden");
 
 }
 
