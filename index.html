@@ -6229,19 +6229,14 @@ function showPhase(n){
       renderRequirements();
       renderPersonalSim();
       ensureProfiles(false);
-      if(theory)theory.classList.add("hidden");
-      if(reflectionUnderstood)reflectionUnderstood.checked=false;
-      const req=document.getElementById("requirementsReveal");
-      if(req)req.classList.add("hidden");
-      const tr1=document.getElementById("termsReveal1");
-      const tr2=document.getElementById("termsReveal2");
-      if(tr1)tr1.classList.add("hidden");
-      if(tr2)tr2.classList.add("hidden");
+
+      /* Beim blossen Wechsel zurück in die Entdeckungsphase darf
+         keine bereits bearbeitete Erklärung erneut aufpoppen.
+         Die Renderfunktionen dürfen ihren Inhalt aktualisieren,
+         danach werden alle Erklärfenster zentral geschlossen. */
+      closeAllExplanationsOnLoad();
     }
 
-    /* Die Renderfunktionen können den Hinweis der letzten Runde
-       wieder einsetzen. Beim blossen Phasenwechsel soll er nicht
-       erneut erscheinen. */
     clearThoughtHints();
   }
 
@@ -6959,9 +6954,9 @@ function regen(left,max=TREE_MAX){
 
   if(share<=0.15)reg=2;
   else if(share<=0.35)reg=rand(2,3);
-  else if(share<=0.55)reg=rand(3,4);
-  else if(share<=0.75)reg=rand(4,5);
-  else reg=rand(4,6);
+  else if(share<=0.55)reg=rand(2,4);
+  else if(share<=0.75)reg=rand(2,4);
+  else reg=rand(3,5);
 
   /* Seltener besonders guter Nachwuchs:
      In etwa jeder zehnten Runde wachsen zusätzlich 3 Früchte nach. */
