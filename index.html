@@ -3214,6 +3214,1514 @@ body.explanationOpen{
   }
 }
 
+
+/* ============================================================
+   TEIL 3 – MYSTERY
+   ============================================================ */
+#phase3{display:none}
+#phase3.active{display:block}
+
+.phase3MissionInner{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);
+  gap:18px;
+  align-items:stretch;
+}
+.phase3MissionCopy .missionKicker{
+  display:inline-block;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#2f6c39;
+  margin-bottom:6px;
+}
+.phase3MissionCopy h2{margin:0 0 4px}
+.phase3Lead{
+  margin:0 0 12px;
+  color:#356d38;
+  font-size:20px;
+  font-weight:800;
+}
+.phase3HeroPlaceholder{
+  min-height:230px;
+  border:2px dashed #aeb8c0;
+  border-radius:12px;
+  background:#f5f7f8;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:20px;
+  color:#65717a;
+}
+.phase3HeroPlaceholder strong{
+  display:block;
+  color:#39444b;
+  margin-bottom:5px;
+}
+
+.mysteryInfo{margin-top:18px}
+.mysteryInfoGrid{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);
+  gap:16px;
+}
+.mysteryInfo .taskInstruction{margin:0}
+.mysteryInfo .taskInstruction p{margin:7px 0 0}
+.mysteryGuessBox{
+  background:#f5f7f4;
+  border:1px solid #d8ddd6;
+  border-radius:12px;
+  padding:14px;
+}
+.mysteryGuessBox label,
+.mysteryQuestionBox label{
+  display:block;
+  font-weight:800;
+  margin-bottom:6px;
+}
+.mysteryGuessBox textarea,
+.mysteryQuestionBox textarea,
+.mysteryFinish textarea{
+  width:100%;
+  font:inherit;
+  font-size:16px;
+  line-height:1.45;
+}
+.mysteryGuessBox textarea{min-height:78px}
+.mysteryGuessBox .action{margin-top:8px}
+
+.mysteryWorkspace{margin-top:18px}
+.mysteryWorkspaceHeader{
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.mysteryWorkspaceHeader h2{margin:0}
+.mysteryWorkspaceHeader .smallNote{margin:4px 0 0}
+.mysteryWorkspaceTools{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.mysteryWorkspaceTools .action{margin:0}
+
+.mysteryCategoryEditor{
+  background:#f7f7f4;
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:12px;
+}
+.mysteryCategoryEditor strong{display:block;margin-bottom:7px}
+.mysteryCategoryInputs{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.mysteryCategoryInput{
+  display:grid;
+  grid-template-columns:18px minmax(0,1fr);
+  gap:7px;
+  align-items:center;
+}
+.mysteryLegendSwatch{
+  width:16px;height:16px;border-radius:4px;border:1px solid rgba(0,0,0,.14)
+}
+.mysteryLegendSwatch.cat1{background:#dfeaff}
+.mysteryLegendSwatch.cat2{background:#e3f1dd}
+.mysteryLegendSwatch.cat3{background:#f0e5f6}
+.mysteryCategoryInput input{
+  width:100%;
+  min-width:0;
+  font:inherit;
+  font-size:14px;
+  padding:8px 9px;
+  border:1px solid #bbb;
+  border-radius:8px;
+  background:#fff;
+}
+.mysteryLegend{
+  display:flex;
+  gap:8px 14px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-top:10px;
+  font-size:13px;
+}
+.mysteryLegendItem{
+  display:inline-flex;
+  gap:6px;
+  align-items:center;
+}
+
+.mysteryGuide{
+  padding:11px 13px;
+  margin:0 0 12px;
+  border-left:4px solid #5aaed6;
+  border-radius:9px;
+  background:#f2f7fa;
+  font-size:14px;
+  line-height:1.45;
+}
+.mysteryBoardScroller{
+  overflow:auto;
+  border:1px solid #d4d7d8;
+  border-radius:13px;
+  background:#eef1f2;
+  -webkit-overflow-scrolling:touch;
+}
+.mysteryBoard{
+  position:relative;
+  width:1080px;
+  height:760px;
+  min-width:1080px;
+  background:
+    linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.72)),
+    linear-gradient(90deg,#d9dfe2 1px,transparent 1px),
+    linear-gradient(#d9dfe2 1px,transparent 1px);
+  background-size:auto,28px 28px,28px 28px;
+  overflow:hidden;
+}
+#mysteryLines{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:1;
+}
+.mysteryLine{
+  stroke:#647985;
+  stroke-width:2.5;
+  fill:none;
+}
+.mysteryLineLabel{
+  fill:#fff;
+  stroke:#aeb8be;
+  stroke-width:1;
+}
+.mysteryLineText{
+  font-size:12px;
+  fill:#33434c;
+  text-anchor:middle;
+  dominant-baseline:middle;
+}
+
+.mysteryCard{
+  position:absolute;
+  width:215px;
+  min-height:126px;
+  padding:10px;
+  border:1px solid #d0d3d4;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 3px 8px rgba(0,0,0,.10);
+  z-index:3;
+  transition:background .15s,border-color .15s,box-shadow .15s;
+}
+.mysteryCard.cat1{background:#edf3ff;border-color:#9bb9ef}
+.mysteryCard.cat2{background:#edf7e9;border-color:#9cc892}
+.mysteryCard.cat3{background:#f6eef9;border-color:#c7a7d5}
+.mysteryCard.connectionPick{
+  outline:3px solid #287bae;
+  outline-offset:2px;
+}
+.mysteryCardHeader{
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr) 24px;
+  gap:7px;
+  align-items:center;
+  margin-bottom:5px;
+}
+.mysteryCardIcon svg{
+  width:28px;height:28px;display:block;image-rendering:pixelated
+}
+.mysteryCardTitle{
+  font-size:14px;
+  line-height:1.2;
+  font-weight:800;
+}
+.mysteryDragHandle{
+  width:24px;height:24px;
+  display:grid;place-items:center;
+  border:0;background:transparent;
+  color:#777;font-size:17px;
+  cursor:grab;
+  touch-action:none;
+}
+.mysteryDragHandle:active{cursor:grabbing}
+.mysteryCardText{
+  margin:0;
+  font-size:14px;
+  line-height:1.38;
+}
+.mysteryCardBottom{
+  margin-top:8px;
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mysteryCardCategory{
+  flex:1;
+  min-width:0;
+  font:inherit;
+  font-size:12px;
+  padding:5px 6px;
+  border:1px solid #aaa;
+  border-radius:7px;
+  background:#fff;
+}
+.mysteryCardBadge{
+  font-size:10px;
+  font-weight:700;
+  color:#666;
+  white-space:nowrap;
+}
+.mysteryCard.userNote{background:#fff8d6}
+.mysteryCard.questionNote{background:#f7edfb}
+
+.mysteryExtraArea{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.mysteryExtraArea .action{margin:0}
+.mysteryExtraArea .smallNote{margin:0}
+
+.mysteryQuestionBox{
+  margin-top:16px;
+  padding:14px;
+  border-radius:12px;
+  background:#f6eff9;
+  border-left:4px solid #9a64b4;
+}
+.mysteryQuestionBox p{margin:0 0 8px}
+.mysteryQuestionRow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:8px;
+  align-items:end;
+}
+.mysteryQuestionRow textarea{min-height:68px}
+.mysteryQuestionRow .action{margin:0}
+
+.mysteryFinish{margin-top:18px}
+.mysteryFinish h2{margin-top:0}
+.mysteryFinish textarea{min-height:110px}
+.mysteryClassNote{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:10px;
+  background:#f2f0f6;
+  font-weight:600;
+}
+.phase3BottomNav{margin-top:18px}
+
+@media(max-width:850px){
+  .phase3MissionInner{grid-template-columns:1fr}
+  .phase3HeroPlaceholder{min-height:170px}
+  .mysteryInfoGrid{grid-template-columns:1fr}
+  .mysteryCategoryInputs{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .mysteryBoard{width:920px;min-width:920px;height:820px}
+  .mysteryCard{width:205px}
+  .mysteryQuestionRow{grid-template-columns:1fr}
+}
+
+
+/* Teil 3: Verbindungen und eigene Karten */
+.mysteryBoard.connectMode .mysteryCard{cursor:pointer}
+#mysteryLines{pointer-events:none}
+.mysteryConnectDelete{pointer-events:all;cursor:pointer}
+.mysteryConnectDeleteCircle{
+  fill:#fff;
+  stroke:#7f898e;
+  stroke-width:1.5;
+}
+.mysteryConnectDeleteText{
+  fill:#4d5559;
+  font-size:17px;
+  font-weight:800;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  pointer-events:none;
+}
+.mysteryCard.userNote .mysteryCardHeader,
+.mysteryCard.questionNote .mysteryCardHeader{
+  grid-template-columns:30px minmax(0,1fr) auto 24px;
+}
+.mysteryOwnDelete{
+  border:0;
+  background:transparent;
+  padding:3px 5px;
+  font:inherit;
+  font-size:11px;
+  font-weight:700;
+  color:#666;
+  cursor:pointer;
+}
+.mysteryOwnDelete:hover{text-decoration:underline}
+
+
+.mysteryOwnCardCreator{
+  margin-top:12px;
+  padding:14px;
+  border-radius:12px;
+  background:#fff9da;
+  border:1px solid #dfc968;
+}
+.mysteryOwnCardCreator textarea{
+  width:100%;
+  min-height:76px;
+  font:inherit;
+  font-size:16px;
+  margin:7px 0 8px;
+}
+.mysteryConnectDot{
+  width:20px;
+  height:20px;
+  border:2px solid #6f7f88;
+  border-radius:50%;
+  background:#fff;
+  cursor:pointer;
+  flex:0 0 auto;
+  padding:0;
+}
+.mysteryConnectDot.active{
+  border-color:#1f78ad;
+  background:#1f78ad;
+  box-shadow:inset 0 0 0 4px #fff;
+}
+.mysteryCardBottom{
+  grid-template-columns:minmax(0,1fr) auto auto!important;
+}
+.mysteryLineHit{
+  stroke:transparent;
+  stroke-width:18;
+  pointer-events:stroke;
+  cursor:pointer;
+}
+.mysteryLineGroup{pointer-events:auto}
+.mysteryLineGroup:hover .mysteryLine{stroke-width:3.5}
+.mysteryLineEdit{
+  pointer-events:auto;
+  cursor:pointer;
+}
+.mysteryLineLabelBox{
+  fill:#fff;
+  stroke:#8d969b;
+  stroke-width:1;
+  rx:8;
+  ry:8;
+}
+.mysteryLineLabelText{
+  fill:#34434b;
+  font-size:12px;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  pointer-events:none;
+}
+.mysteryLineDeleteCircle{
+  fill:#fff;
+  stroke:#8d969b;
+  stroke-width:1.3;
+}
+.mysteryLineDeleteText{
+  fill:#555;
+  font-size:15px;
+  font-weight:800;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  pointer-events:none;
+}
+.mysteryLineEditorOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.34);
+  z-index:9999;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
+.mysteryLineEditorDialog{
+  width:min(420px,100%);
+  background:#fff;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 14px 50px rgba(0,0,0,.24);
+}
+.mysteryLineEditorDialog h3{margin:0 0 10px}
+.mysteryLineEditorDialog input{
+  width:100%;
+  font:inherit;
+  font-size:16px;
+  padding:10px;
+  border:1px solid #aaa;
+  border-radius:8px;
+}
+.mysteryLineEditorActions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+
+/* Teil 3: Karten ohne sichtbare Grund-/Zusatz-Deklaration */
+.mysteryCardBottom{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+}
+
+
+/* Teil 3: Beschriftung direkt auf der Verbindungslinie */
+.mysteryLineLabelBox{display:none!important}
+.mysteryLineLabelText{
+  fill:#34434b;
+  font-size:12px;
+  font-weight:700;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  pointer-events:none;
+  paint-order:stroke;
+  stroke:#fff;
+  stroke-width:4px;
+  stroke-linejoin:round;
+}
+.mysteryLineHint{
+  margin:0 0 10px;
+  font-size:13px;
+  color:#59666d;
+}
+
+
+.mysteryOwnDelete{
+  width:20px!important;
+  height:20px!important;
+  min-width:20px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:#c94343!important;
+  color:#fff!important;
+  display:grid!important;
+  place-items:center!important;
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:800!important;
+  cursor:pointer;
+}
+.mysteryOwnDelete:hover{
+  text-decoration:none!important;
+  filter:brightness(.94);
+}
+
+
+/* Teil 3 – Feinschliff Arbeitsfläche */
+.mysteryWorkspace,
+.mysteryBoardScroller{
+  min-width:0;
+  max-width:100%;
+}
+.mysteryWorkspace{overflow:hidden}
+.mysteryBoardScroller{
+  width:100%;
+  overflow:auto;
+  overscroll-behavior:contain;
+}
+.mysteryCard.isFront{z-index:40!important}
+
+.mysteryCardDelete{
+  width:20px;
+  height:20px;
+  min-width:20px;
+  border:0;
+  border-radius:50%;
+  background:#c94343;
+  color:#fff;
+  padding:0;
+  display:grid;
+  place-items:center;
+  font:inherit;
+  font-size:14px;
+  line-height:1;
+  font-weight:800;
+  cursor:pointer;
+}
+.mysteryCardDelete:hover{filter:brightness(.94)}
+
+.mysteryExpandBtn,
+.mysteryCollapseBtn{
+  display:none;
+}
+
+.mysteryGuide{
+  border-left-color:#5db7de!important;
+  background:#edf6fb!important;
+  color:#222!important;
+}
+.mysteryGuide > strong{
+  display:block;
+  color:#356d86;
+  margin-bottom:5px;
+}
+.mysteryGuide p{margin:0}
+.mysteryGuide .mysteryLegend{
+  margin-top:9px;
+  padding-top:8px;
+  border-top:1px solid rgba(53,109,134,.18);
+}
+
+.mysteryQuestionBox{
+  background:#edf6fb!important;
+  border-left-color:#5db7de!important;
+}
+.mysteryClassNote{
+  margin-top:12px;
+  padding:11px 12px;
+  border-left:4px solid #5db7de;
+  border-radius:8px;
+  background:#edf6fb;
+  font-weight:400!important;
+}
+.mysteryClassNote strong{
+  display:block;
+  color:#356d86;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin-bottom:4px;
+}
+.mysteryClassNote p{margin:0}
+
+.mysteryLineLabelText{
+  stroke-width:2.5px!important;
+}
+
+@media(max-width:700px){
+  .mysteryBoardScroller{
+    overflow:auto;
+    border-radius:10px;
+  }
+  .mysteryBoard{
+    min-width:760px!important;
+    width:760px!important;
+    height:880px!important;
+  }
+  .mysteryCard{
+    width:205px!important;
+    min-height:0!important;
+  }
+  .mysteryCardHeader{
+    grid-template-columns:30px minmax(0,1fr) auto 24px!important;
+    margin-bottom:0!important;
+  }
+  .mysteryCardIcon{
+    display:none!important;
+  }
+  .mysteryExpandBtn{
+    display:grid;
+    place-items:center;
+    width:28px;
+    height:28px;
+    border:1px solid #aeb8bd;
+    border-radius:7px;
+    background:#fff;
+    color:#42515a;
+    font:inherit;
+    font-size:18px;
+    font-weight:800;
+    padding:0;
+  }
+  .mysteryCardText,
+  .mysteryCardBottom{
+    display:none!important;
+  }
+  .mysteryCard.mobileExpanded .mysteryCardText{
+    display:block!important;
+    margin-top:8px;
+  }
+  .mysteryCard.mobileExpanded .mysteryCardBottom{
+    display:grid!important;
+  }
+  .mysteryCard.mobileExpanded .mysteryCollapseBtn{
+    display:block;
+    grid-column:1/-1;
+    justify-self:start;
+    margin-top:3px;
+    border:0;
+    background:transparent;
+    padding:2px 0;
+    color:#50626c;
+    font:inherit;
+    font-size:12px;
+    font-weight:700;
+  }
+  .mysteryWorkspaceHeader{
+    display:block!important;
+  }
+  .mysteryWorkspaceTools{
+    margin-top:8px;
+  }
+}
+
+
+@media(max-width:700px){
+  .mysteryCard .mysteryCardHeader,
+  .mysteryCard.userNote .mysteryCardHeader,
+  .mysteryCard.questionNote .mysteryCardHeader{
+    grid-template-columns:30px minmax(0,1fr) auto 24px!important;
+  }
+}
+
+
+/* ============================================================
+   TEIL 3 – RESPONSIVE BREITE
+   Phase 1/2 verteilen ihre Inhalte über display:contents direkt
+   im Hauptgrid. Teil 3 ist dagegen ein eigener Container und muss
+   deshalb ausdrücklich über die volle Hauptgrid-Breite laufen.
+   Die breite Mystery-Fläche darf nur im eigenen Scroller überlaufen.
+   ============================================================ */
+#phase3.active{
+  display:grid!important;
+  grid-column:1 / -1!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  gap:18px!important;
+  overflow:visible!important;
+}
+
+#phase3 > *,
+#phase3 .panel,
+#phase3 .phase3MissionInner,
+#phase3 .phase3MissionCopy,
+#phase3 .mysteryWorkspace,
+#phase3 .mysteryWorkspaceHeader,
+#phase3 .mysteryInfo,
+#phase3 .mysteryFinish,
+#phase3 .mysteryExtraArea,
+#phase3 .mysteryOwnCardCreator,
+#phase3 .mysteryQuestionBox{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+
+#phase3 > *{
+  grid-column:1 / -1!important;
+}
+
+#phase3 .phase3Mission{
+  display:block!important;
+}
+
+#phase3 .phase3MissionInner > *{
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+#phase3 .phase3MissionCopy,
+#phase3 .phase3MissionCopy p,
+#phase3 .taskInstruction,
+#phase3 .taskInstruction p,
+#phase3 .mysteryGuide,
+#phase3 .mysteryGuide p,
+#phase3 .smallNote{
+  overflow-wrap:break-word!important;
+  word-break:normal!important;
+}
+
+#phase3 .mysteryBoardScroller{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  contain:layout paint!important;
+}
+
+#phase3 .mysteryBoard{
+  max-width:none!important;
+  flex:none!important;
+}
+
+/* Auf schmalen Ansichten entspricht Teil 3 exakt der verfügbaren
+   Innenbreite des Hauptbereichs; nur die Arbeitsfläche scrollt. */
+@media(max-width:900px){
+  #phase3.active{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  #phase3 .phase3MissionInner{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+
+  #phase3 .mysteryBoardScroller{
+    width:100%!important;
+    max-width:100%!important;
+  }
+}
+
+@media(max-width:480px){
+  #phase3 .panel{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+}
+
+
+/* Teil 3 – Interaktion und Farben konsistent */
+.mysteryCardDelete{
+  background:#f2c9cf!important;
+  color:#222!important;
+  border:1px solid #d9a8b0!important;
+}
+.mysteryCardDelete:hover{
+  background:#eab8c0!important;
+}
+
+/* Hinweise verwenden wie in Teil 2 die neutrale Hinweisfarbe,
+   Blau bleibt für Reflexionen reserviert. */
+.mysteryGuide,
+.mysteryClassNote{
+  background:#f2f0eb!important;
+  border-left-color:#9a958b!important;
+  color:#333!important;
+}
+.mysteryGuide > strong,
+.mysteryClassNote > strong{
+  color:#666!important;
+}
+.mysteryGuide .mysteryLegend{
+  border-top-color:rgba(100,96,88,.18)!important;
+}
+
+.mysteryReflectionBox{
+  margin:14px 0 0!important;
+}
+.mysteryReflectionBox label{
+  display:block;
+  margin:0 0 5px!important;
+  font-size:16px!important;
+  font-weight:800!important;
+}
+.mysteryReflectionBox p{
+  margin:0 0 9px!important;
+}
+.mysteryReflectionBox textarea{
+  width:100%!important;
+  min-height:105px!important;
+  border:2px solid #5db7de!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  padding:11px 12px!important;
+  font:inherit!important;
+  font-size:16px!important;
+  line-height:1.5!important;
+}
+
+/* Gleiche Kopfstruktur für eigene und vorbereitete Karten */
+.mysteryCard .mysteryCardHeader,
+.mysteryCard.userNote .mysteryCardHeader,
+.mysteryCard.questionNote .mysteryCardHeader{
+  grid-template-columns:30px minmax(0,1fr) 20px 24px!important;
+}
+
+/* Beschriftung nur leicht von der Linie absetzen; schmaler Halo */
+.mysteryLineLabelText{
+  stroke-width:2px!important;
+}
+
+/* Mobile Linien-Notiz */
+.mysteryLineNoteText{
+  font-size:15px;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  pointer-events:none;
+}
+
+
+/* Teil 3 – Einstieg wie die übrigen Novera-Seiten:
+   Seitentitel, Titelbild, danach Mission */
+#phase3 .phase3Mission{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:16px!important;
+  align-items:stretch!important;
+}
+#phase3 .phase3PageTitle{
+  min-width:0;
+}
+#phase3 .phase3PageTitle h2{
+  margin:0!important;
+  font-size:25px!important;
+}
+#phase3 .phase3HeroPlaceholder{
+  width:100%!important;
+  min-height:250px;
+}
+#phase3 .phase3MissionCopy{
+  padding:2px 0 0!important;
+  min-width:0;
+}
+#phase3 .phase3MissionCopy .missionKicker{
+  margin-bottom:5px;
+}
+#phase3 .phase3MissionCopy h3{
+  margin:0 0 8px!important;
+  font-size:22px!important;
+}
+#phase3 .phase3MissionCopy p{
+  margin:0!important;
+}
+
+@media(max-width:700px){
+  #phase3 .phase3HeroPlaceholder{
+    min-height:180px;
+  }
+}
+
+
+/* Teil 3 – Layoutabgleich und Kartensteuerung */
+#phase3 .phase3TitleBlock{
+  grid-column:1/-1!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:16px!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+#phase3 .phase3TitleBlock > h2{
+  margin:0!important;
+  font-size:25px!important;
+}
+#phase3 .phase3HeroPlaceholder{
+  width:100%!important;
+  max-width:100%!important;
+  min-height:250px!important;
+}
+#phase3 .phase3MissionCopy{
+  padding:0 4px!important;
+  min-width:0!important;
+}
+#phase3 .phase3MissionCopy h3{
+  margin:0 0 8px!important;
+  font-size:22px!important;
+}
+#phase3 .phase3MissionCopy p{
+  margin:0!important;
+}
+
+.mysteryCard .mysteryCardHeader,
+.mysteryCard.userNote .mysteryCardHeader,
+.mysteryCard.questionNote .mysteryCardHeader{
+  grid-template-columns:30px minmax(0,1fr) 30px!important;
+  gap:7px!important;
+}
+.mysteryDragRow{
+  display:flex!important;
+  justify-content:flex-start!important;
+  margin:4px 0 7px!important;
+}
+.mysteryDragHandle{
+  width:auto!important;
+  min-width:0!important;
+  height:28px!important;
+  padding:0 7px!important;
+  border:1px solid #c6cccf!important;
+  border-radius:7px!important;
+  background:#f7f8f8!important;
+  color:#657078!important;
+  font-size:12px!important;
+  font-weight:700!important;
+}
+.mysteryCardDelete{
+  width:28px!important;
+  height:28px!important;
+  min-width:28px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:#d85b5b!important;
+  color:#fff!important;
+  display:grid!important;
+  place-items:center!important;
+  font-size:15px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  box-shadow:none!important;
+}
+.mysteryCardDelete:hover{
+  background:#c94c4c!important;
+}
+.mysteryCardBottom{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:7px!important;
+}
+
+@media(max-width:700px){
+  #phase3 .phase3HeroPlaceholder{
+    min-height:180px!important;
+  }
+  .mysteryCard .mysteryCardHeader,
+  .mysteryCard.userNote .mysteryCardHeader,
+  .mysteryCard.questionNote .mysteryCardHeader{
+    grid-template-columns:30px minmax(0,1fr) 30px!important;
+  }
+  .mysteryDragRow{
+    margin:4px 0 0!important;
+  }
+  .mysteryCard.mobileExpanded .mysteryDragRow{
+    margin-bottom:7px!important;
+  }
+}
+
+
+/* ===== Teil 3: freie Mystery-Arbeitsfläche ===== */
+.mysteryBoardScroller{
+  position:relative!important;
+  width:100%!important;
+  height:min(72vh,720px)!important;
+  min-height:430px!important;
+  overflow:hidden!important;
+  touch-action:none!important;
+  cursor:grab;
+  background:#eef1f2!important;
+}
+.mysteryBoardScroller.isPanning{cursor:grabbing}
+.mysteryBoardStage{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:1px;
+  height:1px;
+  transform-origin:0 0;
+  will-change:transform;
+}
+.mysteryBoard{
+  position:absolute!important;
+  left:-5000px!important;
+  top:-5000px!important;
+  width:10000px!important;
+  height:10000px!important;
+  min-width:10000px!important;
+  max-width:none!important;
+  overflow:visible!important;
+  background:
+    linear-gradient(rgba(255,255,255,.72),rgba(255,255,255,.72)),
+    linear-gradient(90deg,#d9dfe2 1px,transparent 1px),
+    linear-gradient(#d9dfe2 1px,transparent 1px)!important;
+  background-size:auto,28px 28px,28px 28px!important;
+}
+#mysteryLines{
+  position:absolute!important;
+  inset:0!important;
+  width:10000px!important;
+  height:10000px!important;
+  overflow:visible!important;
+}
+.mysteryCard{
+  width:205px!important;
+  min-height:0!important;
+  font-size:13px!important;
+}
+.mysteryCardTitle,
+.mysteryCardText,
+.mysteryCardCategory{
+  font-size:13px!important;
+}
+.mysteryCardText{line-height:1.4!important}
+.mysteryDragRow{margin:1px 0 5px!important}
+.mysteryDragHandle{
+  width:24px!important;
+  height:22px!important;
+  min-width:24px!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+  color:#777!important;
+  font-size:17px!important;
+  line-height:1!important;
+  display:grid!important;
+  place-items:center!important;
+}
+.mysteryExpandBtn,.mysteryCollapseBtn{display:none!important}
+@media(max-width:700px){
+  .mysteryCardIcon{display:block!important}
+  .mysteryCardText,.mysteryCardBottom{display:block!important}
+  .mysteryCardBottom{display:grid!important}
+  .mysteryBoardScroller{height:62vh!important;min-height:420px!important}
+}
+.modelRevealSection{margin-top:18px}
+.modelRevealBox{margin:0 0 16px!important}
+.modelQuizItem{padding:11px 0;border-bottom:1px solid #e1e1dc}
+.modelQuizItem p{margin:0 0 8px!important}
+.modelQuizChoices{display:flex;gap:8px;flex-wrap:wrap}
+.modelQuizChoices label{
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px;align-items:center;
+  padding:8px 10px;border:1px solid #ddd;border-radius:8px;background:#faf9f6;cursor:pointer
+}
+.modelQuizChoices input[type="radio"]{
+  appearance:none;-webkit-appearance:none;width:22px;height:22px;min-width:22px;margin:0;
+  border:2px solid #777;border-radius:5px;background:#fff;display:grid;place-content:center
+}
+.modelQuizChoices input[type="radio"]::before{
+  content:"✓";color:#fff;font-size:15px;font-weight:900;transform:scale(0)
+}
+.modelQuizChoices input[type="radio"]:checked{background:#222;border-color:#222}
+.modelQuizChoices input[type="radio"]:checked::before{transform:scale(1)}
+.modelQuizFeedback{margin-top:6px;font-size:13px;font-weight:700}
+.modelQuizFeedback.good{color:#2f7d32}.modelQuizFeedback.bad{color:#b33a2f}
+
+
+/* ===== Teil 3: einheitliche Werkzeugleiste ===== */
+.mysteryToolbar{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:6px!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:auto!important;
+  padding:2px 0 8px!important;
+  scrollbar-width:thin;
+}
+.mysteryToolbar > *{
+  flex:0 0 auto!important;
+  margin:0!important;
+  width:auto!important;
+}
+.mysteryToolIcon{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  padding:0!important;
+  border:1px solid #bbb!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  color:#222!important;
+  font:inherit!important;
+  font-size:17px!important;
+  font-weight:700!important;
+}
+
+/* Steuerung liegt nicht mehr auf der Arbeitsfläche */
+.mysteryPanControls{display:none!important}
+
+/* Ganze Karte ist verschiebbar */
+.mysteryCard{
+  cursor:grab!important;
+  touch-action:none!important;
+}
+.mysteryCard.isDragging{cursor:grabbing!important}
+.mysteryCardCategory,
+.mysteryConnectDot,
+.mysteryCardDelete,
+.mysteryOwnDelete{
+  cursor:pointer!important;
+  touch-action:auto!important;
+}
+.mysteryDragRow,
+.mysteryDragHandle{
+  display:none!important;
+}
+
+/* ===== Erklärung: dieselbe Kategorie/Farbe wie bisher ===== */
+.modelInfoBox{
+  margin:0 0 18px!important;
+  padding:14px 15px!important;
+  background:#fff7df!important;
+  border:1px solid #e4c66c!important;
+  border-left:5px solid #d6a23d!important;
+  border-radius:10px!important;
+}
+.modelInfoBox::before{
+  content:"◆ Erklärung";
+  display:block;
+  margin-bottom:7px;
+  color:#8a641f;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.modelInfoBox h2{
+  margin:0 0 8px!important;
+  font-size:21px!important;
+}
+.modelInfoBox p{
+  margin:6px 0!important;
+}
+
+/* ===== Aufgabe 3: Sperrlogik wie Phase 1/2 ===== */
+.phase3Lockable.phase3Locked{
+  cursor:pointer;
+  padding-bottom:14px!important;
+}
+.phase3Lockable.phase3Locked > *:not(.taskLabel):not(.phase3LockHint){
+  display:none!important;
+}
+.phase3LockHint{
+  display:none;
+  margin:4px 0 0!important;
+  color:#666;
+  font-size:12px!important;
+}
+.phase3Lockable.phase3Locked .phase3LockHint{
+  display:block!important;
+}
+.phase3Lockable.phase3Locked:hover{
+  box-shadow:0 2px 12px #00000012,0 0 0 2px #75c56b55!important;
+}
+
+/* ===== Modellquiz als Tabelle ===== */
+.modelQuizTableWrap{
+  width:100%;
+  overflow-x:auto;
+  margin:12px 0;
+}
+.modelQuizTable{
+  width:100%;
+  min-width:620px;
+  border-collapse:collapse;
+  font-size:14px;
+}
+.modelQuizTable th,
+.modelQuizTable td{
+  padding:9px 10px;
+  border-bottom:1px solid #ddd;
+  vertical-align:middle;
+}
+.modelQuizTable th{
+  background:#f4f1ea;
+  font-size:13px;
+  text-align:left;
+}
+.modelQuizTable th:nth-child(2),
+.modelQuizTable th:nth-child(3),
+.modelQuizTable td:nth-child(2),
+.modelQuizTable td:nth-child(3){
+  width:145px;
+  text-align:center;
+}
+.modelQuizChoice{
+  display:inline-grid!important;
+  place-items:center!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  cursor:pointer;
+}
+.modelQuizChoice input[type="radio"]{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  width:24px!important;
+  height:24px!important;
+  min-width:24px!important;
+  margin:0!important;
+  border:2px solid #777!important;
+  border-radius:5px!important;
+  background:#fff!important;
+}
+.modelQuizChoice > span{
+  position:absolute;
+  pointer-events:none;
+  color:#fff;
+  font-size:16px;
+  font-weight:900;
+  opacity:0;
+}
+.modelQuizChoice input[type="radio"]:checked{
+  background:#222!important;
+  border-color:#222!important;
+}
+.modelQuizChoice:has(input[type="radio"]:checked) > span{
+  opacity:1;
+}
+.modelQuizFeedback{
+  margin-top:4px;
+  font-size:12px;
+  font-weight:700;
+}
+.modelQuizFeedback.good{color:#2f7d32}
+.modelQuizFeedback.bad{color:#b33a2f}
+
+
+/* ===== Teil 3: Bestätigungsdialog ===== */
+.noveraConfirmOverlay{
+  position:fixed;
+  inset:0;
+  z-index:7000;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.42);
+}
+.noveraConfirmDialog{
+  width:min(390px,100%);
+  padding:18px;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 14px 48px rgba(0,0,0,.28);
+}
+.noveraConfirmDialog h3{margin:0 0 8px;font-size:20px}
+.noveraConfirmDialog p{margin:0}
+.noveraConfirmActions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:16px;
+}
+/* ===== Teil 3: Vollbild-Arbeitsfläche ===== */
+.mysteryWorkspaceShell{
+  min-width:0;
+}
+.mysteryWorkspaceShell.isExpanded{
+  position:fixed!important;
+  inset:0!important;
+  z-index:6000!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+  padding:10px!important;
+  background:#f4f1ea!important;
+}
+.mysteryWorkspaceShell.isExpanded .mysteryToolbar{
+  flex:0 0 auto!important;
+}
+.mysteryWorkspaceShell.isExpanded .mysteryOwnCardCreator{
+  flex:0 0 auto!important;
+}
+.mysteryWorkspaceShell.isExpanded .mysteryBoardScroller{
+  flex:1 1 auto!important;
+  height:auto!important;
+  min-height:0!important;
+}
+body.mysteryExpanded{
+  overflow:hidden!important;
+}
+
+
+/* ===== Teil 3: gleiche Aufgabenstruktur wie Phase 1/2 ===== */
+.phase3Tasks{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:18px;
+  grid-column:1/-1;
+  min-width:0;
+}
+.phase3TaskCard{
+  min-width:0;
+}
+.phase3TaskCard > h2{
+  margin-top:0;
+}
+.phase3TaskCard .taskContent,
+.phase3TaskBody{
+  min-width:0;
+}
+.phase3TaskCard .mysteryGuide{
+  margin:10px 0 12px!important;
+}
+.phase3TaskCard .mysteryClassNote{
+  margin-top:12px!important;
+}
+
+/* Erklärung gehört zu Aufgabe B */
+.modelInfoBox{
+  margin:10px 0 12px!important;
+}
+.modelInfoBox h3{
+  margin:0 0 7px!important;
+  font-size:18px!important;
+}
+
+
+.mysteryCardDelete{
+  width:22px!important;
+  height:22px!important;
+  min-width:22px!important;
+  font-size:13px!important;
+}
+.mysterySymbolBtn{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  font-size:18px!important;
+}
+.mysteryGuide ul{
+  margin:6px 0 0;
+  padding-left:20px;
+}
+.mysteryGuide li{
+  margin:2px 0;
+}
+
+
+.mysteryQuestionReflection{
+  margin:12px 0 8px!important;
+  padding:11px 12px;
+  border-left:4px solid #9a78b8;
+  border-radius:8px;
+  background:#f5eff9;
+  font-weight:400;
+}
+.mysteryQuestionReflection::before{
+  content:"? Fragen";
+  display:block;
+  margin-bottom:4px;
+  color:#6f4d8b;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.mysteryQuestionReflection label{
+  display:block;
+  margin-bottom:5px;
+  font-size:16px!important;
+  font-weight:800;
+}
+.mysteryQuestionReflection p{margin:0 0 9px!important}
+.mysteryQuestionReflection textarea{
+  width:100%;
+  min-height:105px;
+  border:2px solid #9a78b8;
+  border-radius:10px;
+  background:#fff;
+  padding:11px 12px;
+  font:inherit;
+  font-size:16px;
+  line-height:1.5;
+}
+
+
+.modelQuizChoice input[type="radio"]{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  width:24px!important;
+  height:24px!important;
+  min-width:24px!important;
+  margin:0!important;
+  border:2px solid #777!important;
+  border-radius:4px!important;
+  background:#fff!important;
+  display:grid!important;
+  place-content:center!important;
+}
+.modelQuizChoice input[type="radio"]::before{
+  content:"✓";
+  color:#fff;
+  font-size:16px;
+  font-weight:900;
+  line-height:1;
+  transform:scale(0);
+}
+.modelQuizChoice input[type="radio"]:checked{
+  background:#222!important;
+  border-color:#222!important;
+}
+.modelQuizChoice input[type="radio"]:checked::before{
+  transform:scale(1);
+}
+.modelQuizChoice > span{display:none!important}
+
+
+/* Teil 3 – Kartentypografie einheitlich kompakt */
+.mysteryCardTitle,
+.mysteryCardText,
+.mysteryCardCategory{
+  font-size:13px!important;
+  line-height:1.35!important;
+}
+
+
+#mysteryHome{
+  font-size:24px!important;
+  line-height:1!important;
+}
+#toggleMysteryFullscreen{
+  font-size:22px!important;
+  line-height:1!important;
+}
+
+
+/* Eigene Karte – kleine Overlay-Box */
+.mysteryOwnCardOverlay{
+  position:fixed;
+  inset:0;
+  z-index:6200;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.38);
+}
+.mysteryOwnCardOverlay.hidden{
+  display:none!important;
+}
+.mysteryOwnCardDialog{
+  width:min(460px,100%);
+  padding:18px;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 14px 45px rgba(0,0,0,.24);
+}
+.mysteryOwnCardDialog h3{
+  margin:0 0 10px;
+  font-size:20px;
+}
+.mysteryOwnCardDialog label{
+  display:block;
+  margin-bottom:7px;
+  font-size:14px;
+  line-height:1.45;
+}
+.mysteryOwnCardDialog textarea{
+  width:100%;
+  min-height:120px;
+  padding:11px 12px;
+  border:2px solid #bbb;
+  border-radius:10px;
+  background:#fff;
+  font:inherit;
+  font-size:16px;
+  line-height:1.5;
+  resize:vertical;
+}
+.mysteryOwnCardDialog .action{
+  margin-top:10px;
+}
+
+
+.phase3Lockable.phase3Locked > h2{
+  display:none!important;
+}
+.phase3Lockable.phase3Locked .taskLabel{
+  margin-bottom:5px!important;
+}
+
 </style>
 </head>
 
@@ -3667,7 +5175,508 @@ body.explanationOpen{
   </div>
 </article>
 </section>
-<div class="phaseNav bottomNav"><button class="action secondary phaseNext" id="backToPhase1Bottom" data-t="nav.back">← Zurück</button></div></div>
+<div class="phaseNav bottomNav">
+  <button class="action secondary phaseNext" id="backToPhase1Bottom" data-t="nav.back">← Zurück</button>
+  <button class="action phaseNext" id="toPhase3" type="button">Was hat Novera mit der Erde zu tun? →</button>
+</div></div>
+
+<div id="phase3" class="phaseView">
+  <section class="panel phase3TitleBlock">
+    <div class="phase3HeroPlaceholder">
+      <div><strong>Platzhalter für die Titelgrafik</strong>Blick von Novera auf die weit entfernte Erde</div>
+    </div>
+
+    <div class="phase3MissionCopy">
+      <span class="missionKicker">Deine Mission</span>
+      <h3>Herausfinden, was Novera mit der Erde zu tun hat</h3>
+      <p>Untersuche nun in einem Mystery die Frage: <strong>Was hat Novera mit der Erde zu tun?</strong> Bei einem Mystery arbeitest du mit verschiedenen Hinweisen. Du ordnest Karten, verbindest wichtige Zusammenhänge und entwickelst daraus eine eigene Erklärung. Es gibt nicht nur eine richtige Lösung.</p>
+    </div>
+  </section>
+
+  <section class="phase3Tasks">
+    <article class="taskCard phase3TaskCard" id="phase3TaskA">
+    <span class="taskLabel">Aufgabe A</span>
+    <h2>Mystery: Was hat Novera mit der Erde zu tun?</h2>
+
+    <div class="taskContent">
+      <p class="taskInstruction">
+        Arbeitet in Gruppen von 2–4 Personen. Ordnet die Karten auf der Arbeitsfläche und verbindet wichtige Zusammenhänge. Baut daraus eine Erklärung zur Mystery-Frage. Ihr müsst nicht alle Karten verwenden oder alles miteinander verbinden. Einige gute Verbindungen reichen.
+      </p>
+
+      <div class="mysteryGuide" id="mysteryGuide">
+        <strong>ⓘ Hinweis</strong>
+        <ul>
+          <li>Arbeitsfläche: frei verschieben; mit Mausrad oder zwei Fingern zoomen.</li>
+          <li>Zuordnung wählen: Die Kartenfarbe zeigt die Kategorie. Die Legende erklärt die Farben.</li>
+          <li>Zwei Punkte antippen: Karten verbinden. Linie antippen: beschriften oder löschen.</li>
+        </ul>
+        <div class="mysteryLegend" id="mysteryLegend"></div>
+      </div>
+
+      <div class="mysteryWorkspaceShell" id="mysteryWorkspaceShell">
+        <div class="mysteryToolbar" aria-label="Mystery-Werkzeuge">
+        <button class="action secondary compactAction" id="showNextMysteryCard" type="button">Mehr Karten</button>
+        <button class="action secondary compactAction" id="toggleOwnMysteryCard" type="button">Eigene Karte</button>
+        <button class="action secondary compactAction" id="printMysteryCards" type="button">Analoge Version</button>
+        <button class="action secondary compactAction" id="clearMysteryBoard" type="button">Fläche leeren</button>
+        <button class="action secondary compactAction mysterySymbolBtn" type="button" data-pan="reset" id="mysteryHome" aria-label="Ansicht zentrieren" title="Ansicht zentrieren">◎</button>
+        <button class="action secondary compactAction mysterySymbolBtn" type="button" id="toggleMysteryFullscreen" aria-label="Vollbild" title="Vollbild">⤢</button>
+      </div>
+        <div class="mysteryOwnCardOverlay hidden" id="mysteryOwnCardCreator" role="dialog" aria-modal="true" aria-labelledby="mysteryOwnCardTitle">
+      <div class="mysteryOwnCardDialog">
+        <button class="commentClose mysteryOwnCardClose" id="closeOwnMysteryCard" type="button" aria-label="Eigene Karte schliessen">Schliessen</button>
+        <h3 id="mysteryOwnCardTitle">Eigene Karte</h3>
+        <label for="mysteryOwnCardText">Schreibt eure eigene Idee oder einen wichtigen Zusammenhang auf.</label>
+        <textarea id="mysteryOwnCardText" placeholder="Eigene Idee …"></textarea>
+        <button class="action compactAction" id="createOwnMysteryCard" type="button">Karte erstellen</button>
+      </div>
+    </div>
+        <div class="mysteryBoardScroller" id="mysteryViewport">
+      <div class="mysteryBoardStage" id="mysteryStage">
+        <div class="mysteryBoard" id="mysteryBoard">
+          <svg id="mysteryLines" viewBox="0 0 10000 10000" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <article class="mysteryCard" data-card-id="1" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="4" y="15" width="8" height="8" fill="#d85846"/><rect x="7" y="11" width="3" height="4" fill="#4e9d4b"/><rect x="16" y="12" width="10" height="10" fill="#e7bb3f"/><rect x="19" y="9" width="4" height="3" fill="#4e9d4b"/></svg></div>
+        <div class="mysteryCardTitle">Needs auf der Erde</div>
+      </div>
+      <p class="mysteryCardText">Auch auf der Erde brauchen Menschen Dinge, ohne die ein gutes Leben kaum möglich ist – zum Beispiel Nahrung, sauberes Wasser, Schutz oder medizinische Hilfe. Auf Novera habt ihr solche Dinge als Needs kennengelernt.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="2" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="14" y="4" width="4" height="5" fill="#51afe0"/><rect x="11" y="9" width="10" height="5" fill="#51afe0"/><rect x="8" y="14" width="16" height="8" fill="#51afe0"/><rect x="11" y="22" width="10" height="4" fill="#51afe0"/></svg></div>
+        <div class="mysteryCardTitle">Desires auf der Erde</div>
+      </div>
+      <p class="mysteryCardText">Auch auf der Erde wünschen sich Menschen Dinge, die über grundlegende Bedürfnisse hinausgehen. Solche Desires können sehr verschieden sein und sich durch Werbung, Trends oder das Umfeld verändern.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="3" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="7" height="7" fill="#efb17b"/><rect x="4" y="15" width="9" height="11" fill="#5b7dc6"/><rect x="20" y="8" width="7" height="7" fill="#d79d72"/><rect x="19" y="15" width="9" height="11" fill="#5ca66f"/></svg></div>
+        <div class="mysteryCardTitle">Ein gutes Leben braucht mehr als Dinge</div>
+      </div>
+      <p class="mysteryCardText">Auf der Erde hängt ein gutes Leben nicht nur von Besitz ab. Gesundheit, Beziehungen, Sicherheit, Bildung und Mitbestimmung spielen ebenfalls eine wichtige Rolle.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="4" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="7" y="11" width="18" height="15" fill="#df5969"/><rect x="5" y="9" width="22" height="5" fill="#ef7c89"/><rect x="14" y="8" width="4" height="18" fill="#f0d36b"/><rect x="9" y="6" width="5" height="5" fill="#ef7c89"/><rect x="18" y="6" width="5" height="5" fill="#ef7c89"/></svg></div>
+        <div class="mysteryCardTitle">Ein Need kann verschieden erfüllt werden</div>
+      </div>
+      <p class="mysteryCardText">Auf der Erde kann ein Need auf verschiedene Arten erfüllt werden. Wer mobil sein möchte, braucht zum Beispiel nicht zwingend ein eigenes Auto – auch Bus, Zug oder Fahrrad können Mobilität ermöglichen.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="5" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="14" width="11" height="10" fill="#4d9b50"/><rect x="8" y="10" width="6" height="8" fill="#4d9b50"/><rect x="10" y="23" width="3" height="5" fill="#78543a"/><rect x="18" y="12" width="11" height="11" fill="#67ab63"/><rect x="21" y="8" width="6" height="8" fill="#67ab63"/><rect x="23" y="22" width="3" height="6" fill="#78543a"/></svg></div>
+        <div class="mysteryCardTitle">Was sich erneuert, braucht Zeit</div>
+      </div>
+      <p class="mysteryCardText">Auf der Erde können sich manche Vorräte und Lebensräume erneuern. Das braucht Zeit. Zum Beispiel wächst ein abgeholzter Wald nicht in einer Nacht wieder nach.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="6" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="7" y="12" width="16" height="10" fill="#4ba8d8"/><rect x="3" y="15" width="6" height="5" fill="#4ba8d8"/><rect x="23" y="14" width="5" height="6" fill="#4ba8d8"/><rect x="11" y="14" width="2" height="2" fill="#142433"/></svg></div>
+        <div class="mysteryCardTitle">Nutzung kann schneller sein als Erholung</div>
+      </div>
+      <p class="mysteryCardText">Menschen können auf der Erde mehr nutzen, als in derselben Zeit wieder entsteht. Zum Beispiel können Fischbestände schrumpfen, wenn dauerhaft mehr Fische gefangen werden, als Nachwuchs entsteht.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="7" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="4" y="18" width="6" height="10" fill="#595959"/><rect x="12" y="13" width="6" height="15" fill="#777"/><rect x="20" y="8" width="6" height="20" fill="#969696"/><rect x="6" y="10" width="6" height="5" fill="#c6c8cc"/><rect x="10" y="7" width="8" height="6" fill="#dadbde"/></svg></div>
+        <div class="mysteryCardTitle">Auch die Erde hat Grenzen</div>
+      </div>
+      <p class="mysteryCardText">Auch auf der Erde kann nicht jede Belastung beliebig wachsen. Forschende untersuchen unter dem Begriff «planetare Grenzen», wie stark wichtige Bereiche wie Klima, Wasser, Land und Artenvielfalt verändert werden können, bevor Risiken deutlich steigen.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="8" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="4" y="20" width="5" height="8" fill="#e1b83e"/><rect x="12" y="15" width="5" height="13" fill="#df844c"/><rect x="20" y="8" width="5" height="20" fill="#5ca261"/><rect x="3" y="27" width="24" height="2" fill="#333"/></svg></div>
+        <div class="mysteryCardTitle">Grenzen der Erde hängen zusammen</div>
+      </div>
+      <p class="mysteryCardText">Auf der Erde beeinflussen sich verschiedene Bereiche gegenseitig. Steigende Temperaturen können zum Beispiel Arten unter Druck setzen; mehr CO₂ verändert zusätzlich die Ozeane. Probleme bleiben deshalb selten auf einen Bereich beschränkt.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="9" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="7" y="14" width="18" height="13" fill="#d7885d"/><rect x="5" y="11" width="22" height="5" fill="#935146"/><rect x="13" y="19" width="6" height="8" fill="#6f4d3d"/><rect x="21" y="18" width="3" height="4" fill="#78b9dc"/></svg></div>
+        <div class="mysteryCardTitle">Kipppunkte können Veränderungen verstärken</div>
+      </div>
+      <p class="mysteryCardText">Manche Veränderungen auf der Erde können ab einer bestimmten Schwelle sehr schwer rückgängig zu machen sein. Solche Schwellen nennt man Kipppunkte. Danach kann eine weitere kleine Veränderung grosse Folgen auslösen.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="10" data-extra="0">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="8" y="10" width="16" height="12" fill="#d77755"/><rect x="6" y="8" width="20" height="4" fill="#914b40"/><rect x="4" y="22" width="24" height="3" fill="#4ca9df"/><rect x="7" y="26" width="19" height="2" fill="#4ca9df"/></svg></div>
+        <div class="mysteryCardTitle">Folgen treffen Menschen unterschiedlich</div>
+      </div>
+      <p class="mysteryCardText">Auf der Erde sind Menschen nicht gleich stark von Hitze, Überschwemmungen oder Ernteausfällen betroffen. Geld, Wohnort, Gesundheit, Infrastruktur und politische Unterstützung beeinflussen, wie gut Menschen sich schützen können.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="101" data-extra="1">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="8" height="20" fill="#98a9b5"/><rect x="19" y="11" width="8" height="16" fill="#7894a6"/><rect x="14" y="20" width="4" height="7" fill="#4e6f83"/></svg></div>
+        <div class="mysteryCardTitle">Nicht alles ist eine persönliche Entscheidung</div>
+      </div>
+      <p class="mysteryCardText">Auf der Erde hängen Möglichkeiten auch von Strassen, öffentlichem Verkehr, Energieversorgung, Preisen, Gesetzen und Unternehmen ab. Deshalb entstehen Veränderungen nicht nur durch einzelne Konsumentscheidungen.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="102" data-extra="1">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="15" y="5" width="2" height="21" fill="#6f5b39"/><rect x="8" y="9" width="16" height="2" fill="#6f5b39"/><rect x="3" y="18" width="10" height="3" fill="#e1b84f"/><rect x="19" y="18" width="10" height="3" fill="#e1b84f"/></svg></div>
+        <div class="mysteryCardTitle">Wer nutzt wie viel?</div>
+      </div>
+      <p class="mysteryCardText">Menschen und Länder nutzen auf der Erde sehr unterschiedlich viel Energie und Rohstoffe und verursachen unterschiedlich viele Emissionen. Gleichzeitig sind die Folgen von Umweltveränderungen ungleich verteilt.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="103" data-extra="1">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="14" width="22" height="9" fill="#4d87cc"/><rect x="9" y="10" width="13" height="5" fill="#6fa4dc"/><rect x="8" y="22" width="5" height="5" fill="#333"/><rect x="20" y="22" width="5" height="5" fill="#333"/></svg></div>
+        <div class="mysteryCardTitle">Wer trägt wie viel Verantwortung?</div>
+      </div>
+      <p class="mysteryCardText">Bei der Frage nach Gerechtigkeit spielt nicht nur eine Rolle, wer betroffen ist. Auch wer besonders viel zu einer Belastung beigetragen hat und wer Möglichkeiten zur Veränderung besitzt, kann wichtig sein.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="104" data-extra="1">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="8" y="5" width="16" height="22" fill="#4b9bd3"/><rect x="5" y="9" width="22" height="14" fill="#4b9bd3"/><rect x="10" y="8" width="5" height="6" fill="#65a85d"/><rect x="18" y="15" width="6" height="6" fill="#65a85d"/></svg></div>
+        <div class="mysteryCardTitle">Die Erde liefert wichtige Lebensgrundlagen</div>
+      </div>
+      <p class="mysteryCardText">Menschen auf der Erde sind auf Wasser, fruchtbare Böden, Nahrung, ein stabiles Klima und funktionierende Lebensräume angewiesen. Werden diese Grundlagen stark verändert, wirkt sich das auch auf Gesundheit und Versorgung aus.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="105" data-extra="1">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="4" y="20" width="5" height="8" fill="#e1b83e"/><rect x="12" y="15" width="5" height="13" fill="#df844c"/><rect x="20" y="8" width="5" height="20" fill="#5ca261"/><rect x="3" y="27" width="24" height="2" fill="#333"/></svg></div>
+        <div class="mysteryCardTitle">Gesellschaft kann Möglichkeiten verändern</div>
+      </div>
+      <p class="mysteryCardText">Auf der Erde können Politik und Gesellschaft Rahmenbedingungen verändern – zum Beispiel durch öffentlichen Verkehr, Energieversorgung, Regeln oder neue Technik. Dadurch ändern sich auch die Möglichkeiten einzelner Menschen.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+<article class="mysteryCard" data-card-id="106" data-extra="1">
+      <div class="mysteryCardHeader">
+        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="8" y="10" width="16" height="12" fill="#d77755"/><rect x="6" y="8" width="20" height="4" fill="#914b40"/><rect x="4" y="22" width="24" height="3" fill="#4ca9df"/><rect x="7" y="26" width="19" height="2" fill="#4ca9df"/></svg></div>
+        <div class="mysteryCardTitle">Novera zeigt nur einen Teil der Wirklichkeit</div>
+      </div>
+      <p class="mysteryCardText">Der magische Baum auf Novera zeigt eine einfache Idee: Nutzung heute kann Möglichkeiten morgen beeinflussen. Auf der Erde sind die Zusammenhänge aber viel komplexer, weil viele Prozesse gleichzeitig wirken und miteinander verbunden sind.</p>
+      <div class="mysteryCardBottom">
+        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
+        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
+      </div>
+    </article>
+        </div>
+      </div>
+    </div>
+      </div>
+
+      <div class="taskQuestion mysteryReflectionBox">
+        <label for="mysteryAnswer"><strong>Unsere Antwort auf die Mystery-Frage</strong></label>
+        <p>Was hat Novera mit einem guten Leben auf der Erde zu tun? Schreibt eure wichtigsten Zusammenhänge in wenigen Sätzen auf. Eure Antwort muss nicht alles erklären.</p>
+        <textarea id="mysteryAnswer" placeholder="Unsere Antwort …"></textarea>
+      </div>
+
+      <div class="mysteryQuestionReflection mysteryReflectionBox">
+        <label for="mysteryQuestion"><strong>Fragen, die bei uns entstanden sind</strong></label>
+        <p>Ihr müsst nicht auf alles eine Antwort haben. Welche Fragen sind bei euch entstanden? Was habt ihr euch beim Arbeiten gefragt?</p>
+        <textarea id="mysteryQuestion" placeholder="Unsere offenen Fragen …"></textarea>
+      </div>
+
+      <div class="mysteryClassNote">
+        <strong>ⓘ Hinweis</strong>
+        <p>Wie ihr eure Lösung und eure offenen Fragen in der Klasse weiterverwendet, besprecht ihr mit eurer Lehrperson.</p>
+      </div>
+
+      <button class="action compactAction" id="finishMysteryTask" type="button">Aufgabe abschliessen</button>
+    </div>
+  </article>
+
+    <article class="taskCard phase3TaskCard phase3Lockable phase3Locked" id="modelTask">
+    <span class="taskLabel">Aufgabe B</span>
+    <h2>Novera – ein Modell</h2>
+    <p class="phase3LockHint">Beende zuerst Aufgabe A.</p>
+
+    <div class="phase3TaskBody">
+      <div class="theoryBox hidden" id="modelExplanation">
+        <p>Die Fantasiewelt Novera und der magische Baum sind <strong>Modelle</strong>. Ein Modell zeigt einen Ausschnitt der Wirklichkeit vereinfacht. So lassen sich bestimmte Zusammenhänge leichter erkennen.</p>
+        <p>Modelle haben aber Grenzen: Sie lassen vieles weg. Der Baum zeigt zum Beispiel, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann. Er zeigt aber nicht, wie die vielen Vorgänge auf der Erde genau ablaufen.</p>
+        <p>Darum ist wichtig zu fragen: <strong>Was kann das Modell zeigen – und was nicht?</strong></p>
+        <label class="understoodCheck">
+          <input type="checkbox" id="modelExplanationUnderstood">
+          <span>Gelesen und verstanden</span>
+        </label>
+      </div>
+
+      <p class="taskInstruction">
+        Entscheide bei jeder Aussage: Kann Novera das zeigen oder nicht? Prüfe danach deine Antworten.
+      </p>
+
+      <div class="modelQuizTableWrap">
+          <table class="modelQuizTable">
+            <thead>
+              <tr>
+                <th>Aussage</th>
+                <th>Kann gezeigt werden</th>
+                <th>Kann nicht gezeigt werden</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="modelQuizRow" data-correct="yes">
+          <td>
+            <span>Der Baum zeigt, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz1" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz1" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="no">
+          <td>
+            <span>Der Baum zeigt genau, wie schnell sich Wälder, Fischbestände oder Böden auf der Erde erholen.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz2" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz2" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="yes">
+          <td>
+            <span>Novera kann helfen, über Needs und Desires nachzudenken.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz3" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz3" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="no">
+          <td>
+            <span>Novera zeigt genau, was jeder Mensch für ein gutes Leben braucht.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz4" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz4" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="yes">
+          <td>
+            <span>Novera kann zeigen, dass nicht alles gleichzeitig erfüllt werden kann.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz5" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz5" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="no">
+          <td>
+            <span>Der Baum zeigt alle wichtigen Zusammenhänge des Erdsystems.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz6" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz6" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="yes">
+          <td>
+            <span>Novera kann helfen, über Verteilung und Gerechtigkeit zu sprechen.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz7" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz7" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="no">
+          <td>
+            <span>Die Fruchtzahl zeigt, wie viele Rohstoffe es auf der Erde wirklich gibt.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz8" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz8" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="yes">
+          <td>
+            <span>Novera kann helfen, Folgen von Entscheidungen über mehrere Runden zu beobachten.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz9" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz9" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="no">
+          <td>
+            <span>Aus Novera kann man direkt ablesen, welche Lösung für die Erde richtig ist.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz10" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz10" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="yes">
+          <td>
+            <span>Ein Modell kann etwas verständlicher machen, obwohl es die Wirklichkeit vereinfacht.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz11" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz11" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+<tr class="modelQuizRow" data-correct="no">
+          <td>
+            <span>Ein Modell ist nur dann nützlich, wenn es die Wirklichkeit vollständig abbildet.</span>
+            <div class="modelQuizFeedback" aria-live="polite"></div>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann gezeigt werden">
+              <input type="radio" name="modelQuiz12" value="yes"><span>✓</span>
+            </label>
+          </td>
+          <td>
+            <label class="modelQuizChoice" aria-label="Kann nicht gezeigt werden">
+              <input type="radio" name="modelQuiz12" value="no"><span>✓</span>
+            </label>
+          </td>
+        </tr>
+            </tbody>
+          </table>
+        </div>
+      <button class="action compactAction" id="checkModelQuiz" type="button">Antworten prüfen</button>
+
+      <div class="taskQuestion mysteryReflectionBox">
+          <label for="modelReflection"><strong>Grenzen und Möglichkeiten des Modells</strong></label>
+          <p>Möchtest du noch etwas aufschreiben, das dir zu den Möglichkeiten oder Grenzen von Novera aufgefallen ist?</p>
+          <textarea id="modelReflection" placeholder="Mir ist aufgefallen …"></textarea>
+        </div>
+    </div>
+  </article>
+  </section>
+
+  <div class="phase3BottomNav">
+    <button class="action secondary phaseNext" id="backToPhase2Bottom" type="button">← Zurück zu Novera entdecken</button>
+  </div>
+</div>
 </main>
 
 
@@ -6252,30 +8261,31 @@ function clearThoughtHints(){
 }
 
 function showPhase(n){
-  /* Ein blosses Vor-/Zurückwechseln darf keinen alten Rundenhinweis
-     erneut anzeigen. Erst eine neu abgeschlossene Runde aktiviert
-     Hinweise wieder. */
   suppressThoughtHints=true;
-  /* Beim Wechsel zwischen den Phasen bleiben Erklärungen und alte
-     Denkhinweise geschlossen. Sie erscheinen erst wieder durch
-     einen neuen Arbeitsschritt bzw. eine neue Runde. */
   closeAllExplanationsOnLoad();
   clearThoughtHints();
 
+  const phaseNum=n===3?3:(n===2?2:1);
   const p1=document.getElementById("phase1");
   const p2=document.getElementById("phase2");
+  const p3=document.getElementById("phase3");
   const headerTitle=document.querySelector("header h1");
 
-  localStorage.setItem("novera_current_phase",String(n===2?2:1));
+  localStorage.setItem("novera_current_phase",String(phaseNum));
 
-  if(p1)p1.classList.toggle("active",n===1);
-  if(p2)p2.classList.toggle("active",n===2);
+  if(p1)p1.classList.toggle("active",phaseNum===1);
+  if(p2)p2.classList.toggle("active",phaseNum===2);
+  if(p3)p3.classList.toggle("active",phaseNum===3);
 
   if(headerTitle){
-    headerTitle.textContent=n===2?"Novera entdecken":"Willkommen auf Novera";
+    headerTitle.textContent=phaseNum===3
+      ?"Novera und die Erde"
+      :phaseNum===2
+        ?"Novera entdecken"
+        :"Willkommen auf Novera";
   }
 
-  if(n===2){
+  if(phaseNum===2){
     configurePhase2Source();
 
     const s=eState();
@@ -6289,20 +8299,17 @@ function showPhase(n){
       renderRequirements();
       renderPersonalSim();
       ensureProfiles(false);
-
-      /* Beim blossen Wechsel zurück in die Entdeckungsphase darf
-         keine bereits bearbeitete Erklärung erneut aufpoppen.
-         Die Renderfunktionen dürfen ihren Inhalt aktualisieren,
-         danach werden alle Erklärfenster zentral geschlossen. */
       closeAllExplanationsOnLoad();
     }
-
     clearThoughtHints();
   }
 
-  requestAnimationFrame(()=>{
-    clearThoughtHints();
-  });
+  if(phaseNum===3){
+    renderMystery();
+    updateModelTaskLock();
+  }
+
+  requestAnimationFrame(()=>clearThoughtHints());
   window.scrollTo(0,0);
 }
 function currentSourceWorlds(){
@@ -7549,6 +9556,88 @@ function makeWorkStateHtml(printOnlyCompleted=false){
     ? selectedWorldBlock
     : "";
 
+
+  const mysteryConnections=Array.isArray(learning.mysteryConnections)?learning.mysteryConnections:[];
+  const mysteryOwnCards=Array.isArray(learning.mysteryOwnCards)?learning.mysteryOwnCards:[];
+  const mysteryDismissed=Array.isArray(learning.mysteryDismissedCards)?learning.mysteryDismissedCards.map(String):[];
+  const mysteryRevealCount=Number.isFinite(Number(learning.mysteryRevealCount))
+    ?Math.max(0,Math.min(MYSTERY_BASE_IDS.length+MYSTERY_EXTRA_IDS.length,Number(learning.mysteryRevealCount)))
+    :4;
+  const mysteryPositions=learning.mysteryPositions||{};
+  const mysteryCategories=learning.mysteryCardCategories||{};
+  const mysteryAnswer=String(learning.mysteryAnswer||"").trim();
+  const mysteryQuestion=String(learning.mysteryQuestion||"").trim();
+
+  const mysteryWorked=(
+    mysteryConnections.length>0 ||
+    mysteryOwnCards.length>0 ||
+    mysteryRevealCount>4 ||
+    mysteryAnswer ||
+    mysteryQuestion
+  );
+
+  let mysteryPrintBlock="";
+  if(!printOnlyCompleted || mysteryWorked){
+    const orderedIds=MYSTERY_BASE_IDS.concat(MYSTERY_EXTRA_IDS);
+    const visibleIds=orderedIds.filter((id,i)=>i<mysteryRevealCount&&!mysteryDismissed.includes(String(id)));
+    const ownIds=mysteryOwnCards.map(x=>String(x.id));
+    const idsForNetwork=visibleIds.concat(ownIds);
+
+    const printCardData={};
+    idsForNetwork.forEach((id,index)=>{
+      const domCard=document.querySelector('#phase3 .mysteryCard[data-card-id="'+id+'"]');
+      let title="";
+      let text="";
+      if(domCard){
+        title=domCard.querySelector(".mysteryCardTitle")?.textContent||"";
+        text=domCard.querySelector(".mysteryCardText")?.textContent||"";
+      }else{
+        const own=mysteryOwnCards.find(x=>String(x.id)===String(id));
+        if(own){
+          title="Eigene Idee";
+          text=String(own.text||"");
+        }
+      }
+      const pos=mysteryPositions[id]||MYSTERY_DEFAULT_POS[id]||[40+(index%4)*240,40+Math.floor(index/4)*165];
+      printCardData[id]={title,text,x:Number(pos[0])||0,y:Number(pos[1])||0};
+    });
+
+    const lineSvg=mysteryConnections.map(c=>{
+      const a=printCardData[String(c.a)];
+      const b=printCardData[String(c.b)];
+      if(!a||!b)return "";
+      const x1=a.x+107.5,y1=a.y+63,x2=b.x+107.5,y2=b.y+63;
+      const mx=(x1+x2)/2,my=(y1+y2)/2;
+      const label=String(c.label||"").slice(0,42);
+      return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="#647985" stroke-width="2"/>'+
+        (label?'<text x="'+mx+'" y="'+(my-6)+'" text-anchor="middle" font-size="12" font-weight="700" paint-order="stroke" stroke="#fff" stroke-width="3">'+esc(label)+'</text>':"");
+    }).join("");
+
+    const cardsHtml=idsForNetwork.map(id=>{
+      const c=printCardData[id];
+      if(!c)return "";
+      const cat=mysteryCategories[id]||"";
+      const bg=cat==="cat1"?"#edf3ff":cat==="cat2"?"#edf7e9":cat==="cat3"?"#f6eef9":"#fff";
+      return '<article class="mysteryPrintCard" style="left:'+(c.x/10.8)+'%;top:'+(c.y/7.6)+'%;background:'+bg+'">'+
+        '<h3>'+esc(c.title)+'</h3><p>'+esc(c.text)+'</p></article>';
+    }).join("");
+
+    mysteryPrintBlock=
+      '<section class="mysteryPrintPage">'+
+        '<h2>Was hat Novera mit der Erde zu tun? – Mystery</h2>'+
+        '<div class="mysteryPrintCanvas">'+
+          '<svg viewBox="0 0 1080 760" preserveAspectRatio="none">'+lineSvg+'</svg>'+
+          cardsHtml+
+        '</div>'+
+      '</section>'+
+      ((mysteryAnswer||mysteryQuestion)
+        ?'<section class="printCard"><h2>Mystery – Reflexion</h2>'+
+          (mysteryAnswer?'<h3>Unsere Antwort auf die Mystery-Frage</h3><div class="answer">'+esc(mysteryAnswer)+'</div>':"")+
+          (mysteryQuestion?'<h3>Fragen, die bei uns entstanden sind</h3><div class="answer">'+esc(mysteryQuestion)+'</div>':"")+
+        '</section>'
+        :"");
+  }
+
   const json=JSON.stringify(data).replace(/</g,"\\u003c");
 
   return '<!doctype html><html lang="de"><head><meta charset="utf-8">'+
@@ -7567,7 +9656,13 @@ function makeWorkStateHtml(printOnlyCompleted=false){
     'table{width:100%;border-collapse:collapse;font-size:12px;overflow-wrap:anywhere}'+
     'th,td{padding:7px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}'+
     'tr.ok td{background:#eef7ec}tr.miss td{background:#fff0ee}'+
-    '@media print{body{background:#fff}header{padding-top:0}.note{display:none!important}.printCard{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}a{color:#000;text-decoration:none}}'+
+    '.mysteryPrintPage{page:mysteryPage;break-before:page;break-after:page;width:100%;height:190mm;margin:0;padding:0;overflow:hidden}'+
+    '.mysteryPrintPage h2{margin:0 0 4mm;font-size:16pt}'+
+    '.mysteryPrintCanvas{position:relative;width:100%;height:172mm;border:1px solid #bbb;background:#f7f8f8;overflow:hidden}'+
+    '.mysteryPrintCanvas>svg{position:absolute;inset:0;width:100%;height:100%;z-index:1}'+
+    '.mysteryPrintCard{position:absolute;width:19.9%;min-height:15%;padding:2.4mm;border:1px solid #bbb;border-radius:2mm;z-index:2;overflow:hidden}'+
+    '.mysteryPrintCard h3{font-size:9pt;line-height:1.15;margin:0 0 1.5mm}.mysteryPrintCard p{font-size:6.7pt;line-height:1.25;margin:0}'+
+    '@media print{@page mysteryPage{size:A4 landscape;margin:8mm}body{background:#fff}header{padding-top:0}.note{display:none!important}.printCard{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}a{color:#000;text-decoration:none}.mysteryPrintPage{page:mysteryPage!important}}'+
     '</style></head><body>'+
     '<header><h1>Novera – Arbeitsstand</h1>'+
     '<p class="note">Diese Datei ist eine Sicherung deines Arbeitsstands. Du kannst sie über «Arbeitsstand laden» wieder in Novera einlesen.</p></header>'+
@@ -7576,6 +9671,7 @@ function makeWorkStateHtml(printOnlyCompleted=false){
     (answers.D?'<section class="printCard"><h2>Willkommensphase – abschliessende Reflexion zu Aufgabe C</h2><div class="answer">'+esc(answers.D)+'</div></section>':"")+
     selectedWorldForOutput+
     phase2Blocks+
+    mysteryPrintBlock+
     '</main>'+
     '<script type="application/json" id="novera-workstate-data">'+json+'<\/script>'+
     '</body></html>';
@@ -7860,6 +9956,955 @@ function closeAllExplanationsOnLoad(){
   document.body.classList.remove("explanationOpen");
 }
 
+
+/* ============================================================
+   TEIL 3 – MYSTERY
+   ============================================================ */
+/* Bewusst gemischte Reihenfolge:
+   Needs/Desires, Grenzen der Erde und Gerechtigkeit/Systemisches
+   wechseln unregelmässig. So entstehen weder lange Themenblöcke
+   noch ein leicht durchschaubares 1-2-3-Muster. */
+const MYSTERY_BASE_IDS=["1","7","10","5","2","102","8","3","6","101"];
+const MYSTERY_EXTRA_IDS=["4","9","103","104","105","106"];
+const MYSTERY_DEFAULT_POS={
+  "1":[30,30],"2":[265,30],"3":[500,30],"4":[735,30],
+  "5":[60,205],"6":[315,205],"7":[570,205],
+  "8":[825,205],"9":[190,390],"10":[480,390],
+  "101":[750,390],"102":[35,565],"103":[270,565],
+  "104":[505,565],"105":[740,565],"106":[845,40]
+};
+
+function mysteryState(){
+  const s=eState();
+  return {
+    revealCount:Number.isFinite(Number(s.mysteryRevealCount))?Math.max(0,Math.min(16,Number(s.mysteryRevealCount))):3,
+    dismissedCards:Array.isArray(s.mysteryDismissedCards)?s.mysteryDismissedCards.map(String):[],
+    positions:s.mysteryPositions&&typeof s.mysteryPositions==="object"?s.mysteryPositions:{},
+    categories:s.mysteryCardCategories&&typeof s.mysteryCardCategories==="object"?s.mysteryCardCategories:{},
+    categoryNames:Array.isArray(s.mysteryCategoryNames)&&s.mysteryCategoryNames.length===3
+      ?s.mysteryCategoryNames
+      :["Needs und Desires","Grenzen der Erde","Gerechtigkeit"],
+    connections:Array.isArray(s.mysteryConnections)?s.mysteryConnections:[],
+    ownCards:Array.isArray(s.mysteryOwnCards)?s.mysteryOwnCards:[],
+    question:String(s.mysteryQuestion||""),
+    answer:String(s.mysteryAnswer||"")
+  };
+}
+function saveMysteryPatch(p){ePatch(p)}
+
+function buildOwnMysteryCard(item){
+  const card=document.createElement("article");
+  card.className="mysteryCard userNote";
+  card.dataset.cardId=item.id;
+  card.dataset.extra="0";
+  card.innerHTML=
+    '<div class="mysteryCardHeader">'+
+      '<div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="6" width="22" height="21" fill="#f1d85f"/><rect x="8" y="10" width="16" height="2" fill="#ad9839"/><rect x="8" y="15" width="13" height="2" fill="#ad9839"/><rect x="8" y="20" width="15" height="2" fill="#ad9839"/></svg></div>'+
+      '<div class="mysteryCardTitle">Eigene Idee</div>'+
+      '<button class="mysteryCardDelete mysteryOwnDelete" type="button" aria-label="Eigene Karte löschen">×</button>'+
+    '</div>'+
+    ''+
+    '<p class="mysteryCardText">'+escapeHtml(item.text)+'</p>'+
+    '<div class="mysteryCardBottom">'+
+      '<select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>'+
+      ''+
+      '<button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>'+
+    '</div>';
+  return card;
+}
+
+function addOwnMysteryCard(text){
+  const clean=String(text||"").trim();
+  if(!clean)return;
+  const s=mysteryState();
+  const id="own-"+Date.now()+"-"+Math.floor(Math.random()*1000);
+  s.ownCards.push({id,text:clean});
+  s.positions[id]=nearbyMysteryPosition();
+  saveMysteryPatch({mysteryOwnCards:s.ownCards,mysteryPositions:s.positions});
+  mysteryLastTouchedId=id;
+  renderMystery();
+
+  requestAnimationFrame(()=>{
+    const card=document.querySelector('#phase3 .mysteryCard[data-card-id="'+id+'"]');
+    if(card)bringMysteryCardToFront(card,false);
+  });
+}
+
+
+let mysteryView={x:0,y:0,scale:1};
+let mysteryInitialViewDone=false;
+
+function applyMysteryView(){
+  const stage=document.getElementById("mysteryStage");
+  if(stage)stage.style.transform="translate("+mysteryView.x+"px,"+mysteryView.y+"px) scale("+mysteryView.scale+")";
+}
+function mysteryZoomAt(factor,clientX=null,clientY=null){
+  const viewport=document.getElementById("mysteryViewport");
+  if(!viewport)return;
+  const rect=viewport.getBoundingClientRect();
+  const px=clientX===null?rect.width/2:clientX-rect.left;
+  const py=clientY===null?rect.height/2:clientY-rect.top;
+  const old=mysteryView.scale;
+  const next=Math.max(0.22,Math.min(3.5,old*factor));
+  const worldX=(px-mysteryView.x)/old;
+  const worldY=(py-mysteryView.y)/old;
+  mysteryView.x=px-worldX*next;
+  mysteryView.y=py-worldY*next;
+  mysteryView.scale=next;
+  applyMysteryView();
+}
+function panMysteryBy(dx,dy){
+  mysteryView.x+=dx;mysteryView.y+=dy;applyMysteryView();
+}
+function fitMysteryViewToVisible(maxScale=1.15){
+  const viewport=document.getElementById("mysteryViewport");
+  if(!viewport)return;
+
+  const cards=[...document.querySelectorAll("#phase3 .mysteryCard")]
+    .filter(card=>card.style.display!=="none");
+  if(!cards.length){
+    mysteryView={x:0,y:0,scale:1};
+    applyMysteryView();
+    return;
+  }
+
+  const bounds=cards.reduce((b,card)=>{
+    const x=parseFloat(card.style.left)||0;
+    const y=parseFloat(card.style.top)||0;
+    const w=card.offsetWidth||205;
+    const h=card.offsetHeight||130;
+    return {
+      minX:Math.min(b.minX,x),
+      minY:Math.min(b.minY,y),
+      maxX:Math.max(b.maxX,x+w),
+      maxY:Math.max(b.maxY,y+h)
+    };
+  },{minX:Infinity,minY:Infinity,maxX:-Infinity,maxY:-Infinity});
+
+  const rect=viewport.getBoundingClientRect();
+  const contentW=Math.max(1,bounds.maxX-bounds.minX);
+  const contentH=Math.max(1,bounds.maxY-bounds.minY);
+  const padding=42;
+  const scale=Math.max(0.22,Math.min(maxScale,
+    (rect.width-padding*2)/contentW,
+    (rect.height-padding*2)/contentH
+  ));
+
+  const worldCx=(bounds.minX+bounds.maxX)/2;
+  const worldCy=(bounds.minY+bounds.maxY)/2;
+
+  mysteryView={
+    x:-(worldCx-5000)*scale,
+    y:-(worldCy-5000)*scale,
+    scale
+  };
+  applyMysteryView();
+}
+
+function resetMysteryView(){
+  fitMysteryViewToVisible();
+}
+function initMysteryPanZoom(){
+  const viewport=document.getElementById("mysteryViewport");
+  if(!viewport||viewport.dataset.panZoomReady==="1")return;
+  viewport.dataset.panZoomReady="1";
+
+  viewport.addEventListener("wheel",e=>{
+    e.preventDefault();
+    mysteryZoomAt(e.deltaY<0?1.12:0.89,e.clientX,e.clientY);
+  },{passive:false});
+
+  const pointers=new Map();
+  let panStart=null,pinchStart=null;
+
+  viewport.addEventListener("pointerdown",e=>{
+    if(e.target.closest(".mysteryCard")||e.target.closest(".mysteryPanControls"))return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    viewport.setPointerCapture(e.pointerId);
+    if(pointers.size===1){
+      panStart={id:e.pointerId,x:e.clientX,y:e.clientY,vx:mysteryView.x,vy:mysteryView.y};
+      viewport.classList.add("isPanning");
+    }else if(pointers.size===2){
+      const pts=[...pointers.values()];
+      pinchStart={
+        dist:Math.hypot(pts[1].x-pts[0].x,pts[1].y-pts[0].y),
+        scale:mysteryView.scale,x:mysteryView.x,y:mysteryView.y,
+        cx:(pts[0].x+pts[1].x)/2,cy:(pts[0].y+pts[1].y)/2
+      };
+      panStart=null;
+    }
+  });
+  viewport.addEventListener("pointermove",e=>{
+    if(!pointers.has(e.pointerId))return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===2&&pinchStart){
+      const pts=[...pointers.values()];
+      const dist=Math.max(1,Math.hypot(pts[1].x-pts[0].x,pts[1].y-pts[0].y));
+      const next=Math.max(0.22,Math.min(3.5,pinchStart.scale*(dist/pinchStart.dist)));
+      const rect=viewport.getBoundingClientRect();
+      const cx=(pts[0].x+pts[1].x)/2-rect.left,cy=(pts[0].y+pts[1].y)/2-rect.top;
+      const sx=pinchStart.cx-rect.left,sy=pinchStart.cy-rect.top;
+      const wx=(sx-pinchStart.x)/pinchStart.scale,wy=(sy-pinchStart.y)/pinchStart.scale;
+      mysteryView.scale=next;
+      mysteryView.x=cx-wx*next;mysteryView.y=cy-wy*next;
+      applyMysteryView();
+    }else if(pointers.size===1&&panStart&&panStart.id===e.pointerId){
+      mysteryView.x=panStart.vx+(e.clientX-panStart.x);
+      mysteryView.y=panStart.vy+(e.clientY-panStart.y);
+      applyMysteryView();
+    }
+  });
+  const release=e=>{
+    pointers.delete(e.pointerId);
+    if(pointers.size<2)pinchStart=null;
+    if(pointers.size===0){
+      panStart=null;viewport.classList.remove("isPanning");
+    }else if(pointers.size===1){
+      const [id,pt]=[...pointers.entries()][0];
+      panStart={id,x:pt.x,y:pt.y,vx:mysteryView.x,vy:mysteryView.y};
+    }
+  };
+  viewport.addEventListener("pointerup",release);
+  viewport.addEventListener("pointercancel",release);
+
+  document.querySelectorAll(".mysteryToolbar [data-pan], .mysteryToolbar [data-zoom]").forEach(btn=>{
+    btn.onclick=e=>{
+      e.preventDefault();e.stopPropagation();
+      if(btn.dataset.zoom==="in")mysteryZoomAt(1.2);
+      else if(btn.dataset.zoom==="out")mysteryZoomAt(0.83);
+      else if(btn.dataset.pan==="reset")resetMysteryView();
+      else if(btn.dataset.pan==="up")panMysteryBy(0,70);
+      else if(btn.dataset.pan==="down")panMysteryBy(0,-70);
+      else if(btn.dataset.pan==="left")panMysteryBy(70,0);
+      else if(btn.dataset.pan==="right")panMysteryBy(-70,0);
+    };
+  });
+  applyMysteryView();
+}
+
+let mysteryFirstCard=null;
+
+function resetConnectionPick(){
+  mysteryFirstCard=null;
+  document.querySelectorAll("#phase3 .mysteryConnectDot.active")
+    .forEach(b=>b.classList.remove("active"));
+}
+
+function chooseMysteryConnection(card){
+  const id=String(card.dataset.cardId);
+  const dot=card.querySelector(".mysteryConnectDot");
+  if(!dot)return;
+
+  if(!mysteryFirstCard){
+    mysteryFrontIds=[];
+    bringMysteryCardToFront(card,true);
+    mysteryFirstCard=id;
+    dot.classList.add("active");
+    return;
+  }
+
+  if(mysteryFirstCard===id){
+    resetConnectionPick();
+    return;
+  }
+
+  const s=mysteryState();
+  const exists=s.connections.some(c=>
+    (c.a===mysteryFirstCard&&c.b===id)||
+    (c.a===id&&c.b===mysteryFirstCard)
+  );
+  if(!exists){
+    s.connections.push({a:mysteryFirstCard,b:id,label:""});
+    saveMysteryPatch({mysteryConnections:s.connections});
+  }
+
+  const firstCard=document.querySelector('#phase3 .mysteryCard[data-card-id="'+mysteryFirstCard+'"]');
+  if(firstCard)bringMysteryCardToFront(firstCard,true);
+  bringMysteryCardToFront(card,true);
+
+  resetConnectionPick();
+  drawMysteryConnections();
+}
+
+function cardCenter(card,board){
+  return {
+    x:(parseFloat(card.style.left)||0)+card.offsetWidth/2,
+    y:(parseFloat(card.style.top)||0)+card.offsetHeight/2
+  };
+}
+
+let mysteryMobileOpenLine=null;
+
+function isMysteryMobile(){
+  return window.matchMedia && window.matchMedia("(max-width:700px)").matches;
+}
+
+function closeMysteryMobileLineLabel(){
+  if(mysteryMobileOpenLine===null)return;
+  mysteryMobileOpenLine=null;
+  drawMysteryConnections();
+}
+
+function openMysteryLineEditor(index){
+  const s=mysteryState();
+  const c=s.connections[index];
+  if(!c)return;
+
+  const overlay=document.createElement("div");
+  overlay.className="mysteryLineEditorOverlay";
+  overlay.innerHTML=
+    '<div class="mysteryLineEditorDialog">'+
+      '<h3>Verbindung</h3>'+
+      '<label for="mysteryLineLabelInput">Wie hängen die Karten zusammen?</label>'+
+      '<input id="mysteryLineLabelInput" type="text" maxlength="42" value="'+escapeHtml(c.label||"")+'" placeholder="z. B. braucht, beeinflusst, führt zu …">'+
+      '<div class="mysteryLineEditorActions">'+
+        '<button class="action secondary compactAction" id="cancelMysteryLineEdit" type="button">Abbrechen</button>'+
+        '<button class="action secondary compactAction" id="deleteMysteryLine" type="button">Verbindung löschen</button>'+
+        '<button class="action compactAction" id="saveMysteryLine" type="button">Speichern</button>'+
+      '</div>'+
+    '</div>';
+
+  document.body.appendChild(overlay);
+  const input=overlay.querySelector("#mysteryLineLabelInput");
+  input.focus();
+
+  overlay.querySelector("#cancelMysteryLineEdit").onclick=()=>overlay.remove();
+  overlay.querySelector("#deleteMysteryLine").onclick=()=>{
+    const state=mysteryState();
+    state.connections.splice(index,1);
+    saveMysteryPatch({mysteryConnections:state.connections});
+    overlay.remove();
+    drawMysteryConnections();
+  };
+  overlay.querySelector("#saveMysteryLine").onclick=()=>{
+    const state=mysteryState();
+    if(state.connections[index]){
+      state.connections[index].label=input.value.trim();
+      saveMysteryPatch({mysteryConnections:state.connections});
+    }
+    overlay.remove();
+    drawMysteryConnections();
+  };
+}
+
+function drawMysteryConnections(){
+  const board=document.getElementById("mysteryBoard");
+  const svg=document.getElementById("mysteryLines");
+  if(!board||!svg)return;
+
+  const s=mysteryState();
+  svg.innerHTML="";
+
+  s.connections.forEach((c,index)=>{
+    const a=document.querySelector('#phase3 .mysteryCard[data-card-id="'+c.a+'"]');
+    const b=document.querySelector('#phase3 .mysteryCard[data-card-id="'+c.b+'"]');
+    if(!a||!b||a.style.display==="none"||b.style.display==="none")return;
+
+    const p1=cardCenter(a,board);
+    const p2=cardCenter(b,board);
+    const mx=(p1.x+p2.x)/2;
+    const my=(p1.y+p2.y)/2;
+
+    let angle=Math.atan2(p2.y-p1.y,p2.x-p1.x)*180/Math.PI;
+    if(angle>90||angle<-90)angle+=180;
+
+    const g=document.createElementNS("http://www.w3.org/2000/svg","g");
+    g.setAttribute("class","mysteryLineGroup");
+    g.dataset.lineIndex=String(index);
+
+    const line=document.createElementNS("http://www.w3.org/2000/svg","line");
+    line.setAttribute("x1",p1.x);
+    line.setAttribute("y1",p1.y);
+    line.setAttribute("x2",p2.x);
+    line.setAttribute("y2",p2.y);
+    line.setAttribute("class","mysteryLine");
+
+    const hit=document.createElementNS("http://www.w3.org/2000/svg","line");
+    hit.setAttribute("x1",p1.x);
+    hit.setAttribute("y1",p1.y);
+    hit.setAttribute("x2",p2.x);
+    hit.setAttribute("y2",p2.y);
+    hit.setAttribute("class","mysteryLineHit");
+
+    hit.addEventListener("click",e=>{
+      e.stopPropagation();
+
+      if(isMysteryMobile() && c.label){
+        if(mysteryMobileOpenLine!==index){
+          mysteryMobileOpenLine=index;
+          drawMysteryConnections();
+        }else{
+          openMysteryLineEditor(index);
+        }
+      }else{
+        openMysteryLineEditor(index);
+      }
+    });
+
+    g.appendChild(line);
+    g.appendChild(hit);
+
+    const safeLabel=String(c.label||"").slice(0,42);
+
+    if(safeLabel){
+      if(isMysteryMobile() && mysteryMobileOpenLine!==index){
+        const note=document.createElementNS("http://www.w3.org/2000/svg","text");
+        note.setAttribute("x",mx);
+        note.setAttribute("y",my-7);
+        note.setAttribute("class","mysteryLineNoteText");
+        note.textContent="📝";
+        g.appendChild(note);
+      }else{
+        const text=document.createElementNS("http://www.w3.org/2000/svg","text");
+        text.setAttribute("x",mx);
+        text.setAttribute("y",my-8);
+        text.setAttribute("class","mysteryLineLabelText");
+        text.setAttribute("transform","rotate("+angle+" "+mx+" "+(my-8)+")");
+        text.textContent=safeLabel;
+        g.appendChild(text);
+      }
+    }
+
+    svg.appendChild(g);
+  });
+}
+
+function updateMysteryCategoryUI(){
+  const s=mysteryState();
+  const inputs=[
+    document.getElementById("mysteryCat1"),
+    document.getElementById("mysteryCat2"),
+    document.getElementById("mysteryCat3")
+  ];
+
+  inputs.forEach((input,i)=>{
+    if(input&&input.value!==s.categoryNames[i])input.value=s.categoryNames[i];
+  });
+
+  const legend=document.getElementById("mysteryLegend");
+  if(legend){
+    legend.innerHTML=s.categoryNames.map((name,i)=>
+      '<span class="mysteryLegendItem"><span class="mysteryLegendSwatch cat'+(i+1)+'"></span><span>'+escapeHtml(name)+'</span></span>'
+    ).join("")+
+    '<span class="mysteryLegendItem"><span class="mysteryLegendSwatch" style="background:#fff"></span><span>noch nicht zugeordnet</span></span>';
+  }
+
+  document.querySelectorAll("#phase3 .mysteryCard").forEach(card=>{
+    const id=String(card.dataset.cardId);
+    const sel=card.querySelector(".mysteryCardCategory");
+    if(!sel)return;
+
+    const value=s.categories[id]||"";
+
+    sel.innerHTML=
+      '<option value="" selected>Zuordnung</option>'+
+      s.categoryNames.map((name,i)=>
+        '<option value="cat'+(i+1)+'">'+escapeHtml(name)+'</option>'
+      ).join("");
+
+    /* Im geschlossenen Dropdown steht immer nur «Zuordnung».
+       Die gewählte Kategorie ist an Farbe und Legende erkennbar. */
+    sel.value="";
+    sel.title=value
+      ? "Zugeordnet: "+s.categoryNames[Math.max(0,Number(value.replace("cat",""))-1)]
+      : "Noch nicht zugeordnet";
+
+    card.classList.remove("cat1","cat2","cat3");
+    if(value)card.classList.add(value);
+  });
+}
+
+function bindMysteryCategoryEditor(){
+  ["mysteryCat1","mysteryCat2","mysteryCat3"].forEach((id,i)=>{
+    const input=document.getElementById(id);
+    if(!input||input.readOnly)return;
+    input.oninput=()=>{
+      const s=mysteryState();
+      s.categoryNames[i]=input.value.trim()||("Kategorie "+(i+1));
+      saveMysteryPatch({mysteryCategoryNames:s.categoryNames});
+      updateMysteryCategoryUI();
+    };
+  });
+}
+
+function deleteOwnMysteryCard(id){
+  const s=mysteryState();
+  s.ownCards=s.ownCards.filter(x=>String(x.id)!==String(id));
+  delete s.positions[id];
+  delete s.categories[id];
+  s.connections=s.connections.filter(c=>c.a!==id&&c.b!==id);
+
+  saveMysteryPatch({
+    mysteryOwnCards:s.ownCards,
+    mysteryPositions:s.positions,
+    mysteryCardCategories:s.categories,
+    mysteryConnections:s.connections
+  });
+
+  const card=document.querySelector('#phase3 .mysteryCard[data-card-id="'+id+'"]');
+  if(card)card.remove();
+  resetConnectionPick();
+  drawMysteryConnections();
+}
+
+function returnPreparedMysteryCardToPool(id){
+  const s=mysteryState();
+  if(!s.dismissedCards.includes(String(id)))s.dismissedCards.push(String(id));
+  delete s.positions[id];
+  delete s.categories[id];
+  s.connections=s.connections.filter(c=>c.a!==id&&c.b!==id);
+
+  saveMysteryPatch({
+    mysteryDismissedCards:s.dismissedCards,
+    mysteryPositions:s.positions,
+    mysteryCardCategories:s.categories,
+    mysteryConnections:s.connections
+  });
+
+  resetConnectionPick();
+  renderMystery();
+}
+
+let mysteryFrontIds=[];
+let mysteryLastTouchedId=null;
+let mysteryPlacementStep=0;
+
+function bringMysteryCardToFront(card,preserve=false){
+  if(!card)return;
+  const id=String(card.dataset.cardId);
+  mysteryLastTouchedId=id;
+
+  if(!preserve)mysteryFrontIds=[];
+  if(!mysteryFrontIds.includes(id))mysteryFrontIds.push(id);
+
+  document.querySelectorAll("#phase3 .mysteryCard").forEach(c=>{
+    c.classList.toggle("isFront",mysteryFrontIds.includes(String(c.dataset.cardId)));
+  });
+}
+
+function showNoveraConfirm(message,onConfirm,confirmText="Löschen"){
+  const old=document.querySelector(".noveraConfirmOverlay");
+  if(old)old.remove();
+
+  const overlay=document.createElement("div");
+  overlay.className="noveraConfirmOverlay";
+  overlay.innerHTML=
+    '<div class="noveraConfirmDialog" role="dialog" aria-modal="true" aria-labelledby="noveraConfirmTitle">'+
+      '<h3 id="noveraConfirmTitle">Bitte bestätigen</h3>'+
+      '<p>'+escapeHtml(message)+'</p>'+
+      '<div class="noveraConfirmActions">'+
+        '<button class="action secondary compactAction" type="button" data-confirm-cancel>Abbrechen</button>'+
+        '<button class="action compactAction noveraConfirmDelete" type="button" data-confirm-ok>'+escapeHtml(confirmText)+'</button>'+
+      '</div>'+
+    '</div>';
+
+  document.body.appendChild(overlay);
+
+  const close=()=>overlay.remove();
+  overlay.querySelector("[data-confirm-cancel]").onclick=close;
+  overlay.querySelector("[data-confirm-ok]").onclick=()=>{
+    close();
+    onConfirm();
+  };
+  overlay.addEventListener("click",e=>{
+    if(e.target===overlay)close();
+  });
+}
+
+function ensureMysteryCardControls(card){
+  const id=String(card.dataset.cardId);
+  const header=card.querySelector(".mysteryCardHeader");
+  const bottom=card.querySelector(".mysteryCardBottom");
+  if(!header||!bottom)return;
+
+  let del=card.querySelector(".mysteryCardDelete");
+  if(!del){
+    del=document.createElement("button");
+    del.type="button";
+    del.className="mysteryCardDelete";
+    del.setAttribute("aria-label","Karte zurücklegen");
+    del.textContent="×";
+    header.appendChild(del);
+  }
+
+
+  del.onclick=e=>{
+    e.preventDefault();
+    e.stopPropagation();
+
+    showNoveraConfirm("Karte wirklich löschen?",()=>{
+      if(id.startsWith("own-")){
+        deleteOwnMysteryCard(id);
+      }else{
+        returnPreparedMysteryCardToPool(id);
+      }
+    });
+  };
+}
+
+function bindMysteryCard(card){
+  const id=String(card.dataset.cardId);
+  ensureMysteryCardControls(card);
+
+  const connectDot=card.querySelector(".mysteryConnectDot");
+  if(connectDot){
+    connectDot.onclick=e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      bringMysteryCardToFront(card,true);
+      chooseMysteryConnection(card);
+    };
+  }
+
+  const sel=card.querySelector(".mysteryCardCategory");
+  if(sel){
+    sel.onchange=e=>{
+      e.stopPropagation();
+      if(!sel.value)return;
+      mysteryLastTouchedId=id;
+      const s=mysteryState();
+      s.categories[id]=sel.value;
+      saveMysteryPatch({mysteryCardCategories:s.categories});
+      updateMysteryCategoryUI();
+    };
+    sel.onpointerdown=e=>e.stopPropagation();
+    sel.onclick=e=>e.stopPropagation();
+  }
+
+  const del=card.querySelector(".mysteryCardDelete");
+  if(del){
+    del.onpointerdown=e=>e.stopPropagation();
+  }
+
+  card.onpointerdown=e=>{
+    if(
+      e.target.closest("select") ||
+      e.target.closest(".mysteryConnectDot") ||
+      e.target.closest(".mysteryCardDelete") ||
+      e.target.closest("input") ||
+      e.target.closest("button")
+    )return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    bringMysteryCardToFront(card,false);
+    card.classList.add("isDragging");
+    card.setPointerCapture(e.pointerId);
+
+    const startX=e.clientX;
+    const startY=e.clientY;
+    const startLeft=parseFloat(card.style.left)||0;
+    const startTop=parseFloat(card.style.top)||0;
+
+    const move=ev=>{
+      const x=startLeft+(ev.clientX-startX)/mysteryView.scale;
+      const y=startTop+(ev.clientY-startY)/mysteryView.scale;
+      card.style.left=x+"px";
+      card.style.top=y+"px";
+      drawMysteryConnections();
+    };
+
+    const up=()=>{
+      card.removeEventListener("pointermove",move);
+      card.removeEventListener("pointerup",up);
+      card.removeEventListener("pointercancel",up);
+      card.classList.remove("isDragging");
+
+      const s=mysteryState();
+      s.positions[id]=[
+        parseFloat(card.style.left)||0,
+        parseFloat(card.style.top)||0
+      ];
+      saveMysteryPatch({mysteryPositions:s.positions});
+      drawMysteryConnections();
+    };
+
+    card.addEventListener("pointermove",move);
+    card.addEventListener("pointerup",up);
+    card.addEventListener("pointercancel",up);
+  };
+}
+
+
+function mysteryCardWorldPosition(id){
+  const card=document.querySelector('#phase3 .mysteryCard[data-card-id="'+id+'"]');
+  if(!card||card.style.display==="none")return null;
+  return {
+    x:parseFloat(card.style.left)||0,
+    y:parseFloat(card.style.top)||0,
+    w:card.offsetWidth||205,
+    h:card.offsetHeight||130
+  };
+}
+
+function mysteryPlacementAnchor(){
+  if(mysteryLastTouchedId){
+    const touched=mysteryCardWorldPosition(mysteryLastTouchedId);
+    if(touched)return touched;
+  }
+
+  const visible=[...document.querySelectorAll("#phase3 .mysteryCard")]
+    .filter(card=>card.style.display!=="none");
+
+  if(!visible.length){
+    return {x:4940,y:4940,w:205,h:130};
+  }
+
+  /* Ohne vorherige Interaktion die Karte verwenden, die im aktuellen
+     Ausschnitt am nächsten zur Bildschirmmitte liegt. */
+  const viewport=document.getElementById("mysteryViewport");
+  if(!viewport){
+    const card=visible[visible.length-1];
+    return mysteryCardWorldPosition(String(card.dataset.cardId));
+  }
+
+  const rect=viewport.getBoundingClientRect();
+  const cx=rect.width/2;
+  const cy=rect.height/2;
+
+  let best=null;
+  let bestD=Infinity;
+  visible.forEach(card=>{
+    const p=mysteryCardWorldPosition(String(card.dataset.cardId));
+    if(!p)return;
+    const screenX=mysteryView.x+(p.x+p.w/2-5000)*mysteryView.scale;
+    const screenY=mysteryView.y+(p.y+p.h/2-5000)*mysteryView.scale;
+    const d=Math.hypot(screenX-cx,screenY-cy);
+    if(d<bestD){
+      bestD=d;
+      best=p;
+    }
+  });
+
+  return best||mysteryCardWorldPosition(String(visible[visible.length-1].dataset.cardId));
+}
+
+function nearbyMysteryPosition(){
+  const anchor=mysteryPlacementAnchor();
+  const scale=Math.max(.22,mysteryView.scale||1);
+
+  /* Abstände sind bewusst in Bildschirm-Pixeln definiert. Dadurch
+     bleibt die neue Karte auch bei starkem Zoom in der Nähe. */
+  const screenOffsets=[
+    [165,45],
+    [-165,45],
+    [85,135],
+    [-85,135],
+    [165,-75],
+    [-165,-75],
+    [0,165],
+    [0,-145]
+  ];
+
+  const visible=[...document.querySelectorAll("#phase3 .mysteryCard")]
+    .filter(card=>card.style.display!=="none")
+    .map(card=>mysteryCardWorldPosition(String(card.dataset.cardId)))
+    .filter(Boolean);
+
+  for(let n=0;n<screenOffsets.length;n++){
+    const off=screenOffsets[(mysteryPlacementStep+n)%screenOffsets.length];
+    const x=anchor.x+off[0]/scale;
+    const y=anchor.y+off[1]/scale;
+
+    /* Nur grob prüfen, ob die neue Karte auf dem Bildschirm fast
+       deckungsgleich mit einer vorhandenen Karte wäre. */
+    const tooClose=visible.some(p=>{
+      const dx=Math.abs((p.x-x)*scale);
+      const dy=Math.abs((p.y-y)*scale);
+      return dx<95 && dy<70;
+    });
+
+    if(!tooClose){
+      mysteryPlacementStep=(mysteryPlacementStep+n+1)%screenOffsets.length;
+      return [x,y];
+    }
+  }
+
+  const off=screenOffsets[mysteryPlacementStep%screenOffsets.length];
+  mysteryPlacementStep=(mysteryPlacementStep+1)%screenOffsets.length;
+  return [anchor.x+off[0]/scale,anchor.y+off[1]/scale];
+}
+
+function placeMysteryCardNearWorkArea(id){
+  const s=mysteryState();
+  s.positions[id]=nearbyMysteryPosition();
+  saveMysteryPatch({mysteryPositions:s.positions});
+  mysteryLastTouchedId=String(id);
+}
+
+function renderMystery(){
+  const board=document.getElementById("mysteryBoard");
+  if(!board)return;
+  const s=mysteryState();
+
+  const question=document.getElementById("mysteryQuestion");
+  const answer=document.getElementById("mysteryAnswer");
+  if(question&&question.value!==s.question)question.value=s.question;
+  if(answer&&answer.value!==s.answer)answer.value=s.answer;
+
+  s.ownCards.forEach(item=>{
+    if(!document.querySelector('#phase3 .mysteryCard[data-card-id="'+item.id+'"]')){
+      board.appendChild(buildOwnMysteryCard(item));
+    }
+  });
+
+  const orderedIds=MYSTERY_BASE_IDS.concat(MYSTERY_EXTRA_IDS);
+  document.querySelectorAll("#phase3 .mysteryCard").forEach((card,index)=>{
+    const id=String(card.dataset.cardId);
+    const builtInIndex=orderedIds.indexOf(id);
+    const isOwn=id.startsWith("own-");
+    const dismissed=s.dismissedCards.includes(id);
+    const visible=isOwn || (builtInIndex>=0 && builtInIndex<s.revealCount && !dismissed);
+    card.style.display=visible?"":"none";
+    const savedPos=s.positions[id];
+    const initialPos={
+      "1":[4665,4930],
+      "7":[4898,4930],
+      "10":[5131,4930]
+    };
+    const basePos=MYSTERY_DEFAULT_POS[id]||[40+(index%4)*240,40+Math.floor(index/4)*165];
+    const pos=savedPos||(initialPos[id]||[5000+basePos[0]-540,5000+basePos[1]-380]);
+    card.style.left=pos[0]+"px";
+    card.style.top=pos[1]+"px";
+    bindMysteryCard(card);
+  });
+
+  const poolHasPrepared=s.revealCount<orderedIds.length || s.dismissedCards.length>0;
+  const nextBtn=document.getElementById("showNextMysteryCard");
+  if(nextBtn)nextBtn.style.display=poolHasPrepared?"":"none";
+
+  updateMysteryCategoryUI();
+  bindMysteryCategoryEditor();
+  initMysteryPanZoom();
+  requestAnimationFrame(()=>{
+    drawMysteryConnections();
+    const freshStart=s.revealCount===3 &&
+      s.dismissedCards.length===0 &&
+      s.ownCards.length===0 &&
+      Object.keys(s.positions||{}).length===0;
+    if(freshStart&&!mysteryInitialViewDone){
+      mysteryInitialViewDone=true;
+      fitMysteryViewToVisible(0.78);
+    }
+  });
+}
+
+function clearMysteryBoard(){
+  showNoveraConfirm(
+    "Arbeitsfläche wirklich leeren? Eure Ordnung, eigenen Ideen, Zuordnungen und Verbindungen werden entfernt. Danach startet die Fläche wieder mit drei Karten.",
+    ()=>{
+      const s=eState();
+      s.mysteryRevealCount=3;
+      s.mysteryDismissedCards=[];
+      s.mysteryOwnCards=[];
+      s.mysteryPositions={};
+      s.mysteryCardCategories={};
+      s.mysteryConnections=[];
+      localStorage.setItem(E_KEY,JSON.stringify(s));
+
+      document.querySelectorAll("#phase3 .mysteryCard.userNote,#phase3 .mysteryCard.questionNote").forEach(c=>c.remove());
+      resetConnectionPick();
+      mysteryLastTouchedId=null;
+      mysteryPlacementStep=0;
+      mysteryInitialViewDone=false;
+      renderMystery();
+      requestAnimationFrame(()=>fitMysteryViewToVisible(0.78));
+    },
+    "Fläche leeren"
+  );
+}
+
+function printAllMysteryCards(){
+  const s=mysteryState();
+  const cards=[];
+
+  MYSTERY_BASE_IDS.concat(MYSTERY_EXTRA_IDS).forEach(id=>{
+    const card=document.querySelector('#phase3 .mysteryCard[data-card-id="'+id+'"]');
+    if(!card)return;
+    cards.push({
+      title:card.querySelector(".mysteryCardTitle")?.textContent||"",
+      text:card.querySelector(".mysteryCardText")?.textContent||""
+    });
+  });
+
+  s.ownCards.forEach(item=>{
+    cards.push({title:"Eigene Idee",text:String(item.text||"")});
+  });
+
+  const win=window.open("","_blank");
+  if(!win){
+    alert("Das Fenster für die analoge Version konnte nicht geöffnet werden. Erlaube Pop-ups und versuche es erneut.");
+    return;
+  }
+
+  const cardHtml=cards.map(c=>
+    '<article class="printCard"><h2>'+escapeHtml(c.title)+'</h2><p>'+escapeHtml(c.text)+'</p></article>'
+  ).join("");
+
+  win.document.open();
+  win.document.write(
+    '<!doctype html><html lang="de"><head><meta charset="utf-8">'+
+    '<title>Novera – Mystery analog</title>'+
+    '<style>'+
+      '@page{size:A4;margin:10mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}'+
+      '.printIntro{margin:0 0 7mm;font-size:10pt;line-height:1.45}.printIntro h1{font-size:17pt;margin:0 0 3mm}.printIntro p{margin:0}'+
+      '.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:0}'+
+      '.printCard{height:62mm;border:1px dashed #555;padding:8mm;break-inside:avoid;overflow:hidden}'+
+      '.printCard h2{font-size:13pt;line-height:1.2;margin:0 0 5mm}.printCard p{font-size:10.5pt;line-height:1.4;margin:0}'+
+    '</style></head><body>'+
+    '<section class="printIntro"><h1>Novera – Mystery: analoge Version</h1>'+
+    '<p>Schneidet die Karten entlang der gestrichelten Linien aus. Ordnet sie auf einem grossen Blatt. Zeichnet Verbindungslinien zwischen wichtigen Karten und beschriftet sie, wenn euch das beim Erklären hilft. Ihr müsst nicht alle Karten verwenden. Eigene Ideen könnt ihr auf zusätzlichen Zetteln ergänzen.</p></section>'+
+    '<main class="cards">'+cardHtml+'</main>'+
+    '<script>window.onload=function(){window.print();};<\/script>'+
+    '</body></html>'
+  );
+  win.document.close();
+}
+
+function setMysteryExpanded(expanded){
+  const shell=document.getElementById("mysteryWorkspaceShell");
+  const btn=document.getElementById("toggleMysteryFullscreen");
+  if(!shell||!btn)return;
+
+  shell.classList.toggle("isExpanded",!!expanded);
+  document.body.classList.toggle("mysteryExpanded",!!expanded);
+  btn.textContent=expanded?"×":"⤢";
+  btn.setAttribute("aria-label",expanded?"Vollbild schliessen":"Arbeitsfläche im Vollbild öffnen");
+
+  requestAnimationFrame(()=>{
+    applyMysteryView();
+    drawMysteryConnections();
+  });
+}
+
+function updateModelTaskLock(){
+  const task=document.getElementById("modelTask");
+  if(!task)return;
+  const s=eState();
+  task.classList.toggle("phase3Locked",s.mysteryTaskComplete!==true);
+}
+
+function resetMystery(){
+  const s=eState();
+  delete s.mysteryExtraShown;
+  delete s.mysteryRevealCount;
+  delete s.mysteryDismissedCards;
+  delete s.mysteryPositions;
+  delete s.mysteryCardCategories;
+  delete s.mysteryCategoryNames;
+  delete s.mysteryConnections;
+  delete s.mysteryOwnCards;
+  delete s.mysteryQuestion;
+  delete s.mysteryAnswer;
+  delete s.modelReflection;
+  delete s.mysteryTaskComplete;
+  delete s.modelExplanationUnderstood;
+  localStorage.setItem(E_KEY,JSON.stringify(s));
+  document.querySelectorAll("#phase3 .mysteryCard.userNote,#phase3 .mysteryCard.questionNote").forEach(c=>c.remove());
+  resetConnectionPick();
+  renderMystery();
+}
+
 function initErarbeitung(){
   closeAllExplanationsOnLoad();
   applyTexts();
@@ -7867,6 +10912,152 @@ function initErarbeitung(){
 
   id("toPhase2").onclick=()=>showPhase(2);
   id("backToPhase1Bottom").onclick=()=>showPhase(1);
+
+  const toPhase3=id("toPhase3");
+  const backToPhase2Bottom=id("backToPhase2Bottom");
+  if(toPhase3)toPhase3.onclick=()=>showPhase(3);
+  if(backToPhase2Bottom)backToPhase2Bottom.onclick=()=>showPhase(2);
+
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){
+      const ownOverlay=document.getElementById("mysteryOwnCardCreator");
+      if(ownOverlay&&!ownOverlay.classList.contains("hidden")){
+        ownOverlay.classList.add("hidden");
+        return;
+      }
+      const shell=document.getElementById("mysteryWorkspaceShell");
+      if(shell&&shell.classList.contains("isExpanded"))setMysteryExpanded(false);
+    }
+  });
+
+  document.addEventListener("click",e=>{
+    if(!isMysteryMobile() || mysteryMobileOpenLine===null)return;
+    if(e.target.closest && e.target.closest(".mysteryLineGroup"))return;
+    closeMysteryMobileLineLabel();
+  });
+
+  const mysteryQuestion=id("mysteryQuestion");
+  const mysteryAnswer=id("mysteryAnswer");
+  const modelReflection=id("modelReflection");
+  const mysteryOwnCardText=id("mysteryOwnCardText");
+  const mysteryOwnCardCreator=id("mysteryOwnCardCreator");
+
+  if(mysteryQuestion)mysteryQuestion.addEventListener("input",()=>saveMysteryPatch({mysteryQuestion:mysteryQuestion.value}));
+  if(mysteryAnswer)mysteryAnswer.addEventListener("input",()=>{
+    saveMysteryPatch({mysteryAnswer:mysteryAnswer.value});
+  });
+  if(modelReflection){
+    modelReflection.value=String(eState().modelReflection||"");
+    modelReflection.addEventListener("input",()=>saveMysteryPatch({modelReflection:modelReflection.value}));
+  }
+  const checkModelQuiz=id("checkModelQuiz");
+  if(checkModelQuiz)checkModelQuiz.onclick=()=>{
+    document.querySelectorAll(".modelQuizRow").forEach(item=>{
+      const chosen=item.querySelector('input[type="radio"]:checked');
+      const fb=item.querySelector(".modelQuizFeedback");
+      if(!fb)return;
+      if(!chosen){
+        fb.textContent="Noch nicht entschieden.";
+        fb.className="modelQuizFeedback bad";
+        return;
+      }
+      const ok=chosen.value===item.dataset.correct;
+      fb.textContent=ok?"Passt.":"Prüfe die Aussage noch einmal.";
+      fb.className="modelQuizFeedback "+(ok?"good":"bad");
+    });
+  };
+
+  const nextCardBtn=id("showNextMysteryCard");
+  if(nextCardBtn)nextCardBtn.onclick=()=>{
+    const s=mysteryState();
+    const ordered=MYSTERY_BASE_IDS.concat(MYSTERY_EXTRA_IDS);
+    const total=ordered.length;
+    let newCardId=null;
+
+    if(s.dismissedCards.length){
+      newCardId=String(s.dismissedCards[0]);
+      saveMysteryPatch({
+        mysteryDismissedCards:s.dismissedCards.filter(id=>String(id)!==newCardId)
+      });
+    }else if(s.revealCount<total){
+      newCardId=String(ordered[s.revealCount]);
+      saveMysteryPatch({mysteryRevealCount:Math.min(total,s.revealCount+1)});
+    }
+
+    if(newCardId){
+      placeMysteryCardNearWorkArea(newCardId);
+    }
+
+    renderMystery();
+
+    if(newCardId){
+      requestAnimationFrame(()=>{
+        const card=document.querySelector('#phase3 .mysteryCard[data-card-id="'+newCardId+'"]');
+        if(card)bringMysteryCardToFront(card,false);
+      });
+    }
+  };
+
+  const analogBtn=id("printMysteryCards");
+  if(analogBtn)analogBtn.onclick=()=>{
+    showNoveraConfirm(
+      "Spoiler: Die analoge Version enthält alle verfügbaren Karten. Möchtest du sie wirklich anzeigen?",
+      ()=>printAllMysteryCards(),
+      "Anzeigen"
+    );
+  };
+
+  const clearMysteryBtn=id("clearMysteryBoard");
+  if(clearMysteryBtn)clearMysteryBtn.onclick=e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    clearMysteryBoard();
+  };
+
+  const fullscreenBtn=id("toggleMysteryFullscreen");
+  if(fullscreenBtn)fullscreenBtn.onclick=e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    const shell=id("mysteryWorkspaceShell");
+    setMysteryExpanded(!(shell&&shell.classList.contains("isExpanded")));
+  };
+
+  const toggleOwnCardBtn=id("toggleOwnMysteryCard");
+  const closeOwnMysteryCard=id("closeOwnMysteryCard");
+
+  const closeOwnCardOverlay=()=>{
+    if(mysteryOwnCardCreator)mysteryOwnCardCreator.classList.add("hidden");
+  };
+
+  if(toggleOwnCardBtn)toggleOwnCardBtn.onclick=()=>{
+    if(mysteryOwnCardCreator)mysteryOwnCardCreator.classList.remove("hidden");
+    if(mysteryOwnCardText){
+      mysteryOwnCardText.value="";
+      setTimeout(()=>mysteryOwnCardText.focus(),0);
+    }
+  };
+
+  if(closeOwnMysteryCard)closeOwnMysteryCard.onclick=closeOwnCardOverlay;
+
+  if(mysteryOwnCardCreator){
+    mysteryOwnCardCreator.addEventListener("click",e=>{
+      if(e.target===mysteryOwnCardCreator)closeOwnCardOverlay();
+    });
+  };
+
+  const createOwnCardBtn=id("createOwnMysteryCard");
+  if(createOwnCardBtn)createOwnCardBtn.onclick=()=>{
+    if(!mysteryOwnCardText||!mysteryOwnCardText.value.trim()){
+      alert("Schreibt zuerst den Text für eure Karte.");
+      if(mysteryOwnCardText)mysteryOwnCardText.focus();
+      return;
+    }
+    addOwnMysteryCard(mysteryOwnCardText.value);
+    mysteryOwnCardText.value="";
+    closeOwnCardOverlay();
+  };
+
+  updateModelTaskLock();
 
   const sourceDemo=id("sourceDemo");
   const sourceSaved=id("sourceSaved");
@@ -7923,6 +11114,45 @@ function initErarbeitung(){
     const target=id(b.dataset.help);
     if(target)target.classList.toggle("active");
   });
+
+  const finishMysteryTask=id("finishMysteryTask");
+  const modelExplanation=id("modelExplanation");
+  const modelExplanationUnderstood=id("modelExplanationUnderstood");
+
+  if(finishMysteryTask)finishMysteryTask.onclick=()=>{
+    const answer=String(mysteryAnswer?.value||"").trim();
+    if(!answer){
+      if(mysteryAnswer){
+        mysteryAnswer.scrollIntoView({behavior:"smooth",block:"center"});
+        setTimeout(()=>mysteryAnswer.focus(),250);
+      }
+      return;
+    }
+    ePatch({mysteryTaskComplete:true});
+    updateModelTaskLock();
+    if(modelExplanation){
+      openExplanation(modelExplanation);
+    }
+  };
+
+  if(modelExplanationUnderstood){
+    modelExplanationUnderstood.onchange=()=>{
+      if(modelExplanationUnderstood.checked){
+        ePatch({modelExplanationUnderstood:true});
+        closeExplanation(modelExplanation);
+      }
+    };
+  }
+
+  const modelTask=id("modelTask");
+  if(modelTask){
+    modelTask.addEventListener("click",e=>{
+      if(modelTask.classList.contains("phase3Locked")){
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+  }
 
   document.querySelectorAll(".phase2Lockable").forEach(card=>{
     card.addEventListener("click",e=>{
@@ -8153,7 +11383,7 @@ const savedPhase=Number(localStorage.getItem("novera_current_phase")||1);
 const startPhase=returnPhaseRaw!==null ? Number(returnPhaseRaw) : savedPhase;
 
 sessionStorage.removeItem("novera_return_phase");
-showPhase(startPhase===2?2:1);
+showPhase(startPhase===3?3:(startPhase===2?2:1));
 
 renderGallery();
 
