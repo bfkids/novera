@@ -3181,6 +3181,39 @@ body.explanationOpen{
   width:100%;
 }
 
+
+.sourceWorldsHeading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.sourceWorldsHeading h2{
+  margin-bottom:0;
+}
+.sourceWorldsHeading + .smallNote{
+  margin-top:8px;
+}
+@media(max-width:600px){
+  .sourceWorldsHeading{
+    align-items:flex-start;
+  }
+}
+
+
+#deleteDemoWorlds{
+  width:auto!important;
+  max-width:190px!important;
+  flex:0 0 auto!important;
+  white-space:nowrap;
+}
+@media(max-width:600px){
+  #deleteDemoWorlds{
+    max-width:170px!important;
+  }
+}
+
 </style>
 </head>
 
@@ -3482,7 +3515,14 @@ body.explanationOpen{
 
 
 
-<section class="carryWorlds panel sourceWorldSelector"><h2 data-t="worlds.title">Deine gespeicherten Welten</h2><p class="smallNote" data-t="worlds.note">Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.</p><div class="galleryGrid" id="phase2Worlds"></div></section>
+<section class="carryWorlds panel sourceWorldSelector">
+  <div class="sourceWorldsHeading">
+    <h2 id="sourceWorldsTitle">Deine gespeicherten Welten</h2>
+    <button class="action secondary compactAction hidden" id="deleteDemoWorlds" type="button">Demowelten löschen</button>
+  </div>
+  <p class="smallNote" id="sourceWorldsNote">Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.</p>
+  <div class="galleryGrid" id="phase2Worlds"></div>
+</section>
 <section class="learnTasks sourceDependent">
 <article class="learnCard phase2Lockable phase2Locked" id="learn1">
   <span class="taskLabel">Aufgabe A</span>
@@ -6070,6 +6110,22 @@ function applyTexts(){
   });
 }
 
+function updateSourceWorldsHeading(mode){
+  const title=document.getElementById("sourceWorldsTitle");
+  const note=document.getElementById("sourceWorldsNote");
+  const deleteBtn=document.getElementById("deleteDemoWorlds");
+
+  if(mode==="demo"){
+    if(title)title.textContent="Demowelten";
+    if(note)note.textContent="Diese vorbereiteten Beispielwelten kannst du hier ansehen und für die Aufgaben auswählen.";
+    if(deleteBtn)deleteBtn.classList.remove("hidden");
+  }else{
+    if(title)title.textContent="Deine gespeicherten Welten";
+    if(note)note.textContent="Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.";
+    if(deleteBtn)deleteBtn.classList.add("hidden");
+  }
+}
+
 function configurePhase2Source(){
   const notice=document.getElementById("sourceStatusNotice");
   const phase=document.getElementById("phase2");
@@ -6080,6 +6136,7 @@ function configurePhase2Source(){
   if(savedBtn)savedBtn.style.display="none";
   const saved=getSavedWorlds();
   const s=eState();
+  updateSourceWorldsHeading(s.sourceMode);
   const justLoaded=sessionStorage.getItem("novera_workstate_just_loaded")==="1";
 
   if(!phase)return;
@@ -6098,6 +6155,7 @@ function configurePhase2Source(){
       resetAfterWorldChoice();
       ePatch({sourceMode:"saved",selectedWorldId:null});
     }
+    updateSourceWorldsHeading("saved");
 
     if(tiles)tiles.style.display="none";
 
@@ -6151,6 +6209,7 @@ function configurePhase2Source(){
       resetAfterWorldChoice();
       ePatch({sourceMode:"saved",selectedWorldId:null});
     }
+    updateSourceWorldsHeading("saved");
 
     if(tiles)tiles.style.display="grid";
     if(demoBtn)demoBtn.style.display="";
@@ -6166,6 +6225,7 @@ function configurePhase2Source(){
     }
 
   }else{
+    updateSourceWorldsHeading(null);
     if(tiles)tiles.style.display="grid";
     if(demoBtn)demoBtn.style.display="";
     if(loadBtn)loadBtn.style.display="";
@@ -6466,6 +6526,7 @@ function setLearningSource(mode,worlds){
   }
 
   ePatch(p);
+  updateSourceWorldsHeading(mode);
 
   const phase=document.getElementById("phase2");
   phase.classList.add("hasSource");
@@ -6481,6 +6542,40 @@ function setLearningSource(mode,worlds){
     renderPersonalSim();
     ensureProfiles(false);
   }
+}
+
+function deleteDemoWorlds(){
+  const s=eState();
+  if(s.sourceMode!=="demo")return;
+
+  const keepY=window.scrollY;
+
+  resetAfterWorldChoice();
+
+  const next=eState();
+  delete next.sourceMode;
+  delete next.selectedWorldId;
+  delete next.importedWorlds;
+  localStorage.setItem(E_KEY,JSON.stringify(next));
+
+  const phase=document.getElementById("phase2");
+  if(phase){
+    phase.classList.add("active");
+    phase.classList.remove("hasSource");
+    phase.classList.remove("sourceReady");
+  }
+
+  const gallery=document.getElementById("phase2Worlds");
+  if(gallery)gallery.innerHTML="";
+
+  updateSourceWorldsHeading(null);
+  configurePhase2Source();
+  clearThoughtHints();
+  closeAllExplanationsOnLoad();
+
+  requestAnimationFrame(()=>{
+    window.scrollTo({top:keepY,left:0,behavior:"auto"});
+  });
 }
 
 function showSourceMessage(msg){
@@ -7775,6 +7870,7 @@ function initErarbeitung(){
 
   const sourceDemo=id("sourceDemo");
   const sourceSaved=id("sourceSaved");
+  const deleteDemoBtn=id("deleteDemoWorlds");
   const sourceWorkState=id("sourcePdf");
   const sourceLegacyFile=id("sourcePdfFile");
 
@@ -7785,6 +7881,10 @@ function initErarbeitung(){
       const worldsBox=id("phase2Worlds");
       if(worldsBox)worldsBox.scrollIntoView({behavior:"smooth",block:"start"});
     };
+  }
+
+  if(deleteDemoBtn){
+    deleteDemoBtn.onclick=deleteDemoWorlds;
   }
 
   /* Technischer Fallback: die Welten der Willkommensphase
