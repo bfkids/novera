@@ -1257,6 +1257,101 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
     line-height:1.1!important;
   }
 }
+
+/* ============================================================
+   FEINANPASSUNG: kleinere Hierarchie im Safari-Druck
+   Keine Seitenskalierung.
+   ============================================================ */
+
+/* Legenden-Farbquadrate generell kleiner */
+.legendRow{
+  grid-template-columns:5mm 5.2mm minmax(0,1fr)!important;
+  gap:1.5mm!important;
+}
+.legendColor{
+  width:4.8mm!important;
+  height:4.8mm!important;
+  border-width:.25mm!important;
+}
+.legendRow{
+  height:6.8mm!important;
+}
+.legendWrite{
+  height:4.8mm!important;
+}
+
+/* Druck: Seitentitel nur noch etwas grösser als Untertitel;
+   Untertitel nur leicht grösser als Fliesstext und fett. */
+@media print{
+  .pageTitle{
+    font-size:12.2pt!important;
+    line-height:1.08!important;
+    font-weight:800!important;
+    margin:.6mm 0 1.4mm!important;
+  }
+
+  h2{
+    font-size:9.6pt!important;
+    line-height:1.16!important;
+    font-weight:800!important;
+    margin:.8mm 0 1.1mm!important;
+  }
+
+  h3{
+    font-size:8.9pt!important;
+    line-height:1.16!important;
+    font-weight:800!important;
+    margin:.7mm 0!important;
+  }
+
+  .taskHeaderGraphic h2{
+    font-size:9.5pt!important;
+    line-height:1.14!important;
+  }
+
+  .phaseMission h2{
+    font-size:10.2pt!important;
+    line-height:1.15!important;
+    font-weight:800!important;
+    margin:.8mm 0 1.1mm!important;
+  }
+
+  .phaseMission p{
+    margin-top:0!important;
+  }
+
+  .coverPage .pageTitle{
+    font-size:11pt!important;
+    line-height:1.08!important;
+  }
+
+  .coverPage .coverTitle{
+    font-size:23pt!important;
+    line-height:1!important;
+  }
+
+  .rollPanel h3,
+  .personRollBox h3,
+  .agreementBox h3,
+  .legend h3{
+    font-size:8.7pt!important;
+    line-height:1.12!important;
+  }
+
+  /* Legenden im Druck noch etwas kompakter */
+  .legendRow{
+    grid-template-columns:4.6mm 4.7mm minmax(0,1fr)!important;
+    gap:1.2mm!important;
+    height:6.2mm!important;
+  }
+  .legendColor{
+    width:4.3mm!important;
+    height:4.3mm!important;
+  }
+  .legendWrite{
+    height:4.4mm!important;
+  }
+}
 </style></head><body>
 <div class="previewBar"><strong>Novera – A4-Hochformat Vorschau</strong><button onclick="window.print()" title="Druckdialog erneut öffnen" type="button">Druckdialog erneut öffnen</button></div>
 <main><section class="page coverPage" data-page="0">
