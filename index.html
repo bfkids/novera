@@ -1,11 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Novera – Fantasiewelt-Simulation</title>
-
-
 <style>
 *{
   box-sizing:border-box;
@@ -5021,1083 +5020,1014 @@ details.learningGoals{
   }
 }
 
+
+/* ===== Header-Buttons: Desktop und Mobil ===== */
+.mobileBtnText{display:none}
+.desktopBtnText{display:inline}
+
+@media(max-width:700px){
+  .headerBar{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+  }
+  .workStateControls{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto auto!important;
+    gap:6px!important;
+    width:100%!important;
+    justify-content:stretch!important;
+  }
+  .workStateControls .action{
+    min-width:0!important;
+    width:100%!important;
+    padding:8px 8px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    min-height:38px!important;
+  }
+  #printWorkState,
+  #openAnalogVersion{
+    width:auto!important;
+    min-width:44px!important;
+  }
+  .desktopBtnText{display:none!important}
+  .mobileBtnText{display:inline!important}
+}
+
+@media(min-width:701px){
+  .headerBar{
+    display:flex!important;
+    grid-template-columns:none!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+  }
+  .workStateControls{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    width:auto!important;
+    justify-content:flex-end!important;
+  }
+  .desktopBtnText{display:inline!important}
+  .mobileBtnText{display:none!important}
+}
+
+/* ===== Lernziele direkt in der Missions-/Titelbox ===== */
+#phase1 .missionCopy .learningGoalsShell,
+#phase2 .missionCopy .learningGoalsShell,
+#phase3 .phase3MissionCopy .learningGoalsShell{
+  margin:14px 0 0!important;
+  padding:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  width:100%!important;
+}
+#phase1 .missionCopy details.learningGoals,
+#phase2 .missionCopy details.learningGoals,
+#phase3 .phase3MissionCopy details.learningGoals{
+  width:100%!important;
+  margin:0!important;
+}
+
+/* Mobil bleibt die Lernzielbox direkt unter dem Missionstext
+   und nutzt die volle Textspaltenbreite. */
+@media(max-width:800px){
+  #phase1 .missionCopy,
+  #phase2 .missionCopy,
+  #phase3 .phase3MissionCopy{
+    width:100%!important;
+    max-width:none!important;
+  }
+  #phase1 .missionCopy .learningGoalsShell,
+  #phase2 .missionCopy .learningGoalsShell,
+  #phase3 .phase3MissionCopy .learningGoalsShell{
+    width:100%!important;
+  }
+}
+
 </style>
 </head>
-
 <body>
-
 <header>
-  <div class="headerBar">
-    <h1>Willkommen auf Novera</h1>
-    <div class="workStateControls">
-      <button class="action compactAction" id="saveWorkState" type="button">Arbeitsstand sichern</button>
-      <button class="action secondary compactAction" id="loadWorkState" type="button">Arbeitsstand laden</button>
-      <button class="action secondary compactAction" id="printWorkState" type="button" aria-label="Drucken" title="Drucken">🖨</button>
-      <button class="action secondary compactAction" id="openAnalogVersion" type="button" title="Analoge Version drucken">Analog</button>
-      <input id="loadWorkStateFile" type="file" accept=".html,text/html" hidden>
-    </div>
-  </div>
+<div class="headerBar">
+<h1>Willkommen auf Novera</h1>
+<div class="workStateControls">
+<button class="action compactAction" id="saveWorkState" type="button"><span class="desktopBtnText">Arbeitsstand sichern</span><span class="mobileBtnText">Sichern</span></button>
+<button class="action secondary compactAction" id="loadWorkState" type="button"><span class="desktopBtnText">Arbeitsstand laden</span><span class="mobileBtnText">Laden</span></button>
+<button aria-label="Drucken" class="action secondary compactAction" id="printWorkState" title="Drucken" type="button">🖨</button>
+<button aria-label="Analoge Version öffnen" class="action secondary compactAction" id="openAnalogVersion" title="Analoge Version öffnen" type="button"><span class="desktopBtnText">Analoge Version</span><span class="mobileBtnText">Analog</span></button>
+<input accept=".html,text/html" hidden="" id="loadWorkStateFile" type="file"/>
+</div>
+</div>
 </header>
-
 <main>
-<div id="phase1" class="phaseView active">
-
-  <!-- Mission -->
-
-  <section class="mission panel">
-
-    <div class="missionCopy">
-      <span class="missionKicker">Deine Mission</span>
-      <h2>Ein gutes Leben!</h2>
-      <p>
+<div class="phaseView active" id="phase1">
+<!-- Mission -->
+<section class="mission panel">
+<div class="missionCopy">
+<span class="missionKicker">Deine Mission</span>
+<h2>Ein gutes Leben!</h2>
+<p>
         Hast du manchmal auch verrückte Träume? Zum Beispiel diesen:
         In einem fantastischen Paralleluniversum entdeckst du den seltsamen,
         bewohnbaren Inselplaneten Novera. Du bist der erste Mensch, der diese
         Welt betritt und machst sie zu deinem neuen Zuhause. <b>Was brauchst du,
         um hier gut leben zu können?</b>
-
-      </p>
-    </div>
-
-    <div class="banner">
-      <img
-        src="novera-mission.webp"
-        alt="Pixel-Art des schwebenden Inselplaneten Novera"
-      >
-    </div>
-
-  </section>
-
-  <!-- Gespeicherte Welten -->
-
-  <section class="galleryWrap" id="galleryWrap">
-    <h2 class="galleryTitle">Gespeicherte Welten</h2>
-    <div class="galleryGrid" id="galleryGrid"></div>
-  </section>
-
-  <div class="workspaceLayout">
-
-  <!-- Insel -->
-
-  <section class="panel" id="simulationWorkspace">
-
-    <div id="islandWrap">
-      <canvas id="canvas"></canvas>
-    </div>
-
-  </section>
-
-  <!-- Steuerung -->
-
-  <aside class="panel workspaceControls">
-
-    <h2>Farben und Bedeutungen</h2>
-
-    <div class="paletteSectionTitle">
+</p>
+<div class="learningGoalsShell"><details class="learningGoals">
+<summary><span aria-hidden="true" class="learningGoalsArrow">›</span><strong>Lernziele</strong></summary>
+<div class="learningGoalsBody"><ul>
+<li>Ich kann beschreiben, was für mich zu einem guten Leben gehört.</li>
+<li>Ich kann erklären, warum Menschen unterschiedliche Vorstellungen von einem guten Leben haben.</li>
+<li>Ich kann mit anderen eine gemeinsame Lösung aushandeln, auch wenn wir unterschiedliche Ansichten haben.</li>
+</ul></div>
+</details></div></div>
+<div class="banner">
+<img alt="Pixel-Art des schwebenden Inselplaneten Novera" src="novera-mission.webp"/>
+</div>
+</section>
+<!-- Gespeicherte Welten -->
+<section class="galleryWrap" id="galleryWrap">
+<h2 class="galleryTitle">Gespeicherte Welten</h2>
+<div class="galleryGrid" id="galleryGrid"></div>
+</section>
+<div class="workspaceLayout">
+<!-- Insel -->
+<section class="panel" id="simulationWorkspace">
+<div id="islandWrap">
+<canvas id="canvas"></canvas>
+</div>
+</section>
+<!-- Steuerung -->
+<aside class="panel workspaceControls">
+<h2>Farben und Bedeutungen</h2>
+<div class="paletteSectionTitle">
       Meine Farben
     </div>
-
-    <div class="palette" id="userPalette"></div>
-
-    <div
-      class="colorShares"
-      id="colorShares"
-      aria-live="polite"
-    ></div>
-
-    <div class="inlineHint paletteHint">
-      <p>Wähle eine Farbe, benenne sie und setze sie auf der Welt ein. Benenne alle verwendeten Farben, damit die Aufteilung eindeutig ist.</p>
-    </div>
-
-    <div class="buttons">
-
-      <button
-        class="action secondary"
-        id="reset"
-      >
+<div class="palette" id="userPalette"></div>
+<div aria-live="polite" class="colorShares" id="colorShares"></div>
+<div class="inlineHint paletteHint">
+<p>Wähle eine Farbe, benenne sie und setze sie auf der Welt ein. Benenne alle verwendeten Farben, damit die Aufteilung eindeutig ist.</p>
+</div>
+<div class="buttons">
+<button class="action secondary" id="reset">
         Welt zurücksetzen
       </button>
-
-      <button
-        class="action"
-        id="save"
-      >
+<button class="action" id="save">
         Welt speichern
       </button>
-
-    </div>
-
-  </aside>
-
-  <!-- Aufgaben und Reflexion -->
-
-  <section class="tasks" aria-label="Aufgaben A bis D">
-
-    <article class="taskCard" id="taskA">
-      <div class="taskContent">
-        <span class="taskLabel">Aufgabe A</span>
-        <h2>Was brauchst du, um auf Novera gut leben zu können?</h2>
-        <p class="taskInstruction">
+</div>
+</aside>
+<!-- Aufgaben und Reflexion -->
+<section aria-label="Aufgaben A bis D" class="tasks">
+<article class="taskCard" id="taskA">
+<div class="taskContent">
+<span class="taskLabel">Aufgabe A</span>
+<h2>Was brauchst du, um auf Novera gut leben zu können?</h2>
+<p class="taskInstruction">
           Gestalte deine erste Welt. Wähle Farben, gib ihnen eigene Bedeutungen
           und zeige damit, was für dich zu einem guten Leben gehört. Du kannst
           auch die bereits vorhandenen Farben benennen oder verändern.
         </p>
-        <div class="inlineHint saveReminder">
-          <p>Vergiss nicht, deine Welt zu speichern.</p>
-        </div>
-        <p class="taskQuestion">
+<div class="inlineHint saveReminder">
+<p>Vergiss nicht, deine Welt zu speichern.</p>
+</div>
+<p class="taskQuestion">
           Was ist dir für ein gutes Leben besonders wichtig? Erkläre, wie
           deine Welt das zeigt.
         </p>
-        <label class="taskAnswerLabel" for="taskAnswerA">
+<label class="taskAnswerLabel" for="taskAnswerA">
           Deine Antwort
         </label>
-        <textarea
-          class="taskAnswer"
-          id="taskAnswerA"
-          data-task-answer="A"
-          maxlength="5000"
-        ></textarea>
-        <p class="taskSaveNote">
+<textarea class="taskAnswer" data-task-answer="A" id="taskAnswerA" maxlength="5000"></textarea>
+<p class="taskSaveNote">
           Deine Antwort wird automatisch in diesem Browser gespeichert.
         </p>
-      </div>
-    </article>
-
-    <article class="taskCard withArtwork phase1Lockable phase1Locked" id="taskB">
-      <span class="taskLabel">Aufgabe B</span>
-      <h2>
+</div>
+</article>
+<article class="taskCard withArtwork phase1Lockable phase1Locked" id="taskB">
+<span class="taskLabel">Aufgabe B</span>
+<h2>
         Zwei weitere Personen erreichen deine Welt. Sie wollen auch ein
         gutes Leben führen. Was veränderst du?
       </h2>
-      <p class="phase1LockHint">Bearbeite zuerst Aufgabe A vollständig.</p>
-
-      <div class="phase1TaskBody">
-        <img
-          class="taskArtwork"
-          src="novera-aufgabe-b.webp"
-          alt="Illustration zu zwei weiteren Personen auf Novera"
-        >
-        <div class="taskContent">
-          <p class="taskInstruction">
+<p class="phase1LockHint">Bearbeite zuerst Aufgabe A vollständig.</p>
+<div class="phase1TaskBody">
+<img alt="Illustration zu zwei weiteren Personen auf Novera" class="taskArtwork" src="novera-aufgabe-b.webp"/>
+<div class="taskContent">
+<p class="taskInstruction">
             Gestalte die Welt so um, dass du und zwei weitere Personen dort gut
             leben können.
           </p>
-          <div class="inlineHint saveReminder"><p>Vergiss nicht, deine Welt zu speichern.</p></div>
-          <p class="taskQuestion">
+<div class="inlineHint saveReminder"><p>Vergiss nicht, deine Welt zu speichern.</p></div>
+<p class="taskQuestion">
             Was hast du in der zweiten Welt verändert? Und warum?
           </p>
-          <label class="taskAnswerLabel" for="taskAnswerB">
+<label class="taskAnswerLabel" for="taskAnswerB">
             Deine Antwort
           </label>
-          <textarea
-            class="taskAnswer"
-            id="taskAnswerB"
-            data-task-answer="B"
-            maxlength="5000"
-          ></textarea>
-          <p class="taskSaveNote">
+<textarea class="taskAnswer" data-task-answer="B" id="taskAnswerB" maxlength="5000"></textarea>
+<p class="taskSaveNote">
             Deine Antwort wird automatisch in diesem Browser gespeichert.
           </p>
-        </div>
-      </div>
-    </article>
-
+</div>
+</div>
+</article>
 <article class="taskCard withArtwork phase1Lockable phase1Locked" id="taskC">
-      <span class="taskLabel">Aufgabe C</span>
-      <h2>
+<span class="taskLabel">Aufgabe C</span>
+<h2>
         Schliesse dich mit jemandem zusammen. Einigt euch auf eine gemeinsame
         Welt, in der ihr beide und die insgesamt vier weiteren Personen gut
         leben können.
       </h2>
-      <p class="phase1LockHint">Bearbeite zuerst Aufgabe B vollständig.</p>
-
-      <div class="phase1TaskBody">
-        <img
-          class="taskArtwork"
-          src="novera-aufgabe-c.webp"
-          alt="Illustration zur gemeinsamen Gestaltung von Novera"
-        >
-        <div class="taskContent">
-          <p class="taskInstruction">
+<p class="phase1LockHint">Bearbeite zuerst Aufgabe B vollständig.</p>
+<div class="phase1TaskBody">
+<img alt="Illustration zur gemeinsamen Gestaltung von Novera" class="taskArtwork" src="novera-aufgabe-c.webp"/>
+<div class="taskContent">
+<p class="taskInstruction">
             Besprecht, was euch für ein gutes Leben wichtig ist. Einigt euch auf
             eine gemeinsame Welt, in der ihr beide und vier weitere Personen gut
             leben können. Beide gestalten diese gemeinsame Welt in ihrer eigenen
             Simulation gleich.
           </p>
-          <div class="inlineHint saveReminder"><p>Vergiss nicht, deine Welt zu speichern.</p></div>
-          <p class="taskQuestion">
+<div class="inlineHint saveReminder"><p>Vergiss nicht, deine Welt zu speichern.</p></div>
+<p class="taskQuestion">
             Was war euch beiden wichtig? Wo wart ihr unterschiedlicher Meinung?
             Worauf musstet ihr euch einigen?
           </p>
-          <label class="taskAnswerLabel" for="taskAnswerC">
+<label class="taskAnswerLabel" for="taskAnswerC">
             Eure Antwort
           </label>
-          <textarea
-            class="taskAnswer"
-            id="taskAnswerC"
-            data-task-answer="C"
-            maxlength="5000"
-          ></textarea>
-
-          <div class="phase1FinalReflection">
-            <p class="taskQuestion">
+<textarea class="taskAnswer" data-task-answer="C" id="taskAnswerC" maxlength="5000"></textarea>
+<div class="phase1FinalReflection">
+<p class="taskQuestion">
               Hat sich deine Vorstellung von einem guten Leben durch die Aufgaben verändert?
               Begründe deine Antwort.
             </p>
-            <label class="taskAnswerLabel" for="taskAnswerD">
+<label class="taskAnswerLabel" for="taskAnswerD">
               Deine Antwort
             </label>
-            <textarea
-              class="taskAnswer"
-              id="taskAnswerD"
-              data-task-answer="D"
-              maxlength="5000"
-            ></textarea>
-          </div>
-
-          <p class="taskSaveNote">
+<textarea class="taskAnswer" data-task-answer="D" id="taskAnswerD" maxlength="5000"></textarea>
+</div>
+<p class="taskSaveNote">
             Eure Antworten werden automatisch in diesem Browser gespeichert.
           </p>
-        </div>
-      </div>
-    </article>
-
-<div class="learningGoalsShell"><details class="learningGoals">
-      <summary><span class="learningGoalsArrow" aria-hidden="true">›</span><strong>Lernziele</strong></summary>
-      <div class="learningGoalsBody"><ul>
-        <li>Ich kann beschreiben, was für mich zu einem guten Leben gehört.</li>
-        <li>Ich kann erklären, warum Menschen unterschiedliche Vorstellungen von einem guten Leben haben.</li>
-        <li>Ich kann mit anderen eine gemeinsame Lösung aushandeln, auch wenn wir unterschiedliche Ansichten haben.</li>
-      </ul></div>
-    </details></div>
+</div>
+</div>
+</article>
 
 <div class="phaseNav phaseNavEnd">
-      <button class="action secondary" id="toPhase2" type="button">
+<button class="action secondary" id="toPhase2" type="button">
         Novera weiter entdecken →
       </button>
-    </div>
-
-  </section>
-
-  </div>
-
 </div>
-
-<div id="phase2" class="phaseView">
+</section>
+</div>
+</div>
+<div class="phaseView" id="phase2">
 <section class="phaseTop panel mission phase2Mission">
-  <div class="missionCopy">
-    <span class="missionKicker">Deine Mission</span>
-    <h2>Herausfinden, wie Novera tickt</h2>
-    <p>Du arbeitest mit einer bisherigen oder vorbereiteten Novera-Welt weiter. Finde heraus, was Menschen brauchen und wünschen, welche Voraussetzungen dafür nötig sind und wie heutige Entscheidungen spätere Möglichkeiten verändern.</p>
-  </div>
-
-  <div class="banner">
-    <img
-      src="entdecken.png"
-      alt="Illustration zur Mission «Novera entdecken»"
-    >
-  </div>
+<div class="missionCopy">
+<span class="missionKicker">Deine Mission</span>
+<h2>Herausfinden, wie Novera tickt</h2>
+<p>Du arbeitest mit einer bisherigen oder vorbereiteten Novera-Welt weiter. Finde heraus, was Menschen brauchen und wünschen, welche Voraussetzungen dafür nötig sind und wie heutige Entscheidungen spätere Möglichkeiten verändern.</p>
+<div class="learningGoalsShell"><details class="learningGoals">
+<summary><span aria-hidden="true" class="learningGoalsArrow">›</span><strong>Lernziele</strong></summary>
+<div class="learningGoalsBody"><ul>
+<li>Ich kann unterscheiden, was Menschen für ein gutes Leben brauchen und was sie sich zusätzlich wünschen. Ich kenne dafür die Begriffe <strong>Needs</strong> und <strong>Desires</strong>.</li>
+<li>Ich kann erklären, dass für ein gutes Leben natürliche und gesellschaftliche Voraussetzungen nötig sind.</li>
+<li>Ich kann beschreiben, warum Entscheidungen heute die Möglichkeiten von Menschen später beeinflussen können.</li>
+</ul></div>
+</details></div></div>
+<div class="banner">
+<img alt="Illustration zur Mission «Novera entdecken»" src="entdecken.png"/>
+</div>
 </section>
 <section class="sourceChooser" id="phase2SourceChooser">
-  <div id="sourceStatusNotice" class="sourceStatusNotice"></div>
-
-  <div class="sourceTiles sourceTilesTwo" id="sourceTiles">
-    <button class="sourceTile" id="sourceDemo" type="button">
-      <span class="sourceIcon">▦</span>
-      <strong>Mit Demowelten starten</strong>
-      <span>Drei vorbereitete Beispielwelten ansehen und eine auswählen.</span>
-    </button>
-
-    <button class="sourceTile" id="sourcePdf" type="button">
-      <span class="sourceIcon">⇧</span>
-      <strong>Gespeicherten Arbeitsstand laden</strong>
-      <span>Einen zuvor heruntergeladenen Novera-Arbeitsstand wiederherstellen.</span>
-    </button>
-
-    <!-- bleibt technisch vorhanden, wird aber nicht angezeigt -->
-    <button class="sourceTile hidden" id="sourceSaved" type="button" aria-hidden="true" tabindex="-1" style="display:none!important">
-      <strong>Welten aus der Willkommensphase</strong>
-    </button>
-
-    <input id="sourcePdfFile" type="file" accept=".html,text/html" hidden>
-  </div>
-
-  <div class="sourceMessage" id="sourceMessage"></div>
+<div class="sourceStatusNotice" id="sourceStatusNotice"></div>
+<div class="sourceTiles sourceTilesTwo" id="sourceTiles">
+<button class="sourceTile" id="sourceDemo" type="button">
+<span class="sourceIcon">▦</span>
+<strong>Mit Demowelten starten</strong>
+<span>Drei vorbereitete Beispielwelten ansehen und eine auswählen.</span>
+</button>
+<button class="sourceTile" id="sourcePdf" type="button">
+<span class="sourceIcon">⇧</span>
+<strong>Gespeicherten Arbeitsstand laden</strong>
+<span>Einen zuvor heruntergeladenen Novera-Arbeitsstand wiederherstellen.</span>
+</button>
+<!-- bleibt technisch vorhanden, wird aber nicht angezeigt -->
+<button aria-hidden="true" class="sourceTile hidden" id="sourceSaved" style="display:none!important" tabindex="-1" type="button">
+<strong>Welten aus der Willkommensphase</strong>
+</button>
+<input accept=".html,text/html" hidden="" id="sourcePdfFile" type="file"/>
+</div>
+<div class="sourceMessage" id="sourceMessage"></div>
 </section>
-
-
-
 <section class="carryWorlds panel sourceWorldSelector">
-  <div class="sourceWorldsHeading">
-    <h2 id="sourceWorldsTitle">Deine gespeicherten Welten</h2>
-    <button class="action secondary compactAction hidden" id="deleteDemoWorlds" type="button">Demowelten löschen</button>
-  </div>
-  <p class="smallNote" id="sourceWorldsNote">Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.</p>
-  <div class="galleryGrid" id="phase2Worlds"></div>
+<div class="sourceWorldsHeading">
+<h2 id="sourceWorldsTitle">Deine gespeicherten Welten</h2>
+<button class="action secondary compactAction hidden" id="deleteDemoWorlds" type="button">Demowelten löschen</button>
+</div>
+<p class="smallNote" id="sourceWorldsNote">Diese Welten hast du in der ersten Phase gespeichert. Du kannst sie hier nochmals ansehen.</p>
+<div class="galleryGrid" id="phase2Worlds"></div>
 </section>
 <section class="learnTasks sourceDependent">
 <article class="learnCard phase2Lockable phase2Locked" id="learn1">
-  <span class="taskLabel">Aufgabe A</span>
-  <h2>Vier bis sechs Bereiche auswählen</h2>
-  <p class="phase2LockHint">Wähle zuerst eine Welt aus.</p>
-  <p class="taskInstruction">Wähle vier bis sechs verschiedene Bereiche aus deiner Welt aus, die du genauer anschauen möchtest.</p>
-  <div id="categorySort" class="sortList"></div>
-  <button class="action compactAction" id="confirmSort">Meine Auswahl bestätigen</button>
+<span class="taskLabel">Aufgabe A</span>
+<h2>Vier bis sechs Bereiche auswählen</h2>
+<p class="phase2LockHint">Wähle zuerst eine Welt aus.</p>
+<p class="taskInstruction">Wähle vier bis sechs verschiedene Bereiche aus deiner Welt aus, die du genauer anschauen möchtest.</p>
+<div class="sortList" id="categorySort"></div>
+<button class="action compactAction" id="confirmSort">Meine Auswahl bestätigen</button>
 </article>
-
 <article class="learnCard phase2Lockable phase2Locked" id="learn2">
-  <span class="taskLabel">Aufgabe B</span>
-  <h2>Genauer beschreiben und entscheiden</h2>
-  <p class="phase2LockHint">Wähle in Aufgabe A zuerst vier bis sechs Bereiche aus.</p>
-  <p class="taskInstruction">Beschreibe bei jedem ausgewählten Bereich genauer, was du damit meinst. Entscheide danach für dich persönlich: Brauche ich das ganz sicher für ein gutes Leben oder wünsche ich es mir eher zusätzlich?</p>
-  <div id="needEditors" class="needEditors"></div>
-  <div class="phaseNav"><button class="action" id="makeNeeds">Auswahl übernehmen</button></div>
-  <div class="theoryBox hidden" id="requirementsReveal">
-    <p><strong>Damit Menschen etwas bekommen oder tun können, braucht es Voraussetzungen.</strong> Manche sind natürlich, zum Beispiel Wasser, Boden, Rohstoffe oder Energie. Andere entstehen durch das Zusammenleben, zum Beispiel Wissen, Arbeit, Verkehrswege, Regeln oder Zusammenarbeit. Oft braucht es beides gleichzeitig.</p>
-    <div id="requirementsList"></div>
-    <label class="understoodCheck">
-      <input type="checkbox" id="requirementsUnderstood">
-      <span>Gelesen und verstanden</span>
-    </label>
-  </div>
+<span class="taskLabel">Aufgabe B</span>
+<h2>Genauer beschreiben und entscheiden</h2>
+<p class="phase2LockHint">Wähle in Aufgabe A zuerst vier bis sechs Bereiche aus.</p>
+<p class="taskInstruction">Beschreibe bei jedem ausgewählten Bereich genauer, was du damit meinst. Entscheide danach für dich persönlich: Brauche ich das ganz sicher für ein gutes Leben oder wünsche ich es mir eher zusätzlich?</p>
+<div class="needEditors" id="needEditors"></div>
+<div class="phaseNav"><button class="action" id="makeNeeds">Auswahl übernehmen</button></div>
+<div class="theoryBox hidden" id="requirementsReveal">
+<p><strong>Damit Menschen etwas bekommen oder tun können, braucht es Voraussetzungen.</strong> Manche sind natürlich, zum Beispiel Wasser, Boden, Rohstoffe oder Energie. Andere entstehen durch das Zusammenleben, zum Beispiel Wissen, Arbeit, Verkehrswege, Regeln oder Zusammenarbeit. Oft braucht es beides gleichzeitig.</p>
+<div id="requirementsList"></div>
+<label class="understoodCheck">
+<input id="requirementsUnderstood" type="checkbox"/>
+<span>Gelesen und verstanden</span>
+</label>
+</div>
 </article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn3"><span class="taskLabel">Aufgabe C</span><p class="phase2LockHint">Zuerst Aufgabe B fertig bearbeiten.</p><div class="treeStory treeStorySimple">
-  <div class="treeStoryCopy">
-    <h3>Der magische Baum</h3>
-    <p data-t="t3.story">Auf Novera braucht es keine natürlichen oder gesellschaftlichen Voraussetzungen um Dinge für ein gutes Leben zu ermöglichen. Hier wächst ein magischer Baum. Seine Früchte können dir geben, was du brauchst. Für alles was du dir erfüllst, werden zwei Früchte geerntet. Nach jeder Runde wachsen über Nacht neue Früchte. Wie viele es genau sind, siehst du erst nach der Nacht.</p>
-  </div>
-  <div class="treeStoryMedia">
-  <img class="treeStoryImage" src="baum.png" alt="Magischer Baum auf Novera">
+<div class="treeStoryCopy">
+<h3>Der magische Baum</h3>
+<p data-t="t3.story">Auf Novera braucht es keine natürlichen oder gesellschaftlichen Voraussetzungen um Dinge für ein gutes Leben zu ermöglichen. Hier wächst ein magischer Baum. Seine Früchte können dir geben, was du brauchst. Für alles was du dir erfüllst, werden zwei Früchte geerntet. Nach jeder Runde wachsen über Nacht neue Früchte. Wie viele es genau sind, siehst du erst nach der Nacht.</p>
 </div>
-</div><p class="taskInstruction" data-t="t3.goal">Wähle aus, was du in dieser Runde bekommen möchtest. Beim Klick auf «Runde abschliessen» werden die dafür nötigen Früchte vom Baum genommen.</p><div id="taskCRequirements" class="requirementGrid"></div><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">14</span>/<span id="treeMaxCount">14</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div class="thoughtHint" id="personalThoughtHint" aria-live="polite"></div><div class="roundActions">
-  <button class="action" id="finishRound" data-t="sim.finish">Runde abschliessen</button>
-  <button class="action secondary" id="resetPersonalRounds" type="button">Runden zurücksetzen</button>
+<div class="treeStoryMedia">
+<img alt="Magischer Baum auf Novera" class="treeStoryImage" src="baum.png"/>
+</div>
+</div><p class="taskInstruction" data-t="t3.goal">Wähle aus, was du in dieser Runde bekommen möchtest. Beim Klick auf «Runde abschliessen» werden die dafür nötigen Früchte vom Baum genommen.</p><div class="requirementGrid" id="taskCRequirements"></div><div><div class="pixelTree" id="pixelTree"><div class="pixelCrown"></div><div class="pixelTrunk"></div><div id="fruitLayer"></div></div><div class="simNumbers"><strong><span data-t="sim.tree">Am Baum</span>: <span id="treeCount">14</span>/<span id="treeMaxCount">14</span></strong><strong><span data-t="sim.round">Runde</span>: <span id="roundCount">1</span></strong></div></div><div aria-live="polite" class="thoughtHint" id="personalThoughtHint"></div><div class="roundActions">
+<button class="action" data-t="sim.finish" id="finishRound">Runde abschliessen</button>
+<button class="action secondary" id="resetPersonalRounds" type="button">Runden zurücksetzen</button>
 </div></article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn4">
-  <span class="taskLabel">Aufgabe D</span>
-  <h2>Was hast du beobachtet?</h2><p class="phase2LockHint">Führe zuerst mindestens drei Runden in Aufgabe C durch.</p>
-  <div class="taskQuestion reflectionPrompt">
-    <strong>Denke über deine Runden nach.</strong>
-    <p>Gehe dabei auf diese Fragen ein:</p>
-    <ul>
-      <li>Was ist passiert, wenn du viele Früchte genutzt hast?</li>
-      <li>Was ist passiert, wenn du weniger Früchte genutzt hast?</li>
-      <li>Wann konntest du dir auch zusätzliche Wünsche erfüllen – und wann nicht?</li>
-      <li>Was konntest du beim Nachwachsen der Früchte nicht vorhersagen?</li>
-    </ul>
-    <textarea id="individualReflection" data-e-save="individualReflection" class="largeReflection"></textarea>
-  </div>
-  <button class="action compactAction" id="checkIndividualReflection" type="button">Reflexion speichern</button>
-
-  <div class="theoryBox hidden" id="individualTheory">
-    <strong>Vergleiche deine Beobachtungen mit dieser Erkenntnis:</strong>
-    <p><strong>Nutzung heute beeinflusst Möglichkeiten morgen.</strong> Wie viele Früchte nachwachsen, ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.</p>
-    <label class="understoodCheck">
-      <input type="checkbox" id="reflectionUnderstood">
-      <span>Das habe ich so verstanden.</span>
-    </label>
-  </div>
-
-  <div class="theoryBox hidden" id="termsReveal1">
-    <p>Bis jetzt hast du selbst entschieden, was du <strong>ganz sicher für ein gutes Leben brauchst</strong> und was du dir <strong>eher zusätzlich wünschst</strong>. Dabei ging es um deine persönliche Sicht.</p>
-    <p>Nun schauen wir darauf, <strong>was Menschen allgemein brauchen, damit sie gut leben können</strong>. Dafür unterscheiden wir zwischen <strong>Needs</strong> und <strong>Desires</strong>.</p>
-    <p><strong>Needs</strong> sind Dinge und Bedingungen, die für ein gutes Leben grundlegend sind. Dazu gehören zum Beispiel Nahrung, Wasser, Gesundheit, Bildung, Wohnen, soziale Beziehungen, Energie oder die Möglichkeit mitzubestimmen.</p>
-    <label class="understoodCheck">
-      <input type="checkbox" id="termsPart1Understood">
-      <span>Gelesen und verstanden</span>
-    </label>
-  </div>
-
-  <div class="theoryBox hidden" id="termsReveal2">
-    <p><strong>Desires</strong> sind zusätzliche Wünsche. Sie können uns sehr wichtig sein, sind aber nicht dasselbe wie grundlegende Needs.</p>
-    <p>Oft steckt hinter einem Desire ein Need: Ein bestimmtes Smartphone ist kein Need. Mit anderen Menschen in Kontakt sein zu können, kann dagegen einer sein.</p>
-    <p>Was wir uns wünschen, wird auch von <strong>Werbung, sozialen Medien, Trends und unserem Umfeld</strong> beeinflusst. Dadurch kann sich ein Desire manchmal so wichtig anfühlen wie ein Need.</p>
-    <p><strong>Desires sind nicht falsch oder schlecht.</strong> Die Unterscheidung wird besonders wichtig, wenn nicht alles gleichzeitig möglich ist.</p>
-    <label class="understoodCheck">
-      <input type="checkbox" id="termsUnderstood">
-      <span>Gelesen und verstanden</span>
-    </label>
-  </div>
+<span class="taskLabel">Aufgabe D</span>
+<h2>Was hast du beobachtet?</h2><p class="phase2LockHint">Führe zuerst mindestens drei Runden in Aufgabe C durch.</p>
+<div class="taskQuestion reflectionPrompt">
+<strong>Denke über deine Runden nach.</strong>
+<p>Gehe dabei auf diese Fragen ein:</p>
+<ul>
+<li>Was ist passiert, wenn du viele Früchte genutzt hast?</li>
+<li>Was ist passiert, wenn du weniger Früchte genutzt hast?</li>
+<li>Wann konntest du dir auch zusätzliche Wünsche erfüllen – und wann nicht?</li>
+<li>Was konntest du beim Nachwachsen der Früchte nicht vorhersagen?</li>
+</ul>
+<textarea class="largeReflection" data-e-save="individualReflection" id="individualReflection"></textarea>
+</div>
+<button class="action compactAction" id="checkIndividualReflection" type="button">Reflexion speichern</button>
+<div class="theoryBox hidden" id="individualTheory">
+<strong>Vergleiche deine Beobachtungen mit dieser Erkenntnis:</strong>
+<p><strong>Nutzung heute beeinflusst Möglichkeiten morgen.</strong> Wie viele Früchte nachwachsen, ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.</p>
+<label class="understoodCheck">
+<input id="reflectionUnderstood" type="checkbox"/>
+<span>Das habe ich so verstanden.</span>
+</label>
+</div>
+<div class="theoryBox hidden" id="termsReveal1">
+<p>Bis jetzt hast du selbst entschieden, was du <strong>ganz sicher für ein gutes Leben brauchst</strong> und was du dir <strong>eher zusätzlich wünschst</strong>. Dabei ging es um deine persönliche Sicht.</p>
+<p>Nun schauen wir darauf, <strong>was Menschen allgemein brauchen, damit sie gut leben können</strong>. Dafür unterscheiden wir zwischen <strong>Needs</strong> und <strong>Desires</strong>.</p>
+<p><strong>Needs</strong> sind Dinge und Bedingungen, die für ein gutes Leben grundlegend sind. Dazu gehören zum Beispiel Nahrung, Wasser, Gesundheit, Bildung, Wohnen, soziale Beziehungen, Energie oder die Möglichkeit mitzubestimmen.</p>
+<label class="understoodCheck">
+<input id="termsPart1Understood" type="checkbox"/>
+<span>Gelesen und verstanden</span>
+</label>
+</div>
+<div class="theoryBox hidden" id="termsReveal2">
+<p><strong>Desires</strong> sind zusätzliche Wünsche. Sie können uns sehr wichtig sein, sind aber nicht dasselbe wie grundlegende Needs.</p>
+<p>Oft steckt hinter einem Desire ein Need: Ein bestimmtes Smartphone ist kein Need. Mit anderen Menschen in Kontakt sein zu können, kann dagegen einer sein.</p>
+<p>Was wir uns wünschen, wird auch von <strong>Werbung, sozialen Medien, Trends und unserem Umfeld</strong> beeinflusst. Dadurch kann sich ein Desire manchmal so wichtig anfühlen wie ein Need.</p>
+<p><strong>Desires sind nicht falsch oder schlecht.</strong> Die Unterscheidung wird besonders wichtig, wenn nicht alles gleichzeitig möglich ist.</p>
+<label class="understoodCheck">
+<input id="termsUnderstood" type="checkbox"/>
+<span>Gelesen und verstanden</span>
+</label>
+</div>
 </article>
 <article class="learnCard socialStart phase2Lockable phase2Locked" id="learn5">
-  <span class="taskLabel">Aufgabe E</span>
-  <h2>Jetzt arbeitet ihr zu zweit</h2><p class="phase2LockHint">Lies zuerst beide Erklärungen zu Needs und Desires und bestätige sie.</p>
-
-  <div class="taskInstruction partnerTaskCombined">
-    <p>Setzt euch zu zweit zusammen. Ihr seid Person A und Person B. Jede Person bekommt zwei vorgegebene Needs und zwei Desires. Besprecht zuerst, wie ihr die Früchte ernten wollt, und schreibt eure Abmachung hier auf. Entscheidet danach gemeinsam, wofür ihr in jeder Runde Früchte erntet. Für jede Sache braucht es zwei Früchte. Die Früchte reichen nicht immer für alles.</p>
-    <div class="labField partnerAgreementField">
-      <label for="groupRule">Eure Abmachung</label>
-      <textarea id="groupRule" data-e-save="groupRule" placeholder="Schreibt hier auf, wie ihr die Früchte ernten wollt."></textarea>
-      <button class="helpBtn" data-help="ruleHelp" type="button">?</button>
-      <div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Was ist euch beim Ernten wichtig? Was soll Person A bekommen, was Person B? Wann erntet ihr für Needs, wann für Desires?</div>
-    </div>
-  </div>
-
-  <div class="groupTreeRuleLayout">
-    <div class="groupTreeColumn">
-      <div class="socialStatus">
-        <strong>Am Baum: <span id="gTree">14</span>/14</strong>
-        <strong>Runde: <span id="gRound">1</span></strong>
-      </div>
-      <div class="pixelTree groupTree">
-        <div class="pixelCrown"></div>
-        <div class="pixelTrunk"></div>
-        <div id="groupFruitLayer"></div>
-      </div>
-    </div>
-  </div>
-
-  <button class="action secondary compactAction" id="newProfiles" type="button">Andere Needs und Desires</button>
-
-  <div class="allocationGrid">
-    <div>
-      <h3>Person A</h3>
-      <div id="allocA" class="allocList"></div>
-    </div>
-    <div>
-      <h3>Person B</h3>
-      <div id="allocB" class="allocList"></div>
-    </div>
-  </div>
-
-  <div class="roundActions">
-  <button class="action" id="gFinish" type="button">Gemeinsame Runde abschliessen</button>
-  <button class="action secondary" id="resetGroupRounds" type="button">Runden zurücksetzen</button>
+<span class="taskLabel">Aufgabe E</span>
+<h2>Jetzt arbeitet ihr zu zweit</h2><p class="phase2LockHint">Lies zuerst beide Erklärungen zu Needs und Desires und bestätige sie.</p>
+<div class="taskInstruction partnerTaskCombined">
+<p>Setzt euch zu zweit zusammen. Ihr seid Person A und Person B. Jede Person bekommt zwei vorgegebene Needs und zwei Desires. Besprecht zuerst, wie ihr die Früchte ernten wollt, und schreibt eure Abmachung hier auf. Entscheidet danach gemeinsam, wofür ihr in jeder Runde Früchte erntet. Für jede Sache braucht es zwei Früchte. Die Früchte reichen nicht immer für alles.</p>
+<div class="labField partnerAgreementField">
+<label for="groupRule">Eure Abmachung</label>
+<textarea data-e-save="groupRule" id="groupRule" placeholder="Schreibt hier auf, wie ihr die Früchte ernten wollt."></textarea>
+<button class="helpBtn" data-help="ruleHelp" type="button">?</button>
+<div class="helpBox" id="ruleHelp">Denkt zum Beispiel darüber nach: Was ist euch beim Ernten wichtig? Was soll Person A bekommen, was Person B? Wann erntet ihr für Needs, wann für Desires?</div>
+</div>
+</div>
+<div class="groupTreeRuleLayout">
+<div class="groupTreeColumn">
+<div class="socialStatus">
+<strong>Am Baum: <span id="gTree">14</span>/14</strong>
+<strong>Runde: <span id="gRound">1</span></strong>
+</div>
+<div class="pixelTree groupTree">
+<div class="pixelCrown"></div>
+<div class="pixelTrunk"></div>
+<div id="groupFruitLayer"></div>
+</div>
+</div>
+</div>
+<button class="action secondary compactAction" id="newProfiles" type="button">Andere Needs und Desires</button>
+<div class="allocationGrid">
+<div>
+<h3>Person A</h3>
+<div class="allocList" id="allocA"></div>
+</div>
+<div>
+<h3>Person B</h3>
+<div class="allocList" id="allocB"></div>
+</div>
+</div>
+<div class="roundActions">
+<button class="action" id="gFinish" type="button">Gemeinsame Runde abschliessen</button>
+<button class="action secondary" id="resetGroupRounds" type="button">Runden zurücksetzen</button>
 </div>
 </article>
 <article class="learnCard phase2Lockable phase2Locked" id="learn7">
-  <span class="taskLabel">Aufgabe F</span>
-  <h2>Was hat sich verändert?</h2><p class="phase2LockHint">Führt zuerst mindestens drei gemeinsame Runden in Aufgabe E durch.</p>
-  <div class="taskQuestion reflectionPrompt">
-    <strong>Denkt über eure gemeinsamen Runden nach.</strong>
-    <p>Geht dabei auf diese Fragen ein:</p>
-    <ul>
-      <li>War eure Verteilung für Person A und Person B gerecht? Warum?</li>
-      <li>Hat eure Abmachung funktioniert? Würdet ihr sie für weitere Runden beibehalten oder verändern? Warum?</li>
-    </ul>
-    <textarea id="groupReflection" data-e-save="groupReflection" class="largeReflection"></textarea>
-  </div>
+<span class="taskLabel">Aufgabe F</span>
+<h2>Was hat sich verändert?</h2><p class="phase2LockHint">Führt zuerst mindestens drei gemeinsame Runden in Aufgabe E durch.</p>
+<div class="taskQuestion reflectionPrompt">
+<strong>Denkt über eure gemeinsamen Runden nach.</strong>
+<p>Geht dabei auf diese Fragen ein:</p>
+<ul>
+<li>War eure Verteilung für Person A und Person B gerecht? Warum?</li>
+<li>Hat eure Abmachung funktioniert? Würdet ihr sie für weitere Runden beibehalten oder verändern? Warum?</li>
+</ul>
+<textarea class="largeReflection" data-e-save="groupReflection" id="groupReflection"></textarea>
+</div>
 </article>
 </section>
-<div class="learningGoalsShell"><details class="learningGoals">
-      <summary><span class="learningGoalsArrow" aria-hidden="true">›</span><strong>Lernziele</strong></summary>
-      <div class="learningGoalsBody"><ul>
-      <li>Ich kann unterscheiden, was Menschen für ein gutes Leben brauchen und was sie sich zusätzlich wünschen. Ich kenne dafür die Begriffe <strong>Needs</strong> und <strong>Desires</strong>.</li>
-      <li>Ich kann erklären, dass für ein gutes Leben natürliche und gesellschaftliche Voraussetzungen nötig sind.</li>
-      <li>Ich kann beschreiben, warum Entscheidungen heute die Möglichkeiten von Menschen später beeinflussen können.</li>
-    </ul></div>
-    </details></div>
 
 <div class="phaseNav bottomNav">
-  <button class="action secondary phaseNext" id="backToPhase1Bottom" data-t="nav.back">← Zurück</button>
-  <button class="action phaseNext" id="toPhase3" type="button">Was hat Novera mit der Erde zu tun? →</button>
+<button class="action secondary phaseNext" data-t="nav.back" id="backToPhase1Bottom">← Zurück</button>
+<button class="action phaseNext" id="toPhase3" type="button">Was hat Novera mit der Erde zu tun? →</button>
 </div></div>
-
-<div id="phase3" class="phaseView">
-  <section class="panel phase3TitleBlock">
-    <div class="phase3HeroPlaceholder">
-      <div><strong>Platzhalter für die Titelgrafik</strong>Blick von Novera auf die weit entfernte Erde</div>
-    </div>
-
-    <div class="phase3MissionCopy">
-      <span class="missionKicker">Deine Mission</span>
-      <h3>Herausfinden, was Novera mit der Erde zu tun hat</h3>
-      <p>Untersuche nun in einem Mystery die Frage: <strong>Was hat Novera mit der Erde zu tun?</strong> Bei einem Mystery arbeitest du mit verschiedenen Hinweisen. Du ordnest Karten, verbindest wichtige Zusammenhänge und entwickelst daraus eine eigene Erklärung. Es gibt nicht nur eine richtige Lösung.</p>
-    </div>
-  </section>
-
-  <section class="phase3Tasks">
-    <article class="taskCard phase3TaskCard" id="phase3TaskA">
-    <span class="taskLabel">Aufgabe A</span>
-    <h2>Mystery: Was hat Novera mit der Erde zu tun?</h2>
-
-    <div class="taskContent">
-      <p class="taskInstruction">
+<div class="phaseView" id="phase3">
+<section class="panel phase3TitleBlock">
+<div class="phase3HeroPlaceholder">
+<div><strong>Platzhalter für die Titelgrafik</strong>Blick von Novera auf die weit entfernte Erde</div>
+</div>
+<div class="phase3MissionCopy">
+<span class="missionKicker">Deine Mission</span>
+<h3>Herausfinden, was Novera mit der Erde zu tun hat</h3>
+<p>Untersuche nun in einem Mystery die Frage: <strong>Was hat Novera mit der Erde zu tun?</strong> Bei einem Mystery arbeitest du mit verschiedenen Hinweisen. Du ordnest Karten, verbindest wichtige Zusammenhänge und entwickelst daraus eine eigene Erklärung. Es gibt nicht nur eine richtige Lösung.</p>
+<div class="learningGoalsShell"><details class="learningGoals">
+<summary><span aria-hidden="true" class="learningGoalsArrow">›</span><strong>Lernziele</strong></summary>
+<div class="learningGoalsBody"><ul>
+<li>Ich kann erklären, warum ein gutes Leben für alle mit den Grenzen der Erde zusammenhängt.</li>
+<li>Ich kann beschreiben, warum Fragen zu Nutzung, Verteilung und Gerechtigkeit nicht einfach zu lösen sind.</li>
+<li>Ich kann verschiedene Zusammenhänge miteinander verbinden und begründen, warum es bei komplexen Fragen oft nicht nur eine richtige Antwort gibt.</li>
+</ul></div>
+</details></div></div>
+</section>
+<section class="phase3Tasks">
+<article class="taskCard phase3TaskCard" id="phase3TaskA">
+<span class="taskLabel">Aufgabe A</span>
+<h2>Mystery: Was hat Novera mit der Erde zu tun?</h2>
+<div class="taskContent">
+<p class="taskInstruction">
         Arbeitet in Gruppen von 2–4 Personen. Ordnet die Karten auf der Arbeitsfläche und verbindet wichtige Zusammenhänge. Baut daraus eine Erklärung zur Mystery-Frage. Ihr müsst nicht alle Karten verwenden oder alles miteinander verbinden. Einige gute Verbindungen reichen.
       </p>
-
-      <div class="mysteryGuide" id="mysteryGuide">
-        <strong>ⓘ Hinweis</strong>
-        <ul>
-          <li>Arbeitsfläche: frei verschieben; mit Mausrad oder zwei Fingern zoomen.</li>
-          <li>Zuordnung wählen: Die Kartenfarbe zeigt die Kategorie. Die Legende erklärt die Farben.</li>
-          <li>Zwei Punkte antippen: Karten verbinden. Linie antippen: beschriften oder löschen.</li>
-        </ul>
-        <div class="mysteryLegend" id="mysteryLegend"></div>
-      </div>
-
-      <div class="mysteryWorkspaceShell" id="mysteryWorkspaceShell">
-        <div class="mysteryToolbar" aria-label="Mystery-Werkzeuge">
-        <button class="action secondary compactAction" id="showNextMysteryCard" type="button">+ Karte</button>
-        <button class="action secondary compactAction" id="toggleOwnMysteryCard" type="button">Eigene Karte</button>
-        <button class="action secondary compactAction" id="clearMysteryBoard" type="button">Leeren</button>
-        <button class="action secondary compactAction mysterySymbolBtn" type="button" data-pan="reset" id="mysteryHome" aria-label="Ansicht zentrieren" title="Ansicht zentrieren">◎</button>
-        <button class="action secondary compactAction mysterySymbolBtn" type="button" id="toggleMysteryFullscreen" aria-label="Vollbild" title="Vollbild">⤢</button>
-      </div>
-        <div class="mysteryOwnCardOverlay hidden" id="mysteryOwnCardCreator" role="dialog" aria-modal="true" aria-labelledby="mysteryOwnCardTitle">
-      <div class="mysteryOwnCardDialog">
-        <button class="commentClose mysteryOwnCardClose" id="closeOwnMysteryCard" type="button" aria-label="Eigene Karte schliessen">Schliessen</button>
-        <h3 id="mysteryOwnCardTitle">Eigene Karte</h3>
-        <label for="mysteryOwnCardText">Schreibt eure eigene Idee oder einen wichtigen Zusammenhang auf.</label>
-        <textarea id="mysteryOwnCardText" placeholder="Eigene Idee …"></textarea>
-        <button class="action compactAction" id="createOwnMysteryCard" type="button">Karte erstellen</button>
-      </div>
-    </div>
-        <div class="mysteryBoardScroller" id="mysteryViewport">
-      <div class="mysteryBoardStage" id="mysteryStage">
-        <div class="mysteryBoard" id="mysteryBoard">
-          <svg id="mysteryLines" viewBox="0 0 10000 10000" preserveAspectRatio="none" aria-hidden="true"></svg>
-        <article class="mysteryCard" data-card-id="1" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="4" y="15" width="8" height="8" fill="#d85846"/><rect x="7" y="11" width="3" height="4" fill="#4e9d4b"/><rect x="16" y="12" width="10" height="10" fill="#e7bb3f"/><rect x="19" y="9" width="4" height="3" fill="#4e9d4b"/></svg></div>
-        <div class="mysteryCardTitle">Needs auf der Erde</div>
-      </div>
-      <p class="mysteryCardText">Auch auf der Erde brauchen Menschen Dinge, ohne die ein gutes Leben kaum möglich ist – zum Beispiel Nahrung, sauberes Wasser, Schutz oder medizinische Hilfe. Auf Novera habt ihr solche Dinge als Needs kennengelernt.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryGuide" id="mysteryGuide">
+<strong>ⓘ Hinweis</strong>
+<ul>
+<li>Arbeitsfläche: frei verschieben; mit Mausrad oder zwei Fingern zoomen.</li>
+<li>Zuordnung wählen: Die Kartenfarbe zeigt die Kategorie. Die Legende erklärt die Farben.</li>
+<li>Zwei Punkte antippen: Karten verbinden. Linie antippen: beschriften oder löschen.</li>
+</ul>
+<div class="mysteryLegend" id="mysteryLegend"></div>
+</div>
+<div class="mysteryWorkspaceShell" id="mysteryWorkspaceShell">
+<div aria-label="Mystery-Werkzeuge" class="mysteryToolbar">
+<button class="action secondary compactAction" id="showNextMysteryCard" type="button">+ Karte</button>
+<button class="action secondary compactAction" id="toggleOwnMysteryCard" type="button">Eigene Karte</button>
+<button class="action secondary compactAction" id="clearMysteryBoard" type="button">Leeren</button>
+<button aria-label="Ansicht zentrieren" class="action secondary compactAction mysterySymbolBtn" data-pan="reset" id="mysteryHome" title="Ansicht zentrieren" type="button">◎</button>
+<button aria-label="Vollbild" class="action secondary compactAction mysterySymbolBtn" id="toggleMysteryFullscreen" title="Vollbild" type="button">⤢</button>
+</div>
+<div aria-labelledby="mysteryOwnCardTitle" aria-modal="true" class="mysteryOwnCardOverlay hidden" id="mysteryOwnCardCreator" role="dialog">
+<div class="mysteryOwnCardDialog">
+<button aria-label="Eigene Karte schliessen" class="commentClose mysteryOwnCardClose" id="closeOwnMysteryCard" type="button">Schliessen</button>
+<h3 id="mysteryOwnCardTitle">Eigene Karte</h3>
+<label for="mysteryOwnCardText">Schreibt eure eigene Idee oder einen wichtigen Zusammenhang auf.</label>
+<textarea id="mysteryOwnCardText" placeholder="Eigene Idee …"></textarea>
+<button class="action compactAction" id="createOwnMysteryCard" type="button">Karte erstellen</button>
+</div>
+</div>
+<div class="mysteryBoardScroller" id="mysteryViewport">
+<div class="mysteryBoardStage" id="mysteryStage">
+<div class="mysteryBoard" id="mysteryBoard">
+<svg aria-hidden="true" id="mysteryLines" preserveaspectratio="none" viewbox="0 0 10000 10000"></svg>
+<article class="mysteryCard" data-card-id="1" data-extra="0">
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#d85846" height="8" width="8" x="4" y="15"></rect><rect fill="#4e9d4b" height="4" width="3" x="7" y="11"></rect><rect fill="#e7bb3f" height="10" width="10" x="16" y="12"></rect><rect fill="#4e9d4b" height="3" width="4" x="19" y="9"></rect></svg></div>
+<div class="mysteryCardTitle">Needs auf der Erde</div>
+</div>
+<p class="mysteryCardText">Auch auf der Erde brauchen Menschen Dinge, ohne die ein gutes Leben kaum möglich ist – zum Beispiel Nahrung, sauberes Wasser, Schutz oder medizinische Hilfe. Auf Novera habt ihr solche Dinge als Needs kennengelernt.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="2" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="14" y="4" width="4" height="5" fill="#51afe0"/><rect x="11" y="9" width="10" height="5" fill="#51afe0"/><rect x="8" y="14" width="16" height="8" fill="#51afe0"/><rect x="11" y="22" width="10" height="4" fill="#51afe0"/></svg></div>
-        <div class="mysteryCardTitle">Desires auf der Erde</div>
-      </div>
-      <p class="mysteryCardText">Auch auf der Erde wünschen sich Menschen Dinge, die über grundlegende Bedürfnisse hinausgehen. Solche Desires können sehr verschieden sein und sich durch Werbung, Trends oder das Umfeld verändern.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#51afe0" height="5" width="4" x="14" y="4"></rect><rect fill="#51afe0" height="5" width="10" x="11" y="9"></rect><rect fill="#51afe0" height="8" width="16" x="8" y="14"></rect><rect fill="#51afe0" height="4" width="10" x="11" y="22"></rect></svg></div>
+<div class="mysteryCardTitle">Desires auf der Erde</div>
+</div>
+<p class="mysteryCardText">Auch auf der Erde wünschen sich Menschen Dinge, die über grundlegende Bedürfnisse hinausgehen. Solche Desires können sehr verschieden sein und sich durch Werbung, Trends oder das Umfeld verändern.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="3" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="7" height="7" fill="#efb17b"/><rect x="4" y="15" width="9" height="11" fill="#5b7dc6"/><rect x="20" y="8" width="7" height="7" fill="#d79d72"/><rect x="19" y="15" width="9" height="11" fill="#5ca66f"/></svg></div>
-        <div class="mysteryCardTitle">Ein gutes Leben braucht mehr als Dinge</div>
-      </div>
-      <p class="mysteryCardText">Auf der Erde hängt ein gutes Leben nicht nur von Besitz ab. Gesundheit, Beziehungen, Sicherheit, Bildung und Mitbestimmung spielen ebenfalls eine wichtige Rolle.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#efb17b" height="7" width="7" x="5" y="8"></rect><rect fill="#5b7dc6" height="11" width="9" x="4" y="15"></rect><rect fill="#d79d72" height="7" width="7" x="20" y="8"></rect><rect fill="#5ca66f" height="11" width="9" x="19" y="15"></rect></svg></div>
+<div class="mysteryCardTitle">Ein gutes Leben braucht mehr als Dinge</div>
+</div>
+<p class="mysteryCardText">Auf der Erde hängt ein gutes Leben nicht nur von Besitz ab. Gesundheit, Beziehungen, Sicherheit, Bildung und Mitbestimmung spielen ebenfalls eine wichtige Rolle.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="4" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="7" y="11" width="18" height="15" fill="#df5969"/><rect x="5" y="9" width="22" height="5" fill="#ef7c89"/><rect x="14" y="8" width="4" height="18" fill="#f0d36b"/><rect x="9" y="6" width="5" height="5" fill="#ef7c89"/><rect x="18" y="6" width="5" height="5" fill="#ef7c89"/></svg></div>
-        <div class="mysteryCardTitle">Ein Need kann verschieden erfüllt werden</div>
-      </div>
-      <p class="mysteryCardText">Auf der Erde kann ein Need auf verschiedene Arten erfüllt werden. Wer mobil sein möchte, braucht zum Beispiel nicht zwingend ein eigenes Auto – auch Bus, Zug oder Fahrrad können Mobilität ermöglichen.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#df5969" height="15" width="18" x="7" y="11"></rect><rect fill="#ef7c89" height="5" width="22" x="5" y="9"></rect><rect fill="#f0d36b" height="18" width="4" x="14" y="8"></rect><rect fill="#ef7c89" height="5" width="5" x="9" y="6"></rect><rect fill="#ef7c89" height="5" width="5" x="18" y="6"></rect></svg></div>
+<div class="mysteryCardTitle">Ein Need kann verschieden erfüllt werden</div>
+</div>
+<p class="mysteryCardText">Auf der Erde kann ein Need auf verschiedene Arten erfüllt werden. Wer mobil sein möchte, braucht zum Beispiel nicht zwingend ein eigenes Auto – auch Bus, Zug oder Fahrrad können Mobilität ermöglichen.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="5" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="14" width="11" height="10" fill="#4d9b50"/><rect x="8" y="10" width="6" height="8" fill="#4d9b50"/><rect x="10" y="23" width="3" height="5" fill="#78543a"/><rect x="18" y="12" width="11" height="11" fill="#67ab63"/><rect x="21" y="8" width="6" height="8" fill="#67ab63"/><rect x="23" y="22" width="3" height="6" fill="#78543a"/></svg></div>
-        <div class="mysteryCardTitle">Was sich erneuert, braucht Zeit</div>
-      </div>
-      <p class="mysteryCardText">Auf der Erde können sich manche Vorräte und Lebensräume erneuern. Das braucht Zeit. Zum Beispiel wächst ein abgeholzter Wald nicht in einer Nacht wieder nach.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#4d9b50" height="10" width="11" x="5" y="14"></rect><rect fill="#4d9b50" height="8" width="6" x="8" y="10"></rect><rect fill="#78543a" height="5" width="3" x="10" y="23"></rect><rect fill="#67ab63" height="11" width="11" x="18" y="12"></rect><rect fill="#67ab63" height="8" width="6" x="21" y="8"></rect><rect fill="#78543a" height="6" width="3" x="23" y="22"></rect></svg></div>
+<div class="mysteryCardTitle">Was sich erneuert, braucht Zeit</div>
+</div>
+<p class="mysteryCardText">Auf der Erde können sich manche Vorräte und Lebensräume erneuern. Das braucht Zeit. Zum Beispiel wächst ein abgeholzter Wald nicht in einer Nacht wieder nach.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="6" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="7" y="12" width="16" height="10" fill="#4ba8d8"/><rect x="3" y="15" width="6" height="5" fill="#4ba8d8"/><rect x="23" y="14" width="5" height="6" fill="#4ba8d8"/><rect x="11" y="14" width="2" height="2" fill="#142433"/></svg></div>
-        <div class="mysteryCardTitle">Nutzung kann schneller sein als Erholung</div>
-      </div>
-      <p class="mysteryCardText">Menschen können auf der Erde mehr nutzen, als in derselben Zeit wieder entsteht. Zum Beispiel können Fischbestände schrumpfen, wenn dauerhaft mehr Fische gefangen werden, als Nachwuchs entsteht.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#4ba8d8" height="10" width="16" x="7" y="12"></rect><rect fill="#4ba8d8" height="5" width="6" x="3" y="15"></rect><rect fill="#4ba8d8" height="6" width="5" x="23" y="14"></rect><rect fill="#142433" height="2" width="2" x="11" y="14"></rect></svg></div>
+<div class="mysteryCardTitle">Nutzung kann schneller sein als Erholung</div>
+</div>
+<p class="mysteryCardText">Menschen können auf der Erde mehr nutzen, als in derselben Zeit wieder entsteht. Zum Beispiel können Fischbestände schrumpfen, wenn dauerhaft mehr Fische gefangen werden, als Nachwuchs entsteht.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="7" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="4" y="18" width="6" height="10" fill="#595959"/><rect x="12" y="13" width="6" height="15" fill="#777"/><rect x="20" y="8" width="6" height="20" fill="#969696"/><rect x="6" y="10" width="6" height="5" fill="#c6c8cc"/><rect x="10" y="7" width="8" height="6" fill="#dadbde"/></svg></div>
-        <div class="mysteryCardTitle">Auch die Erde hat Grenzen</div>
-      </div>
-      <p class="mysteryCardText">Auch auf der Erde kann nicht jede Belastung beliebig wachsen. Forschende untersuchen unter dem Begriff «planetare Grenzen», wie stark wichtige Bereiche wie Klima, Wasser, Land und Artenvielfalt verändert werden können, bevor Risiken deutlich steigen.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#595959" height="10" width="6" x="4" y="18"></rect><rect fill="#777" height="15" width="6" x="12" y="13"></rect><rect fill="#969696" height="20" width="6" x="20" y="8"></rect><rect fill="#c6c8cc" height="5" width="6" x="6" y="10"></rect><rect fill="#dadbde" height="6" width="8" x="10" y="7"></rect></svg></div>
+<div class="mysteryCardTitle">Auch die Erde hat Grenzen</div>
+</div>
+<p class="mysteryCardText">Auch auf der Erde kann nicht jede Belastung beliebig wachsen. Forschende untersuchen unter dem Begriff «planetare Grenzen», wie stark wichtige Bereiche wie Klima, Wasser, Land und Artenvielfalt verändert werden können, bevor Risiken deutlich steigen.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="8" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="4" y="20" width="5" height="8" fill="#e1b83e"/><rect x="12" y="15" width="5" height="13" fill="#df844c"/><rect x="20" y="8" width="5" height="20" fill="#5ca261"/><rect x="3" y="27" width="24" height="2" fill="#333"/></svg></div>
-        <div class="mysteryCardTitle">Grenzen der Erde hängen zusammen</div>
-      </div>
-      <p class="mysteryCardText">Auf der Erde beeinflussen sich verschiedene Bereiche gegenseitig. Steigende Temperaturen können zum Beispiel Arten unter Druck setzen; mehr CO₂ verändert zusätzlich die Ozeane. Probleme bleiben deshalb selten auf einen Bereich beschränkt.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#e1b83e" height="8" width="5" x="4" y="20"></rect><rect fill="#df844c" height="13" width="5" x="12" y="15"></rect><rect fill="#5ca261" height="20" width="5" x="20" y="8"></rect><rect fill="#333" height="2" width="24" x="3" y="27"></rect></svg></div>
+<div class="mysteryCardTitle">Grenzen der Erde hängen zusammen</div>
+</div>
+<p class="mysteryCardText">Auf der Erde beeinflussen sich verschiedene Bereiche gegenseitig. Steigende Temperaturen können zum Beispiel Arten unter Druck setzen; mehr CO₂ verändert zusätzlich die Ozeane. Probleme bleiben deshalb selten auf einen Bereich beschränkt.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="9" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="7" y="14" width="18" height="13" fill="#d7885d"/><rect x="5" y="11" width="22" height="5" fill="#935146"/><rect x="13" y="19" width="6" height="8" fill="#6f4d3d"/><rect x="21" y="18" width="3" height="4" fill="#78b9dc"/></svg></div>
-        <div class="mysteryCardTitle">Kipppunkte können Veränderungen verstärken</div>
-      </div>
-      <p class="mysteryCardText">Manche Veränderungen auf der Erde können ab einer bestimmten Schwelle sehr schwer rückgängig zu machen sein. Solche Schwellen nennt man Kipppunkte. Danach kann eine weitere kleine Veränderung grosse Folgen auslösen.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg aria-hidden="true" viewbox="0 0 32 32">
+<rect fill="#D98B5F" height="4" transform="rotate(-12 16 15)" width="22" x="5" y="13"></rect>
+<polygon fill="#674087" points="16,17 11,25 21,25"></polygon>
+<circle cx="7" cy="10" fill="#5DB7DE" r="3"></circle>
+<circle cx="25" cy="20" fill="#F4C84A" r="3"></circle>
+</svg></div>
+<div class="mysteryCardTitle">Kipppunkte können Veränderungen verstärken</div>
+</div>
+<p class="mysteryCardText">Manche Veränderungen auf der Erde können ab einer bestimmten Schwelle sehr schwer rückgängig zu machen sein. Solche Schwellen nennt man Kipppunkte. Danach kann eine weitere kleine Veränderung grosse Folgen auslösen.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="10" data-extra="0">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="8" y="10" width="16" height="12" fill="#d77755"/><rect x="6" y="8" width="20" height="4" fill="#914b40"/><rect x="4" y="22" width="24" height="3" fill="#4ca9df"/><rect x="7" y="26" width="19" height="2" fill="#4ca9df"/></svg></div>
-        <div class="mysteryCardTitle">Folgen treffen Menschen unterschiedlich</div>
-      </div>
-      <p class="mysteryCardText">Auf der Erde sind Menschen nicht gleich stark von Hitze, Überschwemmungen oder Ernteausfällen betroffen. Geld, Wohnort, Gesundheit, Infrastruktur und politische Unterstützung beeinflussen, wie gut Menschen sich schützen können.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#d77755" height="12" width="16" x="8" y="10"></rect><rect fill="#914b40" height="4" width="20" x="6" y="8"></rect><rect fill="#4ca9df" height="3" width="24" x="4" y="22"></rect><rect fill="#4ca9df" height="2" width="19" x="7" y="26"></rect></svg></div>
+<div class="mysteryCardTitle">Folgen treffen Menschen unterschiedlich</div>
+</div>
+<p class="mysteryCardText">Auf der Erde sind Menschen nicht gleich stark von Hitze, Überschwemmungen oder Ernteausfällen betroffen. Geld, Wohnort, Gesundheit, Infrastruktur und politische Unterstützung beeinflussen, wie gut Menschen sich schützen können.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="101" data-extra="1">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="8" height="20" fill="#98a9b5"/><rect x="19" y="11" width="8" height="16" fill="#7894a6"/><rect x="14" y="20" width="4" height="7" fill="#4e6f83"/></svg></div>
-        <div class="mysteryCardTitle">Nicht alles ist eine persönliche Entscheidung</div>
-      </div>
-      <p class="mysteryCardText">Auf der Erde hängen Möglichkeiten auch von Strassen, öffentlichem Verkehr, Energieversorgung, Preisen, Gesetzen und Unternehmen ab. Deshalb entstehen Veränderungen nicht nur durch einzelne Konsumentscheidungen.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#98a9b5" height="20" width="8" x="5" y="7"></rect><rect fill="#7894a6" height="16" width="8" x="19" y="11"></rect><rect fill="#4e6f83" height="7" width="4" x="14" y="20"></rect></svg></div>
+<div class="mysteryCardTitle">Nicht alles ist eine persönliche Entscheidung</div>
+</div>
+<p class="mysteryCardText">Auf der Erde hängen Möglichkeiten auch von Strassen, öffentlichem Verkehr, Energieversorgung, Preisen, Gesetzen und Unternehmen ab. Deshalb entstehen Veränderungen nicht nur durch einzelne Konsumentscheidungen.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="102" data-extra="1">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="15" y="5" width="2" height="21" fill="#6f5b39"/><rect x="8" y="9" width="16" height="2" fill="#6f5b39"/><rect x="3" y="18" width="10" height="3" fill="#e1b84f"/><rect x="19" y="18" width="10" height="3" fill="#e1b84f"/></svg></div>
-        <div class="mysteryCardTitle">Wer nutzt wie viel?</div>
-      </div>
-      <p class="mysteryCardText">Menschen und Länder nutzen auf der Erde sehr unterschiedlich viel Energie und Rohstoffe und verursachen unterschiedlich viele Emissionen. Gleichzeitig sind die Folgen von Umweltveränderungen ungleich verteilt.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg aria-hidden="true" viewbox="0 0 32 32">
+<rect fill="#5DB7DE" height="4" width="8" x="12" y="5"></rect>
+<rect fill="#5DB7DE" height="8" width="5" x="18" y="8"></rect>
+<rect fill="#5DB7DE" height="5" width="5" x="14" y="15"></rect>
+<rect fill="#674087" height="5" width="6" x="13" y="24"></rect>
+</svg></div>
+<div class="mysteryCardTitle">Wer nutzt wie viel?</div>
+</div>
+<p class="mysteryCardText">Menschen und Länder nutzen auf der Erde sehr unterschiedlich viel Energie und Rohstoffe und verursachen unterschiedlich viele Emissionen. Gleichzeitig sind die Folgen von Umweltveränderungen ungleich verteilt.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="103" data-extra="1">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="5" y="14" width="22" height="9" fill="#4d87cc"/><rect x="9" y="10" width="13" height="5" fill="#6fa4dc"/><rect x="8" y="22" width="5" height="5" fill="#333"/><rect x="20" y="22" width="5" height="5" fill="#333"/></svg></div>
-        <div class="mysteryCardTitle">Wer trägt wie viel Verantwortung?</div>
-      </div>
-      <p class="mysteryCardText">Bei der Frage nach Gerechtigkeit spielt nicht nur eine Rolle, wer betroffen ist. Auch wer besonders viel zu einer Belastung beigetragen hat und wer Möglichkeiten zur Veränderung besitzt, kann wichtig sein.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#4d87cc" height="9" width="22" x="5" y="14"></rect><rect fill="#6fa4dc" height="5" width="13" x="9" y="10"></rect><rect fill="#333" height="5" width="5" x="8" y="22"></rect><rect fill="#333" height="5" width="5" x="20" y="22"></rect></svg></div>
+<div class="mysteryCardTitle">Wer trägt wie viel Verantwortung?</div>
+</div>
+<p class="mysteryCardText">Bei der Frage nach Gerechtigkeit spielt nicht nur eine Rolle, wer betroffen ist. Auch wer besonders viel zu einer Belastung beigetragen hat und wer Möglichkeiten zur Veränderung besitzt, kann wichtig sein.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="104" data-extra="1">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="8" y="5" width="16" height="22" fill="#4b9bd3"/><rect x="5" y="9" width="22" height="14" fill="#4b9bd3"/><rect x="10" y="8" width="5" height="6" fill="#65a85d"/><rect x="18" y="15" width="6" height="6" fill="#65a85d"/></svg></div>
-        <div class="mysteryCardTitle">Die Erde liefert wichtige Lebensgrundlagen</div>
-      </div>
-      <p class="mysteryCardText">Menschen auf der Erde sind auf Wasser, fruchtbare Böden, Nahrung, ein stabiles Klima und funktionierende Lebensräume angewiesen. Werden diese Grundlagen stark verändert, wirkt sich das auch auf Gesundheit und Versorgung aus.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#4b9bd3" height="22" width="16" x="8" y="5"></rect><rect fill="#4b9bd3" height="14" width="22" x="5" y="9"></rect><rect fill="#65a85d" height="6" width="5" x="10" y="8"></rect><rect fill="#65a85d" height="6" width="6" x="18" y="15"></rect></svg></div>
+<div class="mysteryCardTitle">Die Erde liefert wichtige Lebensgrundlagen</div>
+</div>
+<p class="mysteryCardText">Menschen auf der Erde sind auf Wasser, fruchtbare Böden, Nahrung, ein stabiles Klima und funktionierende Lebensräume angewiesen. Werden diese Grundlagen stark verändert, wirkt sich das auch auf Gesundheit und Versorgung aus.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="105" data-extra="1">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="4" y="20" width="5" height="8" fill="#e1b83e"/><rect x="12" y="15" width="5" height="13" fill="#df844c"/><rect x="20" y="8" width="5" height="20" fill="#5ca261"/><rect x="3" y="27" width="24" height="2" fill="#333"/></svg></div>
-        <div class="mysteryCardTitle">Gesellschaft kann Möglichkeiten verändern</div>
-      </div>
-      <p class="mysteryCardText">Auf der Erde können Politik und Gesellschaft Rahmenbedingungen verändern – zum Beispiel durch öffentlichen Verkehr, Energieversorgung, Regeln oder neue Technik. Dadurch ändern sich auch die Möglichkeiten einzelner Menschen.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#e1b83e" height="8" width="5" x="4" y="20"></rect><rect fill="#df844c" height="13" width="5" x="12" y="15"></rect><rect fill="#5ca261" height="20" width="5" x="20" y="8"></rect><rect fill="#333" height="2" width="24" x="3" y="27"></rect></svg></div>
+<div class="mysteryCardTitle">Gesellschaft kann Möglichkeiten verändern</div>
+</div>
+<p class="mysteryCardText">Auf der Erde können Politik und Gesellschaft Rahmenbedingungen verändern – zum Beispiel durch öffentlichen Verkehr, Energieversorgung, Regeln oder neue Technik. Dadurch ändern sich auch die Möglichkeiten einzelner Menschen.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
 <article class="mysteryCard" data-card-id="106" data-extra="1">
-      <div class="mysteryCardHeader">
-        <div class="mysteryCardIcon"><svg viewBox="0 0 32 32"><rect x="8" y="10" width="16" height="12" fill="#d77755"/><rect x="6" y="8" width="20" height="4" fill="#914b40"/><rect x="4" y="22" width="24" height="3" fill="#4ca9df"/><rect x="7" y="26" width="19" height="2" fill="#4ca9df"/></svg></div>
-        <div class="mysteryCardTitle">Novera zeigt nur einen Teil der Wirklichkeit</div>
-      </div>
-      <p class="mysteryCardText">Der magische Baum auf Novera zeigt eine einfache Idee: Nutzung heute kann Möglichkeiten morgen beeinflussen. Auf der Erde sind die Zusammenhänge aber viel komplexer, weil viele Prozesse gleichzeitig wirken und miteinander verbunden sind.</p>
-      <div class="mysteryCardBottom">
-        <select class="mysteryCardCategory" aria-label="Kategorie auswählen"></select>
-        <button class="mysteryConnectDot" type="button" aria-label="Karte für Verbindung auswählen"></button>
-      </div>
-    </article>
-        </div>
-      </div>
-    </div>
-      </div>
-
-      <div class="taskQuestion mysteryReflectionBox">
-        <label for="mysteryAnswer"><strong>Unsere Antwort auf die Mystery-Frage</strong></label>
-        <p>Was hat Novera mit einem guten Leben auf der Erde zu tun? Schreibt eure wichtigsten Zusammenhänge in wenigen Sätzen auf. Eure Antwort muss nicht alles erklären.</p>
-        <textarea id="mysteryAnswer" placeholder="Unsere Antwort …"></textarea>
-      </div>
-
-      <div class="mysteryQuestionReflection mysteryReflectionBox">
-        <label for="mysteryQuestion"><strong>Fragen, die bei uns entstanden sind</strong></label>
-        <p>Ihr müsst nicht auf alles eine Antwort haben. Welche Fragen sind bei euch entstanden? Was habt ihr euch beim Arbeiten gefragt?</p>
-        <textarea id="mysteryQuestion" placeholder="Unsere offenen Fragen …"></textarea>
-      </div>
-
-      <div class="mysteryClassNote">
-        <strong>ⓘ Hinweis</strong>
-        <p>Wie ihr eure Lösung und eure offenen Fragen in der Klasse weiterverwendet, besprecht ihr mit eurer Lehrperson.</p>
-      </div>
-
-      <button class="action compactAction" id="finishMysteryTask" type="button">Aufgabe abschliessen</button>
-    </div>
-  </article>
-
-    <article class="taskCard phase3TaskCard phase3Lockable phase3Locked" id="modelTask">
-    <span class="taskLabel">Aufgabe B</span>
-    <h2>Novera – ein Modell</h2>
-    <p class="phase3LockHint">Beende zuerst Aufgabe A.</p>
-
-    <div class="phase3TaskBody">
-      <div class="theoryBox hidden" id="modelExplanation">
-        <p>Die Fantasiewelt Novera und der magische Baum sind <strong>Modelle</strong>. Ein Modell zeigt einen Ausschnitt der Wirklichkeit vereinfacht. So lassen sich bestimmte Zusammenhänge leichter erkennen.</p>
-        <p>Modelle haben aber Grenzen: Sie lassen vieles weg. Der Baum zeigt zum Beispiel, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann. Er zeigt aber nicht, wie die vielen Vorgänge auf der Erde genau ablaufen.</p>
-        <p>Darum ist wichtig zu fragen: <strong>Was kann das Modell zeigen – und was nicht?</strong></p>
-        <label class="understoodCheck">
-          <input type="checkbox" id="modelExplanationUnderstood">
-          <span>Gelesen und verstanden</span>
-        </label>
-      </div>
-
-      <p class="taskInstruction">
+<div class="mysteryCardHeader">
+<div class="mysteryCardIcon"><svg aria-hidden="true" viewbox="0 0 32 32">
+<rect fill="#674087" height="9" width="5" x="14" y="19"></rect>
+<rect fill="#263D73" height="10" width="18" x="7" y="11"></rect>
+<rect fill="#315184" height="7" width="12" x="10" y="7"></rect>
+<rect fill="#315184" height="7" width="7" x="6" y="15"></rect>
+<rect fill="#315184" height="7" width="6" x="21" y="14"></rect>
+<rect fill="#F4C84A" height="3" width="3" x="9" y="12"></rect>
+<rect fill="#F4C84A" height="3" width="3" x="18" y="10"></rect>
+<polygon fill="#5DB7DE" points="16,24 20,28 16,31 12,28"></polygon>
+</svg></div>
+<div class="mysteryCardTitle">Novera zeigt nur einen Teil der Wirklichkeit</div>
+</div>
+<p class="mysteryCardText">Der magische Baum auf Novera zeigt eine einfache Idee: Nutzung heute kann Möglichkeiten morgen beeinflussen. Auf der Erde sind die Zusammenhänge aber viel komplexer, weil viele Prozesse gleichzeitig wirken und miteinander verbunden sind.</p>
+<div class="mysteryCardBottom">
+<select aria-label="Kategorie auswählen" class="mysteryCardCategory"></select>
+<button aria-label="Karte für Verbindung auswählen" class="mysteryConnectDot" type="button"></button>
+</div>
+</article>
+</div>
+</div>
+</div>
+</div>
+<div class="taskQuestion mysteryReflectionBox">
+<label for="mysteryAnswer"><strong>Unsere Antwort auf die Mystery-Frage</strong></label>
+<p>Was hat Novera mit einem guten Leben auf der Erde zu tun? Schreibt eure wichtigsten Zusammenhänge in wenigen Sätzen auf. Eure Antwort muss nicht alles erklären.</p>
+<textarea id="mysteryAnswer" placeholder="Unsere Antwort …"></textarea>
+</div>
+<div class="mysteryQuestionReflection mysteryReflectionBox">
+<label for="mysteryQuestion"><strong>Fragen, die bei uns entstanden sind</strong></label>
+<p>Ihr müsst nicht auf alles eine Antwort haben. Welche Fragen sind bei euch entstanden? Was habt ihr euch beim Arbeiten gefragt?</p>
+<textarea id="mysteryQuestion" placeholder="Unsere offenen Fragen …"></textarea>
+</div>
+<div class="mysteryClassNote">
+<strong>ⓘ Hinweis</strong>
+<p>Wie ihr eure Lösung und eure offenen Fragen in der Klasse weiterverwendet, besprecht ihr mit eurer Lehrperson.</p>
+</div>
+<button class="action compactAction" id="finishMysteryTask" type="button">Aufgabe abschliessen</button>
+</div>
+</article>
+<article class="taskCard phase3TaskCard phase3Lockable phase3Locked" id="modelTask">
+<span class="taskLabel">Aufgabe B</span>
+<h2>Novera – ein Modell</h2>
+<p class="phase3LockHint">Beende zuerst Aufgabe A.</p>
+<div class="phase3TaskBody">
+<div class="theoryBox hidden" id="modelExplanation">
+<p>Die Fantasiewelt Novera und der magische Baum sind <strong>Modelle</strong>. Ein Modell zeigt einen Ausschnitt der Wirklichkeit vereinfacht. So lassen sich bestimmte Zusammenhänge leichter erkennen.</p>
+<p>Modelle haben aber Grenzen: Sie lassen vieles weg. Der Baum zeigt zum Beispiel, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann. Er zeigt aber nicht, wie die vielen Vorgänge auf der Erde genau ablaufen.</p>
+<p>Darum ist wichtig zu fragen: <strong>Was kann das Modell zeigen – und was nicht?</strong></p>
+<label class="understoodCheck">
+<input id="modelExplanationUnderstood" type="checkbox"/>
+<span>Gelesen und verstanden</span>
+</label>
+</div>
+<p class="taskInstruction">
         Entscheide bei jeder Aussage: Kann Novera das zeigen oder nicht? Prüfe danach deine Antworten.
       </p>
+<div class="modelQuizTableWrap">
+<table class="modelQuizTable">
+<thead>
+<tr>
+<th>Aussage</th>
+<th>Ja</th>
+<th>Nein</th>
+</tr>
+</thead>
+<tbody>
+<tr class="modelQuizRow" data-correct="yes">
+<td>
+<span>Der Baum zeigt, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz1" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz1" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="yes">
+<td>
+<span>Novera kann helfen, über Needs und Desires nachzudenken.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz3" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz3" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="no">
+<td>
+<span>Der Baum zeigt genau, wie schnell sich Wälder, Fischbestände oder Böden auf der Erde erholen.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz2" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz2" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="yes">
+<td>
+<span>Novera kann zeigen, dass nicht alles gleichzeitig erfüllt werden kann.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz5" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz5" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="no">
+<td>
+<span>Novera zeigt genau, was jeder Mensch für ein gutes Leben braucht.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz4" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz4" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="no">
+<td>
+<span>Der Baum zeigt alle wichtigen Zusammenhänge des Erdsystems.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz6" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz6" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="yes">
+<td>
+<span>Novera kann helfen, über Verteilung und Gerechtigkeit zu sprechen.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz7" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz7" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="no">
+<td>
+<span>Die Fruchtzahl zeigt, wie viele Rohstoffe es auf der Erde wirklich gibt.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz8" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz8" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="yes">
+<td>
+<span>Novera kann helfen, Folgen von Entscheidungen über mehrere Runden zu beobachten.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz9" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz9" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="yes">
+<td>
+<span>Ein Modell kann etwas verständlicher machen, obwohl es die Wirklichkeit vereinfacht.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz11" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz11" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="no">
+<td>
+<span>Aus Novera kann man direkt ablesen, welche Lösung für die Erde richtig ist.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz10" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz10" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+<tr class="modelQuizRow" data-correct="no">
+<td>
+<span>Ein Modell ist nur dann nützlich, wenn es die Wirklichkeit vollständig abbildet.</span>
+<div aria-live="polite" class="modelQuizFeedback"></div>
+</td>
+<td>
+<label aria-label="Ja" class="modelQuizChoice">
+<input name="modelQuiz12" type="radio" value="yes"/><span>✓</span>
+</label>
+</td>
+<td>
+<label aria-label="Nein" class="modelQuizChoice">
+<input name="modelQuiz12" type="radio" value="no"/><span>✓</span>
+</label>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<button class="action compactAction" id="checkModelQuiz" type="button">Antworten prüfen</button>
+<div class="taskQuestion mysteryReflectionBox">
+<label for="modelReflection"><strong>Grenzen und Möglichkeiten des Modells</strong></label>
+<p>Möchtest du noch etwas aufschreiben, das dir zu den Möglichkeiten oder Grenzen von Novera aufgefallen ist?</p>
+<textarea id="modelReflection" placeholder="Mir ist aufgefallen …"></textarea>
+</div>
+</div>
+</article>
+</section>
 
-      <div class="modelQuizTableWrap">
-          <table class="modelQuizTable">
-            <thead>
-              <tr>
-                <th>Aussage</th>
-                <th>Ja</th>
-                <th>Nein</th>
-              </tr>
-            </thead>
-            <tbody>
-<tr class="modelQuizRow" data-correct="yes">
-          <td>
-            <span>Der Baum zeigt, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz1" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz1" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="yes">
-          <td>
-            <span>Novera kann helfen, über Needs und Desires nachzudenken.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz3" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz3" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="no">
-          <td>
-            <span>Der Baum zeigt genau, wie schnell sich Wälder, Fischbestände oder Böden auf der Erde erholen.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz2" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz2" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="yes">
-          <td>
-            <span>Novera kann zeigen, dass nicht alles gleichzeitig erfüllt werden kann.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz5" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz5" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="no">
-          <td>
-            <span>Novera zeigt genau, was jeder Mensch für ein gutes Leben braucht.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz4" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz4" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="no">
-          <td>
-            <span>Der Baum zeigt alle wichtigen Zusammenhänge des Erdsystems.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz6" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz6" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="yes">
-          <td>
-            <span>Novera kann helfen, über Verteilung und Gerechtigkeit zu sprechen.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz7" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz7" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="no">
-          <td>
-            <span>Die Fruchtzahl zeigt, wie viele Rohstoffe es auf der Erde wirklich gibt.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz8" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz8" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="yes">
-          <td>
-            <span>Novera kann helfen, Folgen von Entscheidungen über mehrere Runden zu beobachten.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz9" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz9" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="yes">
-          <td>
-            <span>Ein Modell kann etwas verständlicher machen, obwohl es die Wirklichkeit vereinfacht.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz11" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz11" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="no">
-          <td>
-            <span>Aus Novera kann man direkt ablesen, welche Lösung für die Erde richtig ist.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz10" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz10" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-<tr class="modelQuizRow" data-correct="no">
-          <td>
-            <span>Ein Modell ist nur dann nützlich, wenn es die Wirklichkeit vollständig abbildet.</span>
-            <div class="modelQuizFeedback" aria-live="polite"></div>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Ja">
-              <input type="radio" name="modelQuiz12" value="yes"><span>✓</span>
-            </label>
-          </td>
-          <td>
-            <label class="modelQuizChoice" aria-label="Nein">
-              <input type="radio" name="modelQuiz12" value="no"><span>✓</span>
-            </label>
-          </td>
-        </tr>
-            </tbody>
-          </table>
-        </div>
-      <button class="action compactAction" id="checkModelQuiz" type="button">Antworten prüfen</button>
-
-      <div class="taskQuestion mysteryReflectionBox">
-          <label for="modelReflection"><strong>Grenzen und Möglichkeiten des Modells</strong></label>
-          <p>Möchtest du noch etwas aufschreiben, das dir zu den Möglichkeiten oder Grenzen von Novera aufgefallen ist?</p>
-          <textarea id="modelReflection" placeholder="Mir ist aufgefallen …"></textarea>
-        </div>
-    </div>
-  </article>
-  </section>
-
-  <div class="learningGoalsShell"><details class="learningGoals">
-      <summary><span class="learningGoalsArrow" aria-hidden="true">›</span><strong>Lernziele</strong></summary>
-      <div class="learningGoalsBody"><ul>
-      <li>Ich kann erklären, warum ein gutes Leben für alle mit den Grenzen der Erde zusammenhängt.</li>
-      <li>Ich kann beschreiben, warum Fragen zu Nutzung, Verteilung und Gerechtigkeit nicht einfach zu lösen sind.</li>
-      <li>Ich kann verschiedene Zusammenhänge miteinander verbinden und begründen, warum es bei komplexen Fragen oft nicht nur eine richtige Antwort gibt.</li>
-    </ul></div>
-    </details></div>
-
-  <div class="phase3BottomNav">
-    <button class="action secondary phaseNext" id="backToPhase2Bottom" type="button">← Zurück zu Novera entdecken</button>
-  </div>
+<div class="phase3BottomNav">
+<button class="action secondary phaseNext" id="backToPhase2Bottom" type="button">← Zurück zu Novera entdecken</button>
+</div>
 </div>
 </main>
-
-
 <!-- Rückfrage beim Speichern -->
-
-<div
-  class="checkOverlay"
-  id="checkOverlay"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="checkTitle"
->
-
-  <div class="checkDialog">
-
-    <h2 id="checkTitle">
+<div aria-labelledby="checkTitle" aria-modal="true" class="checkOverlay" id="checkOverlay" role="dialog">
+<div class="checkDialog">
+<h2 id="checkTitle">
       Bevor du deine Welt speicherst …
     </h2>
-
-    <p>
+<p>
       Prüfe kurz, ob etwas Wichtiges fehlt.
     </p>
-
-    <ul
-      class="checkList"
-      id="checkList"
-    ></ul>
-
-    <p>
+<ul class="checkList" id="checkList"></ul>
+<p>
       Du kannst weitergestalten oder trotzdem speichern.
     </p>
-
-    <div class="checkButtons">
-
-      <button
-        class="checkCancel"
-        id="checkCancel"
-      >
+<div class="checkButtons">
+<button class="checkCancel" id="checkCancel">
         Zurück zur Gestaltung
       </button>
-
-      <button
-        class="checkConfirm"
-        id="checkConfirm"
-      >
+<button class="checkConfirm" id="checkConfirm">
         Trotzdem speichern
       </button>
-
-    </div>
-
-  </div>
-
 </div>
-
-
+</div>
+</div>
 <!-- Hinweise und Impressum -->
-
 <div class="teacherCommentLink">
-
-  <button id="openTeacherComment">
+<button id="openTeacherComment">
     Hinweise und Impressum
   </button>
-
 </div>
-
-
-<div
-  class="commentOverlay"
-  id="commentOverlay"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="commentTitle"
->
-
-  <div class="commentDialog">
-
-    <button
-      class="commentClose"
-      id="closeTeacherComment"
-      aria-label="Hinweise und Impressum schliessen"
-    >
+<div aria-labelledby="commentTitle" aria-modal="true" class="commentOverlay" id="commentOverlay" role="dialog">
+<div class="commentDialog">
+<button aria-label="Hinweise und Impressum schliessen" class="commentClose" id="closeTeacherComment">
       Schliessen
     </button>
-
-    <h2 id="commentTitle">
+<h2 id="commentTitle">
       Hinweise und Impressum
     </h2>
-
-    <p>
-      <strong>Novera</strong> ist eine digitale Lernumgebung, in der Lernende
+<p>
+<strong>Novera</strong> ist eine digitale Lernumgebung, in der Lernende
       zunächst eigene Vorstellungen eines guten Lebens gestalten und vergleichen.
       In der anschliessenden Erarbeitungsphase untersuchen sie Needs und Desires,
       begrenzte Möglichkeiten, Erneuerung, Unsicherheit, Zukunftsüberlegungen sowie gemeinsame
       Regeln und Verteilungsentscheidungen.
     </p>
-
-    <h3>Didaktischer Zweck</h3>
-
-    <p>
+<h3>Didaktischer Zweck</h3>
+<p>
       Die Lernumgebung verbindet offene Gestaltung, Reflexion und eine vereinfachte
       Simulation. Die erste Phase macht unterschiedliche Bedürfnisse, Wünsche und
       Vorstellungen sichtbar. Die zweite Phase lenkt den Blick auf Zusammenhänge
@@ -6106,10 +6036,8 @@ details.learningGoals{
       Partnerphase werden zusätzlich Aushandlung, Verteilung und gemeinsame Regeln
       thematisiert.
     </p>
-
-    <h3>Hinweise zur Verwendung</h3>
-
-    <p>
+<h3>Hinweise zur Verwendung</h3>
+<p>
       Novera gibt keine «richtige» Welt und kein bestimmtes nachhaltiges Verhalten
       vor. Begriffe, Fruchtzuordnungen und Erneuerungsraten sind Teil einer bewusst
       vereinfachten Fantasiewelt. Die Ergebnisse sollten deshalb nicht als reale
@@ -6118,63 +6046,47 @@ details.learningGoals{
       welche vereinfacht es und was lässt sich nicht direkt auf die reale Welt
       übertragen?
     </p>
-
-    <h3>Technische Hinweise</h3>
-
-    <p>
+<h3>Technische Hinweise</h3>
+<p>
       Arbeitsstände werden grundsätzlich im lokalen Speicher des verwendeten
       Browsers abgelegt. Über «Arbeitsstand herunterladen» kann zusätzlich eine
       HTML-Datei als Sicherung gespeichert werden. Diese Datei lässt sich später
       wieder in Novera laden und kann geöffnet, gedruckt oder über den
       Browser-Druckdialog als PDF gesichert werden.
     </p>
-
-    <p>
+<p>
       Die Anwendung wurde mit Unterstützung von <strong>ChatGPT</strong> entwickelt.
       Programmierung, automatische Begriffserkennung und Darstellungen können Fehler
       oder unerwartetes Verhalten enthalten.
     </p>
-
-    <h3>Impressum und Kontakt</h3>
-
-    <p>
-      Erstellt und verantwortlich für diese Website:<br>
-      Ivo Jost<br>
-      Hauptstrasse 82<br>
-      3854 Oberried<br>
+<h3>Impressum und Kontakt</h3>
+<p>
+      Erstellt und verantwortlich für diese Website:<br/>
+      Ivo Jost<br/>
+      Hauptstrasse 82<br/>
+      3854 Oberried<br/>
       Schweiz
     </p>
-
-    <p>
+<p>
       Kontakt über das
-      <a
-        href="https://github.com/bfkids/novera"
-        target="_blank"
-        rel="noopener noreferrer"
-      >GitHub-Repository von Novera</a>.
+      <a href="https://github.com/bfkids/novera" rel="noopener noreferrer" target="_blank">GitHub-Repository von Novera</a>.
     </p>
-
-    <h3>Datenschutz</h3>
-
-    <p>
+<h3>Datenschutz</h3>
+<p>
       Novera verwendet keine Benutzerkonten, Kontaktformulare oder
       Analysewerkzeuge. Eingegebene Begriffe, Antworten, Arbeitsstände und
       gespeicherte Welten werden im lokalen Speicher des verwendeten Browsers
       abgelegt und von der Anwendung nicht an den Verantwortlichen übermittelt.
       Auch die Arbeitsstandsdatei wird direkt im Browser erstellt.
     </p>
-
-    <p>
+<p>
       Beim Aufruf der Website kann der Hosting-Anbieter GitHub technisch
       notwendige Verbindungsdaten verarbeiten, beispielsweise IP-Adresse,
       Zeitpunkt, aufgerufene Datei und Browserangaben. Es gelten die
       Datenschutzbestimmungen des Hosting-Anbieters.
     </p>
 </div>
-
 </div>
-
-
 <script>
 (function(){
 
@@ -10434,7 +10346,7 @@ function initWorkStateControls(){
 
   if(saveBtn)saveBtn.onclick=downloadWorkState;
   if(printBtn)printBtn.onclick=printCurrentWorkState;
-  if(analogBtn)analogBtn.onclick=openNoveraAnalogVersion;
+  if(analogBtn)analogBtn.onclick=()=>window.open("analog.html","_blank","noopener");
 
   if(loadBtn&&fileInput){
     loadBtn.onclick=()=>fileInput.click();
@@ -11999,6 +11911,5 @@ syncStateWithURL();
 
 })();
 </script>
-
 </body>
 </html>
