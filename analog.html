@@ -1202,66 +1202,59 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
 }
 
 /* ============================================================
-   DRUCK: nur sehr leichte Gesamtskalierung
-   Kein künstliches Verbreitern – verhindert Abschneiden rechts.
+   DRUCK: nur Titel und Untertitel kleiner
+   Keine Gesamtskalierung der Seite.
    ============================================================ */
 @media print{
-  .pageInner{
-    zoom:.98!important;
-    width:100%!important;
-    max-width:100%!important;
-    overflow:visible!important;
+  .pageTitle{
+    font-size:16.5pt!important;
+    line-height:1.04!important;
+    margin:.8mm 0 2mm!important;
   }
 
-  .pageBody{
-    width:100%!important;
-    max-width:100%!important;
-    overflow:visible!important;
+  h2{
+    font-size:11.8pt!important;
+    line-height:1.10!important;
+    margin:1.1mm 0 1.5mm!important;
   }
 
-  /* Elemente dürfen die verfügbare Breite nicht überschreiten. */
-  .infoBox,
-  .learningGoals,
-  .worldChoiceInline,
-  .workTable,
-  .personRollBox,
-  .agreementBox,
-  .treeCopy,
-  .cutGrid,
-  .ownGrid{
-    max-width:100%!important;
+  h3{
+    font-size:9.2pt!important;
+    line-height:1.12!important;
+    margin:1mm 0!important;
   }
 
-  img,svg{
-    max-width:100%!important;
+  .taskHeaderGraphic h2{
+    font-size:11.3pt!important;
+    line-height:1.08!important;
   }
 
-  /* Checkbox-Zeilen etwas klarer trennen, ohne Tabelle höher zu machen. */
-  .choiceCheckLine{
-    display:block!important;
-    font-size:6.9pt!important;
-    line-height:1.16!important;
-    margin:0!important;
-  }
-  .choiceCheckLine + .choiceCheckLine{
-    margin-top:.8mm!important;
+  .phaseMission h2{
+    font-size:16.5pt!important;
+    line-height:1.07!important;
+    margin:1.2mm 0 1.7mm!important;
   }
 
-  /* Lange Texte sicher umbrechen statt rechts hinauszulaufen. */
-  .infoBox,
-  .infoBody,
-  .workTable th,
-  .workTable td,
-  .personRollBox,
-  .learningGoals{
-    overflow-wrap:anywhere!important;
-    word-break:normal!important;
+  .phaseMission p{
+    margin-top:0!important;
   }
 
-  /* Tabellenbreite fest innerhalb des verfügbaren Bereichs halten. */
-  .workTable{
-    width:100%!important;
-    table-layout:fixed!important;
+  .coverPage .pageTitle{
+    font-size:15pt!important;
+    line-height:1.05!important;
+  }
+
+  .coverPage .coverTitle{
+    font-size:30pt!important;
+    line-height:1!important;
+  }
+
+  .rollPanel h3,
+  .personRollBox h3,
+  .agreementBox h3,
+  .legend h3{
+    font-size:9pt!important;
+    line-height:1.1!important;
   }
 }
 </style></head><body>
@@ -1371,7 +1364,7 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
 <span class="taskBadge">Aufgabe B</span>
 <h2>Genauer beschreiben und entscheiden</h2>
 <div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Wähle aus dieser Welt vier bis sechs verschiedene Bereiche aus, die du genauer anschauen möchtest. Beschreibe bei jedem ausgewählten Bereich genauer, was du damit meinst. Entscheide danach für dich persönlich: Brauche ich das ganz sicher für ein gutes Leben oder wünsche ich es mir eher zusätzlich?</div></div>
-<table class="workTable classify"><thead><tr><th></th><th>Bereich</th><th>Was meinst du damit genau?</th><th>Wie ordnest du es für dich persönlich ein?</th></tr></thead><tbody><tr><td>1</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>2</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>3</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>4</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>5</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>6</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr></tbody></table>
+<table class="workTable classify"><thead><tr><th></th><th>Bereich</th><th>Was meinst du damit genau?</th><th>Wie ordnest du es für dich persönlich ein?</th></tr></thead><tbody><tr><td>1</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>2</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>3</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>4</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>5</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>6</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr></tbody></table>
 <div class="infoBox explain"><div class="infoLabel">◆ Erklärung</div><div class="infoBody"><strong>Damit Menschen etwas bekommen oder tun können, braucht es Voraussetzungen.</strong> Manche sind natürlich, zum Beispiel Wasser, Boden, Rohstoffe oder Energie. Andere entstehen durch das Zusammenleben, zum Beispiel Wissen, Arbeit, Verkehrswege, Regeln oder Zusammenarbeit. Oft braucht es beides gleichzeitig.</div></div>
 </div>
 </div>
