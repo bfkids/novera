@@ -1200,6 +1200,174 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
     padding-bottom:9mm!important;
   }
 }
+
+/* ============================================================
+   DRUCK: Bildschirm-A4 proportional verkleinern
+   Safari/iPad rendert sonst Text und Kästchen sichtbar grösser.
+   ============================================================ */
+@media print{
+  /* Safari unterstützt zoom im Druck zuverlässig.
+     So werden Text, Tabellen, Kästchen und Grafiken gemeinsam skaliert,
+     statt einzelne Elemente unterschiedlich gross zu werden. */
+  .pageInner{
+    zoom:.89!important;
+    width:112.36%!important; /* 1 / .89 */
+    padding-top:8mm!important;
+    padding-bottom:8mm!important;
+  }
+
+  /* Titel nochmals deutlich kompakter */
+  .pageTitle{
+    font-size:17pt!important;
+    line-height:1.04!important;
+    margin:.8mm 0 2mm!important;
+  }
+  h2{
+    font-size:12pt!important;
+    line-height:1.10!important;
+    margin:1.1mm 0 1.5mm!important;
+  }
+  h3{
+    font-size:9.4pt!important;
+    line-height:1.12!important;
+    margin:1mm 0!important;
+  }
+  .taskHeaderGraphic h2{
+    font-size:11.5pt!important;
+  }
+  .phaseMission h2{
+    font-size:17pt!important;
+    line-height:1.08!important;
+    margin:1.2mm 0 1.8mm!important;
+  }
+  .phaseMission p{
+    font-size:8.9pt!important;
+    line-height:1.38!important;
+  }
+
+  /* Fliesstext nur minimal kleiner als zuvor */
+  body,.pageBody,p,li,.infoBody,.materialLead{
+    font-size:8.35pt!important;
+    line-height:1.34!important;
+  }
+
+  .infoBox{
+    margin:1.1mm 0!important;
+    padding:1.8mm 2.5mm!important;
+  }
+  .infoLabel{
+    font-size:7.8pt!important;
+  }
+
+  /* Reflexionslinien: weiterhin mindestens 3, kompakt */
+  .infoBox.reflect .writeLines{
+    gap:2mm!important;
+    margin-top:.8mm!important;
+  }
+  .infoBox.reflect .writeLines span{
+    height:3.5mm!important;
+  }
+
+  /* Welt-Legenden: gleiche optische Grösse wie in HTML-Vorschau */
+  .legendRow{
+    height:6.6mm!important;
+    grid-template-columns:4.5mm 5.5mm minmax(0,1fr)!important;
+    gap:1.3mm!important;
+  }
+  .legendColor{
+    width:5.2mm!important;
+    height:5.2mm!important;
+    border-width:.25mm!important;
+  }
+  .legendWrite{
+    height:4.8mm!important;
+  }
+  .legend h3{
+    font-size:9.2pt!important;
+  }
+
+  /* Phase 2 A/B: Kästchen lesbar getrennt, aber Tabelle kompakt */
+  .classify td{
+    height:9.6mm!important;
+    padding:.75mm 1mm!important;
+  }
+  .classify th{
+    padding:.8mm 1mm!important;
+  }
+  .choiceCheckLine{
+    display:block!important;
+    font-size:6.7pt!important;
+    line-height:1.18!important;
+    margin:0!important;
+  }
+  .choiceCheckLine + .choiceCheckLine{
+    margin-top:1.1mm!important;
+  }
+
+  /* Büroklammer-Zahlen nicht unnötig gross */
+  .clipNumber{
+    width:9.5mm!important;
+    height:5.8mm!important;
+    font-size:8.8pt!important;
+    border-radius:1.4mm!important;
+  }
+  .rollSimple tbody tr{
+    height:7.4mm!important;
+  }
+
+  /* Zahlen-Rundentabellen nur so hoch wie nötig */
+  .miniProtocol tbody tr,
+  .roundTableLarge tbody tr{
+    height:5.8mm!important;
+  }
+
+  /* Phasenstartbilder und Lernziele etwas kompakter */
+  .phaseStartPage .phaseGraphicArea{
+    margin:6mm 0 5mm!important;
+  }
+  .phaseStartPage .phaseGraphic{
+    max-height:90mm!important;
+  }
+  .learningGoals{
+    padding:2.6mm!important;
+  }
+  .learningGoals li{
+    font-size:8pt!important;
+    line-height:1.24!important;
+  }
+
+  /* Titelblatt: sicher innerhalb einer einzigen Druckseite */
+  .coverPage .cover{
+    padding-top:6mm!important;
+  }
+  .coverPage .pageTitle{
+    font-size:15pt!important;
+  }
+  .coverPage .coverTitle{
+    font-size:31pt!important;
+    margin:3mm 0!important;
+  }
+  .coverPage .coverGraphic{
+    height:53mm!important;
+    margin-top:3mm!important;
+  }
+  .coverPage .coverImage{
+    max-height:53mm!important;
+  }
+  .coverPage .coverWorld{
+    width:122mm!important;
+    margin-top:6mm!important;
+    margin-bottom:8mm!important;
+  }
+  .coverPage .coverWorld .islandGrid{
+    max-height:53mm!important;
+  }
+  .coverPage .nameLine{
+    font-size:10pt!important;
+    margin-top:0!important;
+    margin-bottom:2mm!important;
+  }
+}
 </style></head><body>
 <div class="previewBar"><strong>Novera – A4-Hochformat Vorschau</strong><button onclick="window.print()" title="Druckdialog erneut öffnen" type="button">Druckdialog erneut öffnen</button></div>
 <main><section class="page coverPage" data-page="0">
@@ -1307,7 +1475,7 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
 <span class="taskBadge">Aufgabe B</span>
 <h2>Genauer beschreiben und entscheiden</h2>
 <div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Wähle aus dieser Welt vier bis sechs verschiedene Bereiche aus, die du genauer anschauen möchtest. Beschreibe bei jedem ausgewählten Bereich genauer, was du damit meinst. Entscheide danach für dich persönlich: Brauche ich das ganz sicher für ein gutes Leben oder wünsche ich es mir eher zusätzlich?</div></div>
-<table class="workTable classify"><thead><tr><th></th><th>Bereich</th><th>Was meinst du damit genau?</th><th>Wie ordnest du es für dich persönlich ein?</th></tr></thead><tbody><tr><td>1</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>2</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>3</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>4</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>5</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>6</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr></tbody></table>
+<table class="workTable classify"><thead><tr><th></th><th>Bereich</th><th>Was meinst du damit genau?</th><th>Wie ordnest du es für dich persönlich ein?</th></tr></thead><tbody><tr><td>1</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>2</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>3</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>4</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>5</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>6</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr></tbody></table>
 <div class="infoBox explain"><div class="infoLabel">◆ Erklärung</div><div class="infoBody"><strong>Damit Menschen etwas bekommen oder tun können, braucht es Voraussetzungen.</strong> Manche sind natürlich, zum Beispiel Wasser, Boden, Rohstoffe oder Energie. Andere entstehen durch das Zusammenleben, zum Beispiel Wissen, Arbeit, Verkehrswege, Regeln oder Zusammenarbeit. Oft braucht es beides gleichzeitig.</div></div>
 </div>
 </div>
