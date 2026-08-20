@@ -1631,18 +1631,161 @@ body{
     grid-template-columns:minmax(0,1fr) auto!important;
   }
 }
+
+/* ============================================================
+   ANALOG.HTML = PDF-BEREITSTELLUNG
+   Die eigentlichen A4-Seiten werden unsichtbar im Hintergrund gerendert.
+   ============================================================ */
+html,body{
+  min-height:100%;
+}
+body{
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  background:#f4f1ea!important;
+}
+
+/* Nur diese Bedienoberfläche ist sichtbar. */
+.previewBar{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:24px!important;
+  border-radius:0!important;
+  background:#f4f1ea!important;
+  box-shadow:none!important;
+  display:grid!important;
+  place-items:center!important;
+  z-index:999999!important;
+}
+
+.exportPanel{
+  width:min(620px,calc(100vw - 32px));
+  background:#fff;
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 5px 24px #0002;
+  display:grid;
+  gap:16px;
+}
+.exportTitle{
+  font-size:20px;
+  line-height:1.2;
+}
+.pdfProgressWrap{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:7px!important;
+  width:100%!important;
+  min-width:0!important;
+}
+.pdfProgressTrack{
+  width:100%;
+  height:10px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#ddd;
+}
+.pdfProgressBar{
+  height:100%;
+  width:0;
+  border-radius:999px;
+  background:#4f9b91;
+  transition:width .12s linear;
+}
+.pdfProgressText{
+  font-size:13px;
+  color:#555;
+  white-space:normal;
+}
+#exportVisualPdf{
+  justify-self:start;
+  border:0;
+  border-radius:9px;
+  background:#222;
+  color:#fff;
+  padding:10px 16px;
+  font:inherit;
+  font-weight:750;
+  cursor:pointer;
+}
+#exportVisualPdf:disabled{
+  opacity:.48;
+  cursor:default;
+}
+.exportHint{
+  font-size:13px;
+  color:#666;
+}
+
+/*
+  Ganz wichtig:
+  Die Seiten werden NICHT display:none/visibility:hidden gesetzt,
+  weil html2canvas sie dann nicht rendern könnte.
+  Sie liegen stattdessen weit links ausserhalb des Viewports.
+  Dadurch flackert beim Rendern nichts durchs Bild.
+*/
+main{
+  position:fixed!important;
+  left:-10000px!important;
+  top:0!important;
+  width:210mm!important;
+  height:auto!important;
+  overflow:visible!important;
+  pointer-events:none!important;
+  z-index:-1!important;
+}
+.page{
+  transform:none!important;
+  margin:0!important;
+  width:210mm!important;
+  min-width:210mm!important;
+  max-width:210mm!important;
+  box-shadow:none!important;
+}
+
+/* Während des Captures ebenfalls niemals sichtbar machen. */
+.pdfCaptureMode main{
+  left:-10000px!important;
+}
+.pdfCaptureMode .previewBar{
+  display:grid!important;
+}
+
+@media(max-width:600px){
+  .previewBar{
+    padding:16px!important;
+  }
+  .exportPanel{
+    width:100%;
+    padding:20px;
+  }
+  .exportTitle{
+    font-size:18px;
+  }
+  #exportVisualPdf{
+    width:100%;
+  }
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head><body>
 <div class="previewBar">
-<strong>Novera – analoges Dossier</strong>
-<button id="exportVisualPdf" type="button">PDF herunterladen</button>
-<div class="pdfProgressWrap" hidden="" id="pdfProgressWrap">
+<div class="exportPanel">
+<strong class="exportTitle">Novera – analoges Dossier</strong>
+<div class="pdfProgressWrap" id="pdfProgressWrap">
 <div class="pdfProgressTrack">
 <div class="pdfProgressBar" id="pdfProgressBar" style="width:0%"></div>
 </div>
-<div class="pdfProgressText" id="pdfProgressText">Vorbereitung …</div>
+<div class="pdfProgressText" id="pdfProgressText">PDF wird vorbereitet …</div>
+</div>
+<button disabled="" id="exportVisualPdf" type="button">PDF wird vorbereitet …</button>
+<div class="exportHint" id="exportHint">Bitte kurz warten.</div>
 </div>
 </div>
 <main><section class="page coverPage" data-page="0">
@@ -2151,9 +2294,13 @@ window.addEventListener("load",()=>setTimeout(()=>{
   "use strict";
 
   const btn=document.getElementById("exportVisualPdf");
-  const wrap=document.getElementById("pdfProgressWrap");
   const bar=document.getElementById("pdfProgressBar");
   const text=document.getElementById("pdfProgressText");
+  const hint=document.getElementById("exportHint");
+
+  let readyBlob=null;
+  let readyUrl=null;
+  let generating=false;
 
   function setProgress(done,total,label){
     const pct=total ? Math.round((done/total)*100) : 0;
@@ -2172,23 +2319,23 @@ window.addEventListener("load",()=>setTimeout(()=>{
     }));
   }
 
-  async function exportVisualPdf(){
+  async function buildPdfInBackground(){
+    if(generating || readyBlob)return;
+    generating=true;
+
     if(!window.html2canvas || !window.jspdf){
-      alert("Die PDF-Bibliotheken konnten nicht geladen werden.");
+      text.textContent="PDF konnte nicht vorbereitet werden.";
+      hint.textContent="Die benötigten Bibliotheken wurden nicht geladen.";
       return;
     }
 
-    btn.disabled=true;
-    wrap.hidden=false;
-    setProgress(0,1,"Vorbereitung …");
-
     try{
+      setProgress(0,1,"PDF wird vorbereitet …");
+
       await waitForImages();
       if(document.fonts && document.fonts.ready){
         await document.fonts.ready;
       }
-
-      document.documentElement.classList.add("pdfCaptureMode");
 
       const pages=[...document.querySelectorAll(".page")];
       const total=pages.length;
@@ -2202,20 +2349,18 @@ window.addEventListener("load",()=>setTimeout(()=>{
       });
 
       /*
-        scale 1.55:
-        deutlich schneller und speicherschonender auf iPad/iPhone als 2.2,
-        für normalen A4-Ausdruck aber weiterhin ausreichend scharf.
+        1.35 ist auf Mobilgeräten wesentlich schneller als 1.55/2.2.
+        Für ein rasterbasiertes Druckdossier ist die resultierende Qualität
+        weiterhin ausreichend, während Speicher und Renderzeit stark sinken.
       */
-      const renderScale=1.55;
+      const renderScale=1.35;
 
       for(let i=0;i<total;i++){
-        setProgress(i,total,`Seite ${i+1} von ${total}`);
+        setProgress(i,total,`Seite ${i+1} von ${total} wird vorbereitet …`);
 
-        const page=pages[i];
-        page.scrollIntoView({block:"start"});
-        await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+        const node=pages[i];
 
-        const canvas=await html2canvas(page,{
+        const canvas=await html2canvas(node,{
           scale:renderScale,
           backgroundColor:"#ffffff",
           useCORS:true,
@@ -2223,55 +2368,82 @@ window.addEventListener("load",()=>setTimeout(()=>{
           logging:false,
           scrollX:0,
           scrollY:0,
-          windowWidth:Math.max(document.documentElement.clientWidth,page.scrollWidth),
-          onclone:(doc)=>{
-            doc.documentElement.classList.add("pdfCaptureMode");
-          }
+          windowWidth:1200,
+          windowHeight:1600
         });
 
         if(i>0)pdf.addPage("a4","portrait");
 
         /*
-          JPEG ist für diese Gesamtdokument-PDF deutlich kleiner und schneller
-          als PNG. Hohe Qualität erhält Text und Linien für normalen Ausdruck gut.
+          JPEG 0.88 reduziert Dateigrösse und Rechenzeit weiter.
+          Da jede A4-Seite als Ganzes eingebettet wird, bleiben Layout,
+          Abstände und Seitenumbrüche exakt so wie in der HTML-Ansicht.
         */
-        const img=canvas.toDataURL("image/jpeg",0.92);
+        const img=canvas.toDataURL("image/jpeg",0.88);
         pdf.addImage(img,"JPEG",0,0,210,297,undefined,"FAST");
 
         canvas.width=1;
         canvas.height=1;
 
-        setProgress(i+1,total,`Seite ${i+1} von ${total}`);
-        await new Promise(r=>setTimeout(r,8));
+        setProgress(i+1,total,`Seite ${i+1} von ${total} vorbereitet`);
+        await new Promise(r=>setTimeout(r,0));
       }
 
-      setProgress(total,total,"PDF wird gespeichert …");
+      setProgress(total,total,"PDF wird fertiggestellt …");
 
       const arr=pdf.output("arraybuffer");
-      const blob=new Blob([arr],{type:"application/pdf"});
-      const url=URL.createObjectURL(blob);
+      readyBlob=new Blob([arr],{type:"application/pdf"});
+      readyUrl=URL.createObjectURL(readyBlob);
 
-      const a=document.createElement("a");
-      a.href=url;
-      a.download="Novera-analoges-Dossier.pdf";
-      a.style.display="none";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      setProgress(total,total,"Fertig");
-      setTimeout(()=>URL.revokeObjectURL(url),120000);
+      setProgress(total,total,"PDF ist bereit");
+      btn.disabled=false;
+      btn.textContent="PDF herunterladen";
+      hint.textContent="Die PDF ist fertig und kann jetzt gespeichert werden.";
 
     }catch(err){
       console.error(err);
-      setProgress(0,1,"Fehler");
-      alert("Beim Erzeugen der PDF ist ein Fehler aufgetreten.");
+      text.textContent="PDF konnte nicht erstellt werden.";
+      hint.textContent="Seite neu laden und nochmals versuchen.";
+      btn.disabled=true;
     }finally{
-      document.documentElement.classList.remove("pdfCaptureMode");
-      btn.disabled=false;
+      generating=false;
     }
   }
 
-  if(btn)btn.addEventListener("click",exportVisualPdf);
+  function downloadPreparedPdf(){
+    if(!readyBlob || !readyUrl)return;
+
+    /*
+      Nun geschieht der Download SYNCHRON im echten Button-Klick.
+      Das ist für Safari wesentlich zuverlässiger als ein Download
+      am Ende einer langen asynchronen Render-Funktion.
+    */
+    const fileName="Novera-analoges-Dossier.pdf";
+
+    const a=document.createElement("a");
+    a.href=readyUrl;
+    a.download=fileName;
+    a.rel="noopener";
+    a.style.display="none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    hint.textContent="Download wurde gestartet.";
+  }
+
+  if(btn){
+    btn.addEventListener("click",downloadPreparedPdf);
+  }
+
+  if(document.readyState==="complete"){
+    setTimeout(buildPdfInBackground,100);
+  }else{
+    window.addEventListener("load",()=>setTimeout(buildPdfInBackground,100),{once:true});
+  }
+
+  window.addEventListener("beforeunload",()=>{
+    if(readyUrl)URL.revokeObjectURL(readyUrl);
+  });
 })();
 </script></body></html>
