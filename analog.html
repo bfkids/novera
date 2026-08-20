@@ -2377,8 +2377,8 @@ window.addEventListener("load",()=>setTimeout(()=>{
         compress:true
       });
 
-      /* ca. 144 dpi auf A4: guter Kompromiss aus Druckqualität und Geschwindigkeit */
-      const renderScale=1.5;
+      /* ca. 300 dpi auf A4: hohe Druckqualität; deutlich langsamer und speicherintensiver */
+      const renderScale=3.125;
 
       for(let i=0;i<total;i++){
         setProgress(i,total,`Seite ${i+1} von ${total} wird vorbereitet …`);
@@ -2399,7 +2399,7 @@ window.addEventListener("load",()=>setTimeout(()=>{
 
         if(i>0)pdf.addPage("a4","portrait");
 
-        const img=canvas.toDataURL("image/jpeg",0.90);
+        const img=canvas.toDataURL("image/jpeg",0.98);
         pdf.addImage(img,"JPEG",0,0,210,297,undefined,"FAST");
 
         canvas.width=1;
