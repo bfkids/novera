@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="de"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Novera – analoges Dossier</title><style>
+<html lang="de"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><title>Novera – analoges Dossier</title><style>
 :root{
  --outer:#ece9e1;--ink:#222;
  --green:#75c56b;--greenBg:#edf7ea;
@@ -1457,10 +1457,60 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
   }
 }
 
-/* ============================================================
-   VISUELLER PDF-EXPORT
-   Die HTML-A4-Seiten sind die Masterdarstellung.
-   ============================================================ */
+.pdfDirectButton{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:0;
+  border-radius:8px;
+  background:#222;
+  color:#fff;
+  padding:8px 12px;
+  font-weight:700;
+  text-decoration:none;
+}
+
+/* ===== Direkter PDF-Download ===== */
+#exportVisualPdf{
+  border:0;
+  border-radius:8px;
+  background:#222;
+  color:#fff;
+  padding:8px 12px;
+  font:inherit;
+  font-weight:700;
+  cursor:pointer;
+}
+#exportVisualPdf:disabled{
+  opacity:.55;
+  cursor:default;
+}
+.pdfProgressWrap{
+  min-width:220px;
+  display:grid;
+  grid-template-columns:minmax(120px,220px) auto;
+  align-items:center;
+  gap:8px;
+}
+.pdfProgressTrack{
+  height:8px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#ddd;
+}
+.pdfProgressBar{
+  height:100%;
+  border-radius:99px;
+  background:#4f9b91;
+  transition:width .16s ease;
+}
+.pdfProgressText{
+  min-width:92px;
+  font-size:12px;
+  color:#555;
+  white-space:nowrap;
+}
+
 .pdfCaptureMode .previewBar{
   display:none!important;
 }
@@ -1469,22 +1519,131 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
 }
 .pdfCaptureMode .page{
   box-shadow:none!important;
-  margin:0!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
 }
 
-/* Browser-Druck ist nur noch Fallback. */
+@media(max-width:700px){
+  .previewBar{
+    flex-wrap:wrap;
+  }
+  .pdfProgressWrap{
+    width:100%;
+    grid-template-columns:1fr auto;
+  }
+}
+
 @media print{
   .previewBar{display:none!important;}
+}
+
+/* ============================================================
+   MOBILE / TABLET: volle obere Leiste + A4 automatisch einpassen
+   ============================================================ */
+
+/* Bedienleiste immer über die gesamte Bildschirmbreite */
+.previewBar{
+  position:sticky!important;
+  top:0!important;
+  left:0!important;
+  right:0!important;
+  width:100vw!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:10px 14px!important;
+  box-sizing:border-box!important;
+  z-index:9999!important;
+  border-radius:0!important;
+}
+
+/* Seitenbereich sauber unterhalb der Leiste */
+body{
+  overflow-x:hidden!important;
+}
+
+/* Auf schmalen Bildschirmen wird jede 210-mm-A4-Seite proportional
+   auf die verfügbare Viewportbreite skaliert. */
+@media screen and (max-width:900px){
+  :root{
+    --page-scale: calc((100vw - 20px) / 793.7008);
+    /* 210 mm bei 96 dpi ≈ 793.7008 CSS-Pixel */
+  }
+
+  body{
+    padding-top:0!important;
+  }
+
+  main{
+    width:100%!important;
+    max-width:none!important;
+    overflow:hidden!important;
+  }
+
+  .page{
+    width:210mm!important;
+    min-width:210mm!important;
+    max-width:210mm!important;
+
+    transform:scale(var(--page-scale))!important;
+    transform-origin:top left!important;
+
+    margin-left:10px!important;
+    margin-right:0!important;
+
+    /* Der nachfolgende Seitenfluss muss die skalierte Höhe berücksichtigen. */
+    margin-bottom:calc((297mm * var(--page-scale)) - 297mm + 14px)!important;
+  }
+
+  .previewBar{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    gap:8px!important;
+  }
+
+  #exportVisualPdf{
+    flex:0 0 auto!important;
+  }
+
+  .pdfProgressWrap{
+    flex:1 1 220px!important;
+    min-width:0!important;
+    width:auto!important;
+  }
+}
+
+/* Sehr kleine Smartphones: Fortschritt unter dem Button, Leiste bleibt vollbreit */
+@media screen and (max-width:520px){
+  .previewBar{
+    padding:8px 10px!important;
+  }
+
+  .previewBar > strong{
+    width:100%!important;
+  }
+
+  #exportVisualPdf{
+    width:auto!important;
+  }
+
+  .pdfProgressWrap{
+    flex:1 1 100%!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+  }
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head><body>
 <div class="previewBar">
-<strong>Analoge Druckfassung</strong>
-
-<button id="exportVisualPdf" type="button">PDF erzeugen</button>
-<span aria-live="polite" id="pdfStatus"></span>
+<strong>Novera – analoges Dossier</strong>
+<button id="exportVisualPdf" type="button">PDF herunterladen</button>
+<div class="pdfProgressWrap" hidden="" id="pdfProgressWrap">
+<div class="pdfProgressTrack">
+<div class="pdfProgressBar" id="pdfProgressBar" style="width:0%"></div>
+</div>
+<div class="pdfProgressText" id="pdfProgressText">Vorbereitung …</div>
+</div>
 </div>
 <main><section class="page coverPage" data-page="0">
 <div class="pageInner">
@@ -1992,7 +2151,15 @@ window.addEventListener("load",()=>setTimeout(()=>{
   "use strict";
 
   const btn=document.getElementById("exportVisualPdf");
-  const status=document.getElementById("pdfStatus");
+  const wrap=document.getElementById("pdfProgressWrap");
+  const bar=document.getElementById("pdfProgressBar");
+  const text=document.getElementById("pdfProgressText");
+
+  function setProgress(done,total,label){
+    const pct=total ? Math.round((done/total)*100) : 0;
+    bar.style.width=Math.max(0,Math.min(100,pct))+"%";
+    text.textContent=label || `${done}/${total}`;
+  }
 
   function waitForImages(){
     const imgs=[...document.images];
@@ -2011,30 +2178,9 @@ window.addEventListener("load",()=>setTimeout(()=>{
       return;
     }
 
-    /*
-      Wichtig für iPad/Safari:
-      Das neue Fenster muss unmittelbar innerhalb des Button-Klicks geöffnet
-      werden. Nach dem asynchronen Rendern würde Safari es sonst häufig blockieren
-      oder unzuverlässig behandeln.
-    */
-    const pdfWindow=window.open("about:blank","_blank");
-
-    if(pdfWindow){
-      try{
-        pdfWindow.document.open();
-        pdfWindow.document.write(
-          '<!doctype html><html><head><meta charset="utf-8">'+
-          '<meta name="viewport" content="width=device-width,initial-scale=1">'+
-          '<title>Novera – PDF wird erzeugt</title></head>'+
-          '<body style="font-family:system-ui,sans-serif;padding:32px">'+
-          '<p>PDF wird erzeugt …</p></body></html>'
-        );
-        pdfWindow.document.close();
-      }catch(e){}
-    }
-
     btn.disabled=true;
-    status.textContent="PDF wird erzeugt …";
+    wrap.hidden=false;
+    setProgress(0,1,"Vorbereitung …");
 
     try{
       await waitForImages();
@@ -2045,7 +2191,9 @@ window.addEventListener("load",()=>setTimeout(()=>{
       document.documentElement.classList.add("pdfCaptureMode");
 
       const pages=[...document.querySelectorAll(".page")];
+      const total=pages.length;
       const {jsPDF}=window.jspdf;
+
       const pdf=new jsPDF({
         orientation:"portrait",
         unit:"mm",
@@ -2053,19 +2201,28 @@ window.addEventListener("load",()=>setTimeout(()=>{
         compress:true
       });
 
-      for(let i=0;i<pages.length;i++){
-        status.textContent=`PDF wird erzeugt … ${i+1}/${pages.length}`;
+      /*
+        scale 1.55:
+        deutlich schneller und speicherschonender auf iPad/iPhone als 2.2,
+        für normalen A4-Ausdruck aber weiterhin ausreichend scharf.
+      */
+      const renderScale=1.55;
+
+      for(let i=0;i<total;i++){
+        setProgress(i,total,`Seite ${i+1} von ${total}`);
 
         const page=pages[i];
+        page.scrollIntoView({block:"start"});
+        await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 
         const canvas=await html2canvas(page,{
-          scale:2.2,
+          scale:renderScale,
           backgroundColor:"#ffffff",
           useCORS:true,
           allowTaint:false,
           logging:false,
           scrollX:0,
-          scrollY:-window.scrollY,
+          scrollY:0,
           windowWidth:Math.max(document.documentElement.clientWidth,page.scrollWidth),
           onclone:(doc)=>{
             doc.documentElement.classList.add("pdfCaptureMode");
@@ -2074,52 +2231,43 @@ window.addEventListener("load",()=>setTimeout(()=>{
 
         if(i>0)pdf.addPage("a4","portrait");
 
-        const img=canvas.toDataURL("image/png");
-        pdf.addImage(img,"PNG",0,0,210,297,undefined,"FAST");
+        /*
+          JPEG ist für diese Gesamtdokument-PDF deutlich kleiner und schneller
+          als PNG. Hohe Qualität erhält Text und Linien für normalen Ausdruck gut.
+        */
+        const img=canvas.toDataURL("image/jpeg",0.92);
+        pdf.addImage(img,"JPEG",0,0,210,297,undefined,"FAST");
 
         canvas.width=1;
         canvas.height=1;
 
-        await new Promise(r=>setTimeout(r,20));
+        setProgress(i+1,total,`Seite ${i+1} von ${total}`);
+        await new Promise(r=>setTimeout(r,8));
       }
 
-      document.documentElement.classList.remove("pdfCaptureMode");
-      status.textContent="PDF fertig.";
+      setProgress(total,total,"PDF wird gespeichert …");
 
-      /*
-        Explizites application/pdf statt auf Safaris Interpretation
-        des jsPDF-Blobs zu vertrauen.
-      */
-      const pdfArrayBuffer=pdf.output("arraybuffer");
-      const pdfBlob=new Blob([pdfArrayBuffer],{type:"application/pdf"});
-      const pdfUrl=URL.createObjectURL(pdfBlob);
+      const arr=pdf.output("arraybuffer");
+      const blob=new Blob([arr],{type:"application/pdf"});
+      const url=URL.createObjectURL(blob);
 
-      if(pdfWindow && !pdfWindow.closed){
-        pdfWindow.location.replace(pdfUrl);
-      }else{
-        /*
-          Fallback, falls Pop-ups komplett deaktiviert sind:
-          Im selben Tab zur PDF wechseln. Zurück führt wieder zum Dossier.
-        */
-        window.location.href=pdfUrl;
-      }
+      const a=document.createElement("a");
+      a.href=url;
+      a.download="Novera-analoges-Dossier.pdf";
+      a.style.display="none";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
 
-      setTimeout(()=>URL.revokeObjectURL(pdfUrl),120000);
+      setProgress(total,total,"Fertig");
+      setTimeout(()=>URL.revokeObjectURL(url),120000);
 
     }catch(err){
       console.error(err);
-      document.documentElement.classList.remove("pdfCaptureMode");
-      status.textContent="PDF konnte nicht erzeugt werden.";
-
-      if(pdfWindow && !pdfWindow.closed){
-        try{
-          pdfWindow.document.body.innerHTML=
-            '<p style="font-family:system-ui,sans-serif;padding:32px">'+
-            'Die PDF konnte nicht erzeugt werden.</p>';
-        }catch(e){}
-      }
+      setProgress(0,1,"Fehler");
       alert("Beim Erzeugen der PDF ist ein Fehler aufgetreten.");
     }finally{
+      document.documentElement.classList.remove("pdfCaptureMode");
       btn.disabled=false;
     }
   }
