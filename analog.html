@@ -1202,170 +1202,66 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
 }
 
 /* ============================================================
-   DRUCK: Bildschirm-A4 proportional verkleinern
-   Safari/iPad rendert sonst Text und Kästchen sichtbar grösser.
+   DRUCK: nur sehr leichte Gesamtskalierung
+   Kein künstliches Verbreitern – verhindert Abschneiden rechts.
    ============================================================ */
 @media print{
-  /* Safari unterstützt zoom im Druck zuverlässig.
-     So werden Text, Tabellen, Kästchen und Grafiken gemeinsam skaliert,
-     statt einzelne Elemente unterschiedlich gross zu werden. */
   .pageInner{
-    zoom:.89!important;
-    width:112.36%!important; /* 1 / .89 */
-    padding-top:8mm!important;
-    padding-bottom:8mm!important;
+    zoom:.98!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
   }
 
-  /* Titel nochmals deutlich kompakter */
-  .pageTitle{
-    font-size:17pt!important;
-    line-height:1.04!important;
-    margin:.8mm 0 2mm!important;
-  }
-  h2{
-    font-size:12pt!important;
-    line-height:1.10!important;
-    margin:1.1mm 0 1.5mm!important;
-  }
-  h3{
-    font-size:9.4pt!important;
-    line-height:1.12!important;
-    margin:1mm 0!important;
-  }
-  .taskHeaderGraphic h2{
-    font-size:11.5pt!important;
-  }
-  .phaseMission h2{
-    font-size:17pt!important;
-    line-height:1.08!important;
-    margin:1.2mm 0 1.8mm!important;
-  }
-  .phaseMission p{
-    font-size:8.9pt!important;
-    line-height:1.38!important;
+  .pageBody{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
   }
 
-  /* Fliesstext nur minimal kleiner als zuvor */
-  body,.pageBody,p,li,.infoBody,.materialLead{
-    font-size:8.35pt!important;
-    line-height:1.34!important;
+  /* Elemente dürfen die verfügbare Breite nicht überschreiten. */
+  .infoBox,
+  .learningGoals,
+  .worldChoiceInline,
+  .workTable,
+  .personRollBox,
+  .agreementBox,
+  .treeCopy,
+  .cutGrid,
+  .ownGrid{
+    max-width:100%!important;
   }
 
-  .infoBox{
-    margin:1.1mm 0!important;
-    padding:1.8mm 2.5mm!important;
-  }
-  .infoLabel{
-    font-size:7.8pt!important;
+  img,svg{
+    max-width:100%!important;
   }
 
-  /* Reflexionslinien: weiterhin mindestens 3, kompakt */
-  .infoBox.reflect .writeLines{
-    gap:2mm!important;
-    margin-top:.8mm!important;
-  }
-  .infoBox.reflect .writeLines span{
-    height:3.5mm!important;
-  }
-
-  /* Welt-Legenden: gleiche optische Grösse wie in HTML-Vorschau */
-  .legendRow{
-    height:6.6mm!important;
-    grid-template-columns:4.5mm 5.5mm minmax(0,1fr)!important;
-    gap:1.3mm!important;
-  }
-  .legendColor{
-    width:5.2mm!important;
-    height:5.2mm!important;
-    border-width:.25mm!important;
-  }
-  .legendWrite{
-    height:4.8mm!important;
-  }
-  .legend h3{
-    font-size:9.2pt!important;
-  }
-
-  /* Phase 2 A/B: Kästchen lesbar getrennt, aber Tabelle kompakt */
-  .classify td{
-    height:9.6mm!important;
-    padding:.75mm 1mm!important;
-  }
-  .classify th{
-    padding:.8mm 1mm!important;
-  }
+  /* Checkbox-Zeilen etwas klarer trennen, ohne Tabelle höher zu machen. */
   .choiceCheckLine{
     display:block!important;
-    font-size:6.7pt!important;
-    line-height:1.18!important;
+    font-size:6.9pt!important;
+    line-height:1.16!important;
     margin:0!important;
   }
   .choiceCheckLine + .choiceCheckLine{
-    margin-top:1.1mm!important;
+    margin-top:.8mm!important;
   }
 
-  /* Büroklammer-Zahlen nicht unnötig gross */
-  .clipNumber{
-    width:9.5mm!important;
-    height:5.8mm!important;
-    font-size:8.8pt!important;
-    border-radius:1.4mm!important;
-  }
-  .rollSimple tbody tr{
-    height:7.4mm!important;
-  }
-
-  /* Zahlen-Rundentabellen nur so hoch wie nötig */
-  .miniProtocol tbody tr,
-  .roundTableLarge tbody tr{
-    height:5.8mm!important;
-  }
-
-  /* Phasenstartbilder und Lernziele etwas kompakter */
-  .phaseStartPage .phaseGraphicArea{
-    margin:6mm 0 5mm!important;
-  }
-  .phaseStartPage .phaseGraphic{
-    max-height:90mm!important;
-  }
+  /* Lange Texte sicher umbrechen statt rechts hinauszulaufen. */
+  .infoBox,
+  .infoBody,
+  .workTable th,
+  .workTable td,
+  .personRollBox,
   .learningGoals{
-    padding:2.6mm!important;
-  }
-  .learningGoals li{
-    font-size:8pt!important;
-    line-height:1.24!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
   }
 
-  /* Titelblatt: sicher innerhalb einer einzigen Druckseite */
-  .coverPage .cover{
-    padding-top:6mm!important;
-  }
-  .coverPage .pageTitle{
-    font-size:15pt!important;
-  }
-  .coverPage .coverTitle{
-    font-size:31pt!important;
-    margin:3mm 0!important;
-  }
-  .coverPage .coverGraphic{
-    height:53mm!important;
-    margin-top:3mm!important;
-  }
-  .coverPage .coverImage{
-    max-height:53mm!important;
-  }
-  .coverPage .coverWorld{
-    width:122mm!important;
-    margin-top:6mm!important;
-    margin-bottom:8mm!important;
-  }
-  .coverPage .coverWorld .islandGrid{
-    max-height:53mm!important;
-  }
-  .coverPage .nameLine{
-    font-size:10pt!important;
-    margin-top:0!important;
-    margin-bottom:2mm!important;
+  /* Tabellenbreite fest innerhalb des verfügbaren Bereichs halten. */
+  .workTable{
+    width:100%!important;
+    table-layout:fixed!important;
   }
 }
 </style></head><body>
