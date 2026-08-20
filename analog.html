@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+
+<html lang="de"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Novera – analoges Dossier</title><style>
+:root{
+ --outer:#ece9e1;--ink:#222;
+ --green:#75c56b;--greenBg:#edf7ea;
+ --blue:#5db7de;--blueBg:#edf6fb;
+ --ochre:#d6a23d;--ochreBg:#fff7df;
+ --purple:#9a78b8;--purpleBg:#f5eff9;
+ --hint:#9a958b;--hintBg:#f2f0eb;
+ --goal:#c36f82;--goalBg:#fbf0f3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--outer);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{padding:16px 0 40px}
+.previewBar{position:sticky;top:8px;z-index:20;width:min(210mm,calc(100vw - 20px));margin:0 auto 10px;padding:9px 12px;background:#fff;border-radius:10px;box-shadow:0 3px 14px #0002;display:flex;justify-content:space-between;align-items:center}
+.previewBar strong{font-size:14px}.previewBar button{border:0;border-radius:8px;background:#222;color:#fff;padding:8px 12px;font-weight:700}
+.page{width:210mm;height:297mm;background:#fff;margin:0 auto 10mm;overflow:hidden;break-after:page;page-break-after:always;box-shadow:0 3px 18px #0002}
+.pageInner{height:100%;padding:10mm 12mm 9mm;display:flex;flex-direction:column}
+.pageTop{display:flex;justify-content:space-between;min-height:6mm;color:#666;font-size:8pt;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.pageTitle{font-size:22pt;line-height:1.08;margin:2mm 0 4mm}.pageBody{flex:1;min-height:0;overflow:hidden}
+h2{font-size:15pt;line-height:1.18;margin:2.5mm 0}h3{font-size:11pt;margin:2mm 0}
+p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}ol,ul{margin:1.5mm 0;padding-left:6mm}li{margin:.9mm 0}
+.infoBox{margin:2.3mm 0;padding:2.8mm 3.2mm;border-left:1.2mm solid;border-radius:2.5mm}
+.infoLabel{font-size:9.4pt;font-weight:800;line-height:1.48;margin-bottom:1mm}.infoBody,.infoBody p,.infoBody li{font-size:9.4pt!important;line-height:1.48!important}
+.infoBox.task{background:var(--greenBg);border-color:var(--green)}.infoBox.task .infoLabel{color:#376a3b}
+.infoBox.hint{background:var(--hintBg);border-color:var(--hint)}.infoBox.hint .infoLabel{color:#666}
+.infoBox.explain{background:var(--ochreBg);border-color:var(--ochre)}.infoBox.explain .infoLabel{color:#8a641f}
+.infoBox.reflect{background:var(--blueBg);border-color:var(--blue)}.infoBox.reflect .infoLabel{color:#356d86}
+.infoBox.questions{background:var(--purpleBg);border-color:var(--purple)}.infoBox.questions .infoLabel{color:#6f4d8b}
+.writeLines{display:grid;gap:4.2mm;margin-top:2mm}.writeLines span{height:4.8mm;border-bottom:.28mm solid #888}
+.taskBadge{display:inline-block;padding:1.5mm 3mm;border-radius:8mm;background:var(--green);font-size:8pt;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.phaseStartContent{height:100%;display:flex;flex-direction:column}
+.phaseMission{max-width:160mm}.missionLabel{font-size:9pt;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#555}.phaseMission h2{font-size:22pt;margin:2mm 0 3mm}.phaseMission p{font-size:11pt;line-height:1.55}
+.phaseGraphicArea{flex:1;display:flex;align-items:center;justify-content:center;min-height:105mm;background:transparent}
+.phaseGraphic{display:block;max-width:165mm;max-height:112mm;width:auto;height:auto;background:transparent}
+.assetPlaceholder{width:160mm;height:105mm;border:.45mm dashed #aaa;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#777;background:#fff}
+.assetFile{font-size:12pt;font-weight:800}.assetNote{font-size:9pt;margin-top:2mm}
+.learningGoals{padding:4mm;background:var(--goalBg);border-left:1.2mm solid var(--goal);border-radius:3mm}.learningGoalsTitle{font-size:9pt;font-weight:800;text-transform:uppercase;color:#914e5e;margin-bottom:1.5mm}.learningGoals ul{margin:0}.learningGoals li{font-size:9.2pt}
+.cover{height:100%;display:flex;flex-direction:column;align-items:center;text-align:center}.coverTopline{font-size:12pt;margin-top:8mm}.coverTitle{font-size:40pt;font-weight:900;letter-spacing:.06em;margin:5mm 0}.coverGraphic{height:75mm;display:flex;align-items:center;justify-content:center}.coverImage{max-width:160mm;max-height:75mm;width:auto;height:auto}.coverWorld{width:150mm;margin-top:5mm}.coverWorld .islandGrid{max-height:72mm}.nameLine{margin-top:auto;margin-bottom:10mm;width:145mm;display:grid;grid-template-columns:auto 1fr;gap:4mm;align-items:end;text-align:left;font-size:12pt}.nameLine span{height:8mm;border-bottom:.35mm solid #555}
+.taskHeaderGraphic{display:grid;grid-template-columns:minmax(0,1fr) 46mm;gap:5mm;align-items:center}.taskGraphic{max-width:46mm;max-height:42mm;width:auto;height:auto;justify-self:center}
+.worldArea{display:grid;grid-template-columns:minmax(0,1fr) 54mm;gap:6mm;align-items:start;margin:2.5mm 0}.islandGrid{display:block;width:100%;height:auto;max-height:85mm}
+.legend h3{margin:0 0 1mm}.legendRow{height:7.7mm;display:grid;grid-template-columns:5mm 7mm 1fr;gap:1.6mm;align-items:center}.legendRow>span:first-child{font-size:7.5pt;text-align:right;color:#777}.legendColor{width:6.5mm;height:6.5mm;border:.3mm solid #777}.legendWrite{height:5.5mm;border-bottom:.28mm solid #777}
+.worldChoiceInline{display:flex;align-items:center;gap:7mm;flex-wrap:wrap;margin:3mm 0 4mm;padding:3mm;background:#f7f5f0;border-radius:2mm}.worldChoiceInline strong,.worldChoiceInline label{font-size:9.4pt}.sectionRule{height:.35mm;background:#ddd;margin:4mm 0}
+.workTable{width:100%;border-collapse:collapse;table-layout:fixed;font-size:7.5pt;margin:2.5mm 0}.workTable th,.workTable td{border:.25mm solid #aaa;padding:1.6mm;vertical-align:top}.workTable th{background:#f6f4ef;text-align:left;font-size:7.5pt}
+.classify th:nth-child(1){width:7mm}.classify th:nth-child(2){width:30mm}.classify th:nth-child(4){width:56mm}.classify td{height:16mm;line-height:1.35}
+.deskRow{display:grid;grid-template-columns:85mm 1fr;gap:5mm;align-items:center}.deskDiagram{width:100%;height:auto}.miniProtocol th,.miniProtocol td{text-align:center}.miniProtocol td{height:10mm}.miniProtocol th:first-child,.miniProtocol td:first-child{text-align:left}
+.diceTable th:first-child{width:20mm;text-align:center}.diceTable td{height:12mm}.diceTable td:first-child{text-align:center;font-size:12pt;font-weight:800}.clipsHint{font-size:8.5pt;color:#666;margin-top:1mm}
+.agreementBox{padding:3mm;border:.3mm solid #bbb;border-radius:2.5mm;margin:3mm 0}
+.pairSlots{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin:2mm 0}.pairSlots>div{padding:2.5mm;border:.3mm solid #bbb;border-radius:2mm}.pairSlots h3{margin-top:0}.pairSlots span{display:inline-block;width:48%;height:12mm;border:.3mm dashed #aaa;margin:.7%;padding:1.5mm;font-size:8pt;color:#666}
+.dividerPage{height:100%;display:flex;flex-direction:column;justify-content:center}.dividerTag{font-size:10pt;font-weight:800;letter-spacing:.06em;color:#777}.dividerPage h2{font-size:28pt}.dividerPage p{font-size:11pt;max-width:150mm}
+.copyHeader{display:flex;gap:3mm;align-items:center;margin-bottom:3mm}.copyHeader span,.copyHeader strong{padding:1.5mm 3mm;background:#e5e5e5;color:#555;border-radius:8mm;font-size:8pt;text-transform:uppercase;letter-spacing:.04em}
+.treeCopy{height:205mm;display:flex;justify-content:center}.treeCopy svg{height:100%;width:auto}.cutGrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,1fr);gap:3mm;height:238mm}.cutCard{border:.4mm dashed #777;border-radius:1.5mm;padding:4mm;display:flex;flex-direction:column;overflow:hidden;break-inside:avoid;background:#fff}.mysteryCut h3{font-size:10.4pt;margin:0 0 1.5mm}.mysteryCut p{font-size:7.8pt;line-height:1.34;margin:0}.catChecks{margin-top:auto;font-size:7.3pt;line-height:1.4;color:#555}
+.ownGrid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}.ownCard{height:112mm}.cardType{font-size:8pt;font-weight:800;text-transform:uppercase}
+.modelTable td{font-size:7.2pt;line-height:1.25;padding:1.15mm}.modelTable th:nth-child(2),.modelTable th:nth-child(3),.modelTable .yn{width:14mm;text-align:center}.yn{font-size:13pt!important}
+.solutionTable td{font-size:7.2pt;line-height:1.25}
+@media print{
+ @page{size:A4 portrait;margin:0}
+ html,body{background:#fff}body{padding:0}.previewBar{display:none!important}.page{margin:0;box-shadow:none}
+}
+
+/* ===== Drucksichere Ränder ===== */
+.pageInner{
+  padding:14mm 13mm 14mm!important;
+}
+.pageTop{
+  min-height:6mm!important;
+}
+
+/* Titelblatt: nur eine Dossier-Bezeichnung */
+.coverTitle{
+  margin-top:8mm!important;
+}
+
+/* Aufgabe E: zwei unabhängige Würfeltabellen */
+.rollTables{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5mm;
+  margin-top:2mm;
+}
+.rollBlock h3{
+  margin:0 0 1.5mm;
+  font-size:12pt;
+}
+.rollTable{
+  margin:0!important;
+}
+.rollTable th,
+.rollTable td{
+  padding:1.25mm 1.4mm!important;
+  font-size:7.5pt!important;
+  line-height:1.25!important;
+  vertical-align:middle!important;
+}
+.rollTable th:first-child{
+  width:30mm;
+}
+.rollTable th:nth-child(3),
+.rollTable th:nth-child(4),
+.rollTable .markCell{
+  width:8mm!important;
+  text-align:center!important;
+}
+.markCell{
+  font-size:12pt!important;
+}
+
+/* Baum-Aufgabe: Aufsicht */
+.deskRow{
+  grid-template-columns:88mm 1fr!important;
+}
+.deskDiagram{
+  max-height:74mm!important;
+}
+
+/* A3-Baumkopiervorlage */
+.a3Notice{
+  padding:3mm 3.5mm;
+  margin:2mm 0 3mm;
+  border-left:1.2mm solid #9a958b;
+  border-radius:2.5mm;
+  background:#f2f0eb;
+  font-size:9.4pt;
+  line-height:1.45;
+}
+.treeCopy{
+  height:198mm!important;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.treeCopy svg{
+  height:100%!important;
+  width:auto!important;
+  max-width:100%!important;
+}
+
+/* Mysterykarten: mehr Innenabstand zum Papierrand und besser lesbar */
+.cutGrid{
+  height:218mm!important;
+  gap:3.5mm!important;
+}
+.cutCard{
+  padding:3.5mm!important;
+  border-width:.45mm!important;
+}
+.mysteryCut h3{
+  font-size:11pt!important;
+  line-height:1.2!important;
+}
+.mysteryCut p{
+  font-size:8.7pt!important;
+  line-height:1.38!important;
+}
+.catChecks{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:1.5mm!important;
+  margin-top:auto!important;
+  padding-top:2mm!important;
+  font-size:7.1pt!important;
+  line-height:1.2!important;
+  color:#555!important;
+}
+.catChecks span{
+  white-space:nowrap;
+}
+
+/* Schreiblinien allgemein luftiger */
+.writeLines{
+  gap:5mm!important;
+}
+.writeLines span{
+  height:5.6mm!important;
+}
+
+/* Gesamttitelblatt vollständig zentriert */
+.coverPage .pageTitle{
+  text-align:center!important;
+}
+.cover{
+  justify-content:center!important;
+  text-align:center!important;
+}
+.coverGraphic,
+.coverWorld,
+.nameLine{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.nameLine{
+  text-align:center!important;
+  grid-template-columns:auto minmax(80mm,1fr)!important;
+}
+
+/* Weltfläche: etwas grösser und weiter links; Legende länger */
+.worldArea{
+  grid-template-columns:minmax(0,1fr) 60mm!important;
+  gap:4mm!important;
+  margin-left:-3mm!important;
+}
+.worldArea .islandGrid{
+  width:112%!important;
+  max-height:96mm!important;
+  transform-origin:left top;
+}
+.legendRow{
+  grid-template-columns:5mm 7mm minmax(0,1fr)!important;
+}
+.legendWrite{
+  width:100%!important;
+}
+
+/* Aufgabenblätter nutzen Resthöhe besser */
+.page:not(.phaseStartPage):not(.materialPage):not(.coverPage) .pageBody{
+  display:flex;
+  flex-direction:column;
+}
+.page:not(.phaseStartPage):not(.materialPage):not(.coverPage) .infoBox.reflect:last-child{
+  flex-grow:1;
+}
+.page:not(.phaseStartPage):not(.materialPage):not(.coverPage) .infoBox.reflect:last-child .infoBody{
+  min-height:100%;
+}
+.page:not(.phaseStartPage):not(.materialPage):not(.coverPage) .infoBox.reflect:last-child .writeLines{
+  min-height:35mm;
+  align-content:space-between;
+}
+
+/* Sieben Runden */
+.miniProtocol td{
+  height:8.5mm!important;
+}
+
+/* Nachtregel kompakt */
+.infoBox.hint .infoBody ul{
+  margin:1mm 0!important;
+}
+.infoBox.hint .infoBody li{
+  margin:.4mm 0!important;
+}
+
+/* Aufgabe E */
+.personRollBox{
+  border:.35mm solid #bbb;
+  border-radius:3mm;
+  padding:3mm;
+  margin:2mm 0;
+  background:#fff;
+}
+.personRollBox>h3{
+  margin:0 0 1mm;
+  font-size:13pt;
+}
+.personRollBox>p{
+  margin:0 0 2mm;
+}
+.personTables{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4mm;
+}
+.rollPanel h3{
+  margin:0 0 1mm;
+  font-size:11pt;
+}
+.rollSimple{
+  margin:0!important;
+}
+.rollSimple th,
+.rollSimple td{
+  padding:1.1mm 1.3mm!important;
+  font-size:7.6pt!important;
+  line-height:1.25!important;
+}
+.rollSimple th:first-child,
+.rollSimple td:first-child{
+  width:13mm!important;
+  text-align:center!important;
+  font-weight:800;
+}
+.agreementBox .writeLines{
+  min-height:30mm;
+}
+
+/* Baumgrafik in Aufgabe C: ohne Beschriftung der Spielfigur */
+.deskDiagram{
+  max-height:76mm!important;
+}
+
+/* A3 Baum – Platz für Hinweis sicherstellen */
+.treeCopy{
+  height:175mm!important;
+}
+.treeCopy svg{
+  max-height:175mm!important;
+}
+.a3Notice{
+  margin-bottom:2mm!important;
+}
+
+/* Mysterykarten sicher innerhalb der Seite */
+.cutGrid{
+  height:210mm!important;
+  gap:4mm!important;
+}
+.cutCard{
+  padding:3.5mm!important;
+  overflow:hidden!important;
+}
+.mysteryCutHead{
+  display:grid;
+  grid-template-columns:11mm minmax(0,1fr);
+  gap:2mm;
+  align-items:center;
+  margin-bottom:1.2mm;
+}
+.mysteryCutHead .mysteryCardIcon{
+  width:10mm!important;
+  height:10mm!important;
+  display:block!important;
+}
+.mysteryCutHead .mysteryCardIcon svg{
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+}
+.mysteryCutTitle h3{
+  margin:0!important;
+  font-size:11pt!important;
+}
+.mysteryCut p{
+  font-size:8.8pt!important;
+  line-height:1.38!important;
+}
+.catChecks{
+  display:flex!important;
+  flex-direction:row!important;
+  justify-content:space-between!important;
+  gap:1.2mm!important;
+  padding-top:2mm!important;
+  font-size:7pt!important;
+  line-height:1.15!important;
+}
+.catChecks span{
+  white-space:nowrap;
+}
+
+/* Eigene Karten: untere Strichellinie bleibt sichtbar */
+.ownGrid{
+  gap:5mm!important;
+  padding-bottom:4mm!important;
+}
+.ownCard{
+  height:105mm!important;
+}
+.ownCard .writeLines{
+  gap:4mm!important;
+}
+.materialPage .pageBody{
+  padding-bottom:2mm!important;
+}
+
+/* Drucksicherer oberer/unterer Rand */
+.pageInner{
+  padding-top:15mm!important;
+  padding-bottom:16mm!important;
+}
+
+/* Lizenz / Impressum */
+.legalPage .pageBody{
+  display:grid;
+  align-content:start;
+  gap:8mm;
+}
+.legalBlock{
+  padding:5mm;
+  border:1px solid #ddd;
+  border-radius:3mm;
+  background:#faf9f6;
+}
+.legalBlock h2{
+  margin-top:0;
+}
+.licenseMark{
+  display:inline-block;
+  padding:2mm 4mm;
+  background:#222;
+  color:#fff;
+  border-radius:2mm;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.addressPlaceholder{
+  color:#777;
+}
+
+/* Aufgabenlabels bleiben kompakte grüne Kapseln */
+.taskBadge{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:max-content!important;
+  flex:0 0 auto!important;
+  align-self:flex-start!important;
+  justify-self:start!important;
+  white-space:nowrap!important;
+}
+
+/* Doppeltitel: Seitenüberschrift reicht, danach direkt Inhalt */
+.pageTitle + .pageBody > h2:first-child{
+  margin-top:0!important;
+}
+
+/* Weltfläche grösser; Legende bekommt längere Schreiblinien */
+.worldArea{
+  grid-template-columns:minmax(0,1fr) 62mm!important;
+  gap:3mm!important;
+  margin-left:-4mm!important;
+  margin-right:0!important;
+}
+.worldArea .islandGrid{
+  width:118%!important;
+  max-height:101mm!important;
+  transform-origin:left top!important;
+}
+.legendRow{
+  grid-template-columns:5mm 7mm minmax(0,1fr)!important;
+}
+.legendWrite{
+  width:100%!important;
+}
+
+/* Schreiblinien sauber, ohne übertriebene Flex-Verteilung */
+.writeLines{
+  display:grid!important;
+  gap:3.6mm!important;
+  align-content:start!important;
+  min-height:0!important;
+}
+.writeLines span{
+  height:5.2mm!important;
+  flex:none!important;
+}
+.pageBody .infoBox.reflect{
+  flex-grow:0!important;
+}
+.pageBody .infoBox.reflect .infoBody{
+  min-height:0!important;
+}
+
+/* Büroklammer-Felder: ca. 12 mm Zeilenhöhe, ausreichend für eine kleine Büroklammer */
+.personRollBox{
+  border:.35mm solid #b7b7b7!important;
+  border-radius:3mm!important;
+  padding:3mm!important;
+  margin:2mm 0!important;
+}
+.personBoxHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:5mm;
+  margin-bottom:2mm;
+}
+.personBoxHead h3{
+  margin:0!important;
+  font-size:13pt!important;
+}
+.personBoxHead span{
+  font-size:8.5pt;
+  color:#666;
+}
+.personTables{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:4mm!important;
+}
+.rollPanel h4{
+  margin:0 0 1mm!important;
+  font-size:10.5pt!important;
+}
+.rollSimple{
+  margin:0!important;
+}
+.rollSimple th,
+.rollSimple td{
+  padding:1.2mm 1.4mm!important;
+  font-size:7.4pt!important;
+  line-height:1.2!important;
+  vertical-align:middle!important;
+}
+.rollSimple tbody tr{
+  height:12mm!important;
+}
+.rollSimple th:first-child,
+.rollSimple td:first-child{
+  width:16mm!important;
+  text-align:center!important;
+}
+.clipCell{
+  padding:1mm!important;
+}
+.clipNumber{
+  display:grid!important;
+  place-items:center!important;
+  width:12mm!important;
+  height:9mm!important;
+  margin:auto!important;
+  border:.35mm solid #999!important;
+  border-radius:2mm!important;
+  font-size:11pt!important;
+  font-weight:800!important;
+  background:#fff!important;
+}
+
+/* Rundentabelle vollständig und gut beschreibbar */
+.roundLead{
+  margin-top:0!important;
+}
+.roundTableLarge{
+  margin-top:4mm!important;
+}
+.roundTableLarge tbody tr{
+  height:20mm!important;
+}
+.roundTableLarge th,
+.roundTableLarge td{
+  text-align:center!important;
+  vertical-align:middle!important;
+}
+
+/* Aufgabe F kompakt, aber mit genug Schreibraum */
+.addonBox{
+  margin-top:5mm!important;
+}
+.addonBox .writeLines{
+  margin-top:3mm!important;
+}
+
+/* Baum-Kopiervorlage: Hinweis näher an den Baum */
+.treeCopy{
+  height:165mm!important;
+  margin-bottom:0!important;
+}
+.treeCopy svg{
+  height:165mm!important;
+}
+.a3Notice{
+  display:inline-block!important;
+  margin:0 0 2mm!important;
+  padding:2.5mm 3mm!important;
+}
+.treeNightHint{
+  margin-top:1mm!important;
+  margin-bottom:0!important;
+}
+.treeNightHint .infoBody ul{
+  margin-bottom:0!important;
+}
+
+/* Mysterykarten: Icons und Optionen kompakt */
+.mysteryCutHead .mysteryCardIcon{
+  width:10.5mm!important;
+  height:10.5mm!important;
+}
+.catChecks{
+  font-size:7.2pt!important;
+}
+
+/* Eigene Mysterykarten bleiben komplett innerhalb des Druckbereichs */
+.ownGrid{
+  grid-template-columns:1fr 1fr!important;
+  gap:5mm!important;
+  padding-bottom:8mm!important;
+}
+.ownCard{
+  height:96mm!important;
+  min-height:0!important;
+}
+.ownCard .writeLines{
+  gap:3mm!important;
+}
+.ownCard .catChecks{
+  margin-bottom:1mm!important;
+}
+
+/* Oberer und unterer Druck-Sicherheitsrand */
+.pageInner{
+  padding-top:15mm!important;
+  padding-bottom:17mm!important;
+}
+
+.worldArea{
+  grid-template-columns:minmax(0,1fr) 62mm!important;
+  gap:6mm!important;
+  margin-left:-7mm!important;
+}
+.worldArea .islandGrid{
+  width:112%!important;
+  max-height:98mm!important;
+}
+
+.page[data-page="6"] .sectionRule{
+  margin:2mm 0!important;
+}
+.page[data-page="6"] h2{
+  margin-top:1.5mm!important;
+  margin-bottom:1.8mm!important;
+}
+.page[data-page="6"] .infoBox{
+  margin:1.5mm 0!important;
+  padding-top:2.3mm!important;
+  padding-bottom:2.3mm!important;
+}
+.page[data-page="6"] .classify td{
+  height:14mm!important;
+}
+
+.page[data-page="9"] .infoBox.task{
+  margin-bottom:1.5mm!important;
+  padding-top:2mm!important;
+  padding-bottom:2mm!important;
+}
+.page[data-page="9"] .infoBox.task li{
+  margin:.45mm 0!important;
+  line-height:1.35!important;
+}
+.page[data-page="9"] .personRollBox{
+  padding:2.2mm!important;
+  margin-top:1mm!important;
+}
+.page[data-page="9"] .rollSimple tbody tr{
+  height:10.2mm!important;
+}
+.page[data-page="9"] .clipNumber{
+  height:8mm!important;
+}
+
+.page[data-page="11"] .roundTableLarge tbody tr,
+.page[data-page="11"] .miniProtocol tbody tr{
+  height:10mm!important;
+}
+.page[data-page="11"] .roundTableLarge th,
+.page[data-page="11"] .roundTableLarge td,
+.page[data-page="11"] .miniProtocol th,
+.page[data-page="11"] .miniProtocol td{
+  padding:1.2mm!important;
+}
+.page[data-page="11"] .compactF{
+  margin-top:2mm!important;
+  padding-top:2.2mm!important;
+  padding-bottom:2.2mm!important;
+}
+.page[data-page="11"] .compactF ul{
+  margin:1mm 0!important;
+}
+.page[data-page="11"] .compactF .writeLines{
+  gap:2.8mm!important;
+}
+
+.page[data-page="4"] .infoBox.reflect{
+  margin-top:1.4mm!important;
+  margin-bottom:1.4mm!important;
+  padding-top:2.2mm!important;
+  padding-bottom:2.2mm!important;
+}
+.page[data-page="4"] .infoBox.reflect .writeLines{
+  gap:2.6mm!important;
+  margin-top:1.4mm!important;
+}
+.page[data-page="4"] .infoBox.reflect .writeLines span{
+  height:4.6mm!important;
+}
+
+.page[data-page="11"] .addonBox{
+  margin-top:2mm!important;
+  margin-bottom:0!important;
+  padding-top:2.1mm!important;
+  padding-bottom:2.1mm!important;
+}
+.page[data-page="11"] .addonBox .infoBody{
+  line-height:1.4!important;
+}
+</style></head><body>
+<div class="previewBar"><strong>Novera – A4-Hochformat Vorschau</strong><button onclick="window.print()" type="button">Drucken</button></div>
+<main><section class="page coverPage" data-page="0">
+<div class="pageInner">
+<h1 class="pageTitle">Dossier für die analoge Durchführung der Lernumgebung</h1>
+<div class="pageBody">
+<div class="cover">
+<div class="coverTitle">NOVERA</div>
+<div class="coverGraphic"><img alt="" class="coverImage" src="novera-mission.webp"/></div>
+<div class="coverWorld"><svg class="islandGrid" viewbox="0 0 226 171"><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="14"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="25"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="25"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="25"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="25"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="25"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="25"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="36"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="36"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="47"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="47"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="47"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="47"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="47"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="47"></rect><rect fill="#D98B5F" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="47"></rect><rect fill="#D98B5F" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="47"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="58"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="58"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="58"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="58"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="58"></rect><rect fill="#D98B5F" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="58"></rect><rect fill="#D98B5F" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="58"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="69"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="69"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="69"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="69"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="69"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="69"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="80"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="80"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="91"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="91"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="91"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="91"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="91"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="91"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="102"></rect><rect fill="#D98B5F" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="102"></rect><rect fill="#D98B5F" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="102"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="102"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="102"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="102"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="102"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="113"></rect><rect fill="#D98B5F" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="113"></rect><rect fill="#D98B5F" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="113"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="113"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="113"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="113"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="113"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="113"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="124"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="124"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="135"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="135"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="135"></rect><rect fill="#5DB7DE" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="135"></rect><rect fill="#75C56B" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="135"></rect></svg></div>
+<div class="nameLine"><strong>Name:</strong><span></span></div>
+</div>
+</div>
+</div>
+</section><section class="page phaseStartPage" data-page="1">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 1</span><span>Seite 1</span></div>
+<h1 class="pageTitle">Willkommen auf Novera</h1>
+<div class="pageBody">
+<div class="phaseStartContent">
+<div class="phaseMission">
+<div class="missionLabel">Deine Mission</div>
+<h2>Ein gutes Leben!</h2>
+<p>Hast du manchmal auch verrückte Träume? Zum Beispiel diesen: In einem fantastischen Paralleluniversum entdeckst du den seltsamen, bewohnbaren Inselplaneten Novera. Du bist der erste Mensch, der diese Welt betritt und machst sie zu deinem neuen Zuhause. Was brauchst du, um hier gut leben zu können?</p>
+</div>
+<div class="phaseGraphicArea"><img alt="" class="phaseGraphic" src="novera-mission.webp"/></div>
+<div class="learningGoals"><div class="learningGoalsTitle">Lernziele</div><ul><li>Ich kann beschreiben, was für mich zu einem guten Leben gehört.</li><li>Ich kann erklären, warum Menschen unterschiedliche Vorstellungen von einem guten Leben haben.</li><li>Ich kann mit anderen eine gemeinsame Lösung aushandeln, auch wenn wir unterschiedliche Ansichten haben.</li></ul></div>
+</div></div>
+</div>
+</section><section class="page" data-page="2">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 1 · AUFGABE A</span><span>Seite 2</span></div>
+<h1 class="pageTitle">Meine erste Welt</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe A</span>
+<h2>Was brauchst du, um auf Novera gut leben zu können?</h2>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Gestalte deine erste Welt. Wähle Farben, gib ihnen eigene Bedeutungen und zeige damit, was für dich zu einem guten Leben gehört. Du kannst auch die bereits vorhandenen Farben benennen oder verändern.</div></div>
+<div class="infoBox hint"><div class="infoLabel">ⓘ Hinweis</div><div class="infoBody">Wähle eine Farbe, benenne sie und setze sie auf der Welt ein. Benenne alle verwendeten Farben, damit die Aufteilung eindeutig ist.</div></div>
+<div class="worldArea"><svg class="islandGrid" viewbox="0 0 226 171"><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="14"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="135"></rect></svg><div class="legend"><h3>Farben und Bedeutungen</h3><div class="legendRow"><span>1</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>2</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>3</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>4</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>5</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>6</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>7</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>8</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>9</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>10</span><span class="legendColor"></span><span class="legendWrite"></span></div></div></div>
+<div class="infoBox reflect"><div class="infoLabel">💭 Reflexion</div><div class="infoBody">Was ist dir für ein gutes Leben besonders wichtig? Erkläre, wie deine Welt das zeigt.<div class="writeLines"><span></span><span></span><span></span><span></span><span></span></div></div></div>
+</div>
+</div>
+</section><section class="page" data-page="3">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 1 · AUFGABE B</span><span>Seite 3</span></div>
+<h1 class="pageTitle">Drei Menschen auf Novera</h1>
+<div class="pageBody">
+<div class="taskHeaderGraphic">
+<div>
+<span class="taskBadge">Aufgabe B</span>
+<h2>Zwei weitere Personen erreichen deine Welt. Sie wollen auch ein gutes Leben führen. Was veränderst du?</h2>
+</div>
+<img alt="" class="taskGraphic" src="novera-aufgabe-b.webp"/>
+</div>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Gestalte die Welt so um, dass du und zwei weitere Personen dort gut leben können.</div></div>
+<div class="infoBox hint"><div class="infoLabel">ⓘ Hinweis</div><div class="infoBody">Nutze deine erste Welt als Ausgangspunkt. Übernimm, verändere oder ergänze deine Gestaltung.</div></div>
+<div class="worldArea"><svg class="islandGrid" viewbox="0 0 226 171"><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="14"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="135"></rect></svg><div class="legend"><h3>Farben und Bedeutungen</h3><div class="legendRow"><span>1</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>2</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>3</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>4</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>5</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>6</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>7</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>8</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>9</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>10</span><span class="legendColor"></span><span class="legendWrite"></span></div></div></div>
+<div class="infoBox reflect"><div class="infoLabel">💭 Reflexion</div><div class="infoBody">Was hast du in der zweiten Welt verändert? Und warum?<div class="writeLines"><span></span><span></span><span></span><span></span><span></span></div></div></div>
+</div>
+</div>
+</section><section class="page" data-page="4">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 1 · AUFGABE C</span><span>Seite 4</span></div>
+<h1 class="pageTitle">Eine gemeinsame Welt</h1>
+<div class="pageBody">
+<div class="taskHeaderGraphic">
+<div>
+<span class="taskBadge">Aufgabe C</span>
+<h2>Schliesse dich mit jemandem zusammen. Einigt euch auf eine gemeinsame Welt, in der ihr beide und die insgesamt vier weiteren Personen gut leben können.</h2>
+</div>
+<img alt="" class="taskGraphic" src="novera-aufgabe-c.webp"/>
+</div>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Besprecht, was euch für ein gutes Leben wichtig ist. Einigt euch auf eine gemeinsame Welt, in der ihr beide und vier weitere Personen gut leben können. Beide gestalten diese gemeinsame Welt gleich.</div></div>
+<div class="infoBox hint"><div class="infoLabel">ⓘ Hinweis</div><div class="infoBody">Vergleicht zuerst eure bisherigen Welten. Entscheidet gemeinsam, bevor ihr das Raster ausmalt.</div></div>
+<div class="worldArea"><svg class="islandGrid" viewbox="0 0 226 171"><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="14"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="25"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="36"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="47"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="58"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="69"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="80"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="201" y="91"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="102"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="14" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="25" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="190" y="113"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="36" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="47" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="58" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="69" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="135" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="146" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="157" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="168" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="179" y="124"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="80" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="91" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="102" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="113" y="135"></rect><rect fill="#fff" height="11" stroke="#aeb4b7" stroke-width=".55" width="11" x="124" y="135"></rect></svg><div class="legend"><h3>Farben und Bedeutungen</h3><div class="legendRow"><span>1</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>2</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>3</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>4</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>5</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>6</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>7</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>8</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>9</span><span class="legendColor"></span><span class="legendWrite"></span></div><div class="legendRow"><span>10</span><span class="legendColor"></span><span class="legendWrite"></span></div></div></div>
+<div class="infoBox reflect"><div class="infoLabel">💭 Reflexion</div><div class="infoBody">Was war euch beiden wichtig? Wo wart ihr unterschiedlicher Meinung? Worauf musstet ihr euch einigen?<div class="writeLines"><span></span><span></span></div></div></div>
+<div class="infoBox reflect"><div class="infoLabel">💭 Reflexion</div><div class="infoBody">Hat sich deine Vorstellung von einem guten Leben durch die Aufgaben verändert? Begründe deine Antwort.<div class="writeLines"><span></span><span></span></div></div></div>
+</div>
+</div>
+</section><section class="page phaseStartPage" data-page="5">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 2</span><span>Seite 5</span></div>
+<h1 class="pageTitle">Novera weiter entdecken</h1>
+<div class="pageBody">
+<div class="phaseStartContent">
+<div class="phaseMission">
+<div class="missionLabel">Deine Mission</div>
+<h2>Herausfinden, wie Novera tickt</h2>
+<p>Du arbeitest mit einer bisherigen oder vorbereiteten Novera-Welt weiter. Finde heraus, was Menschen brauchen und wünschen, welche Voraussetzungen dafür nötig sind und wie heutige Entscheidungen spätere Möglichkeiten verändern.</p>
+</div>
+<div class="phaseGraphicArea"><img alt="" class="phaseGraphic" src="entdecken.png"/></div>
+<div class="learningGoals"><div class="learningGoalsTitle">Lernziele</div><ul><li>Ich kann unterscheiden, was Menschen für ein gutes Leben brauchen und was sie sich zusätzlich wünschen. Ich kenne dafür die Begriffe Needs und Desires.</li><li>Ich kann erklären, dass für ein gutes Leben natürliche und gesellschaftliche Voraussetzungen nötig sind.</li><li>Ich kann beschreiben, warum Entscheidungen heute die Möglichkeiten von Menschen später beeinflussen können.</li></ul></div>
+</div></div>
+</div>
+</section><section class="page" data-page="6">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 2 · AUFGABE A &amp; B</span><span>Seite 6</span></div>
+<h1 class="pageTitle">Bereiche genauer anschauen</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe A</span>
+<h2>Vier bis sechs Bereiche auswählen</h2>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Wähle eine Welt aus der Phase 1 aus, mit der du weiterarbeiten möchtest.</div></div>
+<div class="worldChoiceInline"><strong>Ich arbeite mit der Welt aus</strong><label>○ Aufgabe A</label><label>○ Aufgabe B</label><label>○ Aufgabe C</label></div>
+<div class="sectionRule"></div>
+<span class="taskBadge">Aufgabe B</span>
+<h2>Genauer beschreiben und entscheiden</h2>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Wähle aus dieser Welt vier bis sechs verschiedene Bereiche aus, die du genauer anschauen möchtest. Beschreibe bei jedem ausgewählten Bereich genauer, was du damit meinst. Entscheide danach für dich persönlich: Brauche ich das ganz sicher für ein gutes Leben oder wünsche ich es mir eher zusätzlich?</div></div>
+<table class="workTable classify"><thead><tr><th></th><th>Bereich</th><th>Was meinst du damit genau?</th><th>Wie ordnest du es für dich persönlich ein?</th></tr></thead><tbody><tr><td>1</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>2</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>3</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>4</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>5</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>6</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr></tbody></table>
+<div class="infoBox explain"><div class="infoLabel">◆ Erklärung</div><div class="infoBody"><strong>Damit Menschen etwas bekommen oder tun können, braucht es Voraussetzungen.</strong> Manche sind natürlich, zum Beispiel Wasser, Boden, Rohstoffe oder Energie. Andere entstehen durch das Zusammenleben, zum Beispiel Wissen, Arbeit, Verkehrswege, Regeln oder Zusammenarbeit. Oft braucht es beides gleichzeitig.</div></div>
+</div>
+</div>
+</section><section class="page" data-page="7">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 2 · AUFGABE C</span><span>Seite 7</span></div>
+<h1 class="pageTitle">Der magische Baum</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe C</span>
+<p>Auf Novera braucht es keine natürlichen oder gesellschaftlichen Voraussetzungen um Dinge für ein gutes Leben zu ermöglichen. Hier wächst ein magischer Baum. Seine Früchte können dir geben, was du brauchst. Für alles was du dir erfüllst, werden zwei Früchte geerntet. Nach jeder Runde wachsen über Nacht neue Früchte. Wie viele es genau sind, siehst du erst nach der Nacht.</p>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody"><ol>
+<li>Für diese Aufgabe verwendest du den Baum aus den Kopiervorlagen. Lege ihn aufs Pult und hänge <strong>16 Post-its</strong> als Früchte daran.</li>
+<li>Du spielst mit deinen beschriebenen Dingen aus Aufgabe A/B. Wähle in jeder Runde aus, was du dir erfüllen möchtest. Für jedes erfüllte Ding nimmst du <strong>zwei Früchte</strong> vom Baum.</li>
+<li>Wenn du deine Auswahl getroffen hast, wertest du die Nacht nach den Hinweisen aus und startest mit der neuen Fruchtzahl in die nächste Runde.</li>
+<li>Spiele mindestens fünf Runden.</li>
+</ol></div></div>
+<div class="deskRow">
+<svg aria-label="Aufsicht auf einen Schülertisch mit Baumvorlage, Post-it-Früchten und Spielfigur" class="deskDiagram" role="img" viewbox="0 0 560 350">
+<!-- Tischplatte von oben -->
+<rect fill="#d7b892" height="275" rx="18" stroke="#9b7657" stroke-width="4" width="500" x="30" y="24"></rect>
+<!-- A4-Blatt auf dem Tisch -->
+<rect fill="#fff" height="238" rx="6" stroke="#bbb" stroke-width="2" width="270" x="145" y="43"></rect>
+<!-- Baum, kurze Stammform und grosse Krone -->
+<rect fill="#674087" height="42" rx="4" width="28" x="266" y="211"></rect>
+<circle cx="280" cy="148" fill="#263d73" r="82"></circle>
+<circle cx="221" cy="165" fill="#315184" r="55"></circle>
+<circle cx="339" cy="165" fill="#315184" r="55"></circle>
+<!-- 16 gelbe Post-its -->
+<g fill="#f4c84a" stroke="#b49327" stroke-width="1.4">
+<rect height="20" rx="2" width="20" x="210" y="93"></rect><rect height="20" rx="2" width="20" x="245" y="82"></rect>
+<rect height="20" rx="2" width="20" x="280" y="86"></rect><rect height="20" rx="2" width="20" x="315" y="96"></rect>
+<rect height="20" rx="2" width="20" x="194" y="126"></rect><rect height="20" rx="2" width="20" x="231" y="119"></rect>
+<rect height="20" rx="2" width="20" x="269" y="122"></rect><rect height="20" rx="2" width="20" x="307" y="127"></rect>
+<rect height="20" rx="2" width="20" x="207" y="160"></rect><rect height="20" rx="2" width="20" x="244" y="154"></rect>
+<rect height="20" rx="2" width="20" x="282" y="158"></rect><rect height="20" rx="2" width="20" x="320" y="161"></rect>
+<rect height="20" rx="2" width="20" x="220" y="192"></rect><rect height="20" rx="2" width="20" x="257" y="187"></rect>
+<rect height="20" rx="2" width="20" x="295" y="190"></rect><rect height="20" rx="2" width="20" x="333" y="188"></rect>
+</g>
+<!-- gut erkennbare klassische Spielfigur -->
+<g transform="translate(70 125)">
+<circle cx="42" cy="28" fill="#5d7080" r="21"></circle>
+<path d="M24 49 C25 67,12 78,8 106 L76 106 C72 78,59 67,60 49 Z" fill="#5d7080"></path>
+<ellipse cx="42" cy="108" fill="#4b5b67" rx="38" ry="9"></ellipse>
+</g>
+<text fill="#555" font-size="14" text-anchor="middle" x="280" y="326">Aufsicht auf dein Pult</text>
+</svg>
+<div class="infoBox hint"><div class="infoLabel">ⓘ Hinweis</div><div class="infoBody">
+<strong>Nachtregel</strong>
+<ul>
+<li>Die Hälfte der übrigen Früchte wächst nach; bei ungeraden Zahlen wird abgerundet.</li>
+<li>Würfle einmal: Bei einer 6 wachsen 2 zusätzliche Früchte.</li>
+<li>Maximal 16 Früchte.</li>
+<li>Bei 0 Früchten wächst nichts mehr nach.</li>
+</ul>
+</div></div></div>
+<table class="workTable miniProtocol"><thead><tr><th>Runde</th><th>Start</th><th>genutzt</th><th>übrig</th><th>nachgewachsen</th><th>neu</th></tr></thead>
+<tbody><tr><td>1</td><td>16</td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+</div>
+</div>
+</section><section class="page" data-page="8">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 2 · AUFGABE D</span><span>Seite 8</span></div>
+<h1 class="pageTitle">Was hast du beobachtet?</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe D</span>
+<div class="infoBox reflect"><div class="infoLabel">💭 Reflexion</div><div class="infoBody">Denke über deine Runden nach. Gehe dabei auf diese Fragen ein:
+<ul><li>Was ist passiert, wenn du viele Früchte genutzt hast?</li>
+<li>Was ist passiert, wenn du weniger Früchte genutzt hast?</li>
+<li>Wann konntest du dir auch zusätzliche Wünsche erfüllen – und wann nicht?</li>
+<li>Was konntest du beim Nachwachsen der Früchte nicht vorhersagen?</li></ul><div class="writeLines"><span></span><span></span><span></span><span></span><span></span></div></div></div>
+<div class="infoBox explain"><div class="infoLabel">◆ Erklärung</div><div class="infoBody"><strong>Nutzung heute beeinflusst Möglichkeiten morgen.</strong> Wie viele Früchte nachwachsen, ist begrenzt und nicht vollständig vorhersehbar. Auch wenn du nicht genau weisst, was später passiert, kannst du überlegen, was später noch möglich sein soll.</div></div>
+<div class="infoBox explain"><div class="infoLabel">◆ Erklärung</div><div class="infoBody">Bis jetzt hast du selbst entschieden, was du <strong>ganz sicher für ein gutes Leben brauchst</strong> und was du dir <strong>eher zusätzlich wünschst</strong>. Dabei ging es um deine persönliche Sicht. Nun schauen wir darauf, <strong>was Menschen allgemein brauchen, damit sie gut leben können</strong>. Dafür unterscheiden wir zwischen <strong>Needs</strong> und <strong>Desires</strong>.<br/><br/>
+<strong>Needs</strong> sind Dinge und Bedingungen, die für ein gutes Leben grundlegend sind. Dazu gehören zum Beispiel Nahrung, Wasser, Gesundheit, Bildung, Wohnen, soziale Beziehungen, Energie oder die Möglichkeit mitzubestimmen.<br/><br/>
+<strong>Desires</strong> sind zusätzliche Wünsche. Sie können uns sehr wichtig sein, sind aber nicht dasselbe wie grundlegende Needs. Oft steckt hinter einem Desire ein Need: Ein bestimmtes Smartphone ist kein Need. Mit anderen Menschen in Kontakt sein zu können, kann dagegen einer sein. Was wir uns wünschen, wird auch von Werbung, sozialen Medien, Trends und unserem Umfeld beeinflusst. <strong>Desires sind nicht falsch oder schlecht.</strong> Die Unterscheidung wird besonders wichtig, wenn nicht alles gleichzeitig möglich ist.</div></div>
+</div>
+</div>
+</section><section class="page" data-page="9">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 2 · AUFGABE E</span><span>Seite 9</span></div>
+<h1 class="pageTitle">Jetzt arbeitet ihr zu zweit</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe E</span>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">
+<ol>
+<li>Setzt euch zu zweit zusammen und baut den Baum mit <strong>16 Früchten</strong> wieder auf.</li>
+<li>Jede Person erwürfelt sich <strong>zwei Needs und zwei Desires</strong>. Würfelt jeweils mit <strong>zwei Würfeln</strong> und addiert die Augen. Die Summe liegt zwischen <strong>2 und 12</strong>.</li>
+<li>Person A nutzt das Kästchen «Person A», Person B das Kästchen «Person B». Für Needs und Desires wird getrennt gewürfelt. Legt eine <strong>Büroklammer</strong> auf die gewürfelte Zahl.</li>
+<li>Person A und Person B dürfen dieselbe Möglichkeit haben.</li>
+<li>Bevor ihr startet, schreibt ihr eine <strong>gemeinsame Regel</strong> auf, wie ihr ernten wollt. Beispiel: «Zuerst versuchen wir, für beide mindestens ein Need zu erfüllen.»</li>
+<li>Nun könnt ihr spielen:
+  <ul>
+<li>Entscheidet gemeinsam, was ihr erfüllen wollt.</li>
+<li>Für jede erfüllte Sache nehmt ihr 2 Früchte.</li>
+<li>Wendet danach die Nachtregel aus Aufgabe C an.</li>
+<li>Spielt mindestens 5 Runden.</li>
+</ul>
+</li>
+</ol>
+</div></div>
+<section class="personRollBox">
+<div class="personBoxHead"><h3>Person A</h3><span>📎 Büroklammern auf die erwürfelten Zahlen legen.</span></div>
+<div class="personTables">
+<div class="rollPanel">
+<h4>Needs</h4>
+<table class="workTable rollSimple">
+<thead><tr><th>Summe</th><th>Need</th></tr></thead>
+<tbody><tr><td class="clipCell"><span class="clipNumber">2</span></td><td>Genug zu essen haben</td></tr><tr><td class="clipCell"><span class="clipNumber">3</span></td><td>Sauberes Trinkwasser nutzen können</td></tr><tr><td class="clipCell"><span class="clipNumber">4</span></td><td>Einen sicheren Ort zum Wohnen haben</td></tr><tr><td class="clipCell"><span class="clipNumber">5</span></td><td>Bei Krankheit medizinische Hilfe erhalten</td></tr><tr><td class="clipCell"><span class="clipNumber">6</span></td><td>Vor Gewalt und Bedrohung geschützt sein</td></tr><tr><td class="clipCell"><span class="clipNumber">7</span></td><td>Zu anderen Menschen gehören und Beziehungen pflegen können</td></tr><tr><td class="clipCell"><span class="clipNumber">8</span></td><td>Lernen und sich bilden können</td></tr><tr><td class="clipCell"><span class="clipNumber">9</span></td><td>Bei wichtigen Entscheidungen mitbestimmen können</td></tr><tr><td class="clipCell"><span class="clipNumber">10</span></td><td>Zeit für Erholung und genügend Schlaf haben</td></tr><tr><td class="clipCell"><span class="clipNumber">11</span></td><td>Sich sicher von einem Ort zum anderen bewegen können</td></tr><tr><td class="clipCell"><span class="clipNumber">12</span></td><td>Verlässliche Informationen erhalten</td></tr></tbody>
+</table>
+</div>
+<div class="rollPanel">
+<h4>Desires</h4>
+<table class="workTable rollSimple">
+<thead><tr><th>Summe</th><th>Desire</th></tr></thead>
+<tbody><tr><td class="clipCell"><span class="clipNumber">2</span></td><td>Einen besonders leistungsstarken Gaming-PC besitzen</td></tr><tr><td class="clipCell"><span class="clipNumber">3</span></td><td>Ein VIP-Ticket für ein grosses Konzert haben</td></tr><tr><td class="clipCell"><span class="clipNumber">4</span></td><td>Jedes Jahr eine weite Ferienreise machen</td></tr><tr><td class="clipCell"><span class="clipNumber">5</span></td><td>Eine grosse Sammlung limitierter Sneakers besitzen</td></tr><tr><td class="clipCell"><span class="clipNumber">6</span></td><td>Einen eigenen Pool haben</td></tr><tr><td class="clipCell"><span class="clipNumber">7</span></td><td>Ein privates Heimkino einrichten</td></tr><tr><td class="clipCell"><span class="clipNumber">8</span></td><td>Eine teure Designerjacke besitzen</td></tr><tr><td class="clipCell"><span class="clipNumber">9</span></td><td>Eine Drohne für Freizeitaufnahmen haben</td></tr><tr><td class="clipCell"><span class="clipNumber">10</span></td><td>Einen riesigen Fernseher besitzen</td></tr><tr><td class="clipCell"><span class="clipNumber">11</span></td><td>Eine aufwendige Geburtstagsparty feiern</td></tr><tr><td class="clipCell"><span class="clipNumber">12</span></td><td>Eine Sammlung seltener Fanartikel besitzen</td></tr></tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</section><section class="page" data-page="10">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 2 · AUFGABE E</span><span>Seite 10</span></div>
+<h1 class="pageTitle">Person B und eure gemeinsame Regel</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe E</span>
+<section class="personRollBox">
+<div class="personBoxHead"><h3>Person B</h3><span>📎 Büroklammern auf die erwürfelten Zahlen legen.</span></div>
+<div class="personTables">
+<div class="rollPanel">
+<h4>Needs</h4>
+<table class="workTable rollSimple">
+<thead><tr><th>Summe</th><th>Need</th></tr></thead>
+<tbody><tr><td class="clipCell"><span class="clipNumber">2</span></td><td>Genug zu essen haben</td></tr><tr><td class="clipCell"><span class="clipNumber">3</span></td><td>Sauberes Trinkwasser nutzen können</td></tr><tr><td class="clipCell"><span class="clipNumber">4</span></td><td>Einen sicheren Ort zum Wohnen haben</td></tr><tr><td class="clipCell"><span class="clipNumber">5</span></td><td>Bei Krankheit medizinische Hilfe erhalten</td></tr><tr><td class="clipCell"><span class="clipNumber">6</span></td><td>Vor Gewalt und Bedrohung geschützt sein</td></tr><tr><td class="clipCell"><span class="clipNumber">7</span></td><td>Zu anderen Menschen gehören und Beziehungen pflegen können</td></tr><tr><td class="clipCell"><span class="clipNumber">8</span></td><td>Lernen und sich bilden können</td></tr><tr><td class="clipCell"><span class="clipNumber">9</span></td><td>Bei wichtigen Entscheidungen mitbestimmen können</td></tr><tr><td class="clipCell"><span class="clipNumber">10</span></td><td>Zeit für Erholung und genügend Schlaf haben</td></tr><tr><td class="clipCell"><span class="clipNumber">11</span></td><td>Sich sicher von einem Ort zum anderen bewegen können</td></tr><tr><td class="clipCell"><span class="clipNumber">12</span></td><td>Verlässliche Informationen erhalten</td></tr></tbody>
+</table>
+</div>
+<div class="rollPanel">
+<h4>Desires</h4>
+<table class="workTable rollSimple">
+<thead><tr><th>Summe</th><th>Desire</th></tr></thead>
+<tbody><tr><td class="clipCell"><span class="clipNumber">2</span></td><td>Einen besonders leistungsstarken Gaming-PC besitzen</td></tr><tr><td class="clipCell"><span class="clipNumber">3</span></td><td>Ein VIP-Ticket für ein grosses Konzert haben</td></tr><tr><td class="clipCell"><span class="clipNumber">4</span></td><td>Jedes Jahr eine weite Ferienreise machen</td></tr><tr><td class="clipCell"><span class="clipNumber">5</span></td><td>Eine grosse Sammlung limitierter Sneakers besitzen</td></tr><tr><td class="clipCell"><span class="clipNumber">6</span></td><td>Einen eigenen Pool haben</td></tr><tr><td class="clipCell"><span class="clipNumber">7</span></td><td>Ein privates Heimkino einrichten</td></tr><tr><td class="clipCell"><span class="clipNumber">8</span></td><td>Eine teure Designerjacke besitzen</td></tr><tr><td class="clipCell"><span class="clipNumber">9</span></td><td>Eine Drohne für Freizeitaufnahmen haben</td></tr><tr><td class="clipCell"><span class="clipNumber">10</span></td><td>Einen riesigen Fernseher besitzen</td></tr><tr><td class="clipCell"><span class="clipNumber">11</span></td><td>Eine aufwendige Geburtstagsparty feiern</td></tr><tr><td class="clipCell"><span class="clipNumber">12</span></td><td>Eine Sammlung seltener Fanartikel besitzen</td></tr></tbody>
+</table>
+</div>
+</div>
+</section>
+<div class="agreementBox">
+<h3>Eure gemeinsame Regel</h3>
+<p>Schreibt auf, wie ihr die Früchte ernten wollt.</p>
+<div class="writeLines"><span></span><span></span><span></span><span></span></div>
+</div>
+</div>
+</div>
+</section><section class="page" data-page="11">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 2 · AUFGABE E</span><span>Seite 11</span></div>
+<h1 class="pageTitle">Gemeinsame Runden</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe E</span>
+<p class="roundLead">Tragt eure Ergebnisse nach jeder Runde ein. Ihr spielt mindestens fünf Runden; für weitere Versuche sind sieben Zeilen vorhanden.</p>
+<table class="workTable miniProtocol roundTableLarge">
+<thead><tr><th>Runde</th><th>Start</th><th>genutzt</th><th>übrig</th><th>nachgewachsen</th><th>neu</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>16</td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>7</td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody>
+</table>
+<div class="sectionRule"></div>
+<span class="taskBadge">Aufgabe F</span>
+<div class="infoBox reflect compactF"><div class="infoLabel">💭 Reflexion</div><div class="infoBody">
+Denkt über eure gemeinsamen Runden nach:
+<ul>
+<li>War eure Verteilung für Person A und Person B gerecht? Warum?</li>
+<li>Hat eure gemeinsame Regel funktioniert? Würdet ihr sie beibehalten oder verändern? Warum?</li>
+</ul>
+<div class="writeLines"><span></span><span></span><span></span></div>
+</div></div>
+<div class="infoBox hint addonBox">
+<div class="infoLabel">ⓘ Zusatzauftrag</div>
+<div class="infoBody">
+    Überlegt euch, wie ihr das Spiel in einem Klassenkreis spielen könntet. Was müsstet ihr ändern, damit es funktioniert? Denkt zum Beispiel an Regeln, die maximale Anzahl Früchte oder ein gemeinsames Kartenset mit Needs und Desires.
+  </div>
+</div>
+</div>
+</div>
+</section><section class="page phaseStartPage" data-page="12">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 3</span><span>Seite 12</span></div>
+<h1 class="pageTitle">Novera und die Erde</h1>
+<div class="pageBody">
+<div class="phaseStartContent">
+<div class="phaseMission">
+<div class="missionLabel">Deine Mission</div>
+<h2>Herausfinden, was Novera mit der Erde zu tun hat</h2>
+<p>Untersuche nun in einem Mystery die Frage: Was hat Novera mit der Erde zu tun? Bei einem Mystery arbeitest du mit verschiedenen Hinweisen. Du ordnest Karten, verbindest wichtige Zusammenhänge und entwickelst daraus eine eigene Erklärung. Es gibt nicht nur eine richtige Lösung.</p>
+</div>
+<div class="phaseGraphicArea"><div class="assetPlaceholder">
+<div class="assetFile">phase3-titelgrafik.png</div>
+<div class="assetNote">Grafik hier einsetzen</div>
+</div></div>
+<div class="learningGoals"><div class="learningGoalsTitle">Lernziele</div><ul><li>Ich kann erklären, warum ein gutes Leben für alle mit den Grenzen der Erde zusammenhängt.</li><li>Ich kann beschreiben, warum Fragen zu Nutzung, Verteilung und Gerechtigkeit nicht einfach zu lösen sind.</li><li>Ich kann verschiedene Zusammenhänge miteinander verbinden und begründen, warum es bei komplexen Fragen oft nicht nur eine richtige Antwort gibt.</li></ul></div>
+</div></div>
+</div>
+</section><section class="page" data-page="13">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 3 · AUFGABE A</span><span>Seite 13</span></div>
+<h1 class="pageTitle">Mystery</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe A</span>
+<h2>Mystery: Was hat Novera mit der Erde zu tun?</h2>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody"><ol>
+<li>Holt bei der Lehrperson das passende Arbeitsblatt aus den <strong>Kopiervorlagen zu Phase 3, Aufgabe A</strong>.</li>
+<li>Schneidet die Mysterykarten aus.</li>
+<li>Arbeitet in Gruppen von 2–4 Personen. Legt die Karten zunächst lose auf einen grossen Papierbogen und ordnet sie.</li>
+<li>Markiert bei wichtigen Karten eine Kategorie: <strong>Needs und Desires</strong>, <strong>Grenzen der Erde</strong> oder <strong>Gerechtigkeit</strong>.</li>
+<li>Zeichnet Verbindungen zwischen wichtigen Karten und beschriftet Linien, wenn euch das beim Erklären hilft.</li>
+<li>Baut daraus eine Erklärung zur Mystery-Frage. Ihr müsst nicht alle Karten verwenden oder alles miteinander verbinden. Einige gute Verbindungen reichen.</li>
+</ol></div></div>
+<div class="infoBox hint"><div class="infoLabel">ⓘ Hinweis</div><div class="infoBody">Eigene Ideen könnt ihr auf den leeren Karten aus der Kopiervorlage ergänzen. Klebt die Karten erst fest, wenn ihr mit eurer Ordnung zufrieden seid.</div></div>
+<div class="infoBox reflect"><div class="infoLabel">💭 Reflexion</div><div class="infoBody">Was hat Novera mit einem guten Leben auf der Erde zu tun? Schreibt eure wichtigsten Zusammenhänge in wenigen Sätzen auf. Eure Antwort muss nicht alles erklären.<div class="writeLines"><span></span><span></span><span></span><span></span><span></span></div></div></div>
+<div class="infoBox questions"><div class="infoLabel">? Fragen</div><div class="infoBody">Ihr müsst nicht auf alles eine Antwort haben. Welche Fragen sind bei euch entstanden? Was habt ihr euch beim Arbeiten gefragt?<div class="writeLines"><span></span><span></span><span></span></div></div></div>
+<div class="infoBox hint"><div class="infoLabel">ⓘ Hinweis</div><div class="infoBody">Wie ihr eure Lösung und eure offenen Fragen in der Klasse weiterverwendet, besprecht ihr mit eurer Lehrperson.</div></div>
+</div>
+</div>
+</section><section class="page" data-page="14">
+<div class="pageInner">
+<div class="pageTop"><span>PHASE 3 · AUFGABE B</span><span>Seite 14</span></div>
+<h1 class="pageTitle">Novera – ein Modell</h1>
+<div class="pageBody">
+<span class="taskBadge">Aufgabe B</span>
+<div class="infoBox explain"><div class="infoLabel">◆ Erklärung</div><div class="infoBody">Die Fantasiewelt Novera und der magische Baum sind <strong>Modelle</strong>. Ein Modell zeigt einen Ausschnitt der Wirklichkeit vereinfacht. So lassen sich bestimmte Zusammenhänge leichter erkennen.<br/><br/>
+Modelle haben aber Grenzen: Sie lassen vieles weg. Der Baum zeigt zum Beispiel, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann. Er zeigt aber nicht, wie die vielen Vorgänge auf der Erde genau ablaufen.<br/><br/>
+Darum ist wichtig zu fragen: <strong>Was kann das Modell zeigen – und was nicht?</strong></div></div>
+<div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Entscheide bei jeder Aussage: Kann Novera das zeigen oder nicht? Kreuze Ja oder Nein an.</div></div>
+<table class="workTable modelTable"><thead><tr><th>Aussage</th><th>Ja</th><th>Nein</th></tr></thead><tbody><tr><td>Der Baum zeigt, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Novera kann helfen, über Needs und Desires nachzudenken.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Der Baum zeigt genau, wie schnell sich Wälder, Fischbestände oder Böden auf der Erde erholen.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Novera kann zeigen, dass nicht alles gleichzeitig erfüllt werden kann.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Novera zeigt genau, was jeder Mensch für ein gutes Leben braucht.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Der Baum zeigt alle wichtigen Zusammenhänge des Erdsystems.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Novera kann helfen, über Verteilung und Gerechtigkeit zu sprechen.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Die Fruchtzahl zeigt, wie viele Rohstoffe es auf der Erde wirklich gibt.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Novera kann helfen, Folgen von Entscheidungen über mehrere Runden zu beobachten.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Ein Modell kann etwas verständlicher machen, obwohl es die Wirklichkeit vereinfacht.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Aus Novera kann man direkt ablesen, welche Lösung für die Erde richtig ist.</td><td class="yn">□</td><td class="yn">□</td></tr><tr><td>Ein Modell ist nur dann nützlich, wenn es die Wirklichkeit vollständig abbildet.</td><td class="yn">□</td><td class="yn">□</td></tr></tbody></table>
+<div class="infoBox reflect"><div class="infoLabel">💭 Reflexion</div><div class="infoBody">Möchtest du noch etwas aufschreiben, das dir zu den Möglichkeiten oder Grenzen von Novera aufgefallen ist?<div class="writeLines"><span></span><span></span><span></span></div></div></div>
+</div>
+</div>
+</section><section class="page divider" data-page="15">
+<div class="pageInner">
+<div class="pageTop"><span>MATERIAL</span><span>Seite 15</span></div>
+<h1 class="pageTitle">Kopiervorlagen</h1>
+<div class="pageBody"><div class="dividerPage"><div class="dividerTag">MATERIAL / KOPIERVORLAGEN</div><h2>Für Gruppen und gemeinsame Aufgaben</h2><p>Diese Seiten werden je nach Auftrag einmal pro Gruppe oder für die ganze Klasse kopiert.</p></div></div>
+</div>
+</section><section class="page materialPage" data-page="16">
+<div class="pageInner">
+<div class="pageTop"><span>MATERIAL · PHASE 2</span><span>Seite 16</span></div>
+<h1 class="pageTitle">Der magische Baum</h1>
+<div class="pageBody">
+<div class="copyHeader"><span>PHASE 2</span><strong>Aufgabe C und E</strong></div>
+<h2>Kopiervorlage: Der magische Baum</h2>
+<div class="a3Notice"><strong>Auf A3 vergrössern.</strong></div>
+<div class="treeCopy">
+<svg aria-label="Magischer Baum mit 16 Feldern für kleine Post-its" role="img" viewbox="0 0 200 220">
+<path d="M79 174 L121 174 L124 198 Q100 211 76 198 Z" fill="#674087"></path>
+<path d="M10 87
+           C2 55 24 28 52 27
+           C64 8 91 6 105 24
+           C128 7 157 25 162 48
+           C188 54 196 84 181 104
+           C191 129 171 158 144 160
+           C132 183 104 185 87 169
+           C64 183 35 170 30 149
+           C8 143 0 112 13 96
+           C8 93 8 90 10 87 Z" fill="#263d73"></path>
+<path d="M25 91
+           C18 66 37 43 60 44
+           C74 28 96 31 105 47
+           C122 34 148 43 153 64
+           C171 72 174 96 163 112
+           C168 134 151 150 130 151
+           C115 166 91 161 81 147
+           C58 159 38 145 37 126
+           C22 120 18 103 25 91 Z" fill="#315184" opacity=".9"></path>
+<polygon fill="#5DB7DE" points="100,180 111,191 100,202 89,191" stroke="#315184" stroke-width="1.4"></polygon>
+<g fill="none" stroke="#f4c84a" stroke-dasharray="3 2" stroke-width="1.15">
+<rect height="26.9" rx="2" width="36" x="17" y="25"></rect>
+<rect height="26.9" rx="2" width="36" x="57" y="18"></rect>
+<rect height="26.9" rx="2" width="36" x="99" y="23"></rect>
+<rect height="26.9" rx="2" width="36" x="141" y="31"></rect>
+<rect height="26.9" rx="2" width="36" x="11" y="59"></rect>
+<rect height="26.9" rx="2" width="36" x="51" y="53"></rect>
+<rect height="26.9" rx="2" width="36" x="92" y="57"></rect>
+<rect height="26.9" rx="2" width="36" x="133" y="63"></rect>
+<rect height="26.9" rx="2" width="36" x="19" y="93"></rect>
+<rect height="26.9" rx="2" width="36" x="59" y="88"></rect>
+<rect height="26.9" rx="2" width="36" x="100" y="93"></rect>
+<rect height="26.9" rx="2" width="36" x="141" y="97"></rect>
+<rect height="26.9" rx="2" width="36" x="27" y="126"></rect>
+<rect height="26.9" rx="2" width="36" x="67" y="121"></rect>
+<rect height="26.9" rx="2" width="36" x="107" y="126"></rect>
+<rect height="26.9" rx="2" width="36" x="147" y="130"></rect>
+</g>
+</svg>
+</div>
+<div class="infoBox hint treeNightHint"><div class="infoLabel">ⓘ Hinweis</div><div class="infoBody">
+<strong>Nachtregel</strong>
+<ul>
+<li>Die Hälfte der übrigen Früchte wächst nach; bei ungeraden Zahlen wird abgerundet.</li>
+<li>Würfle einmal: Bei einer 6 wachsen 2 zusätzliche Früchte.</li>
+<li>Maximal 16 Früchte.</li>
+<li>Bei 0 Früchten wächst nichts mehr nach.</li>
+</ul>
+</div></div>
+</div>
+</div>
+</section><section class="page materialPage" data-page="17">
+<div class="pageInner">
+<div class="pageTop"><span>MATERIAL · PHASE 3</span><span>Seite 17</span></div>
+<h1 class="pageTitle">Mysterykarten</h1>
+<div class="pageBody"><div class="copyHeader"><span>PHASE 3</span><strong>Aufgabe A</strong></div>
+<h2>Kopiervorlage: Mysterykarten</h2>
+<p class="materialLead">Karten ausschneiden. Die Zuordnung entsteht erst beim Arbeiten.</p>
+<div class="cutGrid"><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#d85846" height="8" width="8" x="4" y="15"></rect><rect fill="#4e9d4b" height="4" width="3" x="7" y="11"></rect><rect fill="#e7bb3f" height="10" width="10" x="16" y="12"></rect><rect fill="#4e9d4b" height="3" width="4" x="19" y="9"></rect></svg></div><div class="mysteryCutTitle"><h3>Needs auf der Erde</h3></div></div><p>Auch auf der Erde brauchen Menschen Dinge, ohne die ein gutes Leben kaum möglich ist – zum Beispiel Nahrung, sauberes Wasser, Schutz oder medizinische Hilfe. Auf Novera habt ihr solche Dinge als Needs kennengelernt.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#595959" height="10" width="6" x="4" y="18"></rect><rect fill="#777" height="15" width="6" x="12" y="13"></rect><rect fill="#969696" height="20" width="6" x="20" y="8"></rect><rect fill="#c6c8cc" height="5" width="6" x="6" y="10"></rect><rect fill="#dadbde" height="6" width="8" x="10" y="7"></rect></svg></div><div class="mysteryCutTitle"><h3>Auch die Erde hat Grenzen</h3></div></div><p>Auch auf der Erde kann nicht jede Belastung beliebig wachsen. Forschende untersuchen unter dem Begriff «planetare Grenzen», wie stark wichtige Bereiche wie Klima, Wasser, Land und Artenvielfalt verändert werden können, bevor Risiken deutlich steigen.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#d77755" height="12" width="16" x="8" y="10"></rect><rect fill="#914b40" height="4" width="20" x="6" y="8"></rect><rect fill="#4ca9df" height="3" width="24" x="4" y="22"></rect><rect fill="#4ca9df" height="2" width="19" x="7" y="26"></rect></svg></div><div class="mysteryCutTitle"><h3>Folgen treffen Menschen unterschiedlich</h3></div></div><p>Auf der Erde sind Menschen nicht gleich stark von Hitze, Überschwemmungen oder Ernteausfällen betroffen. Geld, Wohnort, Gesundheit, Infrastruktur und politische Unterstützung beeinflussen, wie gut Menschen sich schützen können.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#4d9b50" height="10" width="11" x="5" y="14"></rect><rect fill="#4d9b50" height="8" width="6" x="8" y="10"></rect><rect fill="#78543a" height="5" width="3" x="10" y="23"></rect><rect fill="#67ab63" height="11" width="11" x="18" y="12"></rect><rect fill="#67ab63" height="8" width="6" x="21" y="8"></rect><rect fill="#78543a" height="6" width="3" x="23" y="22"></rect></svg></div><div class="mysteryCutTitle"><h3>Was sich erneuert, braucht Zeit</h3></div></div><p>Auf der Erde können sich manche Vorräte und Lebensräume erneuern. Das braucht Zeit. Zum Beispiel wächst ein abgeholzter Wald nicht in einer Nacht wieder nach.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#51afe0" height="5" width="4" x="14" y="4"></rect><rect fill="#51afe0" height="5" width="10" x="11" y="9"></rect><rect fill="#51afe0" height="8" width="16" x="8" y="14"></rect><rect fill="#51afe0" height="4" width="10" x="11" y="22"></rect></svg></div><div class="mysteryCutTitle"><h3>Desires auf der Erde</h3></div></div><p>Auch auf der Erde wünschen sich Menschen Dinge, die über grundlegende Bedürfnisse hinausgehen. Solche Desires können sehr verschieden sein und sich durch Werbung, Trends oder das Umfeld verändern.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg aria-hidden="true" viewbox="0 0 32 32">
+<rect fill="#5DB7DE" height="4" width="8" x="12" y="5"></rect>
+<rect fill="#5DB7DE" height="8" width="5" x="18" y="8"></rect>
+<rect fill="#5DB7DE" height="5" width="5" x="14" y="15"></rect>
+<rect fill="#674087" height="5" width="6" x="13" y="24"></rect>
+</svg></div><div class="mysteryCutTitle"><h3>Wer nutzt wie viel?</h3></div></div><p>Menschen und Länder nutzen auf der Erde sehr unterschiedlich viel Energie und Rohstoffe und verursachen unterschiedlich viele Emissionen. Gleichzeitig sind die Folgen von Umweltveränderungen ungleich verteilt.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#e1b83e" height="8" width="5" x="4" y="20"></rect><rect fill="#df844c" height="13" width="5" x="12" y="15"></rect><rect fill="#5ca261" height="20" width="5" x="20" y="8"></rect><rect fill="#333" height="2" width="24" x="3" y="27"></rect></svg></div><div class="mysteryCutTitle"><h3>Grenzen der Erde hängen zusammen</h3></div></div><p>Auf der Erde beeinflussen sich verschiedene Bereiche gegenseitig. Steigende Temperaturen können zum Beispiel Arten unter Druck setzen; mehr CO₂ verändert zusätzlich die Ozeane. Probleme bleiben deshalb selten auf einen Bereich beschränkt.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#efb17b" height="7" width="7" x="5" y="8"></rect><rect fill="#5b7dc6" height="11" width="9" x="4" y="15"></rect><rect fill="#d79d72" height="7" width="7" x="20" y="8"></rect><rect fill="#5ca66f" height="11" width="9" x="19" y="15"></rect></svg></div><div class="mysteryCutTitle"><h3>Ein gutes Leben braucht mehr als Dinge</h3></div></div><p>Auf der Erde hängt ein gutes Leben nicht nur von Besitz ab. Gesundheit, Beziehungen, Sicherheit, Bildung und Mitbestimmung spielen ebenfalls eine wichtige Rolle.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article></div></div>
+</div>
+</section><section class="page materialPage" data-page="18">
+<div class="pageInner">
+<div class="pageTop"><span>MATERIAL · PHASE 3</span><span>Seite 18</span></div>
+<h1 class="pageTitle">Mysterykarten</h1>
+<div class="pageBody"><div class="copyHeader"><span>PHASE 3</span><strong>Aufgabe A</strong></div>
+<h2>Kopiervorlage: Mysterykarten</h2>
+<p class="materialLead">Karten ausschneiden. Die Zuordnung entsteht erst beim Arbeiten.</p>
+<div class="cutGrid"><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#4ba8d8" height="10" width="16" x="7" y="12"></rect><rect fill="#4ba8d8" height="5" width="6" x="3" y="15"></rect><rect fill="#4ba8d8" height="6" width="5" x="23" y="14"></rect><rect fill="#142433" height="2" width="2" x="11" y="14"></rect></svg></div><div class="mysteryCutTitle"><h3>Nutzung kann schneller sein als Erholung</h3></div></div><p>Menschen können auf der Erde mehr nutzen, als in derselben Zeit wieder entsteht. Zum Beispiel können Fischbestände schrumpfen, wenn dauerhaft mehr Fische gefangen werden, als Nachwuchs entsteht.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#98a9b5" height="20" width="8" x="5" y="7"></rect><rect fill="#7894a6" height="16" width="8" x="19" y="11"></rect><rect fill="#4e6f83" height="7" width="4" x="14" y="20"></rect></svg></div><div class="mysteryCutTitle"><h3>Nicht alles ist eine persönliche Entscheidung</h3></div></div><p>Auf der Erde hängen Möglichkeiten auch von Strassen, öffentlichem Verkehr, Energieversorgung, Preisen, Gesetzen und Unternehmen ab. Deshalb entstehen Veränderungen nicht nur durch einzelne Konsumentscheidungen.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#df5969" height="15" width="18" x="7" y="11"></rect><rect fill="#ef7c89" height="5" width="22" x="5" y="9"></rect><rect fill="#f0d36b" height="18" width="4" x="14" y="8"></rect><rect fill="#ef7c89" height="5" width="5" x="9" y="6"></rect><rect fill="#ef7c89" height="5" width="5" x="18" y="6"></rect></svg></div><div class="mysteryCutTitle"><h3>Ein Need kann verschieden erfüllt werden</h3></div></div><p>Auf der Erde kann ein Need auf verschiedene Arten erfüllt werden. Wer mobil sein möchte, braucht zum Beispiel nicht zwingend ein eigenes Auto – auch Bus, Zug oder Fahrrad können Mobilität ermöglichen.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg aria-hidden="true" viewbox="0 0 32 32">
+<rect fill="#d98b5f" height="4" transform="rotate(-12 16 15)" width="22" x="5" y="13"></rect>
+<polygon fill="#674087" points="16,17 11,25 21,25"></polygon>
+<circle cx="7" cy="10" fill="#5DB7DE" r="3"></circle>
+<circle cx="25" cy="20" fill="#F4C84A" r="3"></circle>
+</svg></div><div class="mysteryCutTitle"><h3>Kipppunkte können Veränderungen verstärken</h3></div></div><p>Manche Veränderungen auf der Erde können ab einer bestimmten Schwelle sehr schwer rückgängig zu machen sein. Solche Schwellen nennt man Kipppunkte. Danach kann eine weitere kleine Veränderung grosse Folgen auslösen.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#4d87cc" height="9" width="22" x="5" y="14"></rect><rect fill="#6fa4dc" height="5" width="13" x="9" y="10"></rect><rect fill="#333" height="5" width="5" x="8" y="22"></rect><rect fill="#333" height="5" width="5" x="20" y="22"></rect></svg></div><div class="mysteryCutTitle"><h3>Wer trägt wie viel Verantwortung?</h3></div></div><p>Bei der Frage nach Gerechtigkeit spielt nicht nur eine Rolle, wer betroffen ist. Auch wer besonders viel zu einer Belastung beigetragen hat und wer Möglichkeiten zur Veränderung besitzt, kann wichtig sein.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#4b9bd3" height="22" width="16" x="8" y="5"></rect><rect fill="#4b9bd3" height="14" width="22" x="5" y="9"></rect><rect fill="#65a85d" height="6" width="5" x="10" y="8"></rect><rect fill="#65a85d" height="6" width="6" x="18" y="15"></rect></svg></div><div class="mysteryCutTitle"><h3>Die Erde liefert wichtige Lebensgrundlagen</h3></div></div><p>Menschen auf der Erde sind auf Wasser, fruchtbare Böden, Nahrung, ein stabiles Klima und funktionierende Lebensräume angewiesen. Werden diese Grundlagen stark verändert, wirkt sich das auch auf Gesundheit und Versorgung aus.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg viewbox="0 0 32 32"><rect fill="#e1b83e" height="8" width="5" x="4" y="20"></rect><rect fill="#df844c" height="13" width="5" x="12" y="15"></rect><rect fill="#5ca261" height="20" width="5" x="20" y="8"></rect><rect fill="#333" height="2" width="24" x="3" y="27"></rect></svg></div><div class="mysteryCutTitle"><h3>Gesellschaft kann Möglichkeiten verändern</h3></div></div><p>Auf der Erde können Politik und Gesellschaft Rahmenbedingungen verändern – zum Beispiel durch öffentlichen Verkehr, Energieversorgung, Regeln oder neue Technik. Dadurch ändern sich auch die Möglichkeiten einzelner Menschen.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard mysteryCut"><div class="mysteryCutHead"><div class="mysteryCardIcon"><svg aria-hidden="true" viewbox="0 0 32 32">
+<rect fill="#674087" height="9" width="5" x="14" y="19"></rect>
+<rect fill="#263d73" height="10" width="18" x="7" y="11"></rect>
+<rect fill="#315184" height="7" width="12" x="10" y="7"></rect>
+<rect fill="#315184" height="7" width="7" x="6" y="15"></rect>
+<rect fill="#315184" height="7" width="6" x="21" y="14"></rect>
+<rect fill="#F4C84A" height="3" width="3" x="9" y="12"></rect>
+<rect fill="#F4C84A" height="3" width="3" x="18" y="10"></rect>
+<polygon fill="#5DB7DE" points="16,24 20,28 16,31 12,28"></polygon>
+</svg></div><div class="mysteryCutTitle"><h3>Novera zeigt nur einen Teil der Wirklichkeit</h3></div></div><p>Der magische Baum auf Novera zeigt eine einfache Idee: Nutzung heute kann Möglichkeiten morgen beeinflussen. Auf der Erde sind die Zusammenhänge aber viel komplexer, weil viele Prozesse gleichzeitig wirken und miteinander verbunden sind.</p><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article></div></div>
+</div>
+</section><section class="page materialPage" data-page="19">
+<div class="pageInner">
+<div class="pageTop"><span>MATERIAL · PHASE 3</span><span>Seite 19</span></div>
+<h1 class="pageTitle">Eigene Mysterykarten</h1>
+<div class="pageBody"><div class="copyHeader"><span>PHASE 3</span><strong>Aufgabe A</strong></div>
+<h2>Kopiervorlage: Eigene Mysterykarten</h2>
+<p class="materialLead">Nur verwenden, wenn ein wichtiger eigener Zusammenhang fehlt.</p>
+<div class="ownGrid"><article class="cutCard ownCard"><div class="cardType">Eigene Karte</div><div class="writeLines"><span></span><span></span><span></span><span></span><span></span></div><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard ownCard"><div class="cardType">Eigene Karte</div><div class="writeLines"><span></span><span></span><span></span><span></span><span></span></div><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard ownCard"><div class="cardType">Eigene Karte</div><div class="writeLines"><span></span><span></span><span></span><span></span><span></span></div><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article><article class="cutCard ownCard"><div class="cardType">Eigene Karte</div><div class="writeLines"><span></span><span></span><span></span><span></span><span></span></div><div class="catChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div></article></div></div>
+</div>
+</section><section class="page solutionsPage" data-page="20">
+<div class="pageInner">
+<div class="pageTop"><span>LÖSUNGEN</span><span>Seite 20</span></div>
+<h1 class="pageTitle">Novera – ein Modell</h1>
+<div class="pageBody">
+<div class="copyHeader"><span>LÖSUNGEN</span><strong>Phase 3 · Aufgabe B</strong></div>
+<p>Für die offenen Gestaltungs-, Reflexions- und Mysteryaufgaben gibt es bewusst keine eindeutige Musterlösung.</p>
+<table class="workTable solutionTable"><thead><tr><th>Nr.</th><th>Aussage</th><th>Lösung</th></tr></thead><tbody><tr><td>1</td><td>Der Baum zeigt, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann.</td><td>Ja</td></tr><tr><td>2</td><td>Novera kann helfen, über Needs und Desires nachzudenken.</td><td>Ja</td></tr><tr><td>3</td><td>Der Baum zeigt genau, wie schnell sich Wälder, Fischbestände oder Böden auf der Erde erholen.</td><td>Nein</td></tr><tr><td>4</td><td>Novera kann zeigen, dass nicht alles gleichzeitig erfüllt werden kann.</td><td>Ja</td></tr><tr><td>5</td><td>Novera zeigt genau, was jeder Mensch für ein gutes Leben braucht.</td><td>Nein</td></tr><tr><td>6</td><td>Der Baum zeigt alle wichtigen Zusammenhänge des Erdsystems.</td><td>Nein</td></tr><tr><td>7</td><td>Novera kann helfen, über Verteilung und Gerechtigkeit zu sprechen.</td><td>Ja</td></tr><tr><td>8</td><td>Die Fruchtzahl zeigt, wie viele Rohstoffe es auf der Erde wirklich gibt.</td><td>Nein</td></tr><tr><td>9</td><td>Novera kann helfen, Folgen von Entscheidungen über mehrere Runden zu beobachten.</td><td>Ja</td></tr><tr><td>10</td><td>Ein Modell kann etwas verständlicher machen, obwohl es die Wirklichkeit vereinfacht.</td><td>Ja</td></tr><tr><td>11</td><td>Aus Novera kann man direkt ablesen, welche Lösung für die Erde richtig ist.</td><td>Nein</td></tr><tr><td>12</td><td>Ein Modell ist nur dann nützlich, wenn es die Wirklichkeit vollständig abbildet.</td><td>Nein</td></tr></tbody></table>
+
+</div>
+</div>
+</section><section class="page legalPage" data-page="21">
+<div class="pageInner">
+<div class="pageTop"><span>LIZENZ &amp; IMPRESSUM</span><span>Seite 21</span></div>
+<h1 class="pageTitle">Lizenz und Impressum</h1>
+<div class="pageBody">
+<div class="legalBlock">
+<h2>Creative Commons</h2>
+<p>Dieses Unterrichtsmaterial ist unter der Lizenz <strong>Creative Commons Namensnennung 4.0 International (CC BY 4.0)</strong> veröffentlicht.</p>
+<p>Es darf frei kopiert, weitergegeben und bearbeitet werden. Voraussetzung ist die angemessene Namensnennung des Urhebers.</p>
+<p class="licenseMark">CC BY 4.0</p>
+</div>
+<div class="legalBlock">
+<h2>Impressum</h2>
+<p><strong>Didaktisches Konzept:</strong><br/>
+Ivo Jost<br/>
+Hauptstrasse 82<br/>
+3854 Oberried</p>
+<p><strong>Gestaltung und technische Umsetzung:</strong><br/>
+mit Unterstützung von ChatGPT, GPT-5.6 Sol</p>
+<p>2026</p>
+</div>
+</div>
+</div>
+</section></main>
+<script>
+window.addEventListener("load",()=>setTimeout(()=>{
+ document.querySelectorAll(".page").forEach(p=>{
+   const i=p.querySelector(".pageInner");
+   if(i && i.scrollHeight>i.clientHeight+2){p.dataset.overflow="1";console.warn("Überlauf Seite",p.dataset.page,i.scrollHeight,i.clientHeight);}
+ });
+},350));
+</script></body></html>
