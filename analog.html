@@ -1771,6 +1771,28 @@ main{
     width:100%;
   }
 }
+
+/* ============================================================
+   Exportfeld immer exakt im Viewport zentrieren
+   ============================================================ */
+.previewBar{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100vh!important;
+  padding:16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+}
+.exportPanel{
+  width:min(620px,calc(100vw - 32px))!important;
+  max-height:calc(100dvh - 32px)!important;
+  margin:auto!important;
+  box-sizing:border-box!important;
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -2302,6 +2324,13 @@ window.addEventListener("load",()=>setTimeout(()=>{
   let readyUrl=null;
   let generating=false;
 
+  function isAppleSafari(){
+    const ua=navigator.userAgent || "";
+    const apple=/iPad|iPhone|iPod|Macintosh/.test(ua);
+    const safari=/Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|Chrome|Chromium/.test(ua);
+    return apple && safari;
+  }
+
   function setProgress(done,total,label){
     const pct=total ? Math.round((done/total)*100) : 0;
     bar.style.width=Math.max(0,Math.min(100,pct))+"%";
@@ -2348,12 +2377,8 @@ window.addEventListener("load",()=>setTimeout(()=>{
         compress:true
       });
 
-      /*
-        1.35 ist auf Mobilgeräten wesentlich schneller als 1.55/2.2.
-        Für ein rasterbasiertes Druckdossier ist die resultierende Qualität
-        weiterhin ausreichend, während Speicher und Renderzeit stark sinken.
-      */
-      const renderScale=1.35;
+      /* ca. 144 dpi auf A4: guter Kompromiss aus Druckqualität und Geschwindigkeit */
+      const renderScale=1.5;
 
       for(let i=0;i<total;i++){
         setProgress(i,total,`Seite ${i+1} von ${total} wird vorbereitet …`);
@@ -2374,12 +2399,7 @@ window.addEventListener("load",()=>setTimeout(()=>{
 
         if(i>0)pdf.addPage("a4","portrait");
 
-        /*
-          JPEG 0.88 reduziert Dateigrösse und Rechenzeit weiter.
-          Da jede A4-Seite als Ganzes eingebettet wird, bleiben Layout,
-          Abstände und Seitenumbrüche exakt so wie in der HTML-Ansicht.
-        */
-        const img=canvas.toDataURL("image/jpeg",0.88);
+        const img=canvas.toDataURL("image/jpeg",0.90);
         pdf.addImage(img,"JPEG",0,0,210,297,undefined,"FAST");
 
         canvas.width=1;
@@ -2397,8 +2417,14 @@ window.addEventListener("load",()=>setTimeout(()=>{
 
       setProgress(total,total,"PDF ist bereit");
       btn.disabled=false;
-      btn.textContent="PDF herunterladen";
-      hint.textContent="Die PDF ist fertig und kann jetzt gespeichert werden.";
+
+      if(isAppleSafari()){
+        btn.textContent="PDF speichern";
+        hint.textContent="Tippe auf «PDF speichern» und wähle danach «In Dateien sichern».";
+      }else{
+        btn.textContent="PDF herunterladen";
+        hint.textContent="Die PDF ist fertig und kann jetzt gespeichert werden.";
+      }
 
     }catch(err){
       console.error(err);
@@ -2410,16 +2436,35 @@ window.addEventListener("load",()=>setTimeout(()=>{
     }
   }
 
-  function downloadPreparedPdf(){
+  async function savePreparedPdf(){
     if(!readyBlob || !readyUrl)return;
 
-    /*
-      Nun geschieht der Download SYNCHRON im echten Button-Klick.
-      Das ist für Safari wesentlich zuverlässiger als ein Download
-      am Ende einer langen asynchronen Render-Funktion.
-    */
     const fileName="Novera-analoges-Dossier.pdf";
+    const file=new File([readyBlob],fileName,{type:"application/pdf"});
 
+    /*
+      Safari/iOS: Blob-Links mit download= werden häufig nur in einem neuen Tab
+      geöffnet. Web Share übergibt dagegen die fertige PDF nativ an iOS/macOS,
+      wo «In Dateien sichern» verfügbar ist.
+    */
+    if(isAppleSafari() && navigator.share){
+      try{
+        const shareData={files:[file],title:"Novera – analoges Dossier"};
+        if(!navigator.canShare || navigator.canShare({files:[file]})){
+          await navigator.share(shareData);
+          hint.textContent="PDF wurde an das Teilen-Menü übergeben.";
+          return;
+        }
+      }catch(err){
+        if(err && err.name==="AbortError"){
+          hint.textContent="Speichern abgebrochen.";
+          return;
+        }
+        console.warn("Web Share nicht verfügbar, Fallback wird verwendet.",err);
+      }
+    }
+
+    /* Chrome/Firefox/Desktop-Fallback: echter Download-Link */
     const a=document.createElement("a");
     a.href=readyUrl;
     a.download=fileName;
@@ -2433,7 +2478,7 @@ window.addEventListener("load",()=>setTimeout(()=>{
   }
 
   if(btn){
-    btn.addEventListener("click",downloadPreparedPdf);
+    btn.addEventListener("click",savePreparedPdf);
   }
 
   if(document.readyState==="complete"){
