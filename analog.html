@@ -1352,6 +1352,70 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
     height:4.4mm!important;
   }
 }
+
+/* ============================================================
+   FEINANPASSUNG DRUCK
+   ============================================================ */
+@media print{
+  /* Reflexionslinien etwas enger */
+  .infoBox.reflect .writeLines{
+    gap:1.5mm!important;
+    margin-top:.6mm!important;
+  }
+  .infoBox.reflect .writeLines span{
+    height:3.2mm!important;
+  }
+
+  /* Titel/Untertitel noch einen Tick kleiner */
+  .pageTitle{
+    font-size:11.4pt!important;
+    line-height:1.06!important;
+    margin:.5mm 0 1.2mm!important;
+  }
+  h2{
+    font-size:9.2pt!important;
+    line-height:1.14!important;
+    margin:.7mm 0 .95mm!important;
+  }
+  h3{
+    font-size:8.7pt!important;
+    line-height:1.14!important;
+    margin:.6mm 0!important;
+  }
+  .taskHeaderGraphic h2{
+    font-size:9.1pt!important;
+  }
+  .phaseMission h2{
+    font-size:9.7pt!important;
+    line-height:1.13!important;
+    margin:.7mm 0 1mm!important;
+  }
+  .coverPage .pageTitle{
+    font-size:10.5pt!important;
+  }
+  .coverPage .coverTitle{
+    font-size:21.5pt!important;
+  }
+
+  /* Phase 2 A/B: keine zusätzliche Leerhöhe unter den Checkboxen */
+  .classify td{
+    height:auto!important;
+    min-height:0!important;
+    padding-top:.7mm!important;
+    padding-bottom:.7mm!important;
+    vertical-align:top!important;
+  }
+  .classify tbody tr{
+    height:auto!important;
+    min-height:0!important;
+  }
+  .classify td:last-child{
+    line-height:1.14!important;
+  }
+  .classify td:last-child br{
+    line-height:0!important;
+  }
+}
 </style></head><body>
 <div class="previewBar"><strong>Novera – A4-Hochformat Vorschau</strong><button onclick="window.print()" title="Druckdialog erneut öffnen" type="button">Druckdialog erneut öffnen</button></div>
 <main><section class="page coverPage" data-page="0">
