@@ -1416,8 +1416,76 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
     line-height:0!important;
   }
 }
-</style></head><body>
-<div class="previewBar"><strong>Novera – A4-Hochformat Vorschau</strong><button onclick="window.print()" title="Druckdialog erneut öffnen" type="button">Druckdialog erneut öffnen</button></div>
+
+/* ============================================================
+   Safari-Druck: Tabelle A/B + kompaktere Aufgabenlabels
+   ============================================================ */
+@media print{
+  /* Aufgabe A/B/C ... gleich gross wie Hinweis/Reflexion und flacher */
+  .taskBadge{
+    font-size:7.8pt!important;
+    line-height:1.05!important;
+    padding:.75mm 2mm!important;
+    min-height:0!important;
+    border-radius:5mm!important;
+    margin-bottom:.6mm!important;
+  }
+
+  /* Auswahl-Tabelle: kein leerer Nachlauf unter den Checkboxen */
+  .classify tbody tr{
+    height:11.2mm!important;
+  }
+  .classify td{
+    height:11.2mm!important;
+    min-height:0!important;
+    padding:.65mm 1mm!important;
+    vertical-align:top!important;
+  }
+  .classify td:last-child{
+    padding-top:.7mm!important;
+    padding-bottom:.55mm!important;
+  }
+  .choiceCheckLine{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:6.9pt!important;
+    line-height:1.08!important;
+  }
+  .choiceCheckLine + .choiceCheckLine{
+    margin-top:.45mm!important;
+  }
+}
+
+/* ============================================================
+   VISUELLER PDF-EXPORT
+   Die HTML-A4-Seiten sind die Masterdarstellung.
+   ============================================================ */
+.pdfCaptureMode .previewBar{
+  display:none!important;
+}
+.pdfCaptureMode{
+  background:#fff!important;
+}
+.pdfCaptureMode .page{
+  box-shadow:none!important;
+  margin:0!important;
+}
+
+/* Browser-Druck ist nur noch Fallback. */
+@media print{
+  .previewBar{display:none!important;}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head><body>
+<div class="previewBar">
+<strong>Analoge Druckfassung</strong>
+<span>Die PDF wird direkt aus den sichtbaren A4-Seiten erzeugt.</span>
+<button id="exportVisualPdf" type="button">PDF erzeugen</button>
+<span aria-live="polite" id="pdfStatus"></span>
+</div>
 <main><section class="page coverPage" data-page="0">
 <div class="pageInner">
 <h1 class="pageTitle">Dossier für die analoge Durchführung der Lernumgebung</h1>
@@ -1523,7 +1591,7 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
 <span class="taskBadge">Aufgabe B</span>
 <h2>Genauer beschreiben und entscheiden</h2>
 <div class="infoBox task"><div class="infoLabel">✦ Auftrag</div><div class="infoBody">Wähle aus dieser Welt vier bis sechs verschiedene Bereiche aus, die du genauer anschauen möchtest. Beschreibe bei jedem ausgewählten Bereich genauer, was du damit meinst. Entscheide danach für dich persönlich: Brauche ich das ganz sicher für ein gutes Leben oder wünsche ich es mir eher zusätzlich?</div></div>
-<table class="workTable classify"><thead><tr><th></th><th>Bereich</th><th>Was meinst du damit genau?</th><th>Wie ordnest du es für dich persönlich ein?</th></tr></thead><tbody><tr><td>1</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>2</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>3</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>4</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>5</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr><tr><td>6</td><td></td><td></td><td>□ Das brauche ich ganz sicher für ein gutes Leben.<br/>□ Das wünsche ich mir eher zusätzlich.</td></tr></tbody></table>
+<table class="workTable classify"><thead><tr><th></th><th>Bereich</th><th>Was meinst du damit genau?</th><th>Wie ordnest du es für dich persönlich ein?</th></tr></thead><tbody><tr><td>1</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>2</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>3</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>4</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>5</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr><tr><td>6</td><td></td><td></td><td><div class="choiceCheckLine">□ Das brauche ich ganz sicher für ein gutes Leben.</div><div class="choiceCheckLine">□ Das wünsche ich mir eher zusätzlich.</div></td></tr></tbody></table>
 <div class="infoBox explain"><div class="infoLabel">◆ Erklärung</div><div class="infoBody"><strong>Damit Menschen etwas bekommen oder tun können, braucht es Voraussetzungen.</strong> Manche sind natürlich, zum Beispiel Wasser, Boden, Rohstoffe oder Energie. Andere entstehen durch das Zusammenleben, zum Beispiel Wissen, Arbeit, Verkehrswege, Regeln oder Zusammenarbeit. Oft braucht es beides gleichzeitig.</div></div>
 </div>
 </div>
@@ -1923,52 +1991,110 @@ window.addEventListener("load",()=>setTimeout(()=>{
 (function(){
   "use strict";
 
-  let printTriggered=false;
+  const btn=document.getElementById("exportVisualPdf");
+  const status=document.getElementById("pdfStatus");
 
-  function openPrintDialogOnce(){
-    if(printTriggered)return;
-    printTriggered=true;
-
-    /* Kurze Verzögerung, damit Safari/iPad das endgültige
-       Seitenlayout und alle Bilder vor der Druckvorschau berechnet. */
-    setTimeout(()=>{
-      try{
-        window.focus();
-        window.print();
-      }catch(err){
-        console.warn("Druckdialog konnte nicht automatisch geöffnet werden.",err);
-      }
-    },900);
+  function waitForImages(){
+    const imgs=[...document.images];
+    return Promise.all(imgs.map(img=>{
+      if(img.complete)return Promise.resolve();
+      return new Promise(resolve=>{
+        img.addEventListener("load",resolve,{once:true});
+        img.addEventListener("error",resolve,{once:true});
+      });
+    }));
   }
 
-  function waitForImagesThenPrint(){
-    const images=Array.from(document.images||[]);
-    const pending=images.filter(img=>!img.complete);
-
-    if(pending.length===0){
-      openPrintDialogOnce();
+  async function exportVisualPdf(){
+    if(!window.html2canvas || !window.jspdf){
+      alert("Die PDF-Bibliotheken konnten nicht geladen werden.");
       return;
     }
 
-    let remaining=pending.length;
-    const done=()=>{
-      remaining-=1;
-      if(remaining<=0)openPrintDialogOnce();
-    };
+    btn.disabled=true;
+    status.textContent="PDF wird erzeugt …";
 
-    pending.forEach(img=>{
-      img.addEventListener("load",done,{once:true});
-      img.addEventListener("error",done,{once:true});
-    });
+    try{
+      await waitForImages();
+      if(document.fonts && document.fonts.ready){
+        await document.fonts.ready;
+      }
 
-    /* Fallback, falls ein Browser kein load/error-Ereignis mehr liefert. */
-    setTimeout(openPrintDialogOnce,3500);
+      document.documentElement.classList.add("pdfCaptureMode");
+
+      const pages=[...document.querySelectorAll(".page")];
+      const {jsPDF}=window.jspdf;
+      const pdf=new jsPDF({
+        orientation:"portrait",
+        unit:"mm",
+        format:"a4",
+        compress:true
+      });
+
+      for(let i=0;i<pages.length;i++){
+        status.textContent=`PDF wird erzeugt … ${i+1}/${pages.length}`;
+
+        const page=pages[i];
+
+        /* html2canvas nimmt exakt die HTML-Darstellung auf.
+           scale 2.2 hält Text/Linien auf A4 ausreichend scharf,
+           ohne Mobilgeräte unnötig stark zu belasten. */
+        const canvas=await html2canvas(page,{
+          scale:2.2,
+          backgroundColor:"#ffffff",
+          useCORS:true,
+          allowTaint:false,
+          logging:false,
+          scrollX:0,
+          scrollY:-window.scrollY,
+          windowWidth:Math.max(document.documentElement.clientWidth, page.scrollWidth),
+          onclone:(doc)=>{
+            doc.documentElement.classList.add("pdfCaptureMode");
+          }
+        });
+
+        if(i>0)pdf.addPage("a4","portrait");
+
+        /* PNG statt JPG: Linien, Pixelgrafiken und kleine Schrift bleiben sauber. */
+        const img=canvas.toDataURL("image/png");
+        pdf.addImage(img,"PNG",0,0,210,297,undefined,"FAST");
+
+        /* Speicher auf iPad freigeben */
+        canvas.width=1;
+        canvas.height=1;
+
+        await new Promise(r=>setTimeout(r,20));
+      }
+
+      document.documentElement.classList.remove("pdfCaptureMode");
+      status.textContent="PDF fertig.";
+
+      const blob=pdf.output("blob");
+      const url=URL.createObjectURL(blob);
+
+      /* Neues Fenster ist bei einem echten Buttonklick auf iOS/Safari zulässig. */
+      const win=window.open(url,"_blank");
+      if(!win){
+        /* Popupblocker-Fallback */
+        const a=document.createElement("a");
+        a.href=url;
+        a.download="Novera-analoges-Dossier.pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+
+      setTimeout(()=>URL.revokeObjectURL(url),60000);
+    }catch(err){
+      console.error(err);
+      document.documentElement.classList.remove("pdfCaptureMode");
+      status.textContent="PDF konnte nicht erzeugt werden.";
+      alert("Beim Erzeugen der PDF ist ein Fehler aufgetreten.");
+    }finally{
+      btn.disabled=false;
+    }
   }
 
-  if(document.readyState==="complete"){
-    waitForImagesThenPrint();
-  }else{
-    window.addEventListener("load",waitForImagesThenPrint,{once:true});
-  }
+  if(btn)btn.addEventListener("click",exportVisualPdf);
 })();
 </script></body></html>
