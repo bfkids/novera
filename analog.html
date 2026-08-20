@@ -1795,6 +1795,27 @@ main{
 .phase1TaskC .worldArea + .infoBox.reflect{
   margin-top:0!important;
 }
+
+/* Phase 3: Titelgrafik innerhalb des gleichen A4-Bildbereichs wie Phase 1/2 halten */
+.phaseStartPage[data-page="12"] .phase3GraphicArea{
+  flex:0 0 auto!important;
+  width:100%!important;
+  min-height:0!important;
+  height:96mm!important;
+  max-height:96mm!important;
+  margin:7mm 0 6mm!important;
+  overflow:hidden!important;
+}
+.phaseStartPage[data-page="12"] .phase3Graphic{
+  display:block!important;
+  width:auto!important;
+  max-width:100%!important;
+  height:auto!important;
+  max-height:96mm!important;
+  object-fit:contain!important;
+  margin:0 auto!important;
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -2112,7 +2133,7 @@ Denkt über eure gemeinsamen Runden nach:
 <h2>Herausfinden, was Novera mit der Erde zu tun hat</h2>
 <p>Untersuche nun in einem Mystery die Frage: Was hat Novera mit der Erde zu tun? Bei einem Mystery arbeitest du mit verschiedenen Hinweisen. Du ordnest Karten, verbindest wichtige Zusammenhänge und entwickelst daraus eine eigene Erklärung. Es gibt nicht nur eine richtige Lösung.</p>
 </div>
-<div class="phaseGraphicArea"><img alt="" class="phaseGraphic" src="novera-erde.png"/></div>
+<div class="phaseGraphicArea phase3GraphicArea"><img alt="" class="phaseGraphic phase3Graphic" src="novera-erde.png"/></div>
 <div class="learningGoals"><div class="learningGoalsTitle">Lernziele</div><ul><li>Ich kann erklären, warum ein gutes Leben für alle mit den Grenzen der Erde zusammenhängt.</li><li>Ich kann beschreiben, warum Fragen zu Nutzung, Verteilung und Gerechtigkeit nicht einfach zu lösen sind.</li><li>Ich kann verschiedene Zusammenhänge miteinander verbinden und begründen, warum es bei komplexen Fragen oft nicht nur eine richtige Antwort gibt.</li></ul></div>
 </div></div>
 </div>
