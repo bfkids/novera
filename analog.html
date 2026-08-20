@@ -686,8 +686,251 @@ p,li,.infoBody,.materialLead{font-size:9.4pt;line-height:1.48}p{margin:1.6mm 0}o
 .page[data-page="11"] .addonBox .infoBody{
   line-height:1.4!important;
 }
+
+/* ============================================================
+   ROBUSTER DRUCK AUF iOS / iPadOS / Android / Desktop
+   Bildschirmdarstellung bleibt unverändert.
+   ============================================================ */
+
+@media print{
+  @page{
+    size:A4 portrait;
+    margin:0;
+  }
+
+  html,
+  body{
+    width:auto!important;
+    height:auto!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+  }
+
+  .previewBar{
+    display:none!important;
+  }
+
+  /* WICHTIG:
+     Keine feste 297-mm-Höhe beim Drucken.
+     Safari/iPad rechnet eigene Kopf-/Fusszeilen teilweise zusätzlich
+     zur A4-Höhe und erzeugt sonst nach jedem Blatt eine Leerseite. */
+  .page{
+    width:auto!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+    box-shadow:none!important;
+
+    break-after:auto!important;
+    page-break-after:auto!important;
+    break-before:page!important;
+    page-break-before:always!important;
+
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+  .page:first-of-type{
+    break-before:auto!important;
+    page-break-before:auto!important;
+  }
+
+  .pageInner{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+
+    /* Sicherheitszone für Safari-Druckkopf/-fuss und Heimdrucker */
+    padding:10mm 12mm 12mm!important;
+
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+  .pageBody{
+    overflow:visible!important;
+  }
+
+  /* Phasen-/Titelblätter sollen optisch weiterhin eine volle Seite nutzen,
+     ohne die physische A4-Höhe zu erzwingen. */
+  .phaseStartPage .pageInner,
+  .coverPage .pageInner,
+  .divider .pageInner{
+    min-height:255mm!important;
+  }
+
+  /* Kategorien im Ausdruck klar erkennbar.
+     Reflexionsfelder bewusst weiss, damit hineingeschrieben werden kann. */
+  .infoBox.task{
+    background:#edf7ea!important;
+    border-left-color:#75c56b!important;
+  }
+  .infoBox.hint{
+    background:#f2f0eb!important;
+    border-left-color:#9a958b!important;
+  }
+  .infoBox.explain{
+    background:#fff7df!important;
+    border-left-color:#d6a23d!important;
+  }
+  .infoBox.questions{
+    background:#f5eff9!important;
+    border-left-color:#9a78b8!important;
+  }
+  .learningGoals{
+    background:#fbf0f3!important;
+    border-left-color:#c36f82!important;
+  }
+  .infoBox.reflect{
+    background:#fff!important;
+    border-left-color:#5db7de!important;
+  }
+
+  .taskBadge{
+    background:#75c56b!important;
+  }
+
+  .worldChoiceInline,
+  .workTable th,
+  .legalBlock,
+  .a3Notice,
+  .copyHeader span,
+  .copyHeader strong{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+  /* Elemente nie zwischen zwei Druckseiten zerreissen */
+  .infoBox,
+  .learningGoals,
+  .worldArea,
+  .taskHeaderGraphic,
+  .personRollBox,
+  .agreementBox,
+  .copyHeader,
+  .treeCopy,
+  .cutCard,
+  .ownCard{
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+
+  /* Browser sollen Bilder/SVG nicht eigenmächtig verkleinern/verbreitern */
+  img,
+  svg{
+    max-width:100%!important;
+  }
+}
+
+/* iPad-/Tablet-Vorschau: A4-Blätter bleiben horizontal im Viewport.
+   Das betrifft nur die Bildschirmansicht, nicht den Druck. */
+@media screen and (max-width:900px){
+  body{
+    overflow-x:auto;
+  }
+  .previewBar{
+    width:calc(100vw - 20px)!important;
+    max-width:210mm!important;
+  }
+  .page{
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+}
+
+/* ============================================================
+   PHASENSTART: Mission -> grosse Grafik -> Lernziele
+   ============================================================ */
+.phaseStartPage .phaseStartContent{
+  height:auto!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+}
+
+.phaseStartPage .phaseMission{
+  width:100%!important;
+  max-width:none!important;
+  flex:0 0 auto!important;
+}
+
+.phaseStartPage .phaseMission p{
+  margin-bottom:0!important;
+}
+
+.phaseStartPage .phaseGraphicArea{
+  flex:0 0 auto!important;
+  width:100%!important;
+  min-height:0!important;
+  height:auto!important;
+  margin:12mm 0 10mm!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+.phaseStartPage .phaseGraphic{
+  width:min(100%,172mm)!important;
+  max-width:172mm!important;
+  height:auto!important;
+  max-height:112mm!important;
+  object-fit:contain!important;
+}
+
+.phaseStartPage .assetPlaceholder{
+  width:min(100%,172mm)!important;
+  max-width:172mm!important;
+  height:95mm!important;
+  margin:0 auto!important;
+}
+
+.phaseStartPage .learningGoals{
+  flex:0 0 auto!important;
+  width:100%!important;
+  margin:0!important;
+}
+
+/* Auf schmalen Bildschirmen bleibt dieselbe Reihenfolge erhalten. */
+@media screen and (max-width:900px){
+  .phaseStartPage .phaseGraphicArea{
+    margin:9mm 0 8mm!important;
+  }
+  .phaseStartPage .phaseGraphic{
+    width:100%!important;
+    max-width:100%!important;
+  }
+}
+
+/* Beim Drucken keine künstliche Verteilung über die ganze A4-Höhe. */
+@media print{
+  .phaseStartPage .pageInner{
+    min-height:0!important;
+  }
+  .phaseStartPage .pageBody,
+  .phaseStartPage .phaseStartContent{
+    height:auto!important;
+    min-height:0!important;
+  }
+  .phaseStartPage .phaseGraphicArea{
+    margin:10mm 0 9mm!important;
+  }
+  .phaseStartPage .phaseGraphic{
+    width:100%!important;
+    max-width:172mm!important;
+    max-height:108mm!important;
+  }
+  .phaseStartPage .learningGoals{
+    margin-top:0!important;
+  }
+}
 </style></head><body>
-<div class="previewBar"><strong>Novera – A4-Hochformat Vorschau</strong><button onclick="window.print()" type="button">Drucken</button></div>
+<div class="previewBar"><strong>Novera – A4-Hochformat Vorschau</strong><button onclick="window.print()" title="Druckdialog erneut öffnen" type="button">Druckdialog erneut öffnen</button></div>
 <main><section class="page coverPage" data-page="0">
 <div class="pageInner">
 <h1 class="pageTitle">Dossier für die analoge Durchführung der Lernumgebung</h1>
@@ -1152,7 +1395,6 @@ Darum ist wichtig zu fragen: <strong>Was kann das Modell zeigen – und was nich
 <div class="copyHeader"><span>LÖSUNGEN</span><strong>Phase 3 · Aufgabe B</strong></div>
 <p>Für die offenen Gestaltungs-, Reflexions- und Mysteryaufgaben gibt es bewusst keine eindeutige Musterlösung.</p>
 <table class="workTable solutionTable"><thead><tr><th>Nr.</th><th>Aussage</th><th>Lösung</th></tr></thead><tbody><tr><td>1</td><td>Der Baum zeigt, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann.</td><td>Ja</td></tr><tr><td>2</td><td>Novera kann helfen, über Needs und Desires nachzudenken.</td><td>Ja</td></tr><tr><td>3</td><td>Der Baum zeigt genau, wie schnell sich Wälder, Fischbestände oder Böden auf der Erde erholen.</td><td>Nein</td></tr><tr><td>4</td><td>Novera kann zeigen, dass nicht alles gleichzeitig erfüllt werden kann.</td><td>Ja</td></tr><tr><td>5</td><td>Novera zeigt genau, was jeder Mensch für ein gutes Leben braucht.</td><td>Nein</td></tr><tr><td>6</td><td>Der Baum zeigt alle wichtigen Zusammenhänge des Erdsystems.</td><td>Nein</td></tr><tr><td>7</td><td>Novera kann helfen, über Verteilung und Gerechtigkeit zu sprechen.</td><td>Ja</td></tr><tr><td>8</td><td>Die Fruchtzahl zeigt, wie viele Rohstoffe es auf der Erde wirklich gibt.</td><td>Nein</td></tr><tr><td>9</td><td>Novera kann helfen, Folgen von Entscheidungen über mehrere Runden zu beobachten.</td><td>Ja</td></tr><tr><td>10</td><td>Ein Modell kann etwas verständlicher machen, obwohl es die Wirklichkeit vereinfacht.</td><td>Ja</td></tr><tr><td>11</td><td>Aus Novera kann man direkt ablesen, welche Lösung für die Erde richtig ist.</td><td>Nein</td></tr><tr><td>12</td><td>Ein Modell ist nur dann nützlich, wenn es die Wirklichkeit vollständig abbildet.</td><td>Nein</td></tr></tbody></table>
-
 </div>
 </div>
 </section><section class="page legalPage" data-page="21">
@@ -1181,9 +1423,65 @@ mit Unterstützung von ChatGPT, GPT-5.6 Sol</p>
 </section></main>
 <script>
 window.addEventListener("load",()=>setTimeout(()=>{
- document.querySelectorAll(".page").forEach(p=>{
-   const i=p.querySelector(".pageInner");
-   if(i && i.scrollHeight>i.clientHeight+2){p.dataset.overflow="1";console.warn("Überlauf Seite",p.dataset.page,i.scrollHeight,i.clientHeight);}
- });
+  if(window.matchMedia && window.matchMedia("print").matches)return;
+  document.querySelectorAll(".page").forEach(p=>{
+    const i=p.querySelector(".pageInner");
+    if(i && i.scrollHeight>i.clientHeight+2){
+      p.dataset.overflow="1";
+      console.warn("Überlauf Seite",p.dataset.page,i.scrollHeight,i.clientHeight);
+    }
+  });
 },350));
+</script><script>
+(function(){
+  "use strict";
+
+  let printTriggered=false;
+
+  function openPrintDialogOnce(){
+    if(printTriggered)return;
+    printTriggered=true;
+
+    /* Kurze Verzögerung, damit Safari/iPad das endgültige
+       Seitenlayout und alle Bilder vor der Druckvorschau berechnet. */
+    setTimeout(()=>{
+      try{
+        window.focus();
+        window.print();
+      }catch(err){
+        console.warn("Druckdialog konnte nicht automatisch geöffnet werden.",err);
+      }
+    },650);
+  }
+
+  function waitForImagesThenPrint(){
+    const images=Array.from(document.images||[]);
+    const pending=images.filter(img=>!img.complete);
+
+    if(pending.length===0){
+      openPrintDialogOnce();
+      return;
+    }
+
+    let remaining=pending.length;
+    const done=()=>{
+      remaining-=1;
+      if(remaining<=0)openPrintDialogOnce();
+    };
+
+    pending.forEach(img=>{
+      img.addEventListener("load",done,{once:true});
+      img.addEventListener("error",done,{once:true});
+    });
+
+    /* Fallback, falls ein Browser kein load/error-Ereignis mehr liefert. */
+    setTimeout(openPrintDialogOnce,3500);
+  }
+
+  if(document.readyState==="complete"){
+    waitForImagesThenPrint();
+  }else{
+    window.addEventListener("load",waitForImagesThenPrint,{once:true});
+  }
+})();
 </script></body></html>
