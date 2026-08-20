@@ -5107,6 +5107,52 @@ details.learningGoals{
   }
 }
 
+
+/* Phase 3: Titelbox wie Phase 1/2 – weisses Panel, Text links, Grafik rechts */
+#phase3 .phase3TitleBlock{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(320px,1.35fr)!important;
+  gap:24px!important;
+  align-items:center!important;
+  background:#fff!important;
+}
+#phase3 .phase3TitleBlock > .phase3MissionCopy{
+  grid-column:1!important;
+  grid-row:1!important;
+  min-width:0!important;
+  padding:8px 4px!important;
+}
+#phase3 .phase3TitleBlock > .banner{
+  grid-column:2!important;
+  grid-row:1!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#phase3 .phase3TitleBlock > .banner img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:520px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+@media(max-width:800px){
+  #phase3 .phase3TitleBlock{
+    grid-template-columns:1fr!important;
+  }
+  #phase3 .phase3TitleBlock > .banner{
+    grid-column:1!important;
+    grid-row:1!important;
+  }
+  #phase3 .phase3TitleBlock > .phase3MissionCopy{
+    grid-column:1!important;
+    grid-row:2!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -5475,9 +5521,6 @@ details.learningGoals{
 </div></div>
 <div class="phaseView" id="phase3">
 <section class="panel phase3TitleBlock">
-<div class="banner">
-<img alt="Blick von Novera auf die weit entfernte Erde" src="novera-erde.png"/>
-</div>
 <div class="phase3MissionCopy">
 <span class="missionKicker">Deine Mission</span>
 <h3>Herausfinden, was Novera mit der Erde zu tun hat</h3>
@@ -5490,6 +5533,9 @@ details.learningGoals{
 <li>Ich kann verschiedene Zusammenhänge miteinander verbinden und begründen, warum es bei komplexen Fragen oft nicht nur eine richtige Antwort gibt.</li>
 </ul></div>
 </details></div></div>
+<div class="banner">
+<img alt="Blick von Novera auf die weit entfernte Erde" src="novera-erde.png"/>
+</div>
 </section>
 <section class="phase3Tasks">
 <article class="taskCard phase3TaskCard" id="phase3TaskA">
