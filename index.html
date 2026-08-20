@@ -4722,6 +4722,305 @@ body.mysteryExpanded{
   margin-bottom:5px!important;
 }
 
+
+/* ===== Einheitliche Hinweise in Phase 1 ===== */
+.inlineHint{
+  margin:8px 0 12px!important;
+  padding:10px 12px!important;
+  border-left:4px solid #9a958b!important;
+  border-radius:8px!important;
+  background:#f2f0eb!important;
+  color:#333!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+  font-weight:400!important;
+}
+.inlineHint::before{
+  content:"ⓘ Hinweis";
+  display:block;
+  margin-bottom:4px;
+  color:#666;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.inlineHint p{
+  margin:0!important;
+}
+.saveReminder{
+  color:#333!important;
+  font-size:13px!important;
+}
+
+/* ===== Neue Kategorie: Lernziele ===== */
+.learningGoals{
+  margin:18px 0 12px;
+  padding:12px 14px;
+  border-left:4px solid #4f9b91;
+  border-radius:9px;
+  background:#edf7f5;
+  color:#263b38;
+  font-size:14px;
+  line-height:1.5;
+}
+.learningGoals > strong{
+  display:block;
+  margin-bottom:5px;
+  color:#2f6f67;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.learningGoals ul{
+  margin:0;
+  padding-left:20px;
+}
+.learningGoals li{
+  margin:3px 0;
+}
+.phaseNavEnd,
+.bottomNav,
+.phase3BottomNav{
+  margin-top:8px;
+}
+
+
+/* Phase 3 – Mission analog zu Phase 1/2: Text links, Titelgrafik rechts */
+#phase3 .phase3TitleBlock{
+  grid-template-columns:minmax(0,1fr) minmax(320px,1.35fr)!important;
+  gap:24px!important;
+  align-items:center!important;
+}
+#phase3 .phase3MissionCopy{
+  grid-column:1!important;
+  grid-row:1!important;
+  padding:8px 4px!important;
+}
+#phase3 .phase3HeroPlaceholder{
+  grid-column:2!important;
+  grid-row:1!important;
+  min-height:250px!important;
+}
+@media(max-width:800px){
+  #phase3 .phase3TitleBlock{
+    grid-template-columns:1fr!important;
+  }
+  #phase3 .phase3MissionCopy{
+    grid-column:1!important;
+    grid-row:1!important;
+  }
+  #phase3 .phase3HeroPlaceholder{
+    grid-column:1!important;
+    grid-row:2!important;
+    min-height:180px!important;
+  }
+}
+
+
+/* ===== Phase 3 Mission: mobil exakt wie Phase 1/2 – Grafik vor dem Text ===== */
+@media(max-width:800px){
+  #phase3 .phase3TitleBlock{
+    grid-template-columns:1fr!important;
+  }
+  #phase3 .phase3HeroPlaceholder{
+    grid-column:1!important;
+    grid-row:auto!important;
+    order:-1!important;
+    width:100%!important;
+    max-width:100%!important;
+    justify-self:stretch!important;
+    min-height:180px!important;
+  }
+  #phase3 .phase3MissionCopy{
+    grid-column:1!important;
+    grid-row:auto!important;
+    order:0!important;
+  }
+}
+
+/* ===== Lernziele: standardmässig geschlossen ===== */
+details.learningGoals{
+  display:block;
+  padding:0!important;
+  overflow:hidden;
+}
+.learningGoals summary{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 14px;
+  cursor:pointer;
+  list-style:none;
+  user-select:none;
+}
+.learningGoals summary::-webkit-details-marker{
+  display:none;
+}
+.learningGoals summary strong{
+  color:#2f6f67;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.learningGoalsArrow{
+  display:inline-block;
+  color:#2f6f67;
+  font-size:22px;
+  font-weight:700;
+  line-height:1;
+  transform:rotate(0deg);
+  transition:transform .16s ease;
+}
+.learningGoals[open] .learningGoalsArrow{
+  transform:rotate(90deg);
+}
+.learningGoalsBody{
+  padding:0 14px 12px 36px;
+}
+.learningGoalsBody ul{
+  margin:0;
+  padding-left:18px;
+}
+.learningGoalsBody li{
+  margin:3px 0;
+}
+
+/* ===== Demowelten mobil als Swipe-Slider ===== */
+@media(max-width:760px){
+  #phase2Worlds{
+    display:flex!important;
+    grid-template-columns:none!important;
+    gap:12px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory;
+    scroll-padding-inline:8px;
+    -webkit-overflow-scrolling:touch;
+    padding:2px 8px 10px!important;
+    margin-left:-8px;
+    margin-right:-8px;
+  }
+  #phase2Worlds .sourceWorldCard{
+    flex:0 0 min(82vw,330px)!important;
+    width:min(82vw,330px)!important;
+    scroll-snap-align:center;
+    scroll-snap-stop:always;
+  }
+}
+
+
+/* ===== Header: Buttons dürfen nie überlaufen ===== */
+.headerBar{
+  align-items:flex-start!important;
+}
+.workStateControls{
+  min-width:0!important;
+}
+.workStateControls .action{
+  max-width:100%!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+/* Mobil: lange Buttons dürfen die verfügbare Breite teilen */
+@media(max-width:620px){
+  .workStateControls{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+  }
+  .workStateControls .action{
+    width:100%!important;
+    min-width:0!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    text-align:center!important;
+  }
+  #printWorkState,
+  #openAnalogVersion{
+    min-height:42px!important;
+  }
+}
+@media(max-width:420px){
+  .workStateControls{
+    grid-template-columns:1fr!important;
+  }
+}
+
+
+/* ===== Lernziele als eigener weisser Abschlussbereich ===== */
+.learningGoalsShell{
+  margin:18px 0 12px;
+  padding:14px;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 2px 12px #00000012;
+}
+details.learningGoals{
+  margin:0!important;
+  border-left:4px solid #c36f82!important;
+  border-radius:9px!important;
+  background:#fbf0f3!important;
+  color:#4b3036!important;
+}
+.learningGoals summary strong{
+  color:#914e5e!important;
+}
+.learningGoalsArrow{
+  color:#914e5e!important;
+}
+
+/* ===== Header: Desktop/Tablet immer Titel links, Buttons rechts ===== */
+@media(min-width:701px){
+  .headerBar{
+    display:flex!important;
+    grid-template-columns:none!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:16px!important;
+  }
+  .headerBar h1{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+  .workStateControls{
+    flex:0 0 auto!important;
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    justify-content:flex-end!important;
+    width:auto!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+  .workStateControls .action{
+    flex:0 0 auto!important;
+    width:auto!important;
+    max-width:none!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+}
+
+/* Nur auf Mobilgeräten unter den Titel wechseln */
+@media(max-width:700px){
+  .headerBar{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .workStateControls{
+    width:100%!important;
+  }
+}
+
 </style>
 </head>
 
@@ -4734,6 +5033,7 @@ body.mysteryExpanded{
       <button class="action compactAction" id="saveWorkState" type="button">Arbeitsstand sichern</button>
       <button class="action secondary compactAction" id="loadWorkState" type="button">Arbeitsstand laden</button>
       <button class="action secondary compactAction" id="printWorkState" type="button" aria-label="Drucken" title="Drucken">🖨</button>
+      <button class="action secondary compactAction" id="openAnalogVersion" type="button" title="Analoge Version drucken">Analog</button>
       <input id="loadWorkStateFile" type="file" accept=".html,text/html" hidden>
     </div>
   </div>
@@ -4805,8 +5105,8 @@ body.mysteryExpanded{
       aria-live="polite"
     ></div>
 
-    <div class="smallNote">
-      Farbe auswählen, benennen und auf der Welt einsetzen.
+    <div class="inlineHint paletteHint">
+      <p>Wähle eine Farbe, benenne sie und setze sie auf der Welt ein. Benenne alle verwendeten Farben, damit die Aufteilung eindeutig ist.</p>
     </div>
 
     <div class="buttons">
@@ -4842,9 +5142,9 @@ body.mysteryExpanded{
           und zeige damit, was für dich zu einem guten Leben gehört. Du kannst
           auch die bereits vorhandenen Farben benennen oder verändern.
         </p>
-        <p class="saveReminder">
-          ⚠️ Vergiss nicht, deine Welt zu speichern.
-        </p>
+        <div class="inlineHint saveReminder">
+          <p>Vergiss nicht, deine Welt zu speichern.</p>
+        </div>
         <p class="taskQuestion">
           Was ist dir für ein gutes Leben besonders wichtig? Erkläre, wie
           deine Welt das zeigt.
@@ -4883,9 +5183,7 @@ body.mysteryExpanded{
             Gestalte die Welt so um, dass du und zwei weitere Personen dort gut
             leben können.
           </p>
-          <p class="saveReminder">
-            ⚠️ Vergiss nicht, deine Welt zu speichern.
-          </p>
+          <div class="inlineHint saveReminder"><p>Vergiss nicht, deine Welt zu speichern.</p></div>
           <p class="taskQuestion">
             Was hast du in der zweiten Welt verändert? Und warum?
           </p>
@@ -4927,9 +5225,7 @@ body.mysteryExpanded{
             leben können. Beide gestalten diese gemeinsame Welt in ihrer eigenen
             Simulation gleich.
           </p>
-          <p class="saveReminder">
-            ⚠️ Vergiss nicht, deine Welt zu speichern.
-          </p>
+          <div class="inlineHint saveReminder"><p>Vergiss nicht, deine Welt zu speichern.</p></div>
           <p class="taskQuestion">
             Was war euch beiden wichtig? Wo wart ihr unterschiedlicher Meinung?
             Worauf musstet ihr euch einigen?
@@ -4966,6 +5262,15 @@ body.mysteryExpanded{
         </div>
       </div>
     </article>
+
+<div class="learningGoalsShell"><details class="learningGoals">
+      <summary><span class="learningGoalsArrow" aria-hidden="true">›</span><strong>Lernziele</strong></summary>
+      <div class="learningGoalsBody"><ul>
+        <li>Ich kann beschreiben, was für mich zu einem guten Leben gehört.</li>
+        <li>Ich kann erklären, warum Menschen unterschiedliche Vorstellungen von einem guten Leben haben.</li>
+        <li>Ich kann mit anderen eine gemeinsame Lösung aushandeln, auch wenn wir unterschiedliche Ansichten haben.</li>
+      </ul></div>
+    </details></div>
 
 <div class="phaseNav phaseNavEnd">
       <button class="action secondary" id="toPhase2" type="button">
@@ -5175,6 +5480,15 @@ body.mysteryExpanded{
   </div>
 </article>
 </section>
+<div class="learningGoalsShell"><details class="learningGoals">
+      <summary><span class="learningGoalsArrow" aria-hidden="true">›</span><strong>Lernziele</strong></summary>
+      <div class="learningGoalsBody"><ul>
+      <li>Ich kann unterscheiden, was Menschen für ein gutes Leben brauchen und was sie sich zusätzlich wünschen. Ich kenne dafür die Begriffe <strong>Needs</strong> und <strong>Desires</strong>.</li>
+      <li>Ich kann erklären, dass für ein gutes Leben natürliche und gesellschaftliche Voraussetzungen nötig sind.</li>
+      <li>Ich kann beschreiben, warum Entscheidungen heute die Möglichkeiten von Menschen später beeinflussen können.</li>
+    </ul></div>
+    </details></div>
+
 <div class="phaseNav bottomNav">
   <button class="action secondary phaseNext" id="backToPhase1Bottom" data-t="nav.back">← Zurück</button>
   <button class="action phaseNext" id="toPhase3" type="button">Was hat Novera mit der Erde zu tun? →</button>
@@ -5215,10 +5529,9 @@ body.mysteryExpanded{
 
       <div class="mysteryWorkspaceShell" id="mysteryWorkspaceShell">
         <div class="mysteryToolbar" aria-label="Mystery-Werkzeuge">
-        <button class="action secondary compactAction" id="showNextMysteryCard" type="button">Mehr Karten</button>
+        <button class="action secondary compactAction" id="showNextMysteryCard" type="button">+ Karte</button>
         <button class="action secondary compactAction" id="toggleOwnMysteryCard" type="button">Eigene Karte</button>
-        <button class="action secondary compactAction" id="printMysteryCards" type="button">Analoge Version</button>
-        <button class="action secondary compactAction" id="clearMysteryBoard" type="button">Fläche leeren</button>
+        <button class="action secondary compactAction" id="clearMysteryBoard" type="button">Leeren</button>
         <button class="action secondary compactAction mysterySymbolBtn" type="button" data-pan="reset" id="mysteryHome" aria-label="Ansicht zentrieren" title="Ansicht zentrieren">◎</button>
         <button class="action secondary compactAction mysterySymbolBtn" type="button" id="toggleMysteryFullscreen" aria-label="Vollbild" title="Vollbild">⤢</button>
       </div>
@@ -5672,6 +5985,15 @@ body.mysteryExpanded{
     </div>
   </article>
   </section>
+
+  <div class="learningGoalsShell"><details class="learningGoals">
+      <summary><span class="learningGoalsArrow" aria-hidden="true">›</span><strong>Lernziele</strong></summary>
+      <div class="learningGoalsBody"><ul>
+      <li>Ich kann erklären, warum ein gutes Leben für alle mit den Grenzen der Erde zusammenhängt.</li>
+      <li>Ich kann beschreiben, warum Fragen zu Nutzung, Verteilung und Gerechtigkeit nicht einfach zu lösen sind.</li>
+      <li>Ich kann verschiedene Zusammenhänge miteinander verbinden und begründen, warum es bei komplexen Fragen oft nicht nur eine richtige Antwort gibt.</li>
+    </ul></div>
+    </details></div>
 
   <div class="phase3BottomNav">
     <button class="action secondary phaseNext" id="backToPhase2Bottom" type="button">← Zurück zu Novera entdecken</button>
@@ -7447,19 +7769,8 @@ function updateColorShares(){
     }
   );
 
-  if(needsName){
-
-    const prompt =
-      document.createElement("p");
-
-    prompt.className =
-      "colorSharesPrompt";
-
-    prompt.textContent =
-      "Bitte benenne oben alle verwendeten Farben, damit die Aufteilung eindeutig ist.";
-
-    container.appendChild(prompt);
-  }
+  /* Der Hinweis zum Benennen der verwendeten Farben steht dauerhaft
+     direkt unter der Farbauswahl. */
 }
 
 function makePalette(){
@@ -7542,8 +7853,7 @@ function makePalette(){
         color;
 
       picker.title =
-        "Farbe verändern";
-
+        "Farbe wählen";
 
       picker.oninput = () => {
 
@@ -9776,14 +10086,355 @@ function loadWorkStateFile(file){
   reader.readAsText(file,"utf-8");
 }
 
+
+function openNoveraAnalogVersion(){
+  const win=window.open("","_blank");
+  if(!win){
+    alert("Die analoge Version konnte nicht geöffnet werden. Erlaube Pop-ups und versuche es erneut.");
+    return;
+  }
+
+  const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const pixelGrid=()=>{
+    let cells="";
+    for(let i=0;i<300;i++)cells+='<span class="pixelCell"></span>';
+    return '<div class="pixelGrid" aria-label="Leeres Raster mit 20 mal 15 Feldern">'+cells+'</div>';
+  };
+
+  const blankLegend=()=>{
+    let rows="";
+    for(let i=1;i<=10;i++){
+      rows+='<div class="legendBlankRow"><span class="legendNumber">'+i+'</span><span class="legendColorBlank"></span><span class="legendWriteLine"></span></div>';
+    }
+    return '<div class="legendBlank"><h3>Legende</h3><p>Feld ausmalen und Bedeutung dazuschreiben.</p>'+rows+'</div>';
+  };
+
+  const writingLines=n=>{
+    let out='<div class="writingLines">';
+    for(let i=0;i<n;i++)out+='<span></span>';
+    return out+'</div>';
+  };
+
+  const worldSheet=(label,title,task,question,goals)=>{
+    return '<section class="sheet worldSheet">'+
+      '<div class="sheetHead"><span class="phaseTag">Phase 1 · '+esc(label)+'</span><h1>'+esc(title)+'</h1><p>'+esc(task)+'</p></div>'+
+      '<div class="worldWork">'+pixelGrid()+blankLegend()+'</div>'+
+      '<div class="reflection"><strong>Reflexion</strong><p>'+esc(question)+'</p>'+writingLines(2)+'</div>'+
+      (goals?'<div class="miniGoals"><strong>Lernziele</strong><span>'+esc(goals)+'</span></div>':'')+
+    '</section>';
+  };
+
+  const analogNeeds=[
+    "Ausreichend Nahrung",
+    "Sauberes Trinkwasser",
+    "Ein sicherer Ort zum Wohnen",
+    "Medizinische Hilfe, wenn ich krank bin",
+    "Schutz vor Gewalt und Bedrohung",
+    "Menschen, zu denen ich gehöre",
+    "Lernen und Bildung",
+    "Mitbestimmen können, was mich betrifft",
+    "Zeit für Erholung und Schlaf",
+    "Möglichkeiten, mich fortzubewegen",
+    "Verlässliche Informationen",
+    "Eine grundlegende Versorgung mit Energie"
+  ];
+  const analogDesires=[
+    "Ein besonders leistungsstarker Gaming-PC",
+    "Ein VIP-Ticket für ein grosses Konzert",
+    "Jedes Jahr eine weite Ferienreise",
+    "Eine grosse Sammlung limitierter Sneakers",
+    "Ein eigener Pool im Garten",
+    "Das neueste Smartphone-Modell",
+    "Ein sehr grosses Zimmer nur für mich",
+    "Eine teure Markentasche",
+    "Ein zweites Fahrrad nur für Freizeitfahrten",
+    "Ein riesiger Fernseher",
+    "Eine aufwendige Geburtstagsfeier",
+    "Eine Sammlung seltener Fanartikel"
+  ];
+
+  const requestCard=(kind,text,index)=>{
+    return '<article class="cutCard requestCard '+(kind==="Need"?"needCard":"desireCard")+'">'+
+      '<div class="cardMeta">'+esc(kind)+' · Karte '+index+'</div>'+
+      '<div class="requestText">'+esc(text)+'</div>'+
+      '<div class="cardFoot">Diese Karte steht für einen eigenen Anspruch. Sie ist nicht als Gegenstück zu einer anderen Karte gedacht.</div>'+
+    '</article>';
+  };
+
+  const requestPages=()=>{
+    const cards=[];
+    analogNeeds.forEach((t,i)=>cards.push({kind:"Need",text:t,index:i+1}));
+    analogDesires.forEach((t,i)=>cards.push({kind:"Desire",text:t,index:i+1}));
+    /* bewusst mischen, ohne Paare nebeneinander zu bilden */
+    const order=[0,12,1,14,15,2,4,13,16,3,17,5,6,19,7,18,20,8,10,21,9,23,11,22];
+    const mixed=order.map(i=>cards[i]);
+    let pages="";
+    for(let p=0;p<3;p++){
+      const batch=mixed.slice(p*8,p*8+8);
+      pages+='<section class="sheet cardSheet">'+
+        '<div class="sheetHead compactHead"><span class="phaseTag">Phase 2 · Ausschneidekarten</span><h1>Needs und Desires</h1><p>Karten ausschneiden. Danach alle Karten mischen oder die beiden Arten getrennt bereitlegen – je nach Auftrag der Lehrperson.</p></div>'+
+        '<div class="cutGrid">'+batch.map(c=>requestCard(c.kind,c.text,c.index)).join("")+'</div>'+
+      '</section>';
+    }
+    return pages;
+  };
+
+  const mysteryCards=()=>{
+    const ids=(typeof MYSTERY_BASE_IDS!=="undefined"?MYSTERY_BASE_IDS:[])
+      .concat(typeof MYSTERY_EXTRA_IDS!=="undefined"?MYSTERY_EXTRA_IDS:[]);
+    return ids.map((id,index)=>{
+      const card=document.querySelector('#phase3 .mysteryCard[data-card-id="'+id+'"]');
+      if(!card)return null;
+      return {
+        title:card.querySelector(".mysteryCardTitle")?.textContent?.trim()||("Karte "+(index+1)),
+        text:card.querySelector(".mysteryCardText")?.textContent?.trim()||""
+      };
+    }).filter(Boolean);
+  };
+
+  const mysteryPages=()=>{
+    const cards=mysteryCards();
+    let pages="";
+    for(let p=0;p<Math.ceil(cards.length/8);p++){
+      const batch=cards.slice(p*8,p*8+8);
+      pages+='<section class="sheet cardSheet">'+
+        '<div class="sheetHead compactHead"><span class="phaseTag">Phase 3 · Mysterykarten</span><h1>Was hat Novera mit der Erde zu tun?</h1><p>Karten ausschneiden. Die Zuordnung wird erst beim Arbeiten vorgenommen.</p></div>'+
+        '<div class="cutGrid">'+batch.map((c,i)=>
+          '<article class="cutCard mysteryAnalogCard">'+
+            '<div class="cardMeta">Mystery · Karte '+(p*8+i+1)+'</div>'+
+            '<h2>'+esc(c.title)+'</h2>'+
+            '<p>'+esc(c.text)+'</p>'+
+            '<div class="categoryChecks"><span>□ Needs &amp; Desires</span><span>□ Grenzen der Erde</span><span>□ Gerechtigkeit</span></div>'+
+          '</article>'
+        ).join("")+'</div>'+
+      '</section>';
+    }
+    return pages;
+  };
+
+  const modelStatements=[
+    ["Der Baum zeigt, dass heutige Nutzung spätere Möglichkeiten beeinflussen kann.","Ja"],
+    ["Novera kann helfen, über Needs und Desires nachzudenken.","Ja"],
+    ["Der Baum zeigt genau, wie schnell sich Wälder, Fischbestände oder Böden auf der Erde erholen.","Nein"],
+    ["Novera kann zeigen, dass nicht alles gleichzeitig erfüllt werden kann.","Ja"],
+    ["Novera zeigt genau, was jeder Mensch für ein gutes Leben braucht.","Nein"],
+    ["Der Baum zeigt alle wichtigen Zusammenhänge im Erdsystem.","Nein"],
+    ["Novera kann helfen, über Verteilung und Gerechtigkeit zu sprechen.","Ja"],
+    ["Die Zahl der Früchte entspricht einer echten Menge an Ressourcen auf der Erde.","Nein"],
+    ["Novera kann helfen, Folgen von Entscheidungen über mehrere Runden zu beobachten.","Ja"],
+    ["Ein Modell kann Zusammenhänge verständlicher machen, obwohl es die Wirklichkeit vereinfacht.","Ja"],
+    ["Aus Novera lässt sich direkt die richtige Lösung für die Erde ablesen.","Nein"],
+    ["Ein Modell ist nur nützlich, wenn es die Wirklichkeit vollständig abbildet.","Nein"]
+  ];
+
+  const modelRows=modelStatements.map((x,i)=>
+    '<tr><td>'+(i+1)+'. '+esc(x[0])+'</td><td class="checkCell">□</td><td class="checkCell">□</td></tr>'
+  ).join("");
+
+  const htmlDoc='<!doctype html><html lang="de"><head><meta charset="utf-8">'+
+  '<meta name="viewport" content="width=device-width,initial-scale=1">'+
+  '<title>Novera – analoge Version</title>'+
+  '<style>'+
+  '@page{size:A4 landscape;margin:10mm}'+
+  '*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Arial,sans-serif;color:#222;background:#fff}'+
+  'body{-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+  '.sheet{width:277mm;height:190mm;overflow:hidden;break-after:page;page-break-after:always;position:relative;padding:0}'+
+  '.sheet:last-child{break-after:auto;page-break-after:auto}'+
+  '.sheetHead{margin:0 0 4mm}.sheetHead h1{font-size:18pt;margin:1.5mm 0 2mm}.sheetHead p{font-size:9.5pt;line-height:1.4;margin:0;max-width:245mm}'+
+  '.compactHead{height:24mm;margin-bottom:3mm}.compactHead h1{font-size:16pt;margin:1mm 0}.compactHead p{font-size:8.5pt}'+
+  '.phaseTag{font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#555}'+
+  '.cover{display:grid;grid-template-columns:1.1fr .9fr;gap:10mm;align-items:start}.cover h1{font-size:28pt;margin:6mm 0 3mm}.cover h2{font-size:15pt;margin:5mm 0 2mm}.cover p,.cover li{font-size:10pt;line-height:1.45}.coverBox{border:1px solid #bbb;border-left:4px solid #4f9b91;border-radius:3mm;padding:5mm;background:#edf7f5}'+
+  '.copyPlan{width:100%;border-collapse:collapse;font-size:9pt}.copyPlan th,.copyPlan td{border-bottom:1px solid #ddd;padding:2.5mm;text-align:left}'+
+  '.worldWork{display:grid;grid-template-columns:145mm 1fr;gap:7mm;align-items:start}'+
+  '.pixelGrid{width:140mm;height:105mm;display:grid;grid-template-columns:repeat(20,1fr);grid-template-rows:repeat(15,1fr);border:1px solid #555}'+
+  '.pixelCell{border-right:.25mm solid #c8c8c8;border-bottom:.25mm solid #c8c8c8;background:#fff}'+
+  '.legendBlank h3{font-size:12pt;margin:0 0 1mm}.legendBlank p{font-size:8pt;margin:0 0 2mm;color:#555}'+
+  '.legendBlankRow{height:9.4mm;display:grid;grid-template-columns:7mm 9mm 1fr;gap:2mm;align-items:center}'+
+  '.legendNumber{font-size:8pt;color:#777;text-align:right}.legendColorBlank{width:8mm;height:8mm;border:1px solid #777}.legendWriteLine{height:7mm;border-bottom:1px solid #777}'+
+  '.reflection{margin-top:4mm;font-size:9pt}.reflection strong{display:block;margin-bottom:1mm}.reflection p{margin:0 0 1mm}'+
+  '.writingLines{display:grid;gap:3mm}.writingLines span{display:block;height:4mm;border-bottom:1px solid #999}'+
+  '.miniGoals{position:absolute;left:0;right:0;bottom:0;border-left:3px solid #4f9b91;background:#edf7f5;padding:2.5mm 3mm;font-size:8pt}.miniGoals strong{margin-right:3mm;color:#2f6f67}'+
+  '.tableSheet h2{font-size:14pt;margin:3mm 0 2mm}.workTable{width:100%;border-collapse:collapse;font-size:9pt}.workTable th,.workTable td{border:1px solid #bbb;padding:2.5mm;vertical-align:top}.workTable td{height:17mm}.tick{font-size:10pt;white-space:nowrap}'+
+  '.circleLayout{display:grid;grid-template-columns:1.18fr .82fr;gap:8mm}.ruleBox{border-left:4px solid #d6a23d;background:#fff7df;padding:4mm;border-radius:2mm}.ruleBox h2{margin:0 0 2mm;font-size:14pt}.ruleBox p,.ruleBox li,.circleLayout p,.circleLayout li{font-size:9pt;line-height:1.42}.fruitRule{font-size:12pt!important;font-weight:700}.roundTable{width:100%;border-collapse:collapse;font-size:8.5pt}.roundTable th,.roundTable td{border:1px solid #bbb;padding:2mm;text-align:center}.roundTable td{height:12mm}.roundTable th:first-child,.roundTable td:first-child{text-align:left}'+
+  '.conceptBox{border-left:4px solid #d6a23d;background:#fff7df;padding:4mm;border-radius:2mm;margin-bottom:4mm}.conceptBox h2{margin:0 0 2mm;font-size:14pt}.conceptBox p{font-size:9pt;line-height:1.45;margin:1.5mm 0}'+
+  '.cutGrid{height:160mm;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:3mm}'+
+  '.cutCard{border:1px dashed #555;padding:4mm;overflow:hidden;break-inside:avoid;page-break-inside:avoid;background:#fff;display:flex;flex-direction:column}'+
+  '.cardMeta{font-size:7.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#555;margin-bottom:4mm}'+
+  '.requestText{font-size:14pt;font-weight:700;line-height:1.25;margin:auto 0}.cardFoot{font-size:7.2pt;color:#666;line-height:1.3;margin-top:auto}'+
+  '.needCard{border-top:4px solid #5db7de}.desireCard{border-top:4px solid #b58ad8}'+
+  '.mysteryAnalogCard h2{font-size:11pt;line-height:1.2;margin:0 0 2mm}.mysteryAnalogCard p{font-size:8.5pt;line-height:1.35;margin:0}.categoryChecks{margin-top:auto;display:grid;gap:1mm;font-size:7.5pt;color:#555}'+
+  '.networkStart{display:grid;grid-template-columns:.75fr 1.25fr;gap:8mm}.networkPaper{height:115mm;border:1px solid #aaa;background-image:linear-gradient(#eee 1px,transparent 1px),linear-gradient(90deg,#eee 1px,transparent 1px);background-size:8mm 8mm;position:relative}.networkQuestion{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62mm;padding:4mm;border:2px solid #555;border-radius:4mm;background:#fff;text-align:center;font-weight:700;font-size:11pt}'+
+  '.modelQuiz{width:100%;border-collapse:collapse;font-size:8.5pt}.modelQuiz th,.modelQuiz td{border:1px solid #bbb;padding:2mm;vertical-align:middle}.modelQuiz .checkCell{width:18mm;text-align:center;font-size:15pt}'+
+  '.goalBox{border-left:4px solid #4f9b91;background:#edf7f5;padding:4mm;border-radius:2mm}.goalBox h2{margin:0 0 2mm;font-size:14pt}.goalBox li{font-size:9pt;line-height:1.45;margin:1mm 0}'+
+  '.teacherNote{border-left:4px solid #9a958b;background:#f2f0eb;padding:3mm;border-radius:2mm;font-size:8.5pt;line-height:1.4}'+
+  '@media screen{body{background:#ddd;padding:10mm}.sheet{background:#fff;margin:0 auto 10mm;box-shadow:0 2mm 8mm #0002}}'+
+  '@media print{body{background:#fff}.sheet{margin:0;box-shadow:none}}'+
+  '</style></head><body>'+
+
+  '<section class="sheet cover">'+
+    '<div><span class="phaseTag">Novera · analoge Version</span><h1>Novera ohne Bildschirm</h1>'+
+      '<p>Dieses Druckset überträgt die drei Phasen der digitalen Lernumgebung in ein analoges Lernsetting. Die Aufgaben wurden so verändert, dass Zeichnen, Ausschneiden, Aushandeln und gemeinsames Arbeiten die digitalen Interaktionen ersetzen.</p>'+
+      '<div class="coverBox"><strong>Material zusätzlich zum Ausdruck</strong><ul>'+
+        '<li>Farbstifte oder Filzstifte</li><li>Post-its als Früchte</li><li>Schere</li><li>dicke Stifte</li>'+
+        '<li>für das Mystery: ein grosser Papierbogen oder zwei zusammengeklebte A4-Blätter pro Gruppe</li>'+
+      '</ul></div>'+
+      '<h2>Wichtig für die Kreissimulation</h2>'+
+      '<p>Zeichnet einen grossen Baum. Zu Beginn hängen <strong>16 Post-its</strong> als Früchte am Baum. Für jede erfüllte Karte werden zwei Früchte entfernt. Nach jeder Runde wächst nur ein Teil nach. So bleibt die Grundidee der digitalen Simulation erhalten, ohne dass gerechnet oder gewürfelt werden muss.</p>'+
+    '</div>'+
+    '<div><h2>Druck- und Kopierplan</h2><table class="copyPlan"><thead><tr><th>Seiten</th><th>Kopien</th></tr></thead><tbody>'+
+      '<tr><td>Phase 1: drei Rasterwelten</td><td>je 1 pro Schüler:in</td></tr>'+
+      '<tr><td>Phase 2: Konkretisierung</td><td>1 pro Schüler:in</td></tr>'+
+      '<tr><td>Kreissimulation Teil 1 und 2</td><td>1 pro Klasse / Gruppe</td></tr>'+
+      '<tr><td>Needs-/Desires-Karten</td><td>1 Satz pro Klasse oder Gruppe</td></tr>'+
+      '<tr><td>Phase 3: Mystery-Auftrag</td><td>1 pro Gruppe</td></tr>'+
+      '<tr><td>Mysterykarten</td><td>1 Satz pro Gruppe</td></tr>'+
+      '<tr><td>Modell-Quiz / Abschluss</td><td>1 pro Schüler:in oder Gruppe</td></tr>'+
+    '</tbody></table>'+
+    '<div class="teacherNote"><strong>Format:</strong> Alle Druckseiten sind als A4 quer angelegt und besitzen feste Seitenhöhen. Ausschneidekarten liegen vollständig innerhalb einer Seite und werden nicht über Seitenumbrüche geteilt.</div></div>'+
+  '</section>'+
+
+  worldSheet(
+    "Aufgabe A",
+    "Meine erste Welt",
+    "Gestalte Novera so, dass du dort gut leben kannst. Male die Rasterfelder aus. Jede Farbe darf für etwas stehen, das für dich zu einem guten Leben gehört. Trage alle verwendeten Farben in die Legende ein.",
+    "Was ist dir für ein gutes Leben besonders wichtig? Wie zeigt deine Welt das?",
+    ""
+  )+
+  worldSheet(
+    "Aufgabe B",
+    "Drei Menschen auf Novera",
+    "Zwei weitere Menschen kommen auf Novera an. Gestalte eine neue Welt, in der ihr zu dritt gut leben könnt. Übernimm, verändere oder ergänze deine Ideen aus der ersten Welt.",
+    "Was hast du verändert? Warum war diese Veränderung für drei Menschen wichtig?",
+    ""
+  )+
+  worldSheet(
+    "Aufgabe C",
+    "Eine gemeinsame Welt für sechs Menschen",
+    "Arbeite mit einer anderen Person zusammen. Vergleicht eure bisherigen Welten und einigt euch auf eine gemeinsame Version, in der insgesamt sechs Menschen gut leben können. Beide zeichnen dieselbe gemeinsame Lösung ein.",
+    "Was war euch wichtig? Wo hattet ihr unterschiedliche Ansichten? Worauf habt ihr euch geeinigt?",
+    "Ich kann beschreiben, was für mich zu einem guten Leben gehört, unterschiedliche Vorstellungen erklären und mit anderen eine gemeinsame Lösung aushandeln."
+  )+
+
+  '<section class="sheet tableSheet">'+
+    '<div class="sheetHead"><span class="phaseTag">Phase 2 · Vorbereitung</span><h1>Was meinst du genau?</h1><p>Wähle vier bis sechs Bereiche aus deinen Welten. Schreibe möglichst konkret auf, was du damit meinst. Entscheide zunächst in deinen eigenen Worten, ob du es für ein gutes Leben unbedingt brauchst oder ob du es dir zusätzlich wünschst.</p></div>'+
+    '<table class="workTable"><thead><tr><th>Bereich aus meiner Welt</th><th>Was meine ich damit genau?</th><th>Meine Einschätzung</th></tr></thead><tbody>'+
+      Array.from({length:6},()=>'<tr><td></td><td></td><td class="tick">□ brauche ich unbedingt<br>□ wünsche ich zusätzlich</td></tr>').join("")+
+    '</tbody></table>'+
+    '<div class="reflection"><strong>Vor dem Kreis</strong><p>Bringe dieses Blatt zur Kreissimulation mit. Du wirst daraus einzelne konkrete Anliegen auswählen.</p></div>'+
+  '</section>'+
+
+  '<section class="sheet">'+
+    '<div class="sheetHead"><span class="phaseTag">Phase 2 · Kreissimulation Teil 1</span><h1>Der magische Baum – unsere eigenen Anliegen</h1><p>Setzt euch in einen Kreis. Jede Person hat ihr Arbeitsblatt mit den konkretisierten Bedürfnissen und Wünschen dabei.</p></div>'+
+    '<div class="circleLayout">'+
+      '<div><h2>So läuft eine Runde ab</h2><ol>'+
+        '<li>Zeichnet in der Mitte einen grossen Baum und hängt <strong>16 Post-its</strong> als Früchte daran.</li>'+
+        '<li>Jede Person wählt ein konkretes Anliegen vom eigenen Blatt und schreibt es auf einen kleinen Zettel.</li>'+
+        '<li>Legt die Zettel in die Mitte. Besprecht, welche Anliegen ihr in dieser Runde erfüllen möchtet. Ihr müsst euch einigen; nicht alles kann gleichzeitig gewählt werden.</li>'+
+        '<li><strong>Jedes erfüllte Anliegen kostet zwei Früchte.</strong> Nehmt dafür zwei Post-its vom Baum.</li>'+
+        '<li>Am Ende der Runde zählt ihr, wie viele Früchte noch hängen. Dann kommt die Nacht.</li>'+
+      '</ol>'+
+      '<div class="ruleBox"><h2>Die einfache Nachtregel</h2><p class="fruitRule">Es wächst die Hälfte der noch vorhandenen Früchte nach.</p>'+
+        '<p>Abrunden, wenn die Zahl ungerade ist. Der Baum kann höchstens 16 Früchte tragen. Sind keine Früchte mehr da, wächst nichts nach.</p>'+
+        '<p><strong>Beispiel:</strong> 8 Früchte bleiben → 4 wachsen nach → nächste Runde startet mit 12.</p></div></div>'+
+      '<div><h2>Rundenprotokoll</h2><table class="roundTable"><thead><tr><th>Runde</th><th>Start</th><th>verbraucht</th><th>übrig</th><th>wächst nach</th><th>neu</th></tr></thead><tbody>'+
+        '<tr><td>1</td><td>16</td><td></td><td></td><td></td><td></td></tr>'+
+        '<tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr>'+
+        '<tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr>'+
+        '<tr><td>4, falls nötig</td><td></td><td></td><td></td><td></td><td></td></tr>'+
+      '</tbody></table>'+
+      '<div class="reflection"><strong>Reflexion</strong><p>Was wurde schwierig, als nicht alles gleichzeitig möglich war? Wie habt ihr entschieden?</p>'+writingLines(4)+'</div></div>'+
+    '</div>'+
+  '</section>'+
+
+  '<section class="sheet">'+
+    '<div class="sheetHead"><span class="phaseTag">Phase 2 · Begriffe</span><h1>Needs und Desires</h1></div>'+
+    '<div class="conceptBox"><h2>Need</h2><p>Ein <strong>Need</strong> ist etwas, das für ein gutes Leben grundlegend wichtig ist. Wie ein Need erfüllt wird, kann sehr unterschiedlich aussehen.</p></div>'+
+    '<div class="conceptBox"><h2>Desire</h2><p>Ein <strong>Desire</strong> ist etwas, das wir uns zusätzlich wünschen. Wünsche können wichtig sein, sind aber nicht dasselbe wie grundlegende Bedürfnisse.</p></div>'+
+    '<div class="tableSheet"><h2>Prüfe deine eigenen Einträge noch einmal</h2><p>Trage bis zu sechs deiner konkreten Beispiele ein und ordne sie mit den neuen Begriffen ein. Es kann gute Gründe für unterschiedliche Einschätzungen geben.</p>'+
+      '<table class="workTable"><thead><tr><th>Mein konkretes Beispiel</th><th>Need</th><th>Desire</th><th>Warum ordne ich es so ein?</th></tr></thead><tbody>'+
+      Array.from({length:6},()=>'<tr><td></td><td class="checkCell">□</td><td class="checkCell">□</td><td></td></tr>').join("")+
+      '</tbody></table></div>'+
+  '</section>'+
+
+  requestPages()+
+
+  '<section class="sheet">'+
+    '<div class="sheetHead"><span class="phaseTag">Phase 2 · Kreissimulation Teil 2</span><h1>Der magische Baum – Needs, Desires und Gerechtigkeit</h1><p>Setzt den Baum wieder auf 16 Früchte zurück. Verwendet nun die ausgeschnittenen Needs- und Desires-Karten. Die Karten sind absichtlich nicht als Paare gebaut.</p></div>'+
+    '<div class="circleLayout">'+
+      '<div><h2>Auftrag</h2><ol>'+
+        '<li>Mischt die Karten. Bei einer grossen Klasse teilen sich jeweils zwei Personen eine Karte.</li>'+
+        '<li>Jede Person oder jedes Paar vertritt das Anliegen auf der gezogenen Karte.</li>'+
+        '<li>Legt die Karten in die Mitte und handelt aus, welche Anliegen in dieser Runde erfüllt werden.</li>'+
+        '<li>Jede erfüllte Karte kostet wieder zwei Früchte. Verwendet dieselbe Nachtregel wie zuvor.</li>'+
+        '<li>Spielt mindestens drei Runden. Ihr dürft eure Abmachungen zwischen den Runden verändern.</li>'+
+      '</ol>'+
+      '<div class="ruleBox"><h2>Nachtregel bleibt gleich</h2><p class="fruitRule">Die Hälfte der übrigen Früchte wächst nach.</p><p>Maximal 16. Bei 0 wächst 0 nach.</p></div></div>'+
+      '<div><h2>Rundenprotokoll</h2><table class="roundTable"><thead><tr><th>Runde</th><th>Start</th><th>verbraucht</th><th>übrig</th><th>wächst nach</th><th>neu</th></tr></thead><tbody>'+
+        '<tr><td>1</td><td>16</td><td></td><td></td><td></td><td></td></tr>'+
+        '<tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr>'+
+        '<tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr>'+
+      '</tbody></table>'+
+      '<div class="reflection"><strong>Reflexion</strong><p>Wurden Needs und Desires unterschiedlich behandelt? War eure Verteilung gerecht? Welche Regel würdet ihr für eine weitere Runde beibehalten oder verändern?</p>'+writingLines(5)+'</div></div>'+
+    '</div>'+
+    '<div class="miniGoals"><strong>Lernziele</strong><span>Ich kann Needs und Desires unterscheiden, natürliche und gesellschaftliche Voraussetzungen erklären und beschreiben, warum heutige Entscheidungen spätere Möglichkeiten beeinflussen.</span></div>'+
+  '</section>'+
+
+  '<section class="sheet">'+
+    '<div class="sheetHead"><span class="phaseTag">Phase 3 · Mystery</span><h1>Was hat Novera mit der Erde zu tun?</h1><p>Arbeitet in Gruppen von 2–4 Personen. Für das Denknetz braucht ihr zusätzlich einen grossen Papierbogen oder zwei zusammengeklebte A4-Blätter.</p></div>'+
+    '<div class="networkStart">'+
+      '<div><h2>Auftrag</h2><ol>'+
+        '<li>Schneidet die Mysterykarten aus.</li>'+
+        '<li>Lest die Karten und ordnet sie auf eurem Papier. Ihr müsst nicht alle verwenden.</li>'+
+        '<li>Ordnet wichtige Karten einer Kategorie zu: <strong>Needs &amp; Desires</strong>, <strong>Grenzen der Erde</strong> oder <strong>Gerechtigkeit</strong>.</li>'+
+        '<li>Zeichnet Verbindungen zwischen wichtigen Karten. Beschriftet Linien, wenn euch das beim Erklären hilft.</li>'+
+        '<li>Entwickelt daraus eure Antwort auf die Mystery-Frage. Es gibt nicht nur eine richtige Lösung.</li>'+
+      '</ol>'+
+      '<div class="teacherNote"><strong>Tipp:</strong> Legt die Karten zuerst lose. Klebt sie erst fest, wenn ihr mit der Anordnung zufrieden seid.</div>'+
+      '<div class="reflection"><strong>Unsere Antwort</strong><p>Was hat Novera mit einem guten Leben auf der Erde zu tun?</p>'+writingLines(5)+'</div></div>'+
+      '<div class="networkPaper"><div class="networkQuestion">Was hat Novera mit der Erde zu tun?</div></div>'+
+    '</div>'+
+  '</section>'+
+
+  mysteryPages()+
+
+  '<section class="sheet">'+
+    '<div class="sheetHead"><span class="phaseTag">Phase 3 · Novera als Modell</span><h1>Was kann Novera zeigen – und was nicht?</h1></div>'+
+    '<div class="conceptBox"><h2>Ein Modell vereinfacht</h2><p>Die Fantasiewelt Novera und der magische Baum sind Modelle. Ein Modell zeigt nur einen Ausschnitt der Wirklichkeit. Dadurch können Zusammenhänge leichter sichtbar werden. Gleichzeitig lässt jedes Modell vieles weg.</p>'+
+      '<p>Entscheide bei jeder Aussage: Kann Novera das zeigen? Kreuze <strong>Ja</strong> oder <strong>Nein</strong> an.</p></div>'+
+    '<table class="modelQuiz"><thead><tr><th>Aussage</th><th>Ja</th><th>Nein</th></tr></thead><tbody>'+modelRows+'</tbody></table>'+
+  '</section>'+
+
+  '<section class="sheet">'+
+    '<div class="sheetHead"><span class="phaseTag">Phase 3 · Abschluss</span><h1>Grenzen, Gerechtigkeit und komplexe Fragen</h1></div>'+
+    '<div class="reflection"><strong>Grenzen und Möglichkeiten des Modells</strong><p>Was kann Novera gut sichtbar machen? Was kann die Fantasiewelt nicht zeigen?</p>'+writingLines(5)+'</div>'+
+    '<div class="reflection" style="margin-top:8mm"><strong>Offene Fragen</strong><p>Welche Fragen sind bei euch beim Arbeiten entstanden?</p>'+writingLines(4)+'</div>'+
+    '<div class="goalBox" style="margin-top:9mm"><h2>Lernziele</h2><ul>'+
+      '<li>Ich kann erklären, warum ein gutes Leben für alle mit den Grenzen der Erde zusammenhängt.</li>'+
+      '<li>Ich kann beschreiben, warum Fragen zu Nutzung, Verteilung und Gerechtigkeit nicht einfach zu lösen sind.</li>'+
+      '<li>Ich kann verschiedene Zusammenhänge miteinander verbinden und begründen, warum es bei komplexen Fragen oft nicht nur eine richtige Antwort gibt.</li>'+
+    '</ul></div>'+
+  '</section>'+
+
+  '</body></html>';
+
+  win.document.open();
+  win.document.write(htmlDoc);
+  win.document.close();
+  setTimeout(()=>{try{win.focus();win.print();}catch(e){}},350);
+}
+
+
 function initWorkStateControls(){
   const saveBtn=document.getElementById("saveWorkState");
   const loadBtn=document.getElementById("loadWorkState");
   const fileInput=document.getElementById("loadWorkStateFile");
   const printBtn=document.getElementById("printWorkState");
+  const analogBtn=document.getElementById("openAnalogVersion");
 
   if(saveBtn)saveBtn.onclick=downloadWorkState;
   if(printBtn)printBtn.onclick=printCurrentWorkState;
+  if(analogBtn)analogBtn.onclick=openNoveraAnalogVersion;
 
   if(loadBtn&&fileInput){
     loadBtn.onclick=()=>fileInput.click();
@@ -10183,6 +10834,7 @@ function initMysteryPanZoom(){
 }
 
 let mysteryFirstCard=null;
+let mysteryConnectionPending=false;
 
 function resetConnectionPick(){
   mysteryFirstCard=null;
@@ -10191,6 +10843,8 @@ function resetConnectionPick(){
 }
 
 function chooseMysteryConnection(card){
+  if(mysteryConnectionPending)return;
+
   const id=String(card.dataset.cardId);
   const dot=card.querySelector(".mysteryConnectDot");
   if(!dot)return;
@@ -10208,22 +10862,32 @@ function chooseMysteryConnection(card){
     return;
   }
 
-  const s=mysteryState();
-  const exists=s.connections.some(c=>
-    (c.a===mysteryFirstCard&&c.b===id)||
-    (c.a===id&&c.b===mysteryFirstCard)
-  );
-  if(!exists){
-    s.connections.push({a:mysteryFirstCard,b:id,label:""});
-    saveMysteryPatch({mysteryConnections:s.connections});
-  }
-
-  const firstCard=document.querySelector('#phase3 .mysteryCard[data-card-id="'+mysteryFirstCard+'"]');
-  if(firstCard)bringMysteryCardToFront(firstCard,true);
+  /* Den zweiten Klick kurz sichtbar lassen. So ist auch auf Touch-Geräten
+     unmittelbar erkennbar, dass der zweite Verbindungspunkt gewählt wurde. */
+  const firstId=mysteryFirstCard;
+  dot.classList.add("active");
   bringMysteryCardToFront(card,true);
+  mysteryConnectionPending=true;
 
-  resetConnectionPick();
-  drawMysteryConnections();
+  setTimeout(()=>{
+    const s=mysteryState();
+    const exists=s.connections.some(c=>
+      (c.a===firstId&&c.b===id)||
+      (c.a===id&&c.b===firstId)
+    );
+    if(!exists){
+      s.connections.push({a:firstId,b:id,label:""});
+      saveMysteryPatch({mysteryConnections:s.connections});
+    }
+
+    const firstCard=document.querySelector('#phase3 .mysteryCard[data-card-id="'+firstId+'"]');
+    if(firstCard)bringMysteryCardToFront(firstCard,true);
+    bringMysteryCardToFront(card,true);
+
+    mysteryConnectionPending=false;
+    resetConnectionPick();
+    drawMysteryConnections();
+  },180);
 }
 
 function cardCenter(card,board){
@@ -10814,53 +11478,6 @@ function clearMysteryBoard(){
   );
 }
 
-function printAllMysteryCards(){
-  const s=mysteryState();
-  const cards=[];
-
-  MYSTERY_BASE_IDS.concat(MYSTERY_EXTRA_IDS).forEach(id=>{
-    const card=document.querySelector('#phase3 .mysteryCard[data-card-id="'+id+'"]');
-    if(!card)return;
-    cards.push({
-      title:card.querySelector(".mysteryCardTitle")?.textContent||"",
-      text:card.querySelector(".mysteryCardText")?.textContent||""
-    });
-  });
-
-  s.ownCards.forEach(item=>{
-    cards.push({title:"Eigene Idee",text:String(item.text||"")});
-  });
-
-  const win=window.open("","_blank");
-  if(!win){
-    alert("Das Fenster für die analoge Version konnte nicht geöffnet werden. Erlaube Pop-ups und versuche es erneut.");
-    return;
-  }
-
-  const cardHtml=cards.map(c=>
-    '<article class="printCard"><h2>'+escapeHtml(c.title)+'</h2><p>'+escapeHtml(c.text)+'</p></article>'
-  ).join("");
-
-  win.document.open();
-  win.document.write(
-    '<!doctype html><html lang="de"><head><meta charset="utf-8">'+
-    '<title>Novera – Mystery analog</title>'+
-    '<style>'+
-      '@page{size:A4;margin:10mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#111}'+
-      '.printIntro{margin:0 0 7mm;font-size:10pt;line-height:1.45}.printIntro h1{font-size:17pt;margin:0 0 3mm}.printIntro p{margin:0}'+
-      '.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:0}'+
-      '.printCard{height:62mm;border:1px dashed #555;padding:8mm;break-inside:avoid;overflow:hidden}'+
-      '.printCard h2{font-size:13pt;line-height:1.2;margin:0 0 5mm}.printCard p{font-size:10.5pt;line-height:1.4;margin:0}'+
-    '</style></head><body>'+
-    '<section class="printIntro"><h1>Novera – Mystery: analoge Version</h1>'+
-    '<p>Schneidet die Karten entlang der gestrichelten Linien aus. Ordnet sie auf einem grossen Blatt. Zeichnet Verbindungslinien zwischen wichtigen Karten und beschriftet sie, wenn euch das beim Erklären hilft. Ihr müsst nicht alle Karten verwenden. Eigene Ideen könnt ihr auf zusätzlichen Zetteln ergänzen.</p></section>'+
-    '<main class="cards">'+cardHtml+'</main>'+
-    '<script>window.onload=function(){window.print();};<\/script>'+
-    '</body></html>'
-  );
-  win.document.close();
-}
-
 function setMysteryExpanded(expanded){
   const shell=document.getElementById("mysteryWorkspaceShell");
   const btn=document.getElementById("toggleMysteryFullscreen");
@@ -10996,15 +11613,6 @@ function initErarbeitung(){
         if(card)bringMysteryCardToFront(card,false);
       });
     }
-  };
-
-  const analogBtn=id("printMysteryCards");
-  if(analogBtn)analogBtn.onclick=()=>{
-    showNoveraConfirm(
-      "Spoiler: Die analoge Version enthält alle verfügbaren Karten. Möchtest du sie wirklich anzeigen?",
-      ()=>printAllMysteryCards(),
-      "Anzeigen"
-    );
   };
 
   const clearMysteryBtn=id("clearMysteryBoard");
